@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estus Health · OT Driving Assessment Report Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow+Semi+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#344982; --blue:#2f6f9e; --teal:#2ca5b8; --plum:#ab5c95;
+  --ink:#171410; --muted:#55534e; --faint:#8a8880;
+  --cream:#efe9db; --bg:#f2f0ec; --line:#e6e4df; --paper:#ffffff;
+  --grad:linear-gradient(90deg,#344982 0%,#2f6f9e 34%,#2ca5b8 66%,#ab5c95 100%);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Barlow',sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+
+/* ============ APP LAYOUT ============ */
+#app{display:flex;height:100vh;overflow:hidden}
+#formPane{width:46%;min-width:420px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line)}
+#previewPane{flex:1;overflow-y:auto;background:#dcdad5;padding:28px 20px}
+
+/* toolbar */
+#toolbar{position:sticky;top:0;z-index:50;background:var(--ink);padding:10px 16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#toolbar .brand{font-family:'Oswald',sans-serif;font-weight:700;color:#fff;font-size:15px;letter-spacing:.02em;margin-right:auto}
+#toolbar .brand span{font-weight:500;letter-spacing:.14em}
+#toolbar .brand small{display:block;font-family:'Barlow Semi Condensed',sans-serif;font-weight:400;font-size:9px;letter-spacing:.28em;color:#7fd0dd}
+.btn{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:12px;letter-spacing:.05em;padding:7px 12px;border:none;border-radius:4px;cursor:pointer;background:#3a3934;color:#fff}
+.btn:hover{background:#55534e}
+.btn.primary{background:var(--teal)}
+.btn.primary:hover{background:#238ea0}
+.btn.plum{background:var(--plum)}
+.btn.plum:hover{background:#8f4a7c}
+#gradbar{height:3px;background:var(--grad)}
+
+/* form sections */
+details.sec{border-bottom:1px solid var(--line);background:var(--bg)}
+details.sec>summary{cursor:pointer;list-style:none;padding:13px 18px;font-family:'Oswald',sans-serif;font-weight:600;font-size:13.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);display:flex;align-items:center;gap:10px;user-select:none}
+details.sec>summary::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0;transition:transform .15s}
+details.sec[open]>summary::before{background:var(--plum)}
+details.sec>summary .n{font-size:10px;color:var(--faint);letter-spacing:.05em;margin-left:auto;text-transform:none;font-family:'Barlow',sans-serif}
+.secbody{padding:4px 18px 20px}
+
+/* fields */
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:9px}
+.f{display:flex;flex-direction:column;gap:3px;flex:1;min-width:120px}
+.f.w25{flex:0 0 calc(25% - 8px)} .f.w33{flex:0 0 calc(33% - 7px)} .f.w50{flex:0 0 calc(50% - 5px)} .f.w100{flex:0 0 100%}
+.f label{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.f input[type=text],.f input[type=date],.f input[type=number],.f select,.f textarea{border:1px solid #d6d4cf;border-radius:4px;padding:6px 8px;font-family:'Barlow',sans-serif;font-size:13px;color:var(--ink);background:#fff;width:100%}
+.f textarea{resize:vertical;min-height:52px;line-height:1.45}
+.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid var(--teal);outline-offset:-1px}
+.chk{display:flex;align-items:center;gap:7px;font-size:13px;padding:3px 0;cursor:pointer}
+.chk input{accent-color:var(--teal);width:15px;height:15px;cursor:pointer}
+.hint{font-size:11.5px;color:var(--faint);line-height:1.4;margin:2px 0 8px}
+.hint code{background:#e9e7e4;padding:0 4px;border-radius:3px;font-size:11px}
+.subhead{font-family:'Oswald',sans-serif;font-weight:500;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--plum);margin:16px 0 6px;border-bottom:1px solid var(--line);padding-bottom:3px}
+.resetlink{font-size:10.5px;color:var(--teal);cursor:pointer;text-decoration:underline;font-weight:600;margin-left:6px;text-transform:none;letter-spacing:0}
+.pill{display:inline-block;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10.5px;padding:2px 8px;border-radius:10px;letter-spacing:.04em}
+.pill.pass{background:#dff0e4;color:#1e6b3a} .pill.fail{background:#f6e3e3;color:#8c2f2f} .pill.na{background:#e9e7e4;color:var(--muted)}
+
+/* checklist rows */
+.clrow{border:1px solid var(--line);border-radius:5px;background:#fff;padding:8px 10px;margin-bottom:7px}
+.clrow .cltop{display:flex;gap:8px;align-items:flex-start}
+.clrow .cltxt{flex:1;font-size:12.5px;line-height:1.4;color:var(--ink)}
+.clrow select{border:1px solid #d6d4cf;border-radius:4px;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11.5px;padding:4px 6px;flex-shrink:0}
+.clrow select.st-safe{color:#1e6b3a;background:#eef7f1} .clrow select.st-issue{color:#8c2f2f;background:#fbf0f0} .clrow select.st-na{color:var(--muted)}
+.clrow textarea{width:100%;margin-top:7px;border:1px solid #e4d6df;background:#fdf9fc;border-radius:4px;padding:6px 8px;font-family:'Barlow',sans-serif;font-size:12.5px;min-height:44px;resize:vertical}
+.grouphead{font-family:'Oswald',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);margin:14px 0 7px}
+
+/* test cards */
+.testcard{border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:5px;background:#fff;padding:10px 12px;margin-bottom:10px}
+.testcard.off{opacity:.55;border-left-color:#c8c6c1}
+.testcard h4{margin:0;font-family:'Oswald',sans-serif;font-weight:500;font-size:13px;letter-spacing:.05em;display:flex;align-items:center;gap:8px}
+.testcard h4 .pill{margin-left:auto}
+.testcard .trow{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:flex-end}
+.autonote{font-size:12px;line-height:1.45;background:#f4f8f9;border:1px solid #d9e8ec;border-radius:4px;padding:7px 9px;margin-top:8px;color:#274b53}
+.autonote b{color:var(--navy)}
+
+/* medication rows */
+.medrow{display:flex;gap:8px;margin-bottom:6px;align-items:center}
+.medrow input{flex:1;border:1px solid #d6d4cf;border-radius:4px;padding:6px 8px;font-size:13px;font-family:'Barlow',sans-serif}
+.xbtn{border:none;background:#e9e7e4;color:#8c2f2f;border-radius:4px;width:26px;height:26px;cursor:pointer;font-weight:700;flex-shrink:0}
+.addbtn{border:1px dashed var(--teal);background:none;color:var(--teal);font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:12px;border-radius:4px;padding:5px 12px;cursor:pointer}
+
+/* recommendation cards */
+.reccard{border:1px solid var(--line);border-radius:5px;background:#fff;padding:9px 11px;margin-bottom:8px}
+.reccard .rectop{display:flex;gap:8px;align-items:center}
+.reccard .rectop label{font-weight:600;font-size:13px;cursor:pointer;flex:1}
+.reccard textarea{width:100%;margin-top:7px;border:1px solid #d6d4cf;border-radius:4px;padding:6px 8px;font-size:12.5px;font-family:'Barlow',sans-serif;min-height:56px;resize:vertical;line-height:1.45}
+.reccard .params{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;align-items:center;font-size:12px}
+.reccard .params input,.reccard .params select{border:1px solid #d6d4cf;border-radius:4px;padding:3px 6px;font-size:12px;font-family:'Barlow',sans-serif;width:auto}
+
+/* ============ REPORT PREVIEW ============ */
+.page{width:210mm;min-height:297mm;background:#fff;margin:0 auto 18px;box-shadow:0 8px 28px -12px rgba(0,0,0,.35);position:relative;padding:16mm 18mm 20mm;font-family:'Barlow',sans-serif;font-size:10.5pt;line-height:1.5;color:#1c1c1c}
+#reportRoot{max-width:210mm;margin:0 auto}
+.rep-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5mm}
+.rep-wordmark{font-family:'Oswald',sans-serif;font-weight:700;font-size:26px;line-height:.95;color:var(--ink)}
+.rep-wordmark span{font-weight:500;letter-spacing:.12em}
+.rep-tag{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:9px;letter-spacing:.34em;color:var(--plum);margin-top:3px;text-transform:uppercase}
+.rep-contact{text-align:right;font-family:'Barlow Semi Condensed',sans-serif;font-size:8.5pt;color:var(--muted);line-height:1.6}
+.rep-contact .web{color:var(--teal);font-weight:600}
+.rep-rule{height:3px;background:var(--grad);margin:0 0 8mm;border-radius:2px}
+h1.rep-title{font-family:'Oswald',sans-serif;font-weight:600;font-size:19pt;letter-spacing:.03em;margin:0 0 7mm;color:var(--ink)}
+h2.rep{font-family:'Oswald',sans-serif;font-weight:600;font-size:13pt;letter-spacing:.09em;text-transform:uppercase;color:var(--navy);margin:9mm 0 3mm;border-bottom:2px solid var(--teal);padding-bottom:1.5mm;page-break-after:avoid}
+h3.rep{font-family:'Oswald',sans-serif;font-weight:500;font-size:11pt;letter-spacing:.05em;color:var(--plum);margin:5mm 0 2mm;page-break-after:avoid}
+.page p{margin:0 0 3mm}
+table.rep{width:100%;border-collapse:collapse;margin:2mm 0 4mm;font-size:9.5pt;page-break-inside:auto}
+table.rep th{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:8.5pt;letter-spacing:.08em;text-transform:uppercase;text-align:left;background:var(--navy);color:#fff;padding:2mm 2.5mm;border:1px solid var(--navy)}
+table.rep td{border:1px solid #d6d4cf;padding:1.8mm 2.5mm;vertical-align:top}
+table.rep tr:nth-child(even) td{background:#f7f6f3}
+table.rep td.lbl{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;width:34%;background:var(--cream)!important;color:#3a3934}
+table.rep td.ok{text-align:center;font-weight:700;color:#1e6b3a}
+table.rep td.iss{color:#8c2f2f}
+.rep-foot{position:absolute;bottom:8mm;left:18mm;right:18mm;display:flex;justify-content:space-between;font-family:'Barlow Semi Condensed',sans-serif;font-size:7.5pt;letter-spacing:.08em;color:var(--faint);border-top:1px solid var(--line);padding-top:2mm}
+ul.rep{margin:1mm 0 4mm;padding-left:6mm}
+ul.rep li{margin-bottom:2mm}
+
+/* validation */
+#checkBadge{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11.5px;padding:5px 10px;border-radius:12px;cursor:pointer;letter-spacing:.04em}
+#checkBadge.ok{background:#1e6b3a;color:#fff} #checkBadge.bad{background:#8c2f2f;color:#fff}
+#valModal{display:none;position:fixed;inset:0;background:rgba(23,20,16,.55);z-index:200;align-items:center;justify-content:center}
+#valModal.open{display:flex}
+#valBox{background:#fff;border-radius:8px;max-width:560px;width:92%;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px -20px rgba(0,0,0,.5)}
+#valBox header{background:var(--ink);color:#fff;padding:14px 18px;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.1em;text-transform:uppercase}
+#valBox .vbody{overflow-y:auto;padding:10px 18px}
+#valBox .vfoot{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+.vitem{display:flex;gap:8px;align-items:center;padding:6px 8px;border-radius:4px;cursor:pointer;font-size:13px}
+.vitem:hover{background:var(--cream)}
+.vitem .sec{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10px;letter-spacing:.06em;color:#fff;background:var(--plum);border-radius:8px;padding:1px 7px;flex-shrink:0}
+.flash{outline:2px solid var(--plum)!important;outline-offset:1px;transition:outline .2s}
+@media print{
+  body{background:#fff}
+  #formPane,#toolbar,#gradbar{display:none!important}
+  #app{display:block;height:auto;overflow:visible}
+  #previewPane{overflow:visible;padding:0;background:#fff}
+  .page{box-shadow:none;margin:0;width:auto;min-height:0;page-break-after:always}
+  .page:last-child{page-break-after:auto}
+}
+</style>
+</head>
+<body>
+<div id="toolbar">
+  <div class="brand">ESTUS <span>HEALTH</span><small>OT DRIVING REPORT BUILDER</small></div>
+  <button class="btn" onclick="loadExample()">Load example</button>
+  <button class="btn" onclick="newReport()">New</button>
+  <button class="btn" onclick="saveJSON()">Save draft</button>
+  <button class="btn" onclick="document.getElementById('openFile').click()">Open draft</button>
+  <input type="file" id="openFile" accept=".json" style="display:none" onchange="openJSON(event)">
+  <span id="checkBadge" class="bad" onclick="showValidation()">checking…</span>
+  <button class="btn plum" onclick="guard(exportWord)">Export Word</button>
+  <button class="btn primary" onclick="guard(()=>window.print())">Print / PDF</button>
+</div>
+<div id="gradbar"></div>
+<div id="app">
+<div id="formPane">
+
+<!-- ================= 1. CLIENT DETAILS ================= -->
+<details class="sec" open>
+<summary>1 · Client &amp; Assessment Details</summary>
+<div class="secbody">
+  <div class="row">
+    <div class="f w25"><label>Title</label><select data-bind="title"><option>Mr</option><option>Mrs</option><option>Ms</option><option>Miss</option><option>Mx</option><option value="">(none)</option></select></div>
+    <div class="f"><label>First name</label><input type="text" data-bind="firstName"></div>
+    <div class="f"><label>Preferred name</label><input type="text" data-bind="prefName" placeholder="optional"></div>
+    <div class="f"><label>Surname</label><input type="text" data-bind="surname"></div>
+  </div>
+  <div class="row">
+    <div class="f w25"><label>Pronouns</label><select data-bind="pronouns"><option value="he">he / him</option><option value="she">she / her</option><option value="they">they / them</option></select></div>
+    <div class="f w25"><label>Date of birth</label><input type="date" data-bind="dob"></div>
+    <div class="f"><label>NDIS number</label><input type="text" data-bind="ndis" placeholder="if applicable"></div>
+  </div>
+  <div class="row"><div class="f w100"><label>Address</label><input type="text" data-bind="address"></div></div>
+  <div class="row">
+    <div class="f"><label>Licence number</label><input type="text" data-bind="licNo"></div>
+    <div class="f w25"><label>Sighted?</label><select data-bind="licSighted"><option>Yes</option><option>No</option></select></div>
+    <div class="f w25"><label>Licence expiry</label><input type="text" data-bind="licExpiry" placeholder="or [TBC]"></div>
+  </div>
+  <div class="row">
+    <div class="f w33"><label>Licence type</label><select data-bind="licType"><option>Learner's permit (Class C)</option><option>Provisional P1 (Class C)</option><option>Provisional P2 (Class C)</option><option>Full licence (Class C)</option><option>Heavy vehicle licence</option><option>Unlicensed</option></select></div>
+    <div class="f"><label>Conditions (tick all that apply)</label>
+      <div style="display:flex;flex-wrap:wrap;gap:2px 14px">
+        <label class="chk"><input type="checkbox" data-bindchk="licCond" value="L-plates to be displayed">L-plates</label>
+        <label class="chk"><input type="checkbox" data-bindchk="licCond" value="must be accompanied by a fully licensed supervising driver">Supervising driver</label>
+        <label class="chk"><input type="checkbox" data-bindchk="licCond" value="zero BAC">Zero BAC</label>
+        <label class="chk"><input type="checkbox" data-bindchk="licCond" value="automatic vehicles only">Auto only</label>
+        <label class="chk"><input type="checkbox" data-bindchk="licCond" value="corrective lenses to be worn">Corrective lenses</label>
+      </div>
+    </div>
+  </div>
+  <div class="row"><div class="f w100"><label>Other conditions</label><input type="text" data-bind="licCondOther" placeholder="optional, e.g. daylight driving only"></div></div>
+  <div class="row"><div class="f w100"><label>Presenting condition / diagnoses</label><input type="text" data-bind="diagnoses" placeholder="e.g. Autism Spectrum Disorder (Level 2); Schizophrenia"></div></div>
+
+  <div class="subhead">Medications</div>
+  <div id="medRows"></div>
+  <button class="addbtn" onclick="addMed()">+ Add medication</button>
+
+  <div class="subhead">Referral &amp; Report</div>
+  <div class="row">
+    <div class="f"><label>Referrer name</label><input type="text" data-bind="refName"></div>
+    <div class="f"><label>Referrer role</label><input type="text" data-bind="refRole" placeholder="e.g. Occupational Therapist"></div>
+  </div>
+  <div class="row">
+    <div class="f"><label>Referrer organisation</label><input type="text" data-bind="refOrg"></div>
+    <div class="f"><label>Referrer email / phone</label><input type="text" data-bind="refContact"></div>
+  </div>
+  <div class="row">
+    <div class="f w33"><label>Date of assessment</label><input type="date" data-bind="dateAssess"></div>
+    <div class="f w33"><label>Date of report</label><input type="date" data-bind="dateReport"></div>
+  </div>
+  <div class="row">
+    <div class="f"><label>Report completed by</label><input type="text" data-bind="assessor"></div>
+    <div class="f w25"><label>Role</label><input type="text" data-bind="assessorRole"></div>
+    <div class="f w33"><label>AHPRA no.</label><input type="text" data-bind="ahpra"></div>
+  </div>
+  <div class="row">
+    <div class="f"><label>Supervising OT (optional)</label><input type="text" data-bind="supervisor" placeholder="leave blank if none"></div>
+    <div class="f"><label>Motor Driving Instructor</label><input type="text" data-bind="mdi"></div>
+  </div>
+  <div class="row"><div class="f w100"><label>Assessment location</label><input type="text" data-bind="location"></div></div>
+</div>
+</details>
+
+<!-- ================= 2. REPORTS REVIEWED ================= -->
+<details class="sec">
+<summary>2 · Reports Reviewed</summary>
+<div class="secbody">
+  <div class="hint">Tick what you reviewed — the sentence writes itself. Add anything else below.</div>
+  <div id="reviewedChecks"></div>
+  <div class="row" style="margin-top:8px"><div class="f w100"><label>Additional documents (comma-separated)</label><input type="text" data-bind="reviewedExtra" placeholder="e.g. neuropsychology report from Dr Smith (May 2026)"></div></div>
+</div>
+</details>
+
+<!-- ================= 3. BACKGROUND ================= -->
+<details class="sec">
+<summary>3 · Background Information</summary>
+<div class="secbody">
+  <div class="hint">Narrative fields support tokens: <code>{name}</code> <code>{first}</code> <code>{He}</code> <code>{he}</code> <code>{His}</code> <code>{his}</code> <code>{him}</code> <code>{was}</code> <code>{is}</code> <code>{has}</code> — they adapt to the client's name and pronouns automatically. Leave a field blank to skip it in the report. Click <b>reset</b> to restore the standard wording.</div>
+
+  <div class="subhead">Reason for referral</div>
+  <div class="row">
+    <div class="f w100"><label>Purpose of assessment</label>
+      <select data-bind="purpose">
+        <option value="learner">Learner driver — suitability to continue learning toward a provisional licence</option>
+        <option value="medical">Licence holder — fitness to drive following medical condition / event</option>
+        <option value="return">Return to driving after a period of not driving</option>
+        <option value="conditions">Review of licence conditions</option>
+        <option value="mods">Assessment for vehicle modifications</option>
+      </select>
+    </div>
+  </div>
+  <div class="row"><div class="f w100"><label>Reason for referral <span class="resetlink" onclick="resetField('reasonReferral')">reset to standard wording</span></label><textarea data-bind="reasonReferral" rows="4"></textarea></div></div>
+
+  <div class="subhead">Current symptoms &amp; functional challenges</div>
+  <div class="row"><div class="f w100"><label>Narrative</label><textarea data-bind="symptoms" rows="4" placeholder="Primary driving-related challenges, sensory factors, self-identified practice needs…"></textarea></div></div>
+
+  <div class="subhead">Medical history &amp; treatment</div>
+  <div class="row"><div class="f w100"><label>Medical history</label><textarea data-bind="medHistory" rows="3"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Medication response / side effects</label><textarea data-bind="medSideEffects" rows="2"></textarea></div></div>
+
+  <div class="subhead">Driving history &amp; current status</div>
+  <div class="row"><div class="f w100"><label>Narrative</label><textarea data-bind="drivingHistory" rows="4" placeholder="Licence history, hours accrued, vehicle, previous instruction, collisions/infringements, goals…"></textarea></div></div>
+
+  <div class="subhead">Driving needs</div>
+  <div id="needsRows"></div>
+</div>
+</details>
+
+<!-- ================= 4. PRE ON-ROAD ================= -->
+<details class="sec">
+<summary>4 · Pre On-Road Screens</summary>
+<div class="secbody">
+
+  <div class="subhead">Hearing &amp; communication</div>
+  <div class="row">
+    <div class="f w50"><label>Result</label>
+      <select data-bind="hearing"><option value="wnl">No difficulties observed or reported</option><option value="aids">Hearing aids worn — adequate with aids</option><option value="issue">Difficulties observed / reported</option></select>
+    </div>
+    <div class="f"><label>Comment (optional)</label><input type="text" data-bind="hearingNote"></div>
+  </div>
+
+  <div class="subhead">Visual screen</div>
+  <div class="row">
+    <div class="f w33"><label>Corrective lenses for driving</label><select data-bind="lenses"><option>Yes</option><option>No</option></select></div>
+    <div class="f w33"><label>Endorsed on licence</label><select data-bind="lensesEndorsed"><option>Yes</option><option>No</option><option>To be confirmed</option><option>N/A</option></select></div>
+    <div class="f w33"><label>Acuity completed by</label><input type="text" data-bind="acuityBy" placeholder="e.g. Optometrist"></div>
+  </div>
+  <div class="row">
+    <div class="f"><label>Uncorrected R</label><input type="text" data-bind="vaUR" placeholder="6/24"></div>
+    <div class="f"><label>Uncorrected L</label><input type="text" data-bind="vaUL"></div>
+    <div class="f"><label>Uncorrected Binoc</label><input type="text" data-bind="vaUB"></div>
+    <div class="f"><label>Corrected R</label><input type="text" data-bind="vaCR"></div>
+    <div class="f"><label>Corrected L</label><input type="text" data-bind="vaCL"></div>
+    <div class="f"><label>Corrected Binoc</label><input type="text" data-bind="vaCB"></div>
+  </div>
+  <div class="row">
+    <div class="f w50"><label>Visual fields (confrontation)</label><select data-bind="vFields"><option value="full">Full visual fields across all quadrants</option><option value="deficit">Deficit identified — describe below</option><option value="nt">Not tested</option></select></div>
+    <div class="f w50"><label>Eye movements</label><select data-bind="vMovements"><option value="wnl">Smooth &amp; accurate pursuits and saccades, no dizziness</option><option value="issue">Issues observed — describe below</option><option value="nt">Not tested</option></select></div>
+  </div>
+  <div class="row"><div class="f w100"><label>Additional visual notes</label><textarea data-bind="visionNotes" rows="2" placeholder="e.g. short-sighted, wears corrective lenses; longstanding floaters, not functionally limiting…"></textarea></div></div>
+  <div class="row">
+    <div class="f w50"><label>Meets Austroads vision standard</label><select data-bind="austroadsVision"><option>Yes</option><option>No</option><option>Requires specialist confirmation</option></select></div>
+    <div class="f w50"><label>Recommend Orthoptist / Ophthal / Optometrist review</label><select data-bind="eyeReview"><option>Yes</option><option>No</option></select></div>
+  </div>
+
+  <div class="subhead">Physical abilities &amp; restrictions</div>
+  <div class="hint">Each row is pre-filled with standard "within normal limits" wording — only edit what was different.</div>
+  <div id="physRows"></div>
+  <div class="row"><div class="f w100"><label>Summary of physical skills for driving <span class="resetlink" onclick="resetField('physSummary')">reset</span></label><textarea data-bind="physSummary" rows="2"></textarea></div></div>
+
+  <div class="subhead">Cognition / perception — standardised tests</div>
+  <div class="hint">Enter raw scores; interpretation against driving thresholds is written automatically. Untick a test to leave it out. Add clinical comments where relevant.</div>
+  <div id="testCards"></div>
+  <div class="row"><div class="f w100"><label>General cognitive skills (observations)</label><textarea data-bind="genCog" rows="3" placeholder="Alertness, engagement, instruction needs, concentration, communication, insight…"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Summary of cognitive skills for driving</label><textarea data-bind="cogSummary" rows="4"></textarea></div></div>
+</div>
+</details>
+
+<!-- ================= 5. ON-ROAD ================= -->
+<details class="sec">
+<summary>5 · On-Road Assessment</summary>
+<div class="secbody">
+  <div class="row">
+    <div class="f w50"><label>Vehicle</label><select data-bind="vehicle"><option>Dual-control automatic vehicle (dual brakes)</option><option>Dual-control manual vehicle</option><option>Client's own vehicle</option><option>Client's own vehicle with modifications</option></select></div>
+    <div class="f w25"><label>Duration (minutes)</label><input type="number" data-bind="duration"></div>
+  </div>
+  <div class="row"><div class="f w100"><label>Weather conditions</label><input type="text" data-bind="weather" placeholder="e.g. Overcast with no rain; dry road surfaces."></div></div>
+  <div class="row"><div class="f w100"><label>Geographical area / route</label><textarea data-bind="route" rows="2"></textarea></div></div>
+
+  <div class="subhead">Assessment results checklist</div>
+  <div class="hint">Every item defaults to <b>Safe &amp; appropriate</b> — you only write about the exceptions. Comments appear in the report's "Issues observed" column (or as an observation note for safe items).</div>
+  <div id="checklist"></div>
+</div>
+</details>
+
+<!-- ================= 6. SUMMARY & RECOMMENDATIONS ================= -->
+<details class="sec">
+<summary>6 · Summary &amp; Recommendations</summary>
+<div class="secbody">
+  <div class="row">
+    <div class="f w100"><label>Assessment outcome</label>
+      <select data-bind="outcome">
+        <option value="learner-continue">Learner — supported to continue toward provisional licence (with lessons)</option>
+        <option value="fit">Fit to drive — no restrictions recommended</option>
+        <option value="fit-cond">Fit to drive — with licence conditions</option>
+        <option value="lessons-reassess">Driving lessons recommended, then on-road reassessment</option>
+        <option value="mods">Fit to drive with vehicle modifications</option>
+        <option value="cease">Not currently safe to drive — cease driving recommended</option>
+      </select>
+    </div>
+  </div>
+  <div class="row"><div class="f w100"><label>Summary paragraph(s) <span class="resetlink" onclick="resetField('summaryText')">reset to auto-draft</span></label><textarea data-bind="summaryText" rows="8"></textarea></div></div>
+  <div class="hint">The auto-draft pulls in the outcome, diagnoses, screen results and every on-road issue you flagged. Regenerate any time with <b>reset</b>, then fine-tune.</div>
+
+  <div class="subhead">Recommendations</div>
+  <div class="hint">Tick to include. Wording is pre-drafted from your entries (hours, funding, focus areas from flagged issues) and stays editable.</div>
+  <div id="recCards"></div>
+</div>
+</details>
+
+<!-- ================= 7. REFERENCES ================= -->
+<details class="sec">
+<summary>7 · References</summary>
+<div class="secbody">
+  <div class="hint">References are added automatically for the tests you included (plus Austroads). Add extras below, one per line.</div>
+  <div class="row"><div class="f w100"><label>Additional references</label><textarea data-bind="refsExtra" rows="2"></textarea></div></div>
+</div>
+</details>
+
+<!-- ================= 8. DECLARATIONS & SIGN-OFF ================= -->
+<details class="sec">
+<summary>8 · Declarations &amp; Sign-off</summary>
+<div class="secbody">
+  <div class="hint">These sections protect you medicolegally: who you are, what your opinion is based on, its limits, who consented, and who the report is for. Standard wording is pre-filled — adjust per client as needed.</div>
+  <div class="row">
+    <div class="f w50"><label>Report reference <span class="resetlink" onclick="resetField('reportRef')">auto-generate</span></label><input type="text" data-bind="reportRef" placeholder="e.g. EH-20260618-ROM"></div>
+    <div class="f w50"><label>Report version</label><input type="text" data-bind="reportVersion" placeholder="e.g. 1.0 (Final)"></div>
+  </div>
+  <label class="chk" style="margin:4px 0 8px"><input type="checkbox" data-bindbool="consentObtained"><b>Informed consent was obtained for the assessment and for release of this report</b> (required before export)</label>
+  <div class="row"><div class="f w100"><label>Consent statement <span class="resetlink" onclick="resetField('consentText')">reset</span></label><textarea data-bind="consentText" rows="3"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Assessor qualifications &amp; scope <span class="resetlink" onclick="resetField('qualifications')">reset</span></label><textarea data-bind="qualifications" rows="3"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Basis of opinion &amp; limitations <span class="resetlink" onclick="resetField('limitations')">reset</span></label><textarea data-bind="limitations" rows="5"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Declaration <span class="resetlink" onclick="resetField('declarationText')">reset</span></label><textarea data-bind="declarationText" rows="3"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Report prepared for / distribution</label><input type="text" data-bind="distribution" placeholder="e.g. Referrer; client; treating general practitioner"></div></div>
+</div>
+</details>
+
+<div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. Estus Health · OT Driving Assessment Report Builder v1.1</div>
+</div>
+
+<div id="previewPane"><div id="reportRoot"></div></div>
+</div>
+<div id="valModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div id="valBox">
+    <header id="valHead">Outstanding items</header>
+    <div class="vbody" id="valList"></div>
+    <div class="vfoot"><button class="btn" onclick="document.getElementById('valModal').classList.remove('open')">Close</button></div>
+  </div>
+</div>
+<script>
+/* ================================================================
+   ESTUS HEALTH · OT DRIVING ASSESSMENT REPORT BUILDER
+   ================================================================ */
+
+/* ---------- static data ---------- */
+const REVIEWED_OPTS = [
+  {id:'referral', label:'Referral correspondence', text:'referral correspondence from {referrer}'},
+  {id:'licence', label:"Licence / learner's permit (sighted)", text:"{name}'s {licTypeShort} (sighted)"},
+  {id:'gp', label:'GP / specialist medical reports', text:'medical reports provided by {his} treating practitioners'},
+  {id:'prevOT', label:'Previous OT / allied health reports', text:'previous occupational therapy reports'},
+  {id:'background', label:'History provided at interview', text:'the background, medical and driving history provided by {name}{support} during the assessment'},
+];
+
+const NEEDS_ROWS = [
+  {id:'day', label:'Day time', opts:['Yes','No','Future need']},
+  {id:'night', label:'Night time', opts:['Yes','No','Future need (no night-driving experience to date)']},
+  {id:'metro', label:'Metropolitan', opts:['Yes','No','On occasions']},
+  {id:'country', label:'Country', opts:['Yes','No','On occasions']},
+  {id:'traffic', label:'Traffic density / type', opts:['Low density','Low to medium density, building with experience','Medium to high density','All conditions']},
+  {id:'familiar', label:'Familiarity', opts:['Predominantly local and familiar environments initially','Familiar and unfamiliar environments','Local area only']},
+  {id:'distance', label:'Distances travelled', opts:['Short to moderate distances','Short distances only','Moderate to long distances']},
+  {id:'roads', label:'Types of roads used', opts:['Local and suburban, progressing to multi-lane and arterial roads','Local and suburban roads','All road types including highways']},
+  {id:'commercial', label:'Commercial use', opts:['No','Yes']},
+];
+
+const PHYS_ROWS = [
+  {id:'hand', label:'Hand dominance', group:'', def:'Right'},
+  {id:'ulRom', label:'Active ROM', group:'UPPER LIMB', def:'Full active range of movement (shoulders, elbows, wrists and digits).'},
+  {id:'ulStr', label:'Strength', group:'UPPER LIMB', def:'Normal strength against resistance, including grip, elbow, triceps and wrist strength.'},
+  {id:'ulCoord', label:'Coordination', group:'UPPER LIMB', def:'Normal finger-to-nose and finger-to-finger coordination; pronation/supination fast and controlled.'},
+  {id:'ulSens', label:'Sensation / proprioception', group:'UPPER LIMB', def:'No issues detected. Replicated arm positions with eyes closed (steering, mirrors, seatbelt, window).'},
+  {id:'llRom', label:'Active ROM', group:'LOWER LIMB', def:'Full active range of movement (hips, knees and ankles).'},
+  {id:'llStr', label:'Strength', group:'LOWER LIMB', def:'Normal strength against resistance.'},
+  {id:'llCoord', label:'Coordination', group:'LOWER LIMB', def:'No issues observed. Foot-pivot simulation (transferring the foot between the accelerator and brake) was performed accurately with controlled placement.'},
+  {id:'llSens', label:'Sensation / proprioception', group:'LOWER LIMB', def:'No issues detected on testing.'},
+  {id:'tnRom', label:'Range of movement', group:'TRUNK / NECK', def:'Full rotational range of movement in neck and trunk.'},
+  {id:'balance', label:'Balance / mobility / transfers', group:'TRUNK / NECK', def:'No issues with sitting balance, mobility or transfers.'},
+  {id:'pain', label:'Pain', group:'TRUNK / NECK', def:'No pain or discomfort reported.'},
+];
+
+const CHECKLIST = [
+ {g:'Physical Control', items:[
+  {id:'pc1', short:'vehicle set-up', text:'Ability to adjust seat, mirrors and other controls of the vehicle'},
+  {id:'pc2', short:'operating vehicle controls', text:'Able to operate all vehicle controls effectively including changing gears, removing and applying handbrake, applying indicators, and effective braking and accelerating'},
+  {id:'pc3', short:'physical shoulder checks', text:'Physically able to look over shoulder when reversing or changing lanes'},
+  {id:'pc4', short:'foot pedal control', text:'Appropriate foot pedal control with accurate foot placement, braking and accelerating smoothly and efficiently'},
+  {id:'pc5', short:'steering control', text:'Steering control conducted with both hands with smooth cornering and appropriate ability to maintain a straight line as required'},
+  {id:'pc6', short:'consistent indicator use', text:'Engaged indicator appropriately whilst driving'},
+  {id:'pc7', short:'operating controls without diverting attention', text:'Operated vehicle controls without diverting attention from road and traffic conditions'},
+  {id:'pc8', short:'reaction time to hazards', text:'Physically reacted in a timely manner to all road hazards or signal changes'}]},
+ {g:'Vehicle Positioning', items:[
+  {id:'vp1', short:'negotiating roundabouts and curves', text:'Ability to safely and efficiently negotiate roundabouts, curves and bends'},
+  {id:'vp2', short:'road position during turns', text:'Appropriate and legal road position during left and right turns'},
+  {id:'vp3', short:'lane keeping', text:'Safe and appropriate position within lane markings on dual laned roads'},
+  {id:'vp4', short:'lane changing and merging position', text:'Safe and appropriate position when changing lanes and when merging with traffic'},
+  {id:'vp5', short:'clearance from parked cars', text:'Maintain sufficient distance from parked cars'},
+  {id:'vp6', short:'stopping and following distance', text:'Effectively positioned the vehicle at traffic lights and Stop signs; appropriate stopping and following distance behind other cars'},
+  {id:'vp7', short:'positioning for parking and manoeuvres', text:'Able to position the vehicle appropriately when parking and completing manoeuvres'}]},
+ {g:'Speed Control', items:[
+  {id:'sc1', short:'maintaining speed limits', text:'Able to maintain the correct speed limit throughout the assessment, including school and residential zones'},
+  {id:'sc2', short:'speed for traffic conditions', text:'Monitored the speed of the vehicle appropriately for the traffic conditions, including on corners and on approach to intersections'},
+  {id:'sc3', short:'consistent safe speeds', text:'Consistent driving at reasonable but safe and legal speeds'},
+  {id:'sc4', short:'speed on approach and moving off', text:'Safe and appropriate selection of speed approaching intersections and safe acceleration moving off from traffic lights'},
+  {id:'sc5', short:'anticipating conditions', text:'Anticipation and response to conditions by adjusting to a safe and appropriate speed'}]},
+ {g:'Observation', items:[
+  {id:'ob1', short:'continuous near-to-far scanning', text:'Continuous scanning to both left and right, short, middle and long distance'},
+  {id:'ob2', short:'forward observation', text:'Consistent and appropriate forward observation of traffic situations; observed all traffic signs, road markings and potential hazards'},
+  {id:'ob3', short:'consistent mirror monitoring', text:'Regular monitoring of left, right and internal mirrors including appropriate use of rear view mirror'},
+  {id:'ob4', short:'attention to road while operating controls', text:'Operated vehicle controls without diverting attention from road and traffic conditions'},
+  {id:'ob5', short:'blind-spot head checks', text:'Appropriate observation of blind spots when changing lanes, merging, or leaving kerb side parks'},
+  {id:'ob6', short:'response to signs and signals', text:'Appropriate response to road signs and signals'}]},
+ {g:'Planning and Judgement', items:[
+  {id:'pj1', short:'following instructions', text:'Effectively able to follow verbal instructions of the driving instructor, confirming or clarifying instructions as needed'},
+  {id:'pj2', short:'decision-making at intersections', text:'Able to make timely and appropriate decisions and demonstrate efficient progress at controlled and uncontrolled intersections including traffic lights'},
+  {id:'pj3', short:'gap selection', text:'Demonstrated appropriate gap selections when entering traffic or completing lane changes, including when turning left and right, at traffic lights and at Stop signs'},
+  {id:'pj4', short:'response to unexpected hazards', text:'Appropriate response to unexpected hazards and obstacles including pedestrians'},
+  {id:'pj5', short:'route and manoeuvre planning', text:'Planning of correct position to complete manoeuvres / routes'},
+  {id:'pj6', short:'compliance with road rules', text:'Obeying advisory signs, markings and road rules'}]},
+];
+
+const REFS = {
+  austroads:"Austroads, 2022, 'Assessing Fitness to Drive', Austroads Inc, Sydney",
+  dsda1:"Kay LG & Bundy A, 2009, DriveSafe and DriveAware: An assessment tool for driver rehabilitation, NCS Pearson Inc, Sydney, Australia",
+  dsda2:"Kay LG, Bundy AC & Clemson LM, 2009, 'Predicting fitness to drive in people with cognitive impairments by using DriveSafe and DriveAware', Archives of Physical Medicine and Rehabilitation, vol. 90, no. 9, pp. 1514–1522",
+  trails:"Tombaugh T, 2004, 'Trail Making Test A and B: Normative data stratified by age and education', Archives of Clinical Neuropsychology, vol. 19, pp. 203–214",
+  otdora:"Unsworth C, 2011, OT-DORA: Occupational Therapy Driver Off-Road Assessment Battery, American Occupational Therapy Association, Bethesda, USA",
+};
+
+/* ---------- default state ---------- */
+function freshState(){
+  const s = {
+    title:'Mr', firstName:'', prefName:'', surname:'', pronouns:'he', dob:'', ndis:'', address:'',
+    licNo:'', licSighted:'Yes', licExpiry:'', licType:"Learner's permit (Class C)", licCond:[], licCondOther:'',
+    diagnoses:'', meds:[{name:'',dose:'',purpose:''}],
+    refName:'', refRole:'', refOrg:'', refContact:'',
+    dateAssess:'', dateReport:'',
+    assessor:'Liam Fagan', assessorRole:'Occupational Therapist', ahpra:'OCC0002674997',
+    supervisor:'', mdi:'', location:'Flinders University Tonsley campus',
+    reviewed:{referral:true, licence:true, background:true, gp:false, prevOT:false}, reviewedExtra:'', supportPerson:'',
+    purpose:'learner', reasonReferral:'', symptoms:'', medHistory:'', medSideEffects:'', drivingHistory:'',
+    needs:{}, hearing:'wnl', hearingNote:'',
+    lenses:'Yes', lensesEndorsed:'Yes', acuityBy:'Optometrist',
+    vaUR:'',vaUL:'',vaUB:'',vaCR:'',vaCL:'',vaCB:'',
+    vFields:'full', vMovements:'wnl', visionNotes:'', austroadsVision:'Yes', eyeReview:'No',
+    phys:{}, physSummary:'',
+    tests:{
+      trailsB:{on:true, secs:'', errors:'', note:''},
+      maze:{on:true, secs:'', errors:'', note:''},
+      driveSafe:{on:true, score:'', detail:'', note:''},
+      driveAware:{on:true, score:'', note:''},
+      dsdaCat:{on:true, cat:'likely', note:''},
+      intersection:{on:true, score:'', note:''},
+      bells:{on:true, omissions:'', time:'', note:''},
+    },
+    genCog:'', cogSummary:'',
+    vehicle:'Dual-control automatic vehicle (dual brakes)', duration:'', weather:'', route:'',
+    checklist:{}, outcome:'learner-continue', summaryText:'',
+    recs:{}, recParams:{hours:10, funder:'NDIS plan (capacity building)'},
+    refsExtra:'',
+    reportRef:'', reportVersion:'1.0 (Final)', consentObtained:false,
+    consentText:'', qualifications:'', limitations:'', declarationText:'',
+    distribution:'Referrer; client; treating general practitioner',
+  };
+  PHYS_ROWS.forEach(r=> s.phys[r.id]=r.def);
+  NEEDS_ROWS.forEach(r=> s.needs[r.id]={val:r.opts[0], note:''});
+  CHECKLIST.forEach(g=>g.items.forEach(it=> s.checklist[it.id]={st:'safe', note:''}));
+  return s;
+}
+let S = freshState();
+
+/* ---------- pronouns & tokens ---------- */
+const PRO = {
+  he:  {he:'he', him:'him', his:'his', was:'was', is:'is', has:'has', does:'does', himself:'himself'},
+  she: {he:'she', him:'her', his:'her', was:'was', is:'is', has:'has', does:'does', himself:'herself'},
+  they:{he:'they', him:'them', his:'their', was:'were', is:'are', has:'have', does:'do', himself:'themself'},
+};
+function cap(x){return x? x.charAt(0).toUpperCase()+x.slice(1):''}
+function nm(){ // formal name: "Mr Citizen" / fallback first name
+  if(S.title && S.surname) return S.title+' '+S.surname;
+  return (S.prefName||S.firstName||'the client');
+}
+function fullNm(){
+  let f = S.firstName||''; if(S.prefName && S.prefName!==S.firstName) f += ' ('+S.prefName+')';
+  return ((S.title?S.title+' ':'')+f+' '+(S.surname||'')).replace(/\s+/g,' ').trim() || 'the client';
+}
+function fill(t){
+  if(!t) return '';
+  const p = PRO[S.pronouns]||PRO.he;
+  const map = {
+    name:nm(), full:fullNm(), first:(S.prefName||S.firstName||'the client'),
+    he:p.he, He:cap(p.he), him:p.him, his:p.his, His:cap(p.his), himself:p.himself,
+    was:p.was, is:p.is, has:p.has, does:p.does,
+    referrer: S.refName ? (S.refName + (S.refRole? ' ('+S.refRole+(S.refOrg? ', '+S.refOrg:'')+')':'')) : 'the referrer',
+    licTypeShort: /learner/i.test(S.licType)? "learner's permit" : 'driver licence',
+    support: S.supportPerson? ' and '+S.supportPerson : '',
+    diagnoses: S.diagnoses||'[diagnoses]',
+  };
+  return t.replace(/\{(\w+)\}/g,(m,k)=> map[k]!==undefined? map[k] : m);
+}
+function esc(x){return String(x??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function fmtDate(d){ if(!d) return ''; const m=d.match(/^(\d{4})-(\d{2})-(\d{2})$/); return m? m[3]+'/'+m[2]+'/'+m[1] : d; }
+
+/* ---------- auto-text templates ---------- */
+const AUTOTEXT = {
+  reasonReferral(){
+    const by = S.refName? 'by {referrer} ' : '';
+    const base = {
+      learner:`{name} was referred ${by}for an occupational therapy driver assessment to determine {his} suitability to continue learning to drive toward a provisional (P-plate) licence, and to provide recommendations for specialised driver training.`,
+      medical:`{name} was referred ${by}for an occupational therapy driver assessment to determine {his} fitness to return to or continue driving, in the context of {his} medical condition.`,
+      return:`{name} was referred ${by}for an occupational therapy driver assessment to determine {his} readiness to return to driving after a period of not driving.`,
+      conditions:`{name} was referred ${by}for an occupational therapy driver assessment to review {his} current licence conditions and determine whether they remain appropriate.`,
+      mods:`{name} was referred ${by}for an occupational therapy driver assessment to determine {his} requirements for vehicle modifications to support safe, independent driving.`,
+    }[S.purpose];
+    return base + ` The assessment considers the potential impact of {his} ${S.diagnoses? 'diagnoses of '+S.diagnoses : 'presenting condition'} on the cognitive, physical and perceptual skills required for safe driving.`;
+  },
+  physSummary(){
+    return `{name}'s physical abilities are within functional limits for driving a light automatic vehicle; no physical restrictions or modifications are indicated.`;
+  },
+  summaryText(){ return autoSummary(); },
+  reportRef(){
+    const d=(S.dateAssess||'').replaceAll('-','');
+    return 'EH-'+(d||'DRAFT')+'-'+((S.surname||'XXX').substring(0,3).toUpperCase());
+  },
+  consentText(){
+    return `The purpose and process of the assessment, and the limits of confidentiality, were explained to {name}{support}. {name} provided informed consent to participate in the assessment and for this report to be provided to the parties listed at the end of this report.`;
+  },
+  qualifications(){
+    return `${S.assessor} is an Occupational Therapist registered with the Australian Health Practitioner Regulation Agency (AHPRA No. ${S.ahpra||'[AHPRA]'}), practising in occupational therapy driver assessment and rehabilitation. This assessment and report were completed within the scope of that role${S.supervisor? ', under the supervision of '+S.supervisor+' (Occupational Therapist)':''}.`;
+  },
+  limitations(){
+    return `This report reflects {name}'s presentation and performance at the time of the assessment and is based on the information available to me, including the documents listed under "Reports Reviewed" and the history provided by {name}{support}, which is assumed to be accurate. Driving performance may vary with medical status, fatigue, medication changes and environmental conditions, and this assessment represents performance on the day under the conditions described. Should new or conflicting information become available, or should {his} condition change, the opinions in this report may need to be reviewed.`;
+  },
+  declarationText(){
+    return `I declare that the contents of this report are true and correct to the best of my knowledge and belief, and that the opinions expressed are my own, formed with reference to Austroads 'Assessing Fitness to Drive' (2022) and the assessment findings described in this report.`;
+  },
+};
+function resetField(key){ S[key] = AUTOTEXT[key](); syncForm(); update(); }
+
+/* ---------- score interpretation ---------- */
+function interpTrailsB(){
+  const t=S.tests.trailsB, s=parseFloat(t.secs), e=parseInt(t.errors||0);
+  if(isNaN(s)) return {pill:'na', txt:'Enter time in seconds.'};
+  const mins = Math.floor(s/60), rem = Math.round(s%60);
+  const tstr = s>=60? `${s} seconds (${mins} minute${mins!==1?'s':''} ${rem} seconds)` : `${s} seconds`;
+  const pass = s<=180 && e<=1;
+  let txt = `The driving threshold is 180 seconds with no more than one error. `;
+  txt += pass
+    ? `{name} completed the test within the threshold, indicating intact speed of divided attention and mental flexibility when shifting between competing demands.`
+    : (s>180 ? `{name} exceeded the time threshold, indicating reduced speed of divided attention and mental flexibility when shifting between competing demands.` :
+       `{name} completed the test within the time threshold but made ${e} errors, exceeding the error threshold.`);
+  return {pill: pass?'pass':'fail', scoreTxt:`${tstr}, ${e===0?'no errors':e+' error'+(e>1?'s':'')}.`, txt};
+}
+function interpMaze(){
+  const t=S.tests.maze, s=parseFloat(t.secs), e=parseInt(t.errors||0);
+  if(isNaN(s)) return {pill:'na', txt:'Enter time in seconds.'};
+  const pass = s<=100 && e<=1;
+  const txt = `Threshold for driving is 100 seconds with no more than one error. ` + (pass
+    ? `{name}'s result is well within this threshold, indicating intact visuoconstructional skills, planning and foresight.`
+    : `{name}'s result falls outside this threshold, indicating difficulty with visuoconstructional skills, planning and/or foresight.`);
+  return {pill: pass?'pass':'fail', scoreTxt:`Completed in ${s} seconds with ${e===0?'no errors':e+' error'+(e>1?'s':'')}.`, txt};
+}
+function interpDriveSafe(){
+  const t=S.tests.driveSafe, v=parseFloat(t.score);
+  if(isNaN(v)) return {pill:'na', txt:'Enter score out of 84.'};
+  const hi = v>=74;
+  return {pill: hi?'pass':'na', scoreTxt:`${v}/84${t.detail? ' ('+t.detail+')':''}`,
+    txt: hi? `Awareness of the driving environment is intact and within the upper range.` : `Awareness of the driving environment is below the upper range; interpret alongside the DriveAware score and the DSDA outcome category.`};
+}
+function interpDriveAware(){
+  const t=S.tests.driveAware, v=parseFloat(t.score);
+  if(isNaN(v)) return {pill:'na', txt:'Enter score out of 17.'};
+  const ok=v>=13;
+  return {pill: ok?'pass':'fail', scoreTxt:`${v}/17`,
+    txt: ok? `A score of 13 or above indicates intact awareness of driving-related abilities. This is consistent with the insight shown during the assessment.` : `A score below 13 indicates reduced awareness of driving-related abilities, which may affect on-road safety and self-monitoring.`};
+}
+function interpIntersection(){
+  const t=S.tests.intersection, v=parseFloat(t.score);
+  if(isNaN(v)) return {pill:'na', txt:'Enter score out of 8.'};
+  const ok=v>=8;
+  return {pill: ok?'pass':'fail', scoreTxt:`${v}/8${ok?' (100% accuracy)':''}`,
+    txt: ok? `No issues with the application of road rules, planning/problem-solving or visuospatial skills.` : `Errors were made in the application of road rules and/or visuospatial planning; this should be addressed through education and monitored on road.`};
+}
+function interpBells(){
+  const t=S.tests.bells, o=parseInt(t.omissions), time=t.time;
+  if(isNaN(o)) return {pill:'na', txt:'Enter number of omissions.'};
+  const ok=o<3;
+  let txt=`Three or more omissions indicate an attentional deficit, and six or more to either side may indicate visual neglect. `;
+  txt += ok? `No inattention or neglect was evident.` : `The number of omissions indicates a possible attentional deficit; the pattern of omissions should be reviewed for lateralised neglect.`;
+  txt += ` The time taken gives an indication of visual search speed when scanning a field of competing information.`;
+  return {pill: ok?'pass':'fail', scoreTxt:`${o===0?'All targets identified; 0 omissions':o+' omissions'}${time? ' (completed in '+time+')':''}.`, txt};
+}
+const DSDA_CATS = {
+  likely:'Likely to pass an on-road assessment',
+  further:'Requires further on-road assessment to determine impact on driving',
+  unlikely:'Unlikely to be safe to drive',
+};
+function dsdaCombined(){
+  const ds=S.tests.driveSafe, da=S.tests.driveAware;
+  if(!(ds.on&&da.on&&S.tests.dsdaCat.on)) return '';
+  const cat=S.tests.dsdaCat.cat;
+  let base = `{name}'s combined DriveSafe (${ds.score||'—'}/84) and DriveAware (${da.score||'—'}/17) results place {him} in the "${DSDA_CATS[cat]}" category`;
+  if(cat==='likely') base += `, indicating {he} {is} likely able to manage the cognitive aspects of driving.`;
+  else if(cat==='further') base += `. Cognitive readiness for driving could not be determined from off-road testing alone and is informed by the on-road assessment reported below.`;
+  else base += `, indicating significant cognitive barriers to safe driving.`;
+  if(S.tests.dsdaCat.note) base += ' '+S.tests.dsdaCat.note;
+  return base;
+}
+/* ---------- recommendations library ---------- */
+const REC_DEFS = [
+ {id:'continueLearner', label:'Continue as learner driver (with medical approval)', when:()=>S.outcome==='learner-continue',
+  def:()=>`With the approval of {his} treating medical practitioner, {name} is supported to continue as a learner driver toward a provisional licence.`},
+ {id:'fit', label:'Fit to drive — no restrictions', when:()=>S.outcome==='fit',
+  def:()=>`On the basis of this assessment, {name} demonstrated the physical, cognitive, visual and perceptual skills required for safe driving. No licence restrictions are recommended.`},
+ {id:'fitCond', label:'Fit to drive — with conditions', when:()=>S.outcome==='fit-cond',
+  def:()=>`On the basis of this assessment, {name} is considered fit to continue driving subject to the licence conditions outlined below. It is recommended that the licensing authority be advised of these conditions.`},
+ {id:'lessons', label:'Specialised driving lessons (MDI)', when:()=>['learner-continue','lessons-reassess'].includes(S.outcome), params:true,
+  def:()=>{
+    const issues = flaggedShorts();
+    const focus = issues.length? ` Instruction should target the specific areas identified in this assessment: ${issues.join(', ')}.` : '';
+    const extra = S.outcome==='learner-continue' ? ' It should also cover vehicle manoeuvres that were not assessed on road and provide a graded introduction to night and higher-density driving.' : '';
+    return `Approximately ${S.recParams.hours} hours of specialised driving instruction with a Motor Driving Instructor is recommended, funded through ${S.recParams.funder}.${focus}${extra}`;
+  }},
+ {id:'reassess', label:'On-road reassessment after lessons', when:()=>S.outcome==='lessons-reassess',
+  def:()=>`Following completion of the recommended driving instruction, an occupational therapy on-road reassessment is recommended to review {his} progress and determine {his} readiness to drive.`},
+ {id:'mods', label:'Vehicle modifications', when:()=>S.outcome==='mods',
+  def:()=>`The following vehicle modifications are recommended to support safe driving: [list modifications]. Prescription and fitting should be completed by an appropriately qualified provider, with driver training in the modified vehicle.`},
+ {id:'cease', label:'Cease driving', when:()=>S.outcome==='cease',
+  def:()=>`On the basis of this assessment, {name} did not demonstrate the skills currently required for safe driving, and it is recommended that {he} cease driving at this time. {His} treating medical practitioner and the licensing authority should be advised of this outcome. Alternative transport options have been discussed with {name} and {his} supports.`},
+ {id:'lenses', label:'Corrective lenses licence condition', when:()=>S.lenses==='Yes',
+  def:()=>`Licence conditions: {name} should continue to wear corrective lenses for driving, consistent with {his} current vision correction${S.lensesEndorsed==='To be confirmed'? ' (please confirm this condition is recorded on {his} licence)':''}. No additional licence conditions are recommended on the basis of this assessment. The recommendations in this report relate to a light automatic vehicle.`},
+ {id:'optom', label:'Optometrist / eye specialist review', when:()=>S.eyeReview==='Yes',
+  def:()=>`Routine optometrist review is recommended to monitor {his} vision for driving.`},
+ {id:'medReview', label:'Ongoing medical fitness review', when:()=>true,
+  def:()=>`Ongoing review of {his} medical fitness to drive by {his} general practitioner and/or treating specialist, as directed by {his} treating medical practitioner, in relation to ${S.diagnoses? S.diagnoses+' and its management':'{his} medical condition'}.`},
+ {id:'reviewChange', label:'Review on change of condition', when:()=>true,
+  def:()=>`Review is recommended if there is any change in {name}'s medical condition or symptoms.`},
+];
+function flaggedShorts(){
+  const out=[];
+  CHECKLIST.forEach(g=>g.items.forEach(it=>{ if(S.checklist[it.id].st==='issue') out.push(it.short); }));
+  return out;
+}
+
+/* ---------- auto summary draft ---------- */
+function autoSummary(){
+  const dx = S.diagnoses? `, in the context of {his} ${/;|,| and /.test(S.diagnoses)?'diagnoses':'diagnosis'} of ${S.diagnoses}` : '';
+  const purposeTxt = {
+    learner:`{name} was assessed for {his} suitability to continue progressing as a learner driver toward a provisional (P-plate) licence${dx}.`,
+    medical:`{name} was assessed to determine {his} fitness to drive${dx}.`,
+    return:`{name} was assessed to determine {his} readiness to return to driving${dx}.`,
+    conditions:`{name} was assessed to review {his} licence conditions${dx}.`,
+    mods:`{name} was assessed to determine {his} requirements for vehicle modifications${dx}.`,
+  }[S.purpose];
+
+  const cogFlags=[];
+  if(S.tests.trailsB.on){ const r=interpTrailsB(); if(r.pill==='fail') cogFlags.push('reduced speed of divided attention and mental flexibility under load (Trail Making Test Part B above the driving threshold)'); }
+  if(S.tests.maze.on){ const r=interpMaze(); if(r.pill==='fail') cogFlags.push('difficulty with planning and visuoconstructional skills (OT Drive Home Maze outside the driving threshold)'); }
+  if(S.tests.driveAware.on){ const r=interpDriveAware(); if(r.pill==='fail') cogFlags.push('reduced insight into driving-related abilities (DriveAware below cut-off)'); }
+  if(S.tests.bells.on){ const r=interpBells(); if(r.pill==='fail') cogFlags.push('visual inattention on the Bells Test'); }
+  const visOK = S.austroadsVision==='Yes';
+  let p1 = purposeTxt + ` On the pre-drive screen {his} vision ${S.lenses==='Yes'?'(with correction) ':''}${visOK?'met the Austroads vision standard':'did not clearly meet the Austroads vision standard'}, and {his} physical abilities and cognition were ${cogFlags.length?'broadly ':''}within functional limits for driving.`;
+  if(cogFlags.length) p1 += ` The screen did, however, identify ${cogFlags.join('; ')}. ${cogFlags.length===1?'This is {his} main cognitive consideration and is':'These are directly'} relevant to the demands of ${S.purpose==='learner'?'learning to drive':'safe driving'}.`;
+
+  const issues = flaggedShorts();
+  let p2;
+  if(S.outcome==='cease'){
+    p2 = `On road, significant concerns were identified${issues.length? ' with '+issues.join(', '):''}. These are described in the assessment results above and underpin the recommendation that {name} cease driving at this time.`;
+  } else {
+    p2 = `On road, {name} drove safely for the majority of the assessment and demonstrated ${S.purpose==='learner'?'promising foundational skills for a learner at {his} stage':'sound vehicle control and road craft'}.`;
+    if(issues.length){
+      p2 += ` ${S.purpose==='learner'? '{He} {is} not yet an independent driver, and several':'Several'} skills require development: ${issues.join('; ')}. These areas are ${S.purpose==='learner'?'common in novice drivers and ':''}best addressed through the targeted instruction and practice recommended below.`;
+    } else {
+      p2 += ` No areas of concern were identified during the on-road assessment.`;
+    }
+  }
+  return p1+'\n\n'+p2;
+}
+
+/* ================================================================
+   FORM BUILDERS
+================================================================ */
+function buildMedRows(){
+  const el=document.getElementById('medRows');
+  el.innerHTML = S.meds.map((m,i)=>`<div class="medrow">
+    <input placeholder="Name" value="${esc(m.name)}" oninput="S.meds[${i}].name=this.value;update()">
+    <input placeholder="Dosage / frequency" value="${esc(m.dose)}" oninput="S.meds[${i}].dose=this.value;update()">
+    <input placeholder="Purpose" value="${esc(m.purpose)}" oninput="S.meds[${i}].purpose=this.value;update()">
+    <button class="xbtn" onclick="S.meds.splice(${i},1);buildMedRows();update()">×</button></div>`).join('');
+}
+function addMed(){ S.meds.push({name:'',dose:'',purpose:''}); buildMedRows(); update(); }
+
+function buildReviewed(){
+  document.getElementById('reviewedChecks').innerHTML = REVIEWED_OPTS.map(o=>
+   `<label class="chk"><input type="checkbox" ${S.reviewed[o.id]?'checked':''} onchange="S.reviewed['${o.id}']=this.checked;update()">${o.label}</label>`).join('')
+   + `<div class="row" style="margin-top:6px"><div class="f w100"><label>Support person present at interview (for "history provided" wording)</label><input type="text" value="${esc(S.supportPerson)}" oninput="S.supportPerson=this.value;update()" placeholder="e.g. his father"></div></div>`;
+}
+
+function buildNeeds(){
+  document.getElementById('needsRows').innerHTML = NEEDS_ROWS.map(r=>{
+    const n=S.needs[r.id];
+    return `<div class="row" style="margin-bottom:5px">
+      <div class="f w33"><label>${r.label}</label>
+        <select onchange="S.needs['${r.id}'].val=this.value;update()">${r.opts.map(o=>`<option ${n.val===o?'selected':''}>${o}</option>`).join('')}</select></div>
+      <div class="f"><label>Detail (optional)</label><input type="text" value="${esc(n.note)}" oninput="S.needs['${r.id}'].note=this.value;update()" placeholder=""></div></div>`;
+  }).join('');
+}
+
+function buildPhys(){
+  let html='', lastGroup=null;
+  PHYS_ROWS.forEach(r=>{
+    if(r.group && r.group!==lastGroup){ html+=`<div class="grouphead">${r.group}</div>`; lastGroup=r.group; }
+    html+=`<div class="row" style="margin-bottom:5px"><div class="f w100"><label>${r.label} <span class="resetlink" onclick="S.phys['${r.id}']=PHYS_ROWS.find(x=>x.id==='${r.id}').def;syncPhys();update()">reset</span></label>
+      <textarea rows="1" style="min-height:34px" oninput="S.phys['${r.id}']=this.value;update()" id="phys_${r.id}">${esc(S.phys[r.id])}</textarea></div></div>`;
+  });
+  document.getElementById('physRows').innerHTML=html;
+}
+function syncPhys(){ PHYS_ROWS.forEach(r=>{ const el=document.getElementById('phys_'+r.id); if(el) el.value=S.phys[r.id]; }); }
+
+const TEST_META = {
+  trailsB:{name:'Trail Making Test — Part B', purpose:'Measures cognitive flexibility and multi-tasking', interp:interpTrailsB,
+    fields:[{k:'secs',label:'Time (seconds)',type:'number',w:'110px'},{k:'errors',label:'Errors',type:'number',w:'80px'}]},
+  maze:{name:'OT Drive Home Maze', purpose:'Screens attention, visuoconstructional skills, planning and foresight', interp:interpMaze,
+    fields:[{k:'secs',label:'Time (seconds)',type:'number',w:'110px'},{k:'errors',label:'Errors',type:'number',w:'80px'}]},
+  driveSafe:{name:'DriveSafe (iPad version)', purpose:'Measures awareness of driving environments', interp:interpDriveSafe,
+    fields:[{k:'score',label:'Score / 84',type:'number',w:'100px'},{k:'detail',label:'Detail (e.g. 0 objects missed; 1 direction detail missed)',type:'text',w:'260px'}]},
+  driveAware:{name:'DriveAware', purpose:'Measures insight into functional concerns and potential impact on road', interp:interpDriveAware,
+    fields:[{k:'score',label:'Score / 17',type:'number',w:'100px'}]},
+  dsdaCat:{name:'DriveSafe DriveAware — combined outcome', purpose:'DSDA outcome category (from the DSDA report)', interp:null,
+    fields:[]},
+  intersection:{name:'Intersection Diagram Test', purpose:'Measures knowledge of road rules', interp:interpIntersection,
+    fields:[{k:'score',label:'Score / 8',type:'number',w:'100px'}]},
+  bells:{name:'Bells Test', purpose:'Tests for visual inattention', interp:interpBells,
+    fields:[{k:'omissions',label:'Omissions',type:'number',w:'100px'},{k:'time',label:'Time (optional)',type:'text',w:'130px'}]},
+};
+function buildTests(){
+  document.getElementById('testCards').innerHTML = Object.keys(TEST_META).map(id=>{
+    const m=TEST_META[id], t=S.tests[id];
+    const r = m.interp? m.interp() : null;
+    const pill = id==='dsdaCat' ? `<span class="pill ${S.tests.dsdaCat.cat==='likely'?'pass':S.tests.dsdaCat.cat==='unlikely'?'fail':'na'}">${DSDA_CATS[S.tests.dsdaCat.cat]}</span>`
+      : (r? `<span class="pill ${r.pill}">${r.pill==='pass'?'Within threshold':r.pill==='fail'?'Outside threshold':'awaiting score'}</span>`:'');
+    let fields = m.fields.map(f=>`<div class="f" style="flex:0 0 auto;min-width:0"><label>${f.label}</label><input type="${f.type}" style="width:${f.w}" value="${esc(t[f.k])}" oninput="S.tests.${id}.${f.k}=this.value;buildTestPill('${id}');update()"></div>`).join('');
+    if(id==='dsdaCat') fields = `<div class="f" style="flex:1"><label>Outcome category (from DSDA report)</label><select onchange="S.tests.dsdaCat.cat=this.value;buildTests();update()">${Object.keys(DSDA_CATS).map(c=>`<option value="${c}" ${t.cat===c?'selected':''}>${DSDA_CATS[c]}</option>`).join('')}</select></div>`;
+    return `<div class="testcard ${t.on?'':'off'}" id="card_${id}">
+      <h4><label class="chk" style="padding:0"><input type="checkbox" ${t.on?'checked':''} onchange="S.tests.${id}.on=this.checked;buildTests();update()"></label>${m.name} <span id="pill_${id}">${pill}</span></h4>
+      <div style="font-size:11.5px;color:var(--faint);margin:2px 0 0 23px">${m.purpose}</div>
+      ${t.on? `<div class="trow">${fields}<div class="f" style="flex:1;min-width:160px"><label>Clinical comment (optional — appended to interpretation)</label><input type="text" value="${esc(t.note)}" oninput="S.tests.${id}.note=this.value;update()"></div></div>
+      <div class="autonote" id="auto_${id}">${autoNoteHTML(id)}</div>`:''}
+    </div>`;
+  }).join('');
+}
+function autoNoteHTML(id){
+  if(id==='dsdaCat') return '<b>Auto-text:</b> '+esc(fill(dsdaCombined())||'Enable DriveSafe + DriveAware to compose the combined outcome.');
+  const m=TEST_META[id]; if(!m.interp) return '';
+  const r=m.interp();
+  return '<b>Auto-interpretation:</b> '+esc((r.scoreTxt? r.scoreTxt+' ':'')+fill(r.txt));
+}
+function buildTestPill(id){
+  const el=document.getElementById('auto_'+id); if(el) el.innerHTML=autoNoteHTML(id);
+  const m=TEST_META[id];
+  if(m.interp){ const r=m.interp(); const p=document.getElementById('pill_'+id);
+    if(p) p.innerHTML=`<span class="pill ${r.pill}">${r.pill==='pass'?'Within threshold':r.pill==='fail'?'Outside threshold':'awaiting score'}</span>`; }
+  const d=document.getElementById('auto_dsdaCat'); if(d) d.innerHTML=autoNoteHTML('dsdaCat');
+}
+
+function buildChecklist(){
+  document.getElementById('checklist').innerHTML = CHECKLIST.map(g=>
+    `<div class="grouphead">${g.g}</div>` + g.items.map(it=>{
+      const c=S.checklist[it.id];
+      return `<div class="clrow"><div class="cltop">
+        <select class="st-${c.st}" onchange="S.checklist['${it.id}'].st=this.value;buildChecklist();update()">
+          <option value="safe" ${c.st==='safe'?'selected':''}>✓ Safe &amp; appropriate</option>
+          <option value="issue" ${c.st==='issue'?'selected':''}>⚠ Issue observed</option>
+          <option value="na" ${c.st==='na'?'selected':''}>— Not assessed</option>
+        </select>
+        <div class="cltxt">${it.text}</div></div>
+        ${c.st!=='na' ? `<textarea placeholder="${c.st==='issue'?'Describe the issue, contributing factors and what it will take to develop…':'Optional observation note'}" oninput="S.checklist['${it.id}'].note=this.value;update()">${esc(c.note)}</textarea>`:''}
+      </div>`;
+    }).join('')).join('');
+}
+
+function buildRecs(){
+  document.getElementById('recCards').innerHTML = REC_DEFS.map(r=>{
+    const st=S.recs[r.id]||(S.recs[r.id]={on:false,text:''});
+    const suggested = r.when();
+    const params = r.params? `<div class="params">Hours: <input type="number" style="width:64px" value="${esc(S.recParams.hours)}" oninput="S.recParams.hours=this.value;if(S.recs.lessons)S.recs.lessons.text=REC_DEFS.find(x=>x.id==='lessons').def();buildRecs();update()">
+      Funding: <select onchange="S.recParams.funder=this.value;if(S.recs.lessons)S.recs.lessons.text=REC_DEFS.find(x=>x.id==='lessons').def();buildRecs();update()">
+        ${['NDIS plan (capacity building)','private funding','compensable funding scheme','other funding'].map(f=>`<option ${S.recParams.funder===f?'selected':''}>${f}</option>`).join('')}</select></div>`:'';
+    return `<div class="reccard" style="${suggested&&!st.on?'border-left:3px solid var(--teal)':''}">
+      <div class="rectop"><input type="checkbox" style="accent-color:var(--teal);width:15px;height:15px" ${st.on?'checked':''}
+        onchange="S.recs['${r.id}'].on=this.checked; if(this.checked&&!S.recs['${r.id}'].text) S.recs['${r.id}'].text=REC_DEFS.find(x=>x.id==='${r.id}').def(); buildRecs();update()">
+       <label onclick="this.previousElementSibling.click()">${r.label}${suggested&&!st.on?' <span style="color:var(--teal);font-size:10.5px">· suggested for this outcome</span>':''}</label>
+       ${st.on?`<span class="resetlink" onclick="S.recs['${r.id}'].text=REC_DEFS.find(x=>x.id==='${r.id}').def();buildRecs();update()">reset wording</span>`:''}</div>
+      ${st.on? params+`<textarea oninput="S.recs['${r.id}'].text=this.value;update()">${esc(st.text)}</textarea>`:''}
+    </div>`;
+  }).join('');
+}
+/* ================================================================
+   REPORT GENERATION (inline-styled — shared by preview, print, Word)
+================================================================ */
+const ST = {
+  body:`font-family:'Barlow',Calibri,sans-serif;font-size:10.5pt;line-height:1.5;color:#1c1c1c`,
+  h1:`font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:600;font-size:19pt;letter-spacing:.03em;margin:0 0 7mm;color:#171410`,
+  h2:`font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:600;font-size:13pt;letter-spacing:.09em;text-transform:uppercase;color:#344982;margin:9mm 0 3mm;border-bottom:2px solid #2ca5b8;padding-bottom:1.5mm`,
+  h3:`font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:500;font-size:11pt;letter-spacing:.05em;color:#ab5c95;margin:5mm 0 2mm`,
+  p:`margin:0 0 3mm`,
+  tbl:`width:100%;border-collapse:collapse;margin:2mm 0 4mm;font-size:9.5pt`,
+  th:`font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:8.5pt;letter-spacing:.08em;text-transform:uppercase;text-align:left;background:#344982;color:#ffffff;padding:2mm 2.5mm;border:1px solid #344982`,
+  td:`border:1px solid #d6d4cf;padding:1.8mm 2.5mm;vertical-align:top`,
+  lbl:`border:1px solid #d6d4cf;padding:1.8mm 2.5mm;vertical-align:top;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;width:34%;background:#efe9db;color:#3a3934`,
+  ok:`border:1px solid #d6d4cf;padding:1.8mm 2.5mm;text-align:center;font-weight:700;color:#1e6b3a`,
+};
+function P(t){ return t? `<p style="${ST.p}">${paraSplit(t)}</p>`.replace(/<p style="[^"]*"><\/p>/g,'') : ''; }
+function paraSplit(t){ return esc(fill(t)).replace(/\n{2,}/g,`</p><p style="${ST.p}">`).replace(/\n/g,'<br>'); }
+function TR(label,val){ return `<tr><td style="${ST.lbl}">${label}</td><td style="${ST.td}">${paraSplit(val||'')}</td></tr>`; }
+
+function buildReport(){
+  let h='';
+  /* letterhead */
+  h+=`<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5mm">
+    <div><div style="font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:700;font-size:26px;line-height:.95;color:#171410">ESTUS <span style="font-weight:500;letter-spacing:.12em">HEALTH</span></div>
+    <div style="font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:9px;letter-spacing:.34em;color:#ab5c95;margin-top:3px;text-transform:uppercase">OCCUPATIONAL THERAPY</div></div>
+    <div style="text-align:right;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:8.5pt;color:#55534e;line-height:1.6">liam@estushealth.com<br>+61 3 9000 0000<br><span style="color:#2ca5b8;font-weight:600">www.estushealth.com</span></div></div>
+    <div style="height:3px;background:linear-gradient(90deg,#344982 0%,#2f6f9e 34%,#2ca5b8 66%,#ab5c95 100%);margin:0 0 8mm;border-radius:2px;font-size:0">&nbsp;</div>`;
+  h+=`<h1 style="${ST.h1}">Occupational Therapy Driver Assessment Report</h1>`;
+
+  /* client details */
+  const conds=[S.licType, ...S.licCond, S.licCondOther].filter(Boolean).join('. ');
+  h+=`<table style="${ST.tbl}">`+
+    TR('Report Reference / Version', [S.reportRef, S.reportVersion].filter(Boolean).join(' · '))+
+    TR('Name', fullNm())+TR('DOB', fmtDate(S.dob))+
+    (S.ndis? TR('NDIS No', S.ndis):'')+TR('Address', S.address)+
+    TR('Driver Licence Number', S.licNo? S.licNo + (S.licSighted==='Yes'? ' (sighted)':'') : '')+
+    TR('Driver Licence Conditions/Class', conds)+
+    TR('Driver Licence Expiry', S.licExpiry)+
+    TR('Presenting condition/diagnosis', S.diagnoses)+
+    TR('Medications', S.meds.filter(m=>m.name).map(m=>m.name+(m.dose? ' — '+m.dose:'')).join('; '))+
+    TR('Referrer/Medical Practitioner', [S.refName+(S.refRole?' ('+S.refRole+')':''), S.refOrg, S.refContact].filter(Boolean).join(' · '))+
+    TR('Date of Assessment', fmtDate(S.dateAssess))+TR('Date of Report', fmtDate(S.dateReport))+
+    TR('Report Completed by', S.assessor+'\n'+S.assessorRole+(S.ahpra? '\nAHPRA No. '+S.ahpra:''))+
+    `</table>`;
+
+  /* reports reviewed */
+  const rev = REVIEWED_OPTS.filter(o=>S.reviewed[o.id]).map(o=>fill(o.text));
+  if(S.reviewedExtra) S.reviewedExtra.split(',').map(x=>x.trim()).filter(Boolean).forEach(x=>rev.push(x));
+  h+=`<h2 style="${ST.h2}">Reports Reviewed</h2>`+P(rev.length? 'The following were reviewed as part of this assessment: '+rev.join('; ')+'.' : '');
+
+  /* background */
+  h+=`<h2 style="${ST.h2}">Background Information</h2>`;
+  let admin=`This Occupational Therapy Driving Assessment was conducted at ${S.location||'[location]'}. The assessment was administered by ${S.assessor} (${S.assessorRole})`;
+  if(S.supervisor) admin+=`, under the supervision of ${S.supervisor} (Occupational Therapist)`;
+  if(S.mdi) admin+=`. On-road instruction was provided by ${S.mdi} (Motor Driving Instructor)`;
+  h+=P(admin+'.');
+  h+=`<h3 style="${ST.h3}">Reason for Referral</h3>`+P(S.reasonReferral);
+  if(S.consentText) h+=`<h3 style="${ST.h3}">Consent</h3>`+P(S.consentText);
+  if(S.symptoms) h+=`<h3 style="${ST.h3}">Current Symptoms and Functional Challenges</h3>`+P(S.symptoms);
+  if(S.medHistory) h+=`<h3 style="${ST.h3}">Medical History</h3>`+P(S.medHistory);
+  const meds=S.meds.filter(m=>m.name);
+  if(meds.length){
+    h+=`<h3 style="${ST.h3}">Treatment</h3><table style="${ST.tbl}"><tr><th style="${ST.th}">Name</th><th style="${ST.th}">Dosage/Frequency</th><th style="${ST.th}">Purpose</th></tr>`+
+      meds.map(m=>`<tr><td style="${ST.td}">${esc(m.name)}</td><td style="${ST.td}">${esc(m.dose)}</td><td style="${ST.td}">${esc(m.purpose)}</td></tr>`).join('')+`</table>`;
+    h+=P(S.medSideEffects);
+  }
+  if(S.drivingHistory) h+=`<h3 style="${ST.h3}">Driving History &amp; Current Driving Status</h3>`+P(S.drivingHistory);
+  h+=`<h3 style="${ST.h3}">Driving Needs</h3><table style="${ST.tbl}"><tr><th style="${ST.th}">Driving conditions</th><th style="${ST.th}">Current needs</th></tr>`+
+    NEEDS_ROWS.map(r=>{const n=S.needs[r.id];return `<tr><td style="${ST.lbl}">${r.label}</td><td style="${ST.td}">${esc(n.val)}${n.note? (/^(Yes|No)$/.test(n.val)? ', ':' — ')+esc(n.note):''}</td></tr>`}).join('')+`</table>`;
+
+  /* pre on-road */
+  h+=`<h2 style="${ST.h2}">Pre On-Road Assessment</h2>`;
+  h+=`<h3 style="${ST.h3}">Hearing and Communication Screen</h3>`;
+  const hearTxt={wnl:`{name} was able to hear and respond to all questions asked during the assessment. No hearing difficulties were reported${S.supportPerson? ' by {name} or '+S.supportPerson:''}.`,
+    aids:`{name} wears hearing aids and was able to hear and respond to all questions asked during the assessment with aids in place.`,
+    issue:`Hearing difficulties were noted during the assessment.`}[S.hearing];
+  h+=P(hearTxt + (S.hearingNote? ' '+S.hearingNote:''));
+
+  h+=`<h3 style="${ST.h3}">Visual Screen</h3>`;
+  h+=`<table style="${ST.tbl}"><tr><td style="${ST.lbl}">Corrective lenses recommended for driving</td><td style="${ST.td}">${S.lenses}</td><td style="${ST.lbl}">Endorsed on licence</td><td style="${ST.td}">${S.lensesEndorsed}</td></tr></table>`;
+  if(S.vaUR||S.vaCR||S.vaUB||S.vaCB){
+    h+=`<table style="${ST.tbl}"><tr><th style="${ST.th}" colspan="4">Visual Acuity (Snellen's Eye Chart)${S.acuityBy? ' — completed by: '+esc(S.acuityBy):''}</th></tr>
+    <tr><td style="${ST.lbl}"></td><td style="${ST.lbl};width:auto;text-align:center">Right</td><td style="${ST.lbl};width:auto;text-align:center">Left</td><td style="${ST.lbl};width:auto;text-align:center">Binocular</td></tr>
+    <tr><td style="${ST.lbl}">Uncorrected</td><td style="${ST.td};text-align:center">${esc(S.vaUR)}</td><td style="${ST.td};text-align:center">${esc(S.vaUL)}</td><td style="${ST.td};text-align:center">${esc(S.vaUB)}</td></tr>
+    <tr><td style="${ST.lbl}">Corrected</td><td style="${ST.td};text-align:center">${esc(S.vaCR)}</td><td style="${ST.td};text-align:center">${esc(S.vaCL)}</td><td style="${ST.td};text-align:center">${esc(S.vaCB)}</td></tr></table>`;
+  }
+  const vf={full:'Confrontation testing indicated full visual fields across all quadrants.',deficit:'Confrontation testing identified a visual field deficit.',nt:''}[S.vFields];
+  const vm={wnl:'Binocular eye movements (smooth pursuits and saccades) were smooth and accurate, with no reported dizziness.',issue:'Issues were observed with binocular eye movements.',nt:''}[S.vMovements];
+  h+=P([vf,vm,fill(S.visionNotes)].filter(Boolean).join(' '));
+  h+=`<table style="${ST.tbl}"><tr><td style="${ST.lbl};width:70%">Meets Austroads Vision Standard</td><td style="${ST.td}">${S.austroadsVision}</td></tr>
+      <tr><td style="${ST.lbl};width:70%">Recommend assessment by Orthoptist, Ophthalmologist or Optometrist</td><td style="${ST.td}">${S.eyeReview}</td></tr></table>`;
+
+  /* physical */
+  h+=`<h3 style="${ST.h3}">Physical Abilities &amp; Restrictions</h3><table style="${ST.tbl}"><tr><th style="${ST.th};width:34%"></th><th style="${ST.th}">Observed physical abilities and restrictions</th></tr>`;
+  let lastG=null;
+  PHYS_ROWS.forEach(r=>{
+    if(r.group && r.group!==lastG){ h+=`<tr><td colspan="2" style="${ST.td};background:#344982;color:#fff;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:8.5pt;letter-spacing:.08em;text-transform:uppercase">${r.group}</td></tr>`; lastG=r.group; }
+    h+=TR(r.label, S.phys[r.id]);
+  });
+  h+=`</table>`;
+  if(S.physSummary) h+=`<p style="${ST.p}"><b>Summary of physical skills for driving:</b> ${paraSplit(S.physSummary)}</p>`;
+
+  /* cognition */
+  h+=`<h3 style="${ST.h3}">Cognition / Perception Abilities &amp; Restrictions</h3>`;
+  h+=`<table style="${ST.tbl}"><tr><th style="${ST.th}">Test</th><th style="${ST.th}">Purpose</th><th style="${ST.th}">Score</th><th style="${ST.th}">Indicates</th></tr>`;
+  const testRow=(id)=>{
+    const t=S.tests[id]; if(!t.on) return '';
+    const m=TEST_META[id], r=m.interp();
+    return `<tr><td style="${ST.td}"><b>${m.name}</b></td><td style="${ST.td}">${m.purpose}</td><td style="${ST.td}">${esc(r.scoreTxt||'')}</td><td style="${ST.td}">${paraSplit(r.txt+(t.note? ' '+t.note:''))}</td></tr>`;
+  };
+  h+= testRow('trailsB')+testRow('maze')+testRow('driveSafe')+testRow('driveAware');
+  const comb=dsdaCombined();
+  if(comb) h+=`<tr><td colspan="4" style="${ST.td};background:#f4f8f9">${paraSplit(comb)}</td></tr>`;
+  h+= testRow('intersection')+testRow('bells');
+  if(S.genCog) h+=`<tr><td style="${ST.td}"><b>General Cognitive Skills</b></td><td colspan="3" style="${ST.td}">${paraSplit(S.genCog)}</td></tr>`;
+  h+=`</table>`;
+  if(S.cogSummary) h+=`<p style="${ST.p}"><b>Summary of cognitive skills for driving:</b> ${paraSplit(S.cogSummary)}</p>`;
+
+  /* on-road */
+  h+=`<h2 style="${ST.h2}">On-Road Assessment</h2>`;
+  h+=`<table style="${ST.tbl}">`+
+    TR('Vehicle type used for assessment', S.vehicle)+
+    TR('Duration of assessment', S.duration? S.duration+' minutes':'')+
+    TR('Weather conditions', S.weather)+
+    TR('Geographical area', S.route)+
+    TR('MDI present for assessment', S.mdi)+`</table>`;
+  h+=`<h3 style="${ST.h3}">Assessment Results</h3>`;
+  h+=`<table style="${ST.tbl}"><tr><th style="${ST.th};width:14%">Performance area</th><th style="${ST.th};width:38%">Observations</th><th style="${ST.th};width:9%">Safe &amp; appropriate</th><th style="${ST.th}">Issues observed / comments</th></tr>`;
+  CHECKLIST.forEach(g=>g.items.forEach(it=>{
+    const c=S.checklist[it.id];
+    if(c.st==='na' && !c.note) return;
+    const safe = c.st==='safe';
+    h+=`<tr><td style="${ST.td};font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;color:#344982">${g.g}</td>
+      <td style="${ST.td}">${it.text}</td>
+      <td style="${c.st==='safe'? ST.ok : ST.td+';text-align:center'}">${safe?'✓': c.st==='na'?'n/a':''}</td>
+      <td style="${ST.td}${c.st==='issue'?';color:#8c2f2f':''}">${c.st==='issue'&&!c.note? '<b>✗</b>':''}${paraSplit(c.note||'')}</td></tr>`;
+  }));
+  h+=`</table>`;
+
+  /* summary + recs */
+  h+=`<h2 style="${ST.h2}">Summary and Recommendations</h2>`+P(S.summaryText);
+  const recsOn = REC_DEFS.filter(r=>S.recs[r.id]&&S.recs[r.id].on&&S.recs[r.id].text);
+  if(recsOn.length){
+    h+=`<p style="${ST.p}"><b>Recommendations:</b></p><ul style="margin:1mm 0 4mm;padding-left:6mm">`+
+      recsOn.map(r=>`<li style="margin-bottom:2mm">${paraSplit(S.recs[r.id].text)}</li>`).join('')+`</ul>`;
+  }
+
+  /* basis of opinion, limitations, declaration */
+  h+=`<h2 style="${ST.h2}">Basis of Opinion, Limitations and Declaration</h2>`;
+  if(S.qualifications) h+=`<h3 style="${ST.h3}">Assessor Qualifications</h3>`+P(S.qualifications);
+  if(S.limitations) h+=`<h3 style="${ST.h3}">Basis of Opinion and Limitations</h3>`+P(S.limitations);
+  if(S.declarationText) h+=`<h3 style="${ST.h3}">Declaration</h3>`+P(S.declarationText);
+  if(S.distribution) h+=`<p style="${ST.p}"><b>This report has been prepared for:</b> ${esc(S.distribution)}. It is confidential and should not be released to other parties without appropriate consent.</p>`;
+
+  /* signature */
+  h+=`<p style="${ST.p};margin-top:8mm">Please do not hesitate to contact me should you wish to discuss any aspect of this report.</p>
+  <p style="${ST.p};margin-top:6mm">Kind regards,</p>
+  <p style="${ST.p};margin-top:5mm"><b>${esc(S.assessor)}</b><br>${esc(S.assessorRole)}${S.ahpra? '<br>AHPRA No. '+esc(S.ahpra):''}<br>Estus Health<br>Signed: ${esc(fmtDate(S.dateReport))||'____________'}</p>`;
+
+  /* references */
+  const refs=[REFS.austroads];
+  if(S.tests.driveSafe.on||S.tests.driveAware.on){refs.push(REFS.dsda1,REFS.dsda2);}
+  if(S.tests.trailsB.on) refs.push(REFS.trails);
+  if(S.tests.maze.on||S.tests.intersection.on||S.tests.bells.on) refs.push(REFS.otdora);
+  if(S.refsExtra) S.refsExtra.split('\n').map(x=>x.trim()).filter(Boolean).forEach(x=>refs.push(x));
+  h+=`<h2 style="${ST.h2}">References</h2>`+refs.map(r=>`<p style="${ST.p};font-size:9pt;color:#55534e">${esc(r)}</p>`).join('');
+
+  /* end marker + footer strip */
+  h+=`<p style="text-align:center;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:9pt;letter-spacing:.3em;color:#8a8880;margin:10mm 0 4mm">— END OF REPORT —</p>`;
+  h+=`<div style="border-top:1px solid #e6e4df;padding-top:2mm;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:7.5pt;letter-spacing:.08em;color:#8a8880">ESTUS HEALTH · OCCUPATIONAL THERAPY&nbsp;&nbsp;·&nbsp;&nbsp;${esc(footerID())}&nbsp;&nbsp;·&nbsp;&nbsp;CONFIDENTIAL</div>`;
+  return h;
+}
+function footerID(){
+  return [ (S.surname? S.surname.toUpperCase()+', '+(S.firstName||''):'').trim(), S.dob? 'DOB '+fmtDate(S.dob):'', S.reportRef? 'Ref '+S.reportRef:'', S.dateReport? fmtDate(S.dateReport):'' ].filter(Boolean).join(' · ');
+}
+/* ================================================================
+   RENDER / BIND / PERSIST
+================================================================ */
+let renderTimer=null;
+function update(){ clearTimeout(renderTimer); renderTimer=setTimeout(()=>{ render(); autosave(); },250); }
+function render(){
+  document.getElementById('reportRoot').innerHTML = `<div class="page">${buildReport()}</div>`;
+  updatePageStyle(); updateBadge();
+}
+function updatePageStyle(){
+  let st=document.getElementById('pageStyle');
+  if(!st){ st=document.createElement('style'); st.id='pageStyle'; document.head.appendChild(st); }
+  const id=(footerID()+' · CONFIDENTIAL').replace(/\\/g,'').replace(/"/g,"'");
+  st.textContent=`@page{size:A4;margin:18mm 18mm 22mm;
+    @bottom-left{content:"${id}";font-family:'Barlow Semi Condensed',sans-serif;font-size:7.5pt;color:#8a8880}
+    @bottom-right{content:"Page " counter(page) " of " counter(pages);font-family:'Barlow Semi Condensed',sans-serif;font-size:7.5pt;color:#8a8880}}`;
+}
+
+function bindInputs(){
+  document.querySelectorAll('[data-bind]').forEach(el=>{
+    el.addEventListener('input',()=>{ S[el.dataset.bind] = el.value; update(); });
+    if(el.tagName==='SELECT') el.addEventListener('change',()=>{ S[el.dataset.bind]=el.value; update(); });
+  });
+  document.querySelectorAll('[data-bindbool]').forEach(el=>{
+    el.addEventListener('change',()=>{ S[el.dataset.bindbool]=el.checked; update(); });
+  });
+  document.querySelectorAll('[data-bindchk]').forEach(el=>{
+    el.addEventListener('change',()=>{
+      const k=el.dataset.bindchk;
+      S[k] = S[k]||[];
+      if(el.checked){ if(!S[k].includes(el.value)) S[k].push(el.value); }
+      else S[k] = S[k].filter(x=>x!==el.value);
+      update();
+    });
+  });
+}
+function syncForm(){
+  document.querySelectorAll('[data-bind]').forEach(el=>{ el.value = S[el.dataset.bind]??''; });
+  document.querySelectorAll('[data-bindbool]').forEach(el=>{
+    el.addEventListener('change',()=>{ S[el.dataset.bindbool]=el.checked; update(); });
+  });
+  document.querySelectorAll('[data-bindchk]').forEach(el=>{ el.checked = (S[el.dataset.bindchk]||[]).includes(el.value); });
+  document.querySelectorAll('[data-bindbool]').forEach(el=>{ el.checked = !!S[el.dataset.bindbool]; });
+  buildMedRows(); buildReviewed(); buildNeeds(); buildPhys(); buildTests(); buildChecklist(); buildRecs();
+}
+
+/* autosave */
+function autosave(){ try{ localStorage.setItem('estus-ot-report', JSON.stringify(S)); }catch(e){} }
+function loadAutosave(){ try{ const d=localStorage.getItem('estus-ot-report'); if(d){ S = Object.assign(freshState(), JSON.parse(d)); return true; } }catch(e){} return false; }
+
+/* file save/load */
+function saveJSON(){
+  const blob=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=(S.surname||'client')+'-driving-assessment-draft.json'; a.click();
+}
+function openJSON(ev){
+  const f=ev.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{ try{ S=Object.assign(freshState(),JSON.parse(r.result)); syncForm(); render(); }catch(e){ alert('Could not read that draft file.'); } };
+  r.readAsText(f); ev.target.value='';
+}
+function newReport(){
+  if(!confirm('Start a new blank report? The current draft will be cleared (save it first if needed).')) return;
+  S=freshState();
+  ['reasonReferral','physSummary','consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]());
+  syncForm(); render(); autosave();
+}
+
+/* Word export */
+function exportWord(){
+  const foot=esc(footerID());
+  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="utf-8"><title>OT Driver Assessment Report</title>
+<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
+<style>
+@page Section1{size:A4;margin:20mm 18mm 24mm 18mm;mso-footer:f1;}
+div.Section1{page:Section1}
+p.MsoFooter{margin:0;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:7.5pt;color:#8a8880;letter-spacing:.04em;border-top:1pt solid #e6e4df;padding-top:4pt}
+body{${ST.body}} table{border-collapse:collapse} li{margin-bottom:6pt}
+</style>
+</head><body><div class="Section1">${buildReport()}
+<div style="mso-element:footer" id="f1"><p class="MsoFooter">${foot} · CONFIDENTIAL<span style="mso-tab-count:2"></span>Page <span style='mso-field-code:" PAGE "'>1</span> of <span style='mso-field-code:" NUMPAGES "'>1</span></p></div>
+</div></body></html>`;
+  const blob=new Blob(['﻿'+html],{type:'application/msword'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  const d=(S.dateReport||'').replaceAll('-','');
+  a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} Driving Assessment Report${d? ' '+d:''}.doc`;
+  a.click();
+}
+
+/* ================================================================
+   EXAMPLE (de-identified sample client) — for demo / QA
+================================================================ */
+function loadExample(){
+  S=freshState();
+  Object.assign(S,{
+    title:'Mr', firstName:'John', prefName:'Johnny', surname:'Citizen', pronouns:'he', dob:'2000-01-01',
+    address:'123 Sample Street, Adelaide SA 5000', licNo:'AB1234', licSighted:'Yes', licExpiry:'[TBC]',
+    licType:"Learner's permit (Class C)",
+    licCond:['L-plates to be displayed','must be accompanied by a fully licensed supervising driver','zero BAC','automatic vehicles only','corrective lenses to be worn'],
+    diagnoses:'Autism Spectrum Disorder (Level 2); Schizophrenia',
+    meds:[{name:'Paliperidone',dose:'3-monthly intramuscular (IM) injection',purpose:'Stabilisation of schizophrenia'}],
+    refName:'Jane Referrer', refRole:'Occupational Therapist', refOrg:'Example Allied Health', refContact:'referrals@example.com.au',
+    dateAssess:'2026-06-01', dateReport:'2026-06-08',
+    supervisor:'Sarah Supervisor', mdi:'David Instructor', supportPerson:'his father',
+    purpose:'learner',
+    symptoms:"{name} presents with diagnoses of Autism Spectrum Disorder (Level 2) and Schizophrenia. {His} primary driving-related challenge is managing cognitive load when several factors occur simultaneously (for example, at intersections or when tracking multiple vehicles pulling out at once). {He} reports no major sensory sensitivities, although {his} father notes that {he} dislikes large, crowded environments and tends to withdraw in highly stimulating settings. {He} identifies that {he} requires further practice with reverse parking and three-point turns.",
+    medHistory:"Autism Spectrum Disorder (Level 2) and Schizophrenia. {name}'s schizophrenia is reported to be well managed and stabilised on a three-monthly intramuscular injection, which {his} father reports has placed {him} at a “good level.” {He} previously trialled daily oral medication but found this difficult to manage.",
+    medSideEffects:"{name} reported some general fatigue and localised pain for approximately one week following {his} most recent injection but did not report any other side effects from {his} medication.",
+    drivingHistory:"{name} obtained {his} Learner's Permit in approximately 2021 (held for approximately five years) and has accumulated just under 20 supervised daytime logbook hours, learning in the family's automatic vehicle. {He} has undertaken previous lessons through a community driving program and with an instructor (the latter {he} found frustrating), has not yet driven at night, and has no history of motor vehicle collisions or traffic infringements. {He} {is} working toward a provisional (P-plate) licence to support independent travel to employment, study and community activities, and to reduce {his} reliance on family and {his} support worker for transport.",
+    lenses:'Yes', lensesEndorsed:'To be confirmed', acuityBy:'Optometrist',
+    vaUR:'6/24', vaUL:'6/21', vaUB:'6/24', vaCR:'6/12', vaCL:'6/6', vaCB:'6/6 -2',
+    visionNotes:"{name} is short-sighted and wears corrective lenses for driving. {He} reports longstanding myodesopsias (floaters) in both eyes, which {he} does not feel affect {his} vision functionally, and no other visual symptoms.",
+    austroadsVision:'Yes', eyeReview:'Yes',
+    genCog:"{name} was alert, engaged and cooperative throughout the pre-driving screen. {He} required only minimal instruction, maintained concentration throughout (despite some general fatigue and localised pain after a recent injection), communicated clearly, asked relevant and at times complex questions, and demonstrated good insight into the implications of {his} functional status for driving.",
+    cogSummary:"Cognitive and perceptual screening was broadly within functional limits for driving. {name} demonstrated intact visuoconstructional skills, planning and executive function, intact visual scanning and attention, accurate application of road rules, and realistic insight into {his} own abilities. {His} performance on the Trail Making Test Part B, however, exceeded the driving time threshold, indicating reduced speed of divided attention and mental flexibility under load. This is {his} main area of cognitive vulnerability and is consistent with the difficulty {he} reports managing several driving demands at once. {His} combined DriveSafe and DriveAware scores place {him} in the highest (likely to pass) category from a cognitive standpoint. This indicates cognitive readiness to progress to supervised on-road learning rather than readiness to drive unsupervised, and is best developed through graded, repeated practice.",
+    location:'the Estus Health assessment centre',
+    vehicle:'Dual-control automatic vehicle (dual brakes)', duration:'40',
+    weather:'Overcast with no rain; dry road surfaces.',
+    route:'Commenced in a quiet car park for vehicle familiarisation, progressing to two-way and multi-lane roads, traffic lights and roundabouts across 25, 50 and 60 km/h zones in low-to-moderate traffic.',
+    outcome:'learner-continue',
+    recParams:{hours:10, funder:'NDIS plan (capacity building)'},
+  });
+  S.reviewed={referral:true,licence:true,background:true,gp:false,prevOT:false};
+  S.needs.night={val:'Future need (no night-driving experience to date)',note:''};
+  S.needs.metro={val:'Yes',note:'metropolitan Adelaide'};
+  S.needs.country={val:'On occasions',note:''};
+  S.needs.traffic={val:'Low to medium density, building with experience',note:''};
+  Object.assign(S.tests,{
+    trailsB:{on:true,secs:'227',errors:'0',note:'This is likely to affect {his} management of high-density traffic and complex intersections, where attention must be shifted quickly between multiple vehicles, signs and signals. It is consistent with the cognitive-load difficulties {he} reports and is a key focus for supervised practice.'},
+    maze:{on:true,secs:'23',errors:'0',note:''},
+    driveSafe:{on:true,score:'83',detail:'0 objects missed; 1 location/direction detail missed',note:''},
+    driveAware:{on:true,score:'14',note:''},
+    dsdaCat:{on:true,cat:'likely',note:'This reflects cognitive and perceptual readiness only. As a learner driver {he} still requires substantial supervised on-road practice and specialised instruction to develop the physical and procedural skills needed to drive independently and to pass a practical driving test.'},
+    intersection:{on:true,score:'8',note:''},
+    bells:{on:true,omissions:'0',time:'',note:''},
+  });
+  S.checklist.pc3={st:'safe',note:'Physically demonstrated the cervical range of motion to look over {his} shoulder, but rarely initiated this movement spontaneously. This is common in novice drivers who have not yet automated the movement, and is likely compounded by the higher cognitive load {he} manages when several driving tasks occur at once. It will require specific instruction and repeated supervised practice to establish.'};
+  S.checklist.pc6={st:'issue',note:"Because the assessment vehicle's indicator stalk was on the left (contrasting with {his} familiar family vehicle), {he} triggered the wipers instead of the indicators on 3 occasions. {He} managed this calmly and self-corrected. However, {he} required verbal prompting to use indicators generally, and consistently missed applying {his} left indicator when exiting roundabouts. Indicator errors of this kind are common in novice drivers, particularly in an unfamiliar vehicle, and will require targeted instruction and repeated supervised practice."};
+  S.checklist.ob1={st:'issue',note:'{name} did not consistently maintain continuous scanning to near, middle and far distances, tending to fixate on the road immediately ahead as task demands increased. This is common in novice drivers and is likely compounded by {his} reduced speed of divided attention. It will require targeted instruction and supervised practice to develop.'};
+  S.checklist.ob3={st:'issue',note:'Mirror checking was inconsistent and less frequent than required for a learner preparing for a practical test. {He} used the mirrors when cornering or changing lanes but did not scan them often enough overall. Building consistent mirror routines demands considerable divided attention and flexible thinking, and will require sustained instruction and supervised practice given {his} cognitive profile.'};
+  S.checklist.ob5={st:'issue',note:'{name} rarely performed physical blind-spot head checks when changing lanes, merging or leaving the kerb, relying almost entirely on {his} mirrors. For a learner preparing for a practical test, frequent and consistent head checks are required. This skill does not yet appear established, which is common at {his} stage, and will require specific instruction and repeated supervised practice to develop.'};
+  S.checklist.pj3={st:'issue',note:'While {his} gap selection was consistently safe, {name} demonstrated over-caution at roundabouts. {He} was slow to move off and missed several safe, viable opportunities to enter, waiting instead for completely clear traffic. This indicates difficulty judging dynamic gaps and managing the cognitive load of tracking moving vehicles, and links to the reduced speed of divided attention identified on the pre-drive screen. It will require further graded practice to build fluent, efficient decision-making.'};
+  S.checklist.sc1={st:'safe',note:'Speed control was consistent and appropriate for conditions, including a school zone (25 km/h) and 50 and 60 km/h zones.'};
+  S.checklist.pj5={st:'safe',note:'{name} planned ahead and managed multiple instructions appropriately for {his} level of experience, and showed developing defensive driving skills, including covering the brake in some hazardous situations.'};
+  S.consentObtained=true;
+  S.reportRef=AUTOTEXT.reportRef();
+  ['consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]());
+  S.reasonReferral=AUTOTEXT.reasonReferral();
+  S.physSummary=AUTOTEXT.physSummary();
+  S.summaryText=autoSummary();
+  ['continueLearner','lessons','lenses','optom','medReview','reviewChange'].forEach(id=>{
+    S.recs[id]={on:true,text:REC_DEFS.find(r=>r.id===id).def()};
+  });
+  syncForm(); render(); autosave();
+}
+
+/* ================================================================
+   VALIDATION — every required item must be complete before export
+================================================================ */
+const REQ_FIELDS = [
+ ['firstName','First name','1'],['surname','Surname','1'],['dob','Date of birth','1'],['address','Address','1'],
+ ['licNo','Driver licence number','1'],['licExpiry','Licence expiry (or [TBC] is not acceptable for a final report — confirm it)','1'],
+ ['diagnoses','Presenting condition / diagnoses','1'],['refName','Referrer name','1'],['refRole','Referrer role','1'],
+ ['dateAssess','Date of assessment','1'],['dateReport','Date of report','1'],
+ ['assessor','Report completed by','1'],['ahpra','AHPRA number','1'],['mdi','Motor Driving Instructor','1'],['location','Assessment location','1'],
+ ['reasonReferral','Reason for referral','3'],['symptoms','Current symptoms & functional challenges','3'],
+ ['medHistory','Medical history','3'],['drivingHistory','Driving history','3'],
+ ['acuityBy','Visual acuity — completed by','4'],
+ ['vaUR','Visual acuity — uncorrected right (enter NT if not tested)','4'],['vaUL','Visual acuity — uncorrected left','4'],['vaUB','Visual acuity — uncorrected binocular','4'],
+ ['vaCR','Visual acuity — corrected right (enter N/A if no lenses)','4'],['vaCL','Visual acuity — corrected left','4'],['vaCB','Visual acuity — corrected binocular','4'],
+ ['physSummary','Summary of physical skills','4'],['genCog','General cognitive skills observations','4'],['cogSummary','Summary of cognitive skills','4'],
+ ['duration','On-road duration','5'],['weather','Weather conditions','5'],['route','Geographical area / route','5'],
+ ['summaryText','Summary paragraph(s)','6'],
+ ['reportRef','Report reference','8'],['reportVersion','Report version','8'],
+ ['consentText','Consent statement','8'],['qualifications','Assessor qualifications','8'],
+ ['limitations','Basis of opinion & limitations','8'],['declarationText','Declaration','8'],['distribution','Distribution list','8'],
+];
+function missingItems(){
+  const out=[];
+  REQ_FIELDS.forEach(([k,label,sec])=>{
+    if(!String(S[k]??'').trim()) out.push({label, sec, sel:`[data-bind=${k}]`});
+  });
+  if(!S.meds.some(m=>m.name.trim())) out.push({label:"Medications — add at least one row (or 'Nil reported')", sec:'1', sel:'#medRows'});
+  if(S.meds.some(m=>m.name.trim()) && !String(S.medSideEffects||'').trim()) out.push({label:'Medication response / side effects', sec:'3', sel:'[data-bind=medSideEffects]'});
+  Object.keys(TEST_META).forEach(id=>{
+    const t=S.tests[id]; if(!t.on) return;
+    const m=TEST_META[id];
+    if(m.interp){ const need=m.fields[0]; if(!String(t[need.k]??'').trim()) out.push({label:m.name+' — score required (or untick the test)', sec:'4', sel:'#card_'+id}); }
+  });
+  CHECKLIST.forEach(g=>g.items.forEach(it=>{
+    const c=S.checklist[it.id];
+    if(c.st==='issue' && !c.note.trim()) out.push({label:'On-road issue needs a comment: '+it.short, sec:'5', sel:'#checklist'});
+  }));
+  if(!REC_DEFS.some(r=>S.recs[r.id]&&S.recs[r.id].on&&S.recs[r.id].text.trim())) out.push({label:'At least one recommendation must be included', sec:'6', sel:'#recCards'});
+  if(!S.consentObtained) out.push({label:'Confirm informed consent was obtained (tick box)', sec:'8', sel:'[data-bindbool=consentObtained]'});
+  return out;
+}
+function updateBadge(){
+  const b=document.getElementById('checkBadge'); if(!b) return;
+  const n=missingItems().length;
+  b.className = n? 'bad':'ok';
+  b.textContent = n? n+' item'+(n>1?'s':'')+' outstanding' : '✓ ready to export';
+}
+function showValidation(){
+  const list=missingItems();
+  document.getElementById('valHead').textContent = list.length? list.length+' outstanding item'+(list.length>1?'s':'')+' — complete these before export' : 'All required items complete';
+  document.getElementById('valList').innerHTML = list.length? list.map((m,i)=>
+    `<div class="vitem" onclick="jumpTo(${i})"><span class="sec">§${m.sec}</span>${esc(m.label)}</div>`).join('')
+    : '<div style="padding:14px;font-size:13.5px;color:#1e6b3a"><b>✓ Everything required is filled in.</b> You can export or print.</div>';
+  window._valList=list;
+  document.getElementById('valModal').classList.add('open');
+}
+function jumpTo(i){
+  const m=window._valList[i]; if(!m) return;
+  document.getElementById('valModal').classList.remove('open');
+  const el=document.querySelector(m.sel); if(!el) return;
+  const det=el.closest('details'); if(det) det.open=true;
+  el.scrollIntoView({behavior:'smooth',block:'center'});
+  el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'),2500);
+  if(el.focus) try{el.focus({preventScroll:true})}catch(e){}
+}
+function guard(fn){
+  if(missingItems().length){ showValidation(); return; }
+  fn();
+}
+
+/* init */
+window.addEventListener('DOMContentLoaded',()=>{
+  const had=loadAutosave();
+  if(!had){ ['reasonReferral','physSummary','consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]()); }
+  bindInputs(); syncForm(); render();
+});
+</script>
+</body>
+</html>
