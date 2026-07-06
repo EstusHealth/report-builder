@@ -388,9 +388,9 @@ ul.rep li{margin-bottom:2mm}
 
 <!-- ================= 9. LETTERS ================= -->
 <details class="sec">
-<summary>9 · Letters (GP cover letter &amp; MDI referral)</summary>
+<summary>9 · Letters (GP, MDI, NDIS, family &amp; client)</summary>
 <div class="secbody">
-  <div class="hint">Both letters are auto-drafted from the report data. The <b>GP cover letter</b> prints/exports as page 1 of the report package. The <b>MDI referral</b> is a separate document (separate download) — it goes to the instructor, not the GP.</div>
+  <div class="hint">All letters are auto-drafted from the report data — ticking <b>Include</b> drafts the body automatically (edit freely, or <b>reset to auto-draft</b> any time). The <b>GP cover letter</b> prints/exports as page 1 of the report package. The <b>MDI referral</b>, <b>NDIS support letter</b>, <b>family letter</b> and <b>client letter</b> are separate documents (separate downloads) — each goes to a different recipient.</div>
 
   <label class="chk" style="margin:4px 0"><input type="checkbox" data-bindbool="gpOn"><b>Include cover letter to treating medical practitioner / referrer</b></label>
   <div class="row">
@@ -412,10 +412,34 @@ ul.rep li{margin-bottom:2mm}
   <div class="row"><div class="f w100"><label>Lesson plan <span class="resetlink" onclick="resetField('mdiPlan')">reset to auto-draft</span></label><textarea data-bind="mdiPlan" rows="3"></textarea></div></div>
   <div class="row"><div class="f w100"><label>Specific instructions</label><textarea data-bind="mdiInstructions" rows="2"></textarea></div></div>
   <button class="btn plum" style="margin-top:6px" onclick="guard(exportMDIWord)">Download MDI referral (.doc)</button>
+
+  <div class="subhead">NDIS funding support letter</div>
+  <div class="hint">Letter of support for NDIS funding of specialised driver training. Auto-draft pulls in the NDIS number, diagnoses, approved hours/funding (section 6 recommendations) and the on-road focus areas.</div>
+  <label class="chk" style="margin:4px 0"><input type="checkbox" data-bindbool="ndisOn"><b>Include letter of support for NDIS funding</b></label>
+  <div class="row">
+    <div class="f w33"><label>Addressee</label><input type="text" data-bind="ndisName" placeholder="e.g. planner / support coordinator name"></div>
+    <div class="f w33"><label>Role</label><input type="text" data-bind="ndisRole"></div>
+    <div class="f w33"><label>Organisation</label><input type="text" data-bind="ndisOrg"></div>
+  </div>
+  <div class="row"><div class="f w100"><label>Letter body <span class="resetlink" onclick="resetField('ndisBody')">reset to auto-draft</span></label><textarea data-bind="ndisBody" rows="10"></textarea></div></div>
+  <button class="btn plum" style="margin-top:6px" onclick="guard(exportNDISWord)">Download NDIS support letter (.doc)</button>
+
+  <div class="subhead">Family &amp; supervising driver letter</div>
+  <div class="hint">Plain-language letter for the extended family / supervising drivers on how to support the learner between lessons. Auto-draft pulls in the practice focus areas flagged on road so everyone reinforces the same skills.</div>
+  <label class="chk" style="margin:4px 0"><input type="checkbox" data-bindbool="famOn"><b>Include letter for family / supervising drivers</b></label>
+  <div class="row"><div class="f w100"><label>Addressed to <span style="font-weight:400;color:var(--faint)">(optional — defaults to "the family and supervising drivers of [first name]")</span></label><input type="text" data-bind="famName" placeholder="e.g. Mr &amp; Mrs Citizen"></div></div>
+  <div class="row"><div class="f w100"><label>Letter body <span class="resetlink" onclick="resetField('famBody')">reset to auto-draft</span></label><textarea data-bind="famBody" rows="12"></textarea></div></div>
+  <button class="btn plum" style="margin-top:6px" onclick="guard(exportFamWord)">Download family letter (.doc)</button>
+
+  <div class="subhead">Client letter (plain language)</div>
+  <div class="hint">Explains the outcome and next steps directly to the client in accessible language. Auto-draft adapts to the assessment outcome and lists the practice focus areas.</div>
+  <label class="chk" style="margin:4px 0"><input type="checkbox" data-bindbool="clientOn"><b>Include plain-language letter to the client</b></label>
+  <div class="row"><div class="f w100"><label>Letter body <span class="resetlink" onclick="resetField('clientBody')">reset to auto-draft</span></label><textarea data-bind="clientBody" rows="10"></textarea></div></div>
+  <button class="btn plum" style="margin-top:6px" onclick="guard(exportClientWord)">Download client letter (.doc)</button>
 </div>
 </details>
 
-<div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. Estus Health · OT Driving Assessment Report Builder v1.3 — segmented on-road · letters</div>
+<div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. Estus Health · OT Driving Assessment Report Builder v1.4 — segmented on-road · expanded letters (NDIS · family · client)</div>
 </div>
 
 <div id="previewPane"><div id="reportRoot"></div></div>
@@ -558,6 +582,9 @@ function freshState(){
     gpOn:false, gpName:'', gpRole:'General Practitioner', gpPractice:'', gpAddress:'', gpBody:'', gpCc:'Referrer; client file',
     mdiOn:false, mdiSessions:'', mdiRouteReq:'', mdiFunctional:'', mdiPlan:'',
     mdiInstructions:'Please contact me following the sessions to discuss progress and suitability for review or reassessment.',
+    ndisOn:false, ndisName:'', ndisRole:'NDIS Planner / Delegate', ndisOrg:'National Disability Insurance Agency', ndisBody:'',
+    famOn:false, famName:'', famBody:'',
+    clientOn:false, clientBody:'',
   };
   PHYS_ROWS.forEach(r=> s.phys[r.id]=r.def);
   NEEDS_ROWS.forEach(r=> s.needs[r.id]={val:r.opts[0], note:''});
@@ -660,7 +687,41 @@ const AUTOTEXT = {
     return t;
   },
 };
+AUTOTEXT.ndisBody = function(){
+  const hours=S.recParams.hours||'[hours]';
+  const issues=flaggedShorts();
+  const focus=issues.length? ` Instruction will target the specific skill areas identified during the assessment (${issues.join('; ')}), making this a targeted, time-limited capacity-building support rather than an open-ended one.` : '';
+  return `I am writing in support of NDIS funding for specialised driver training for {name} (NDIS No. ${S.ndis||'[NDIS number]'}), following an occupational therapy driver assessment completed on ${fmtDate(S.dateAssess)||'[date]'}. A copy of the full assessment report is attached.\n\n{name} ${S.diagnoses? 'has '+S.diagnoses+', which affects' : 'has a disability that affects'} the skills required for driving. On formal assessment, {he} demonstrated the cognitive, visual and physical capacity to continue learning to drive, and {is} considered likely to achieve independent driving with the structured support recommended below.\n\nRecommended support: approximately ${hours} hours of specialised driving instruction with a Motor Driving Instructor experienced in working with learner drivers with disability, followed by an occupational therapy on-road reassessment to review progress and readiness for a practical driving test.${focus}\n\nThis support relates directly to {his} disability, is evidence-informed and time-limited, and represents value for money: achieving a driver's licence will build {his} independence in community access, education and employment, and reduce {his} long-term reliance on paid transport supports and informal supports for transport. It aligns directly with {his} NDIS goals of increased independence and community participation.\n\nPlease contact me if further information is required to support this request.`;
+};
+AUTOTEXT.famBody = function(){
+  const issues=flaggedShorts();
+  const focus=issues.length? `In practice sessions, focus especially on: ${issues.join('; ')}. These are the same areas {his} driving instructor is working on — consistent messages from everyone help these skills become habits.` : `Focus on consolidating the skills {his} driving instructor introduces in each lesson.`;
+  return `Thank you for the role you play in supporting {first} on the journey toward a full licence. Professional lessons build new skills, but it is the regular, supervised practice with family that turns those skills into habits — your support makes a real difference to how quickly and safely {he} progresses.\n\nHow you can help:\n• Keep practice drives short, regular and low-pressure — several 20–30 minute drives a week are worth more than one long weekend drive.\n• Start each drive in quiet, familiar areas and add busier roads gradually, only as confidence grows.\n• ${focus}\n• Give one instruction at a time, early and calmly — "at the next street, turn left" rather than last-moment directions.\n• Praise what goes well before talking about what to improve, and keep feedback specific and brief.\n• If a drive becomes stressful, it is fine to pull over, take a break, or finish early — pushing through rarely helps learning.\n• Hold off on new challenges such as night driving, wet weather or heavy traffic until {his} driving instructor indicates {he} {is} ready.\n• Keep the logbook up to date after each drive.\n\nLearning to drive takes longer for some people, and progress is not always in a straight line — plateaus and off days are normal. If you have questions about how to support {first}'s practice, or notice anything you are unsure about, please feel welcome to contact me.`;
+};
+AUTOTEXT.clientBody = function(){
+  const issues=flaggedShorts();
+  const outcome={
+    'learner-continue':`You showed the skills needed to keep learning to drive, and I have recommended that you continue working toward your provisional (P-plate) licence. Your doctor will also review the report as part of this process.`,
+    'fit':`You showed the skills needed for safe driving, and I have not recommended any restrictions on your licence.`,
+    'fit-cond':`You showed the skills needed for safe driving with some conditions on your licence, which are explained in the report.`,
+    'lessons-reassess':`I have recommended some lessons with a specialised driving instructor first, and then another on-road assessment to look at your progress.`,
+    'mods':`You showed you can drive safely with some changes (modifications) to the vehicle, which are explained in the report.`,
+    'cease':`The assessment showed that driving is not safe for you right now, and I have recommended that you do not drive at this time. I know this may be hard news. It does not always mean forever — the report explains what would need to change, and your doctor can talk this through with you.`,
+  }[S.outcome];
+  let t=`Thank you for completing your driving assessment with me on ${fmtDate(S.dateAssess)||'[date]'}. This letter explains the results in plain language — the full report has all the detail.\n\nThe result: ${outcome}\n\n`;
+  if(issues.length && S.outcome!=='cease') t+=`What to work on: the main things to practise are ${issues.join('; ')}. Your driving instructor will focus on these in lessons, and practising them between lessons will help a lot.\n\n`;
+  if(['learner-continue','lessons-reassess'].includes(S.outcome)) t+=`What happens next: approximately ${S.recParams.hours||'[hours]'} hours of lessons with a specialised driving instructor have been recommended${/ndis/i.test(S.recParams.funder||'')? ', funded through your NDIS plan':''}. Keep practising with your supervising driver between lessons and keep your logbook up to date. After the lessons we will look at your progress together.\n\n`;
+  t+=`If you have any questions about the assessment or this letter, please ask — you are always welcome to contact me.`;
+  return t;
+};
 function resetField(key){ S[key] = AUTOTEXT[key](); syncForm(); update(); }
+const LETTER_AUTOFIELDS={gpOn:['gpBody'],mdiOn:['mdiFunctional','mdiPlan'],ndisOn:['ndisBody'],famOn:['famBody'],clientOn:['clientBody']};
+function autoDraftLetterFor(key){
+  const fields=LETTER_AUTOFIELDS[key]; if(!fields) return;
+  let changed=false;
+  fields.forEach(f=>{ if(!String(S[f]||'').trim()){ S[f]=AUTOTEXT[f](); changed=true; } });
+  if(changed) syncForm();
+}
 
 /* ---------- score interpretation ---------- */
 function interpTrailsB(){
@@ -1003,6 +1064,38 @@ function buildLetterMDI(){
   h+=CONF_NOTE;
   return h;
 }
+function buildLetterNDIS(){
+  let h=letterhead();
+  h+=`<p style="${ST.p}">${esc(fmtDate(S.dateReport))}</p>`;
+  h+=`<p style="${ST.p};margin-top:4mm">${esc(S.ndisName)||'[Addressee]'}${S.ndisRole? '<br>'+esc(S.ndisRole):''}${S.ndisOrg? '<br>'+esc(S.ndisOrg):''}</p>`;
+  h+=`<p style="${ST.p};margin-top:5mm">Dear ${esc(S.ndisName)||'Sir/Madam'},</p>`;
+  h+=`<p style="${ST.p}"><b>Re: Letter of support — NDIS funding for specialised driver training</b></p>`;
+  h+=`<table style="${ST.tbl};width:80%">`+
+    TR('Client', fullNm())+TR('NDIS number', S.ndis)+TR('DOB', fmtDate(S.dob))+
+    TR('Report reference', S.reportRef)+TR('Date of report', fmtDate(S.dateReport))+`</table>`;
+  h+=P(S.ndisBody);
+  h+=signBlock();
+  h+=CONF_NOTE;
+  return h;
+}
+function buildLetterFam(){
+  let h=letterhead();
+  h+=`<p style="${ST.p}">${esc(fmtDate(S.dateReport))}</p>`;
+  h+=`<p style="${ST.p};margin-top:5mm">Dear ${esc(S.famName)||esc(fill('family and supervising drivers of {first}'))},</p>`;
+  h+=`<p style="${ST.p}"><b>Re: ${esc(fill('Supporting {first} on the journey to a full licence'))}</b></p>`;
+  h+=P(S.famBody);
+  h+=signBlock();
+  return h;
+}
+function buildLetterClient(){
+  let h=letterhead();
+  h+=`<p style="${ST.p}">${esc(fmtDate(S.dateReport))}</p>`;
+  h+=`<p style="${ST.p};margin-top:5mm">Dear ${esc(S.prefName||S.firstName)||'[first name]'},</p>`;
+  h+=`<p style="${ST.p}"><b>Re: Your driving assessment — results and next steps</b></p>`;
+  h+=P(S.clientBody);
+  h+=signBlock();
+  return h;
+}
 
 function buildReport(){
   let h=letterhead();
@@ -1172,6 +1265,9 @@ function render(){
   if(S.gpOn) pages+=`<div class="page">${buildLetterGP()}</div>`;
   pages+=`<div class="page">${buildReport()}</div>`;
   if(S.mdiOn) pages+=`<div class="page">${buildLetterMDI()}</div>`;
+  if(S.ndisOn) pages+=`<div class="page">${buildLetterNDIS()}</div>`;
+  if(S.famOn) pages+=`<div class="page">${buildLetterFam()}</div>`;
+  if(S.clientOn) pages+=`<div class="page">${buildLetterClient()}</div>`;
   document.getElementById('reportRoot').innerHTML = pages;
   updatePageStyle(); updateBadge();
 }
@@ -1190,7 +1286,7 @@ function bindInputs(){
     if(el.tagName==='SELECT') el.addEventListener('change',()=>{ S[el.dataset.bind]=el.value; update(); });
   });
   document.querySelectorAll('[data-bindbool]').forEach(el=>{
-    el.addEventListener('change',()=>{ S[el.dataset.bindbool]=el.checked; update(); });
+    el.addEventListener('change',()=>{ S[el.dataset.bindbool]=el.checked; if(el.checked) autoDraftLetterFor(el.dataset.bindbool); update(); });
   });
   document.querySelectorAll('[data-bindchk]').forEach(el=>{
     el.addEventListener('change',()=>{
@@ -1294,7 +1390,7 @@ function loadExample(){
   S=freshState();
   Object.assign(S,{
     title:'Mr', firstName:'John', prefName:'Johnny', surname:'Citizen', pronouns:'he', dob:'2000-01-01',
-    address:'123 Sample Street, Adelaide SA 5000', licNo:'AB1234', licSighted:'Yes', licExpiry:'[TBC]',
+    ndis:'430 123 456', address:'123 Sample Street, Adelaide SA 5000', licNo:'AB1234', licSighted:'Yes', licExpiry:'[TBC]',
     licType:"Learner's permit (Class C)",
     licCond:['L-plates to be displayed','must be accompanied by a fully licensed supervising driver','zero BAC','automatic vehicles only','corrective lenses to be worn'],
     diagnoses:'Autism Spectrum Disorder (Level 2); Schizophrenia',
@@ -1346,9 +1442,11 @@ function loadExample(){
     gpOn:true, gpName:'Dr A Practitioner', gpRole:'General Practitioner', gpPractice:'Example Medical Centre',
     gpAddress:'1 Example Road\nAdelaide SA 5000', gpCc:'Jane Referrer (Example Allied Health); client file',
     mdiOn:true, mdiSessions:'10 hours (NDIS capacity building)',
+    ndisOn:true, ndisName:'NDIS Planner / Delegate', famOn:true, clientOn:true,
     mdiRouteReq:'Local and suburban roads progressing to multi-lane arterials, traffic lights and roundabouts; graded introduction to night driving in later sessions.',
   });
   S.gpBody=AUTOTEXT.gpBody(); S.mdiFunctional=AUTOTEXT.mdiFunctional(); S.mdiPlan=AUTOTEXT.mdiPlan();
+  S.ndisBody=AUTOTEXT.ndisBody(); S.famBody=AUTOTEXT.famBody(); S.clientBody=AUTOTEXT.clientBody();
   S.consentObtained=true;
   S.reportRef=AUTOTEXT.reportRef();
   ['consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]());
@@ -1371,6 +1469,28 @@ function exportMDIWord(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} MDI Referral.doc`;
   a.click();
+}
+function downloadLetterDoc(bodyHtml, docTitle, fileSuffix){
+  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="utf-8"><title>${docTitle}</title>
+<style>@page{size:A4;margin:20mm 18mm} body{${ST.body}} table{border-collapse:collapse}</style>
+</head><body>${bodyHtml}</body></html>`;
+  const blob=new Blob(['\ufeff'+html],{type:'application/msword'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} ${fileSuffix}.doc`;
+  a.click();
+}
+function exportNDISWord(){
+  if(!S.ndisOn){ alert('Tick "Include letter of support for NDIS funding" first (section 9).'); return; }
+  downloadLetterDoc(buildLetterNDIS(),'NDIS Support Letter','NDIS Support Letter');
+}
+function exportFamWord(){
+  if(!S.famOn){ alert('Tick "Include letter for family / supervising drivers" first (section 9).'); return; }
+  downloadLetterDoc(buildLetterFam(),'Family Support Letter','Family Support Letter');
+}
+function exportClientWord(){
+  if(!S.clientOn){ alert('Tick "Include plain-language letter to the client" first (section 9).'); return; }
+  downloadLetterDoc(buildLetterClient(),'Client Letter','Client Letter');
 }
 
 /* ================================================================
@@ -1423,6 +1543,14 @@ function missingItems(){
       if(!String(S[k]||'').trim()) out.push({label:l, sec:'9', sel:`[data-bind=${k}]`});
     });
   }
+  if(S.ndisOn){
+    if(!String(S.ndis||'').trim()) out.push({label:'NDIS letter — NDIS number required', sec:'1', sel:'[data-bind=ndis]'});
+    [['ndisName','NDIS letter — addressee'],['ndisBody','NDIS letter — body']].forEach(([k,l])=>{
+      if(!String(S[k]||'').trim()) out.push({label:l, sec:'9', sel:`[data-bind=${k}]`});
+    });
+  }
+  if(S.famOn && !String(S.famBody||'').trim()) out.push({label:'Family letter — body', sec:'9', sel:'[data-bind=famBody]'});
+  if(S.clientOn && !String(S.clientBody||'').trim()) out.push({label:'Client letter — body', sec:'9', sel:'[data-bind=clientBody]'});
   return out;
 }
 function updateBadge(){
