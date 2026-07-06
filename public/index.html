@@ -326,9 +326,10 @@ ul.rep li{margin-bottom:2mm}
   </div>
   <div class="row"><div class="f w100"><label>Weather conditions</label><input type="text" data-bind="weather" placeholder="e.g. Overcast with no rain; dry road surfaces."></div></div>
   <div class="row"><div class="f w100"><label>Geographical area / route</label><textarea data-bind="route" rows="2"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Vehicle modifications used</label><input type="text" data-bind="vehicleMods"></div></div>
 
-  <div class="subhead">Assessment results checklist</div>
-  <div class="hint">Every item defaults to <b>Safe &amp; appropriate</b> — you only write about the exceptions. Comments appear in the report's "Issues observed" column (or as an observation note for safe items).</div>
+  <div class="subhead">Assessment results — by performance domain</div>
+  <div class="hint">Five domains, each with its own table in the report. Every item defaults to <b>Safe</b> — use <b>mark all safe</b> then flip the exceptions. Each domain has one <b>Further comments</b> box (required when issues are flagged); it prints under that domain's table.</div>
   <div id="checklist"></div>
 </div>
 </details>
@@ -385,7 +386,36 @@ ul.rep li{margin-bottom:2mm}
 </div>
 </details>
 
-<div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. Estus Health · OT Driving Assessment Report Builder v1.1</div>
+<!-- ================= 9. LETTERS ================= -->
+<details class="sec">
+<summary>9 · Letters (GP cover letter &amp; MDI referral)</summary>
+<div class="secbody">
+  <div class="hint">Both letters are auto-drafted from the report data. The <b>GP cover letter</b> prints/exports as page 1 of the report package. The <b>MDI referral</b> is a separate document (separate download) — it goes to the instructor, not the GP.</div>
+
+  <label class="chk" style="margin:4px 0"><input type="checkbox" data-bindbool="gpOn"><b>Include cover letter to treating medical practitioner / referrer</b></label>
+  <div class="row">
+    <div class="f w33"><label>Addressee</label><input type="text" data-bind="gpName" placeholder="e.g. Dr A Practitioner"></div>
+    <div class="f w33"><label>Role</label><input type="text" data-bind="gpRole"></div>
+    <div class="f w33"><label>Practice / organisation</label><input type="text" data-bind="gpPractice"></div>
+  </div>
+  <div class="row"><div class="f w100"><label>Postal address</label><textarea data-bind="gpAddress" rows="2"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Letter body <span class="resetlink" onclick="resetField('gpBody')">reset to auto-draft</span></label><textarea data-bind="gpBody" rows="6"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>cc</label><input type="text" data-bind="gpCc"></div></div>
+
+  <div class="subhead">MDI referral letter</div>
+  <label class="chk" style="margin:4px 0"><input type="checkbox" data-bindbool="mdiOn"><b>Include referral letter to Motor Driving Instructor</b></label>
+  <div class="row">
+    <div class="f w33"><label>Sessions approved</label><input type="text" data-bind="mdiSessions" placeholder="e.g. 10 hours"></div>
+    <div class="f"><label>Route requirements</label><input type="text" data-bind="mdiRouteReq" placeholder="e.g. local/suburban progressing to arterials and roundabouts"></div>
+  </div>
+  <div class="row"><div class="f w100"><label>Functional issues <span class="resetlink" onclick="resetField('mdiFunctional')">reset to auto-draft</span></label><textarea data-bind="mdiFunctional" rows="4"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Lesson plan <span class="resetlink" onclick="resetField('mdiPlan')">reset to auto-draft</span></label><textarea data-bind="mdiPlan" rows="3"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Specific instructions</label><textarea data-bind="mdiInstructions" rows="2"></textarea></div></div>
+  <button class="btn plum" style="margin-top:6px" onclick="guard(exportMDIWord)">Download MDI referral (.doc)</button>
+</div>
+</details>
+
+<div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. Estus Health · OT Driving Assessment Report Builder v1.3 — segmented on-road · letters</div>
 </div>
 
 <div id="previewPane"><div id="reportRoot"></div></div>
@@ -439,15 +469,24 @@ const PHYS_ROWS = [
 ];
 
 const CHECKLIST = [
- {g:'Physical Control', items:[
-  {id:'pc1', short:'vehicle set-up', text:'Ability to adjust seat, mirrors and other controls of the vehicle'},
-  {id:'pc2', short:'operating vehicle controls', text:'Able to operate all vehicle controls effectively including changing gears, removing and applying handbrake, applying indicators, and effective braking and accelerating'},
-  {id:'pc3', short:'physical shoulder checks', text:'Physically able to look over shoulder when reversing or changing lanes'},
-  {id:'pc4', short:'foot pedal control', text:'Appropriate foot pedal control with accurate foot placement, braking and accelerating smoothly and efficiently'},
-  {id:'pc5', short:'steering control', text:'Steering control conducted with both hands with smooth cornering and appropriate ability to maintain a straight line as required'},
-  {id:'pc6', short:'consistent indicator use', text:'Engaged indicator appropriately whilst driving'},
-  {id:'pc7', short:'operating controls without diverting attention', text:'Operated vehicle controls without diverting attention from road and traffic conditions'},
-  {id:'pc8', short:'reaction time to hazards', text:'Physically reacted in a timely manner to all road hazards or signal changes'}]},
+ {g:'Observation', items:[
+  {id:'ob1', short:'continuous near-to-far scanning', text:'Continuous scanning to both left and right, short, middle and long distance'},
+  {id:'ob2', short:'forward observation', text:'Consistent and appropriate forward observation of traffic situations; observed all traffic signs, road markings and potential hazards'},
+  {id:'ob3', short:'consistent mirror monitoring', text:'Regular monitoring of left, right and internal mirrors including appropriate use of rear view mirror'},
+  {id:'ob4', short:'blind-spot head checks', text:'Appropriate observation of blind spots when changing lanes, merging, or leaving kerb side parks'},
+  {id:'ob5', short:'observation when reversing', text:'Appropriate observation over shoulder when reversing'},
+  {id:'ob6', short:'response to signs and signals', text:'Appropriate response to road signs and signals'},
+  {id:'ob7', short:'attention to road while operating controls', text:'Operated vehicle controls without diverting attention from road and traffic conditions'}]},
+ {g:'Planning and Judgement', items:[
+  {id:'pj1', short:'following instructions', text:'Effectively able to follow verbal instructions of the driving instructor, confirming or clarifying instructions as needed'},
+  {id:'pj2', short:'gap selection', text:'Appropriate choice of safe gaps when entering or merging with traffic, including when turning left and right, at traffic lights and at Stop signs'},
+  {id:'pj3', short:'progress through intersections', text:'Timely and appropriate decisions with efficient progress through controlled and uncontrolled intersections including traffic lights'},
+  {id:'pj4', short:'response to unexpected hazards', text:'Appropriate response to unexpected hazards and obstacles including pedestrians'},
+  {id:'pj5', short:'route and manoeuvre planning', text:'Planning of correct position to complete manoeuvres / routes'},
+  {id:'pj6', short:'compliance with road rules', text:'Obeying advisory signs, markings and road rules'},
+  {id:'pj7', short:'safe speeds when vision obscured', text:'Choosing safe speeds when vision is obscured'},
+  {id:'pj8', short:'defensive driving', text:'Being prepared for evasive action by demonstrating defensive driving techniques'},
+  {id:'pj9', short:'courtesy and composure', text:'Appropriate courtesy to other drivers, composure and positive approach to the drive'}]},
  {g:'Vehicle Positioning', items:[
   {id:'vp1', short:'negotiating roundabouts and curves', text:'Ability to safely and efficiently negotiate roundabouts, curves and bends'},
   {id:'vp2', short:'road position during turns', text:'Appropriate and legal road position during left and right turns'},
@@ -458,24 +497,19 @@ const CHECKLIST = [
   {id:'vp7', short:'positioning for parking and manoeuvres', text:'Able to position the vehicle appropriately when parking and completing manoeuvres'}]},
  {g:'Speed Control', items:[
   {id:'sc1', short:'maintaining speed limits', text:'Able to maintain the correct speed limit throughout the assessment, including school and residential zones'},
-  {id:'sc2', short:'speed for traffic conditions', text:'Monitored the speed of the vehicle appropriately for the traffic conditions, including on corners and on approach to intersections'},
+  {id:'sc2', short:'speed for traffic conditions', text:'Monitored the speed of the vehicle appropriately for the traffic conditions, including on corners, on approach to intersections and when moving off'},
   {id:'sc3', short:'consistent safe speeds', text:'Consistent driving at reasonable but safe and legal speeds'},
-  {id:'sc4', short:'speed on approach and moving off', text:'Safe and appropriate selection of speed approaching intersections and safe acceleration moving off from traffic lights'},
-  {id:'sc5', short:'anticipating conditions', text:'Anticipation and response to conditions by adjusting to a safe and appropriate speed'}]},
- {g:'Observation', items:[
-  {id:'ob1', short:'continuous near-to-far scanning', text:'Continuous scanning to both left and right, short, middle and long distance'},
-  {id:'ob2', short:'forward observation', text:'Consistent and appropriate forward observation of traffic situations; observed all traffic signs, road markings and potential hazards'},
-  {id:'ob3', short:'consistent mirror monitoring', text:'Regular monitoring of left, right and internal mirrors including appropriate use of rear view mirror'},
-  {id:'ob4', short:'attention to road while operating controls', text:'Operated vehicle controls without diverting attention from road and traffic conditions'},
-  {id:'ob5', short:'blind-spot head checks', text:'Appropriate observation of blind spots when changing lanes, merging, or leaving kerb side parks'},
-  {id:'ob6', short:'response to signs and signals', text:'Appropriate response to road signs and signals'}]},
- {g:'Planning and Judgement', items:[
-  {id:'pj1', short:'following instructions', text:'Effectively able to follow verbal instructions of the driving instructor, confirming or clarifying instructions as needed'},
-  {id:'pj2', short:'decision-making at intersections', text:'Able to make timely and appropriate decisions and demonstrate efficient progress at controlled and uncontrolled intersections including traffic lights'},
-  {id:'pj3', short:'gap selection', text:'Demonstrated appropriate gap selections when entering traffic or completing lane changes, including when turning left and right, at traffic lights and at Stop signs'},
-  {id:'pj4', short:'response to unexpected hazards', text:'Appropriate response to unexpected hazards and obstacles including pedestrians'},
-  {id:'pj5', short:'route and manoeuvre planning', text:'Planning of correct position to complete manoeuvres / routes'},
-  {id:'pj6', short:'compliance with road rules', text:'Obeying advisory signs, markings and road rules'}]},
+  {id:'sc4', short:'anticipating conditions', text:'Anticipation and response to conditions by adjusting to a safe and appropriate speed'}]},
+ {g:'Physical Control', items:[
+  {id:'pc1', short:'vehicle transfers', text:'Ability to safely and independently transfer in and out of the vehicle'},
+  {id:'pc2', short:'vehicle set-up', text:'Ability to adjust seat, mirrors and other controls of the vehicle'},
+  {id:'pc3', short:'operating vehicle controls', text:'Able to operate all vehicle controls effectively including removing and applying handbrake, applying indicators, and effective braking and accelerating'},
+  {id:'pc4', short:'physical shoulder checks', text:'Physically able to look over shoulder when reversing or changing lanes'},
+  {id:'pc5', short:'foot pedal control', text:'Appropriate foot pedal control with accurate foot placement, braking and accelerating smoothly and efficiently'},
+  {id:'pc6', short:'steering control', text:'Steering control conducted with both hands with smooth cornering and appropriate ability to maintain a straight line as required'},
+  {id:'pc7', short:'consistent indicator use', text:'Engaged indicator appropriately whilst driving'},
+  {id:'pc8', short:'gear and clutch control', text:'Appropriate gear changes with sound clutch application and upper limb control to engage the gear (if applicable)'},
+  {id:'pc9', short:'reaction time to hazards', text:'Physically reacted in a timely manner to all road hazards or signal changes'}]},
 ];
 
 const REFS = {
@@ -514,16 +548,21 @@ function freshState(){
     },
     genCog:'', cogSummary:'',
     vehicle:'Dual-control automatic vehicle (dual brakes)', duration:'', weather:'', route:'',
-    checklist:{}, outcome:'learner-continue', summaryText:'',
+    vehicleMods:'No modifications to the vehicle were used during the assessment.',
+    checklist:{}, domainComments:{}, outcome:'learner-continue', summaryText:'',
     recs:{}, recParams:{hours:10, funder:'NDIS plan (capacity building)'},
     refsExtra:'',
     reportRef:'', reportVersion:'1.0 (Final)', consentObtained:false,
     consentText:'', qualifications:'', limitations:'', declarationText:'',
     distribution:'Referrer; client; treating general practitioner',
+    gpOn:false, gpName:'', gpRole:'General Practitioner', gpPractice:'', gpAddress:'', gpBody:'', gpCc:'Referrer; client file',
+    mdiOn:false, mdiSessions:'', mdiRouteReq:'', mdiFunctional:'', mdiPlan:'',
+    mdiInstructions:'Please contact me following the sessions to discuss progress and suitability for review or reassessment.',
   };
   PHYS_ROWS.forEach(r=> s.phys[r.id]=r.def);
   NEEDS_ROWS.forEach(r=> s.needs[r.id]={val:r.opts[0], note:''});
-  CHECKLIST.forEach(g=>g.items.forEach(it=> s.checklist[it.id]={st:'safe', note:''}));
+  CHECKLIST.forEach(g=>{ s.domainComments[g.g]=''; g.items.forEach(it=> s.checklist[it.id]='safe'); });
+  s.checklist.pc8='na'; // gear/clutch — n/a for automatic vehicles by default
   return s;
 }
 let S = freshState();
@@ -592,6 +631,33 @@ const AUTOTEXT = {
   },
   declarationText(){
     return `I declare that the contents of this report are true and correct to the best of my knowledge and belief, and that the opinions expressed are my own, formed with reference to Austroads 'Assessing Fitness to Drive' (2022) and the assessment findings described in this report.`;
+  },
+  gpBody(){
+    const outcome={
+      'learner-continue':`In summary, {name} is supported to continue as a learner driver toward a provisional licence, subject to your approval, with the specialised driving instruction outlined in the report.`,
+      'fit':`In summary, {name} demonstrated the skills required for safe driving and no licence restrictions are recommended.`,
+      'fit-cond':`In summary, {name} is considered fit to continue driving subject to the licence conditions outlined in the report.`,
+      'lessons-reassess':`In summary, a program of specialised driving instruction is recommended, followed by an occupational therapy on-road reassessment.`,
+      'mods':`In summary, {name} is considered fit to drive with the vehicle modifications outlined in the report.`,
+      'cease':`In summary, {name} did not demonstrate the skills currently required for safe driving and it is recommended that {he} cease driving at this time.`,
+    }[S.outcome];
+    return `Please find attached the Occupational Therapy Driver Assessment Report for {name}, assessed on ${fmtDate(S.dateAssess)||'[date]'}.\n\n${outcome}\n\nAs {name}'s treating medical practitioner, please review the attached assessment results and recommendations to assist your decision-making regarding {his} current and future driver's licence status. Your consideration and action may be required to notify the driver licensing authority of your licensing recommendations following review of this report. It would be appreciated if you would advise Estus Health of your decision following review.\n\nIf you require further information, please do not hesitate to contact me.`;
+  },
+  mdiFunctional(){
+    const cog=cogFlagList();
+    const lines=[
+      'Vision: '+(S.lenses==='Yes'? 'corrective lenses must be worn for driving.' : 'nil issues identified on screening.'),
+      'Physical: '+(S.physSummary || 'nil restrictions identified; light automatic vehicle appropriate.'),
+      'Cognitive: '+(cog.length? cog.join('; ')+'.' : 'no cognitive concerns identified on screening.'),
+      'Other: refer to the assessment report for full details.',
+    ];
+    return lines.join('\n');
+  },
+  mdiPlan(){
+    const issues=flaggedShorts();
+    let t = issues.length? `Target the following areas identified during the on-road assessment: ${issues.join('; ')}.` : `Consolidate and extend the skills demonstrated during the on-road assessment.`;
+    if(S.purpose==='learner') t += ` Include vehicle manoeuvres (reverse parking, three-point turns) and provide a graded introduction to night driving and higher-density traffic as skills consolidate.`;
+    return t;
   },
 };
 function resetField(key){ S[key] = AUTOTEXT[key](); syncForm(); update(); }
@@ -697,11 +763,19 @@ const REC_DEFS = [
 ];
 function flaggedShorts(){
   const out=[];
-  CHECKLIST.forEach(g=>g.items.forEach(it=>{ if(S.checklist[it.id].st==='issue') out.push(it.short); }));
+  CHECKLIST.forEach(g=>g.items.forEach(it=>{ if(S.checklist[it.id]==='issue') out.push(it.short); }));
   return out;
 }
 
 /* ---------- auto summary draft ---------- */
+function cogFlagList(){
+  const cogFlags=[];
+  if(S.tests.trailsB.on){ const r=interpTrailsB(); if(r.pill==='fail') cogFlags.push('reduced speed of divided attention and mental flexibility under load (Trail Making Test Part B above the driving threshold)'); }
+  if(S.tests.maze.on){ const r=interpMaze(); if(r.pill==='fail') cogFlags.push('difficulty with planning and visuoconstructional skills (OT Drive Home Maze outside the driving threshold)'); }
+  if(S.tests.driveAware.on){ const r=interpDriveAware(); if(r.pill==='fail') cogFlags.push('reduced insight into driving-related abilities (DriveAware below cut-off)'); }
+  if(S.tests.bells.on){ const r=interpBells(); if(r.pill==='fail') cogFlags.push('visual inattention on the Bells Test'); }
+  return cogFlags;
+}
 function autoSummary(){
   const dx = S.diagnoses? `, in the context of {his} ${/;|,| and /.test(S.diagnoses)?'diagnoses':'diagnosis'} of ${S.diagnoses}` : '';
   const purposeTxt = {
@@ -712,11 +786,7 @@ function autoSummary(){
     mods:`{name} was assessed to determine {his} requirements for vehicle modifications${dx}.`,
   }[S.purpose];
 
-  const cogFlags=[];
-  if(S.tests.trailsB.on){ const r=interpTrailsB(); if(r.pill==='fail') cogFlags.push('reduced speed of divided attention and mental flexibility under load (Trail Making Test Part B above the driving threshold)'); }
-  if(S.tests.maze.on){ const r=interpMaze(); if(r.pill==='fail') cogFlags.push('difficulty with planning and visuoconstructional skills (OT Drive Home Maze outside the driving threshold)'); }
-  if(S.tests.driveAware.on){ const r=interpDriveAware(); if(r.pill==='fail') cogFlags.push('reduced insight into driving-related abilities (DriveAware below cut-off)'); }
-  if(S.tests.bells.on){ const r=interpBells(); if(r.pill==='fail') cogFlags.push('visual inattention on the Bells Test'); }
+  const cogFlags=cogFlagList();
   const visOK = S.austroadsVision==='Yes';
   let p1 = purposeTxt + ` On the pre-drive screen {his} vision ${S.lenses==='Yes'?'(with correction) ':''}${visOK?'met the Austroads vision standard':'did not clearly meet the Austroads vision standard'}, and {his} physical abilities and cognition were ${cogFlags.length?'broadly ':''}within functional limits for driving.`;
   if(cogFlags.length) p1 += ` The screen did, however, identify ${cogFlags.join('; ')}. ${cogFlags.length===1?'This is {his} main cognitive consideration and is':'These are directly'} relevant to the demands of ${S.purpose==='learner'?'learning to drive':'safe driving'}.`;
@@ -823,19 +893,29 @@ function buildTestPill(id){
 }
 
 function buildChecklist(){
-  document.getElementById('checklist').innerHTML = CHECKLIST.map(g=>
-    `<div class="grouphead">${g.g}</div>` + g.items.map(it=>{
-      const c=S.checklist[it.id];
+  document.getElementById('checklist').innerHTML = CHECKLIST.map(g=>{
+    const nIss=g.items.filter(it=>S.checklist[it.id]==='issue').length;
+    const nNa=g.items.filter(it=>S.checklist[it.id]==='na').length;
+    const chip = nIss? `<span class="pill fail">${nIss} issue${nIss>1?'s':''}</span>` : `<span class="pill pass">all safe</span>`;
+    return `<div class="grouphead" style="display:flex;align-items:center;gap:8px">${g.g} ${chip}${nNa? `<span class="pill na">${nNa} n/a</span>`:''}<span class="resetlink" style="margin-left:auto" onclick="markAllSafe('${g.g}')">mark all safe</span></div>`
+    + g.items.map(it=>{
+      const st=S.checklist[it.id];
       return `<div class="clrow"><div class="cltop">
-        <select class="st-${c.st}" onchange="S.checklist['${it.id}'].st=this.value;buildChecklist();update()">
-          <option value="safe" ${c.st==='safe'?'selected':''}>✓ Safe &amp; appropriate</option>
-          <option value="issue" ${c.st==='issue'?'selected':''}>⚠ Issue observed</option>
-          <option value="na" ${c.st==='na'?'selected':''}>— Not assessed</option>
+        <select class="st-${st}" onchange="S.checklist['${it.id}']=this.value;buildChecklist();update()">
+          <option value="safe" ${st==='safe'?'selected':''}>✓ Safe</option>
+          <option value="issue" ${st==='issue'?'selected':''}>⚠ Issue</option>
+          <option value="na" ${st==='na'?'selected':''}>— N/A</option>
         </select>
-        <div class="cltxt">${it.text}</div></div>
-        ${c.st!=='na' ? `<textarea placeholder="${c.st==='issue'?'Describe the issue, contributing factors and what it will take to develop…':'Optional observation note'}" oninput="S.checklist['${it.id}'].note=this.value;update()">${esc(c.note)}</textarea>`:''}
-      </div>`;
-    }).join('')).join('');
+        <div class="cltxt">${it.text}</div></div></div>`;
+    }).join('')
+    + `<div class="row" style="margin:6px 0 16px"><div class="f w100"><label>Further comments — ${g.g}${nIss? ' <span style="color:#8c2f2f">(required — issues flagged)</span>':' (optional)'}</label>
+       <textarea rows="2" id="dc_${g.g.replace(/[^A-Za-z]/g,'')}" oninput="S.domainComments['${g.g}']=this.value;update()" placeholder="${nIss?'Describe the issues observed, contributing factors, feedback provided, and what development will require…':'Optional observations for this domain'}">${esc(S.domainComments[g.g]||'')}</textarea></div></div>`;
+  }).join('');
+}
+function markAllSafe(gname){
+  const g=CHECKLIST.find(x=>x.g===gname);
+  g.items.forEach(it=>S.checklist[it.id]='safe');
+  buildChecklist(); update();
 }
 
 function buildRecs(){
@@ -873,14 +953,59 @@ function P(t){ return t? `<p style="${ST.p}">${paraSplit(t)}</p>`.replace(/<p st
 function paraSplit(t){ return esc(fill(t)).replace(/\n{2,}/g,`</p><p style="${ST.p}">`).replace(/\n/g,'<br>'); }
 function TR(label,val){ return `<tr><td style="${ST.lbl}">${label}</td><td style="${ST.td}">${paraSplit(val||'')}</td></tr>`; }
 
-function buildReport(){
-  let h='';
-  /* letterhead */
-  h+=`<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5mm">
+function letterhead(){
+  return `<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5mm">
     <div><div style="font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:700;font-size:26px;line-height:.95;color:#171410">ESTUS <span style="font-weight:500;letter-spacing:.12em">HEALTH</span></div>
     <div style="font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:9px;letter-spacing:.34em;color:#ab5c95;margin-top:3px;text-transform:uppercase">OCCUPATIONAL THERAPY</div></div>
     <div style="text-align:right;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:8.5pt;color:#55534e;line-height:1.6">liam@estushealth.com<br>+61 3 9000 0000<br><span style="color:#2ca5b8;font-weight:600">www.estushealth.com</span></div></div>
     <div style="height:3px;background:linear-gradient(90deg,#344982 0%,#2f6f9e 34%,#2ca5b8 66%,#ab5c95 100%);margin:0 0 8mm;border-radius:2px;font-size:0">&nbsp;</div>`;
+}
+function signBlock(){
+  return `<p style="${ST.p};margin-top:6mm">Kind regards,</p>
+  <p style="${ST.p};margin-top:5mm"><b>${esc(S.assessor)}</b><br>${esc(S.assessorRole)}${S.ahpra? '<br>AHPRA No. '+esc(S.ahpra):''}<br>Estus Health</p>`;
+}
+function reBlock(){
+  return `<table style="${ST.tbl};width:80%">`+
+    TR('Client', fullNm())+TR('DOB', fmtDate(S.dob))+TR('Report reference', S.reportRef)+TR('Date of report', fmtDate(S.dateReport))+`</table>`;
+}
+const CONF_NOTE = `<p style="margin-top:8mm;font-size:7.5pt;color:#8a8880;line-height:1.5"><b>Confidentiality notice:</b> The information in this correspondence and the attached report is intended for the named recipients only and may contain privileged and confidential information. If you are not the intended recipient you must not copy, distribute or take any action in reliance on it.</p>`;
+
+function buildLetterGP(){
+  let h=letterhead();
+  h+=`<p style="${ST.p}">${esc(fmtDate(S.dateReport))}</p>`;
+  h+=`<p style="${ST.p};margin-top:4mm">${esc(S.gpName)}${S.gpRole? '<br>'+esc(S.gpRole):''}${S.gpPractice? '<br>'+esc(S.gpPractice):''}${S.gpAddress? '<br>'+esc(S.gpAddress).replace(/\n/g,'<br>'):''}</p>`;
+  h+=`<p style="${ST.p};margin-top:5mm">Dear ${esc(S.gpName)},</p>`;
+  h+=`<p style="${ST.p}"><b>Re: Occupational Therapy Driver Assessment Report</b></p>`;
+  h+=reBlock();
+  h+=P(S.gpBody);
+  h+=signBlock();
+  if(S.gpCc) h+=`<p style="${ST.p};margin-top:5mm;font-size:9pt;color:#55534e">cc: ${esc(S.gpCc)}</p>`;
+  h+=CONF_NOTE;
+  return h;
+}
+function buildLetterMDI(){
+  let h=letterhead();
+  h+=`<p style="${ST.p}">${esc(fmtDate(S.dateReport))}</p>`;
+  h+=`<p style="${ST.p};margin-top:5mm">Dear ${esc(S.mdi)||'[MDI name]'},</p>`;
+  h+=`<p style="${ST.p}"><b>Re: Driver training program — referral</b></p>`;
+  h+=reBlock();
+  h+=P(`Your services are requested to implement a driver training program for {name}. Please note the following for your reference:`);
+  h+=`<table style="${ST.tbl}">`+
+    TR('Type of vehicle', S.vehicle)+
+    TR('Adaptations / modifications', S.vehicleMods)+
+    TR('Route requirements', S.mdiRouteReq)+
+    TR('Sessions approved', S.mdiSessions)+
+    TR('Functional issues', S.mdiFunctional)+
+    TR('Lesson plan', S.mdiPlan)+
+    TR('Specific instructions', S.mdiInstructions)+`</table>`;
+  h+=P(`Following implementation of this program, please contact me to discuss {name}'s progress and to determine suitability for review or re-assessment.`);
+  h+=signBlock();
+  h+=CONF_NOTE;
+  return h;
+}
+
+function buildReport(){
+  let h=letterhead();
   h+=`<h1 style="${ST.h1}">Occupational Therapy Driver Assessment Report</h1>`;
 
   /* client details */
@@ -979,19 +1104,27 @@ function buildReport(){
     TR('Duration of assessment', S.duration? S.duration+' minutes':'')+
     TR('Weather conditions', S.weather)+
     TR('Geographical area', S.route)+
+    TR('Vehicle modifications', S.vehicleMods)+
     TR('MDI present for assessment', S.mdi)+`</table>`;
   h+=`<h3 style="${ST.h3}">Assessment Results</h3>`;
-  h+=`<table style="${ST.tbl}"><tr><th style="${ST.th};width:14%">Performance area</th><th style="${ST.th};width:38%">Observations</th><th style="${ST.th};width:9%">Safe &amp; appropriate</th><th style="${ST.th}">Issues observed / comments</th></tr>`;
-  CHECKLIST.forEach(g=>g.items.forEach(it=>{
-    const c=S.checklist[it.id];
-    if(c.st==='na' && !c.note) return;
-    const safe = c.st==='safe';
-    h+=`<tr><td style="${ST.td};font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;color:#344982">${g.g}</td>
-      <td style="${ST.td}">${it.text}</td>
-      <td style="${c.st==='safe'? ST.ok : ST.td+';text-align:center'}">${safe?'✓': c.st==='na'?'n/a':''}</td>
-      <td style="${ST.td}${c.st==='issue'?';color:#8c2f2f':''}">${c.st==='issue'&&!c.note? '<b>✗</b>':''}${paraSplit(c.note||'')}</td></tr>`;
-  }));
-  h+=`</table>`;
+  h+=P(`During the on-road assessment, driving behaviours were observed across five performance domains: observation; planning and judgement; vehicle positioning; speed control; and physical control. Results for each domain are outlined below.`);
+  CHECKLIST.forEach(g=>{
+    const nIss=g.items.filter(it=>S.checklist[it.id]==='issue').length;
+    h+=`<h3 style="${ST.h3}">${g.g}${nIss===0? '' : ''}</h3>
+    <table style="${ST.tbl}"><tr><th style="${ST.th}">Performance area</th><th style="${ST.th};width:14%;text-align:center">Appropriate &amp; safe</th><th style="${ST.th};width:14%;text-align:center">Issues observed</th></tr>`;
+    g.items.forEach(it=>{
+      const st=S.checklist[it.id];
+      h+=`<tr><td style="${ST.td}">${it.text}</td>`+
+        (st==='na'
+          ? `<td colspan="2" style="${ST.td};text-align:center;color:#8a8880">Not assessed / not applicable</td>`
+          : `<td style="${st==='safe'? ST.ok : ST.td+';text-align:center'}">${st==='safe'?'☒':'☐'}</td><td style="${ST.td};text-align:center;${st==='issue'?'color:#8c2f2f;font-weight:700':''}">${st==='issue'?'☒':'☐'}</td>`)
+        +`</tr>`;
+    });
+    h+=`</table>`;
+    const dc=S.domainComments[g.g];
+    if(dc) h+=`<p style="${ST.p}"><b>Further comments:</b> ${paraSplit(dc)}</p>`;
+    else if(nIss) h+=`<p style="${ST.p};color:#8c2f2f"><b>Further comments:</b> [required — issues were flagged in this domain]</p>`;
+  });
 
   /* summary + recs */
   h+=`<h2 style="${ST.h2}">Summary and Recommendations</h2>`+P(S.summaryText);
@@ -1035,7 +1168,11 @@ function footerID(){
 let renderTimer=null;
 function update(){ clearTimeout(renderTimer); renderTimer=setTimeout(()=>{ render(); autosave(); },250); }
 function render(){
-  document.getElementById('reportRoot').innerHTML = `<div class="page">${buildReport()}</div>`;
+  let pages='';
+  if(S.gpOn) pages+=`<div class="page">${buildLetterGP()}</div>`;
+  pages+=`<div class="page">${buildReport()}</div>`;
+  if(S.mdiOn) pages+=`<div class="page">${buildLetterMDI()}</div>`;
+  document.getElementById('reportRoot').innerHTML = pages;
   updatePageStyle(); updateBadge();
 }
 function updatePageStyle(){
@@ -1077,7 +1214,37 @@ function syncForm(){
 
 /* autosave */
 function autosave(){ try{ localStorage.setItem('estus-ot-report', JSON.stringify(S)); }catch(e){} }
-function loadAutosave(){ try{ const d=localStorage.getItem('estus-ot-report'); if(d){ S = Object.assign(freshState(), JSON.parse(d)); return true; } }catch(e){} return false; }
+function loadAutosave(){ try{ const d=localStorage.getItem('estus-ot-report'); if(d){ S = migrateState(Object.assign(freshState(), JSON.parse(d))); return true; } }catch(e){} return false; }
+function migrateState(s){
+  const fresh=freshState();
+  if(!s.domainComments||typeof s.domainComments!=='object') s.domainComments=fresh.domainComments;
+  CHECKLIST.forEach(g=>{ if(s.domainComments[g.g]===undefined) s.domainComments[g.g]=''; });
+  if(!s.vehicleMods) s.vehicleMods=fresh.vehicleMods;
+  const vals=s.checklist||{};
+  const isOld=Object.values(vals).some(v=>v&&typeof v==='object');
+  const nc=Object.assign({},fresh.checklist);
+  if(isOld){
+    // map v1 item ids -> v1.2 ids
+    const map={pc1:'pc2',pc2:'pc3',pc3:'pc4',pc4:'pc5',pc5:'pc6',pc6:'pc7',pc7:'ob7',pc8:'pc9',
+               sc4:'sc2',sc5:'sc4', ob4:'ob7',ob5:'ob4', pj2:'pj3',pj3:'pj2'};
+    const domainOf={}, shortOf={};
+    CHECKLIST.forEach(g=>g.items.forEach(it=>{domainOf[it.id]=g.g; shortOf[it.id]=it.short;}));
+    Object.keys(vals).forEach(k=>{
+      const v=vals[k]; if(!v||typeof v!=='object') return;
+      const nk=map[k]||k; if(!(nk in nc)) return;
+      if(v.st==='issue') nc[nk]='issue';
+      else if(nc[nk]==='safe' && v.st==='na') nc[nk]='na';
+      if(v.note && v.note.trim()){
+        const d=domainOf[nk];
+        if(d) s.domainComments[d]=(s.domainComments[d]? s.domainComments[d]+'\n\n':'')+v.note.trim();
+      }
+    });
+  } else {
+    Object.keys(vals).forEach(k=>{ if(k in nc && typeof vals[k]==='string') nc[k]=vals[k]; });
+  }
+  s.checklist=nc;
+  return s;
+}
 
 /* file save/load */
 function saveJSON(){
@@ -1088,7 +1255,7 @@ function saveJSON(){
 function openJSON(ev){
   const f=ev.target.files[0]; if(!f) return;
   const r=new FileReader();
-  r.onload=()=>{ try{ S=Object.assign(freshState(),JSON.parse(r.result)); syncForm(); render(); }catch(e){ alert('Could not read that draft file.'); } };
+  r.onload=()=>{ try{ S=migrateState(Object.assign(freshState(),JSON.parse(r.result))); syncForm(); render(); }catch(e){ alert('Could not read that draft file.'); } };
   r.readAsText(f); ev.target.value='';
 }
 function newReport(){
@@ -1110,7 +1277,7 @@ div.Section1{page:Section1}
 p.MsoFooter{margin:0;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:7.5pt;color:#8a8880;letter-spacing:.04em;border-top:1pt solid #e6e4df;padding-top:4pt}
 body{${ST.body}} table{border-collapse:collapse} li{margin-bottom:6pt}
 </style>
-</head><body><div class="Section1">${buildReport()}
+</head><body><div class="Section1">${S.gpOn? buildLetterGP()+'<br clear="all" style="page-break-before:always">':''}${buildReport()}
 <div style="mso-element:footer" id="f1"><p class="MsoFooter">${foot} · CONFIDENTIAL<span style="mso-tab-count:2"></span>Page <span style='mso-field-code:" PAGE "'>1</span> of <span style='mso-field-code:" NUMPAGES "'>1</span></p></div>
 </div></body></html>`;
   const blob=new Blob(['﻿'+html],{type:'application/msword'});
@@ -1167,14 +1334,21 @@ function loadExample(){
     intersection:{on:true,score:'8',note:''},
     bells:{on:true,omissions:'0',time:'',note:''},
   });
-  S.checklist.pc3={st:'safe',note:'Physically demonstrated the cervical range of motion to look over {his} shoulder, but rarely initiated this movement spontaneously. This is common in novice drivers who have not yet automated the movement, and is likely compounded by the higher cognitive load {he} manages when several driving tasks occur at once. It will require specific instruction and repeated supervised practice to establish.'};
-  S.checklist.pc6={st:'issue',note:"Because the assessment vehicle's indicator stalk was on the left (contrasting with {his} familiar family vehicle), {he} triggered the wipers instead of the indicators on 3 occasions. {He} managed this calmly and self-corrected. However, {he} required verbal prompting to use indicators generally, and consistently missed applying {his} left indicator when exiting roundabouts. Indicator errors of this kind are common in novice drivers, particularly in an unfamiliar vehicle, and will require targeted instruction and repeated supervised practice."};
-  S.checklist.ob1={st:'issue',note:'{name} did not consistently maintain continuous scanning to near, middle and far distances, tending to fixate on the road immediately ahead as task demands increased. This is common in novice drivers and is likely compounded by {his} reduced speed of divided attention. It will require targeted instruction and supervised practice to develop.'};
-  S.checklist.ob3={st:'issue',note:'Mirror checking was inconsistent and less frequent than required for a learner preparing for a practical test. {He} used the mirrors when cornering or changing lanes but did not scan them often enough overall. Building consistent mirror routines demands considerable divided attention and flexible thinking, and will require sustained instruction and supervised practice given {his} cognitive profile.'};
-  S.checklist.ob5={st:'issue',note:'{name} rarely performed physical blind-spot head checks when changing lanes, merging or leaving the kerb, relying almost entirely on {his} mirrors. For a learner preparing for a practical test, frequent and consistent head checks are required. This skill does not yet appear established, which is common at {his} stage, and will require specific instruction and repeated supervised practice to develop.'};
-  S.checklist.pj3={st:'issue',note:'While {his} gap selection was consistently safe, {name} demonstrated over-caution at roundabouts. {He} was slow to move off and missed several safe, viable opportunities to enter, waiting instead for completely clear traffic. This indicates difficulty judging dynamic gaps and managing the cognitive load of tracking moving vehicles, and links to the reduced speed of divided attention identified on the pre-drive screen. It will require further graded practice to build fluent, efficient decision-making.'};
-  S.checklist.sc1={st:'safe',note:'Speed control was consistent and appropriate for conditions, including a school zone (25 km/h) and 50 and 60 km/h zones.'};
-  S.checklist.pj5={st:'safe',note:'{name} planned ahead and managed multiple instructions appropriately for {his} level of experience, and showed developing defensive driving skills, including covering the brake in some hazardous situations.'};
+  Object.assign(S.checklist,{pc7:'issue', ob1:'issue', ob3:'issue', ob4:'issue', pj2:'issue', pc8:'na'});
+  S.domainComments={
+   'Observation':"{name} did not consistently maintain continuous scanning to near, middle and far distances, tending to fixate on the road immediately ahead as task demands increased. Mirror checking was also inconsistent and less frequent than required for a learner preparing for a practical test — {he} used the mirrors when cornering or changing lanes but did not scan them often enough overall. In addition, {he} rarely performed physical blind-spot head checks when changing lanes, merging or leaving the kerb, relying almost entirely on {his} mirrors. These observation skills demand considerable divided attention and are likely compounded by the reduced speed of divided attention identified on the pre-drive screen; they are common development areas in novice drivers and will require targeted instruction and repeated supervised practice to establish.",
+   'Planning and Judgement':"While {his} gap selection was consistently safe, {name} demonstrated over-caution at roundabouts. {He} was slow to move off and missed several safe, viable opportunities to enter, waiting instead for completely clear traffic. This indicates difficulty judging dynamic gaps and managing the cognitive load of tracking moving vehicles, and links to the reduced speed of divided attention identified on the pre-drive screen. Positively, {he} planned ahead, managed multiple instructions appropriately for {his} level of experience, and showed developing defensive driving skills, including covering the brake in some hazardous situations.",
+   'Vehicle Positioning':"",
+   'Speed Control':"Speed control was consistent and appropriate for conditions, including a school zone (25 km/h) and 50 and 60 km/h zones.",
+   'Physical Control':"Because the assessment vehicle's indicator stalk was on the left (contrasting with {his} familiar family vehicle), {he} triggered the wipers instead of the indicators on 3 occasions. {He} managed this calmly and self-corrected. However, {he} required verbal prompting to use indicators generally, and consistently missed applying {his} left indicator when exiting roundabouts. Indicator errors of this kind are common in novice drivers, particularly in an unfamiliar vehicle, and will require targeted instruction and repeated supervised practice. Of note, {he} physically demonstrated the cervical range of motion for shoulder checks, but rarely initiated the movement spontaneously (recorded under Observation).",
+  };
+  Object.assign(S,{
+    gpOn:true, gpName:'Dr A Practitioner', gpRole:'General Practitioner', gpPractice:'Example Medical Centre',
+    gpAddress:'1 Example Road\nAdelaide SA 5000', gpCc:'Jane Referrer (Example Allied Health); client file',
+    mdiOn:true, mdiSessions:'10 hours (NDIS capacity building)',
+    mdiRouteReq:'Local and suburban roads progressing to multi-lane arterials, traffic lights and roundabouts; graded introduction to night driving in later sessions.',
+  });
+  S.gpBody=AUTOTEXT.gpBody(); S.mdiFunctional=AUTOTEXT.mdiFunctional(); S.mdiPlan=AUTOTEXT.mdiPlan();
   S.consentObtained=true;
   S.reportRef=AUTOTEXT.reportRef();
   ['consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]());
@@ -1185,6 +1359,18 @@ function loadExample(){
     S.recs[id]={on:true,text:REC_DEFS.find(r=>r.id===id).def()};
   });
   syncForm(); render(); autosave();
+}
+
+function exportMDIWord(){
+  if(!S.mdiOn){ alert('Tick "Include referral letter to Motor Driving Instructor" first (section 9).'); return; }
+  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="utf-8"><title>MDI Referral</title>
+<style>@page{size:A4;margin:20mm 18mm} body{${ST.body}} table{border-collapse:collapse}</style>
+</head><body>${buildLetterMDI()}</body></html>`;
+  const blob=new Blob(['\ufeff'+html],{type:'application/msword'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} MDI Referral.doc`;
+  a.click();
 }
 
 /* ================================================================
@@ -1202,7 +1388,7 @@ const REQ_FIELDS = [
  ['vaUR','Visual acuity — uncorrected right (enter NT if not tested)','4'],['vaUL','Visual acuity — uncorrected left','4'],['vaUB','Visual acuity — uncorrected binocular','4'],
  ['vaCR','Visual acuity — corrected right (enter N/A if no lenses)','4'],['vaCL','Visual acuity — corrected left','4'],['vaCB','Visual acuity — corrected binocular','4'],
  ['physSummary','Summary of physical skills','4'],['genCog','General cognitive skills observations','4'],['cogSummary','Summary of cognitive skills','4'],
- ['duration','On-road duration','5'],['weather','Weather conditions','5'],['route','Geographical area / route','5'],
+ ['duration','On-road duration','5'],['weather','Weather conditions','5'],['route','Geographical area / route','5'],['vehicleMods','Vehicle modifications (state none if not applicable)','5'],
  ['summaryText','Summary paragraph(s)','6'],
  ['reportRef','Report reference','8'],['reportVersion','Report version','8'],
  ['consentText','Consent statement','8'],['qualifications','Assessor qualifications','8'],
@@ -1220,12 +1406,23 @@ function missingItems(){
     const m=TEST_META[id];
     if(m.interp){ const need=m.fields[0]; if(!String(t[need.k]??'').trim()) out.push({label:m.name+' — score required (or untick the test)', sec:'4', sel:'#card_'+id}); }
   });
-  CHECKLIST.forEach(g=>g.items.forEach(it=>{
-    const c=S.checklist[it.id];
-    if(c.st==='issue' && !c.note.trim()) out.push({label:'On-road issue needs a comment: '+it.short, sec:'5', sel:'#checklist'});
-  }));
+  CHECKLIST.forEach(g=>{
+    const nIss=g.items.filter(it=>S.checklist[it.id]==='issue').length;
+    if(nIss && !String(S.domainComments[g.g]||'').trim())
+      out.push({label:g.g+' — further comments required ('+nIss+' issue'+(nIss>1?'s':'')+' flagged)', sec:'5', sel:'#dc_'+g.g.replace(/[^A-Za-z]/g,'')});
+  });
   if(!REC_DEFS.some(r=>S.recs[r.id]&&S.recs[r.id].on&&S.recs[r.id].text.trim())) out.push({label:'At least one recommendation must be included', sec:'6', sel:'#recCards'});
   if(!S.consentObtained) out.push({label:'Confirm informed consent was obtained (tick box)', sec:'8', sel:'[data-bindbool=consentObtained]'});
+  if(S.gpOn){
+    [['gpName','Cover letter — addressee name'],['gpAddress','Cover letter — postal address'],['gpBody','Cover letter — body']].forEach(([k,l])=>{
+      if(!String(S[k]||'').trim()) out.push({label:l, sec:'9', sel:`[data-bind=${k}]`});
+    });
+  }
+  if(S.mdiOn){
+    [['mdiSessions','MDI referral — sessions approved'],['mdiRouteReq','MDI referral — route requirements'],['mdiFunctional','MDI referral — functional issues'],['mdiPlan','MDI referral — lesson plan']].forEach(([k,l])=>{
+      if(!String(S[k]||'').trim()) out.push({label:l, sec:'9', sel:`[data-bind=${k}]`});
+    });
+  }
   return out;
 }
 function updateBadge(){
