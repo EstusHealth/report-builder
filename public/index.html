@@ -202,6 +202,7 @@ ul.rep li{margin-bottom:2mm}
 <details class="sec" open>
 <summary>1 · Client &amp; Assessment Details<span class="secchip" id="secchip_1"></span></summary>
 <div class="secbody">
+  <div class="hint">Who was assessed, who referred them, and who completed the report. Everything here fills the client details table on page one — the preview on the right updates as you type.</div>
   <div class="row">
     <div class="f w25"><label>Title</label><select data-bind="title"><option>Mr</option><option>Mrs</option><option>Ms</option><option>Miss</option><option>Mx</option><option value="">(none)</option></select></div>
     <div class="f"><label>First name</label><input type="text" data-bind="firstName"></div>
@@ -213,9 +214,9 @@ ul.rep li{margin-bottom:2mm}
     <div class="f w25"><label>Date of birth</label><input type="date" data-bind="dob"></div>
     <div class="f"><label>NDIS number</label><input type="text" data-bind="ndis" placeholder="if applicable"></div>
   </div>
-  <div class="row"><div class="f w100"><label>Address</label><input type="text" data-bind="address"></div></div>
+  <div class="row"><div class="f w100"><label>Address</label><input type="text" data-bind="address" placeholder="Street, suburb, state, postcode"></div></div>
   <div class="row">
-    <div class="f"><label>Licence number</label><input type="text" data-bind="licNo"></div>
+    <div class="f"><label>Licence number</label><input type="text" data-bind="licNo" placeholder="e.g. 123456789"></div>
     <div class="f w25"><label>Sighted?</label><select data-bind="licSighted"><option>Yes</option><option>No</option></select></div>
     <div class="f w25"><label>Licence expiry</label><input type="text" data-bind="licExpiry" placeholder="or [TBC]"></div>
   </div>
@@ -232,7 +233,7 @@ ul.rep li{margin-bottom:2mm}
     </div>
   </div>
   <div class="row"><div class="f w100"><label>Other conditions</label><input type="text" data-bind="licCondOther" placeholder="optional, e.g. daylight driving only"></div></div>
-  <div class="row"><div class="f w100"><label>Presenting condition / diagnoses</label><input type="text" data-bind="diagnoses" placeholder="e.g. Autism Spectrum Disorder (Level 2); Schizophrenia"></div></div>
+  <div class="row"><div class="f w100"><label>Presenting condition / diagnoses</label><input type="text" data-bind="diagnoses" placeholder="the condition(s) relevant to driving, separated by semicolons — e.g. acquired brain injury; anxiety"></div></div>
 
   <div class="subhead">Medications</div>
   <div id="medRows"></div>
@@ -240,12 +241,12 @@ ul.rep li{margin-bottom:2mm}
 
   <div class="subhead">Referral &amp; Report</div>
   <div class="row">
-    <div class="f"><label>Referrer name</label><input type="text" data-bind="refName"></div>
+    <div class="f"><label>Referrer name</label><input type="text" data-bind="refName" placeholder="who asked for this assessment?"></div>
     <div class="f"><label>Referrer role</label><input type="text" data-bind="refRole" placeholder="e.g. Occupational Therapist"></div>
   </div>
   <div class="row">
-    <div class="f"><label>Referrer organisation</label><input type="text" data-bind="refOrg"></div>
-    <div class="f"><label>Referrer email / phone</label><input type="text" data-bind="refContact"></div>
+    <div class="f"><label>Referrer organisation</label><input type="text" data-bind="refOrg" placeholder="practice / clinic / service"></div>
+    <div class="f"><label>Referrer email / phone</label><input type="text" data-bind="refContact" placeholder="email and/or phone"></div>
   </div>
   <div class="row">
     <div class="f w33"><label>Date of assessment</label><input type="date" data-bind="dateAssess"></div>
@@ -258,9 +259,9 @@ ul.rep li{margin-bottom:2mm}
   </div>
   <div class="row">
     <div class="f"><label>Supervising OT (optional)</label><input type="text" data-bind="supervisor" placeholder="leave blank if none"></div>
-    <div class="f"><label>Motor Driving Instructor</label><input type="text" data-bind="mdi"></div>
+    <div class="f"><label>Motor Driving Instructor</label><input type="text" data-bind="mdi" placeholder="instructor who drove during the on-road assessment"></div>
   </div>
-  <div class="row"><div class="f w100"><label>Assessment location</label><input type="text" data-bind="location"></div></div>
+  <div class="row"><div class="f w100"><label>Assessment location</label><input type="text" data-bind="location" placeholder="where the off-road screen took place"></div></div>
 </div>
 </details>
 
@@ -278,7 +279,7 @@ ul.rep li{margin-bottom:2mm}
 <details class="sec">
 <summary>3 · Background Information<span class="secchip" id="secchip_3"></span></summary>
 <div class="secbody">
-  <div class="hint">Narrative fields support tokens: <code>{name}</code> <code>{first}</code> <code>{He}</code> <code>{he}</code> <code>{His}</code> <code>{his}</code> <code>{him}</code> <code>{was}</code> <code>{is}</code> <code>{has}</code> — they adapt to the client's name and pronouns automatically. Leave a field blank to skip it in the report. Click <b>reset</b> to restore the standard wording.</div>
+  <div class="hint">The story behind the referral — each box below becomes its own heading in the report, and the grey prompt text in each box explains what to cover. Narrative fields support tokens: <code>{name}</code> <code>{first}</code> <code>{He}</code> <code>{he}</code> <code>{His}</code> <code>{his}</code> <code>{him}</code> <code>{was}</code> <code>{is}</code> <code>{has}</code> — they adapt to the client's name and pronouns automatically. Leave a field blank to skip it in the report. Click <b>reset</b> to restore the standard wording.</div>
 
   <div class="subhead">Reason for referral</div>
   <div class="row">
@@ -295,14 +296,14 @@ ul.rep li{margin-bottom:2mm}
   <div class="row"><div class="f w100"><label>Reason for referral <span class="resetlink" onclick="resetField('reasonReferral')">reset to standard wording</span></label><textarea data-bind="reasonReferral" rows="4"></textarea></div></div>
 
   <div class="subhead">Current symptoms &amp; functional challenges</div>
-  <div class="row"><div class="f w100"><label>Narrative</label><textarea data-bind="symptoms" rows="4" placeholder="Primary driving-related challenges, sensory factors, self-identified practice needs…"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Narrative</label><textarea data-bind="symptoms" rows="4" placeholder="What does the client find (or expect to find) hard about driving, in their own words? Cover: the main driving-related challenges, any sensory factors (light, noise, busy environments), fatigue or medication effects, and the skills they say they want to practise."></textarea></div></div>
 
   <div class="subhead">Medical history &amp; treatment</div>
-  <div class="row"><div class="f w100"><label>Medical history</label><textarea data-bind="medHistory" rows="3"></textarea></div></div>
-  <div class="row"><div class="f w100"><label>Medication response / side effects</label><textarea data-bind="medSideEffects" rows="2"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Medical history</label><textarea data-bind="medHistory" rows="3" placeholder="The diagnoses relevant to driving and their current status — when diagnosed, how stable the condition is, and who manages it (GP, specialist, allied health). One short paragraph is enough."></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Medication response / side effects</label><textarea data-bind="medSideEffects" rows="2" placeholder="How the client responds to their medication, noting anything that could affect driving (drowsiness, blurred vision, slowed reactions) — or state that no side effects were reported."></textarea></div></div>
 
   <div class="subhead">Driving history &amp; current status</div>
-  <div class="row"><div class="f w100"><label>Narrative</label><textarea data-bind="drivingHistory" rows="4" placeholder="Licence history, hours accrued, vehicle, previous instruction, collisions/infringements, goals…"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Narrative</label><textarea data-bind="drivingHistory" rows="4" placeholder="The client's driving story so far: when they got their permit/licence, roughly how many hours of experience and in what vehicle, any previous lessons, any collisions or infringements, and what they are hoping to achieve (their driving goal)."></textarea></div></div>
 
   <div class="subhead">Driving needs</div>
   <div id="needsRows"></div>
@@ -319,7 +320,7 @@ ul.rep li{margin-bottom:2mm}
     <div class="f w50"><label>Result</label>
       <select data-bind="hearing"><option value="wnl">No difficulties observed or reported</option><option value="aids">Hearing aids worn — adequate with aids</option><option value="issue">Difficulties observed / reported</option></select>
     </div>
-    <div class="f"><label>Comment (optional)</label><input type="text" data-bind="hearingNote"></div>
+    <div class="f"><label>Comment (optional)</label><input type="text" data-bind="hearingNote" placeholder="e.g. instructions repeated once in noisy room; no impact in vehicle"></div>
   </div>
 
   <div class="subhead">Visual screen</div>
@@ -330,11 +331,11 @@ ul.rep li{margin-bottom:2mm}
   </div>
   <div class="row">
     <div class="f"><label>Uncorrected R</label><input type="text" data-bind="vaUR" placeholder="6/24"></div>
-    <div class="f"><label>Uncorrected L</label><input type="text" data-bind="vaUL"></div>
-    <div class="f"><label>Uncorrected Binoc</label><input type="text" data-bind="vaUB"></div>
-    <div class="f"><label>Corrected R</label><input type="text" data-bind="vaCR"></div>
-    <div class="f"><label>Corrected L</label><input type="text" data-bind="vaCL"></div>
-    <div class="f"><label>Corrected Binoc</label><input type="text" data-bind="vaCB"></div>
+    <div class="f"><label>Uncorrected L</label><input type="text" data-bind="vaUL" placeholder="6/18"></div>
+    <div class="f"><label>Uncorrected Binoc</label><input type="text" data-bind="vaUB" placeholder="6/18 (or NT)"></div>
+    <div class="f"><label>Corrected R</label><input type="text" data-bind="vaCR" placeholder="6/12 (or N/A)"></div>
+    <div class="f"><label>Corrected L</label><input type="text" data-bind="vaCL" placeholder="6/9"></div>
+    <div class="f"><label>Corrected Binoc</label><input type="text" data-bind="vaCB" placeholder="6/6"></div>
   </div>
   <div class="row">
     <div class="f w50"><label>Visual fields (confrontation)</label><select data-bind="vFields"><option value="full">Full visual fields across all quadrants</option><option value="deficit">Deficit identified — describe below</option><option value="nt">Not tested</option></select></div>
@@ -355,8 +356,8 @@ ul.rep li{margin-bottom:2mm}
   <div class="hint">Enter raw scores; interpretation against driving thresholds is written automatically. <b>Remove</b> any assessment you did not administer, add more from the library, or add a <b>custom assessment</b> with your own scoring and wording (its reference is added to section 7 automatically). Clinical comments are appended to the auto-interpretation.</div>
   <div id="testCards"></div>
   <div id="testAdd"></div>
-  <div class="row"><div class="f w100"><label>General cognitive skills (observations)</label><textarea data-bind="genCog" rows="3" placeholder="Alertness, engagement, instruction needs, concentration, communication, insight…"></textarea></div></div>
-  <div class="row"><div class="f w100"><label>Summary of cognitive skills for driving</label><textarea data-bind="cogSummary" rows="4"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>General cognitive skills (observations)</label><textarea data-bind="genCog" rows="3" placeholder="How the client presented during testing: were they alert and engaged, how much instruction did they need, did they hold concentration, how did they communicate, and did they show insight into their own abilities?"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Summary of cognitive skills for driving</label><textarea data-bind="cogSummary" rows="4" placeholder="Pull the results together in two or three sentences: what was intact, what (if anything) fell below threshold, and what that means for driving. The auto-interpretations above are good building blocks — the flagged issues also flow into the summary and letters automatically."></textarea></div></div>
 </div>
 </details>
 
@@ -366,11 +367,11 @@ ul.rep li{margin-bottom:2mm}
 <div class="secbody">
   <div class="row">
     <div class="f w50"><label>Vehicle</label><select data-bind="vehicle"><option>Dual-control automatic vehicle (dual brakes)</option><option>Dual-control manual vehicle</option><option>Client's own vehicle</option><option>Client's own vehicle with modifications</option></select></div>
-    <div class="f w25"><label>Duration (minutes)</label><input type="number" data-bind="duration"></div>
+    <div class="f w25"><label>Duration (minutes)</label><input type="number" data-bind="duration" placeholder="e.g. 45"></div>
   </div>
   <div class="row"><div class="f w100"><label>Weather conditions</label><input type="text" data-bind="weather" placeholder="e.g. Overcast with no rain; dry road surfaces."></div></div>
-  <div class="row"><div class="f w100"><label>Geographical area / route</label><textarea data-bind="route" rows="2"></textarea></div></div>
-  <div class="row"><div class="f w100"><label>Vehicle modifications used</label><input type="text" data-bind="vehicleMods"></div></div>
+  <div class="row"><div class="f w100"><label>Geographical area / route</label><textarea data-bind="route" rows="2" placeholder="Where the drive went, easiest to hardest — e.g. started in a quiet car park, then residential streets, multi-lane roads, traffic lights and roundabouts across 40–60 km/h zones."></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Vehicle modifications used</label><input type="text" data-bind="vehicleMods" placeholder="e.g. spinner knob, left-foot accelerator — or state that none were used"></div></div>
 
   <div class="subhead">Assessment results — by performance domain</div>
   <div class="hint">Five domains, each with its own table in the report. Every item defaults to <b>Safe</b> — flip only the exceptions, or <span class="resetlink" onclick="markAllDomainsSafe()">mark every item safe</span> to start clean. Each domain has one <b>Further comments</b> box (required when issues are flagged); it prints under that domain's table.</div>
@@ -408,7 +409,7 @@ ul.rep li{margin-bottom:2mm}
 <summary>7 · References<span class="secchip" id="secchip_7"></span></summary>
 <div class="secbody">
   <div class="hint">References are added automatically for the tests you included (plus Austroads). Add extras below, one per line.</div>
-  <div class="row"><div class="f w100"><label>Additional references</label><textarea data-bind="refsExtra" rows="2"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Additional references</label><textarea data-bind="refsExtra" rows="2" placeholder="One per line, only if you cited something extra — e.g. a state licensing standard or another test manual."></textarea></div></div>
 </div>
 </details>
 
@@ -995,9 +996,9 @@ function autoSummary(){
 function buildMedRows(){
   const el=document.getElementById('medRows');
   el.innerHTML = S.meds.map((m,i)=>`<div class="medrow">
-    <input placeholder="Name" value="${esc(m.name)}" oninput="S.meds[${i}].name=this.value;update()">
-    <input placeholder="Dosage / frequency" value="${esc(m.dose)}" oninput="S.meds[${i}].dose=this.value;update()">
-    <input placeholder="Purpose" value="${esc(m.purpose)}" oninput="S.meds[${i}].purpose=this.value;update()">
+    <input placeholder="Medication name (or “Nil reported”)" value="${esc(m.name)}" oninput="S.meds[${i}].name=this.value;update()">
+    <input placeholder="Dose / frequency, e.g. 10 mg daily" value="${esc(m.dose)}" oninput="S.meds[${i}].dose=this.value;update()">
+    <input placeholder="What it's for" value="${esc(m.purpose)}" oninput="S.meds[${i}].purpose=this.value;update()">
     <button class="xbtn" onclick="S.meds.splice(${i},1);buildMedRows();update()">×</button></div>`).join('');
 }
 function addMed(){ S.meds.push({name:'',dose:'',purpose:''}); buildMedRows(); update(); }
@@ -1005,7 +1006,7 @@ function addMed(){ S.meds.push({name:'',dose:'',purpose:''}); buildMedRows(); up
 function buildReviewed(){
   document.getElementById('reviewedChecks').innerHTML = REVIEWED_OPTS.map(o=>
    `<label class="chk"><input type="checkbox" ${S.reviewed[o.id]?'checked':''} onchange="S.reviewed['${o.id}']=this.checked;update()">${o.label}</label>`).join('')
-   + `<div class="row" style="margin-top:6px"><div class="f w100"><label>Support person present at interview (for "history provided" wording)</label><input type="text" value="${esc(S.supportPerson)}" oninput="S.supportPerson=this.value;update()" placeholder="e.g. his father"></div></div>`;
+   + `<div class="row" style="margin-top:6px"><div class="f w100"><label>Support person present at interview (for "history provided" wording)</label><input type="text" value="${esc(S.supportPerson)}" oninput="S.supportPerson=this.value;update()" placeholder="e.g. a parent or support worker — leave blank if the client attended alone"></div></div>`;
 }
 
 function buildNeeds(){
@@ -1014,7 +1015,7 @@ function buildNeeds(){
     return `<div class="row" style="margin-bottom:5px">
       <div class="f w33"><label>${r.label}</label>
         <select onchange="S.needs['${r.id}'].val=this.value;update()">${r.opts.map(o=>`<option ${n.val===o?'selected':''}>${o}</option>`).join('')}</select></div>
-      <div class="f"><label>Detail (optional)</label><input type="text" value="${esc(n.note)}" oninput="S.needs['${r.id}'].note=this.value;update()" placeholder=""></div></div>`;
+      <div class="f"><label>Detail (optional)</label><input type="text" value="${esc(n.note)}" oninput="S.needs['${r.id}'].note=this.value;update()" placeholder="e.g. where, how far, what for"></div></div>`;
   }).join('');
 }
 
@@ -1080,12 +1081,12 @@ function buildTests(){
   const custom = S.customTests.map((t,i)=>`<div class="testcard custom" id="cardCustom_${i}">
       <h4>${t.name? esc(t.name) : 'Custom assessment'} <span class="pill na">custom</span><span class="resetlink" style="margin-left:auto" onclick="removeCustomTest(${i})">remove</span></h4>
       <div class="trow">
-        <div class="f" style="flex:1;min-width:150px"><label>Assessment name</label><input type="text" value="${esc(t.name)}" oninput="S.customTests[${i}].name=this.value;update()"></div>
-        <div class="f" style="flex:1;min-width:150px"><label>Purpose / what it measures</label><input type="text" value="${esc(t.purpose)}" oninput="S.customTests[${i}].purpose=this.value;update()"></div>
-        <div class="f" style="flex:0 0 150px"><label>Score / result</label><input type="text" value="${esc(t.score)}" oninput="S.customTests[${i}].score=this.value;update()"></div>
+        <div class="f" style="flex:1;min-width:150px"><label>Assessment name</label><input type="text" placeholder="e.g. Road Law and Road Craft Test (OT-DORA)" value="${esc(t.name)}" oninput="S.customTests[${i}].name=this.value;update()"></div>
+        <div class="f" style="flex:1;min-width:150px"><label>Purpose / what it measures</label><input type="text" placeholder="e.g. Knowledge of road law" value="${esc(t.purpose)}" oninput="S.customTests[${i}].purpose=this.value;update()"></div>
+        <div class="f" style="flex:0 0 150px"><label>Score / result</label><input type="text" placeholder="e.g. 24/25" value="${esc(t.score)}" oninput="S.customTests[${i}].score=this.value;update()"></div>
       </div>
-      <div class="row" style="margin-top:7px"><div class="f w100"><label>Interpretation (printed in the report — tokens supported)</label><textarea rows="2" oninput="S.customTests[${i}].interp=this.value;update()">${esc(t.interp)}</textarea></div></div>
-      <div class="row"><div class="f w100"><label>Reference (optional — added to section 7 automatically)</label><input type="text" value="${esc(t.ref)}" oninput="S.customTests[${i}].ref=this.value;update()"></div></div>
+      <div class="row" style="margin-top:7px"><div class="f w100"><label>Interpretation (printed in the report — tokens supported)</label><textarea rows="2" placeholder="One or two sentences on what the result indicates for driving — e.g. {name} demonstrated sound knowledge of road law, with one minor error corrected on discussion." oninput="S.customTests[${i}].interp=this.value;update()">${esc(t.interp)}</textarea></div></div>
+      <div class="row"><div class="f w100"><label>Reference (optional — added to section 7 automatically)</label><input type="text" placeholder="Author(s), year, title, journal/publisher" value="${esc(t.ref)}" oninput="S.customTests[${i}].ref=this.value;update()"></div></div>
     </div>`).join('');
   document.getElementById('testCards').innerHTML = cards + custom;
   buildTestAdd();
@@ -1609,56 +1610,57 @@ body{${ST.body}} table{border-collapse:collapse} li{margin-bottom:6pt}
    EXAMPLE (de-identified sample client) — for demo / QA
 ================================================================ */
 function loadExample(){
+  if(!confirm('Load the sample report? It replaces the current draft (save it first if needed). All names, conditions and results in the sample are fictional — use it to see what a finished report looks like.')) return;
   S=freshState();
   Object.assign(S,{
     title:'Mr', firstName:'John', prefName:'Johnny', surname:'Citizen', pronouns:'he', dob:'2000-01-01',
-    ndis:'430 123 456', address:'123 Sample Street, Adelaide SA 5000', licNo:'AB1234', licSighted:'Yes', licExpiry:'[TBC]',
+    ndis:'430 123 456', address:'123 Sample Street, Sampletown SA 5000', licNo:'123456789', licSighted:'Yes', licExpiry:'01/01/2030',
     licType:"Learner's permit (Class C)",
     licCond:['L-plates to be displayed','must be accompanied by a fully licensed supervising driver','zero BAC','automatic vehicles only','corrective lenses to be worn'],
-    diagnoses:'Autism Spectrum Disorder (Level 2); Schizophrenia',
-    meds:[{name:'Paliperidone',dose:'3-monthly intramuscular (IM) injection',purpose:'Stabilisation of schizophrenia'}],
+    diagnoses:'Example Condition A; Example Condition B',
+    meds:[{name:'Example Medication',dose:'10 mg daily',purpose:'Management of Example Condition A'}],
     refName:'Jane Referrer', refRole:'Occupational Therapist', refOrg:'Example Allied Health', refContact:'referrals@example.com.au',
     dateAssess:'2026-06-01', dateReport:'2026-06-08',
-    supervisor:'Sarah Supervisor', mdi:'David Instructor', supportPerson:'his father',
+    supervisor:'Sarah Supervisor', mdi:'David Instructor', supportPerson:'a family member',
     purpose:'learner',
-    symptoms:"{name} presents with diagnoses of Autism Spectrum Disorder (Level 2) and Schizophrenia. {His} primary driving-related challenge is managing cognitive load when several factors occur simultaneously (for example, at intersections or when tracking multiple vehicles pulling out at once). {He} reports no major sensory sensitivities, although {his} father notes that {he} dislikes large, crowded environments and tends to withdraw in highly stimulating settings. {He} identifies that {he} requires further practice with reverse parking and three-point turns.",
-    medHistory:"Autism Spectrum Disorder (Level 2) and Schizophrenia. {name}'s schizophrenia is reported to be well managed and stabilised on a three-monthly intramuscular injection, which {his} father reports has placed {him} at a “good level.” {He} previously trialled daily oral medication but found this difficult to manage.",
-    medSideEffects:"{name} reported some general fatigue and localised pain for approximately one week following {his} most recent injection but did not report any other side effects from {his} medication.",
-    drivingHistory:"{name} obtained {his} Learner's Permit in approximately 2021 (held for approximately five years) and has accumulated just under 20 supervised daytime logbook hours, learning in the family's automatic vehicle. {He} has undertaken previous lessons through a community driving program and with an instructor (the latter {he} found frustrating), has not yet driven at night, and has no history of motor vehicle collisions or traffic infringements. {He} {is} working toward a provisional (P-plate) licence to support independent travel to employment, study and community activities, and to reduce {his} reliance on family and {his} support worker for transport.",
+    symptoms:"{name}'s main driving-related challenge is managing several demands at once — for example, tracking other vehicles while monitoring signs and signals at busy intersections. {He} reports no sensory sensitivities that affect driving, and identifies reverse parking and driving on busier roads as the skills {he} most wants to practise.",
+    medHistory:"{name} was diagnosed with Example Condition A in 2020 and Example Condition B in 2022. Both conditions are reported to be stable and well managed, and are reviewed regularly by {his} general practitioner and treating team.",
+    medSideEffects:"{name} reported no side effects from {his} current medication that would be expected to affect driving.",
+    drivingHistory:"{name} obtained {his} learner's permit in 2023 and has accumulated approximately 25 supervised daytime logbook hours in the family's automatic vehicle. {He} has completed a small number of professional lessons, has not yet driven at night, and has no history of motor vehicle collisions or traffic infringements. {His} goal is a provisional (P-plate) licence to support independent travel to work, study and community activities.",
     lenses:'Yes', lensesEndorsed:'To be confirmed', acuityBy:'Optometrist',
-    vaUR:'6/24', vaUL:'6/21', vaUB:'6/24', vaCR:'6/12', vaCL:'6/6', vaCB:'6/6 -2',
-    visionNotes:"{name} is short-sighted and wears corrective lenses for driving. {He} reports longstanding myodesopsias (floaters) in both eyes, which {he} does not feel affect {his} vision functionally, and no other visual symptoms.",
+    vaUR:'6/24', vaUL:'6/18', vaUB:'6/18', vaCR:'6/9', vaCL:'6/9', vaCB:'6/6',
+    visionNotes:"{name} is short-sighted and wears corrective lenses for driving. No other visual symptoms were reported.",
     austroadsVision:'Yes', eyeReview:'Yes',
-    genCog:"{name} was alert, engaged and cooperative throughout the pre-driving screen. {He} required only minimal instruction, maintained concentration throughout (despite some general fatigue and localised pain after a recent injection), communicated clearly, asked relevant and at times complex questions, and demonstrated good insight into the implications of {his} functional status for driving.",
-    cogSummary:"Cognitive and perceptual screening was broadly within functional limits for driving. {name} demonstrated intact visuoconstructional skills, planning and executive function, intact visual scanning and attention, accurate application of road rules, and realistic insight into {his} own abilities. {His} performance on the Trail Making Test Part B, however, exceeded the driving time threshold, indicating reduced speed of divided attention and mental flexibility under load. This is {his} main area of cognitive vulnerability and is consistent with the difficulty {he} reports managing several driving demands at once. {His} combined DriveSafe and DriveAware scores place {him} in the highest (likely to pass) category from a cognitive standpoint. This indicates cognitive readiness to progress to supervised on-road learning rather than readiness to drive unsupervised, and is best developed through graded, repeated practice.",
+    genCog:"{name} was alert, engaged and cooperative throughout the pre-driving screen. {He} required only standard instruction, maintained concentration throughout, communicated clearly, and demonstrated good insight into the implications of {his} functional status for driving.",
+    cogSummary:"Cognitive and perceptual screening was broadly within functional limits for driving. {name} demonstrated intact planning, visual scanning and attention, accurate application of road rules, and realistic insight into {his} own abilities. {His} performance on the Trail Making Test Part B, however, exceeded the driving time threshold, indicating reduced speed of divided attention and mental flexibility under load — {his} main area of cognitive vulnerability and a key focus for supervised practice. {His} combined DriveSafe and DriveAware scores place {him} in the highest (likely to pass) category, indicating cognitive readiness to continue supervised on-road learning.",
     location:'the Estus Health assessment centre',
-    vehicle:'Dual-control automatic vehicle (dual brakes)', duration:'40',
+    vehicle:'Dual-control automatic vehicle (dual brakes)', duration:'45',
     weather:'Overcast with no rain; dry road surfaces.',
-    route:'Commenced in a quiet car park for vehicle familiarisation, progressing to two-way and multi-lane roads, traffic lights and roundabouts across 25, 50 and 60 km/h zones in low-to-moderate traffic.',
+    route:'Commenced in a quiet car park for vehicle familiarisation, progressing to residential streets, multi-lane roads, traffic lights and roundabouts across 25, 50 and 60 km/h zones in low-to-moderate traffic.',
     outcome:'learner-continue',
     recParams:{hours:10, funder:'NDIS plan (capacity building)'},
   });
   S.reviewed={referral:true,licence:true,background:true,gp:false,prevOT:false};
   S.needs.night={val:'Future need (no night-driving experience to date)',note:''};
-  S.needs.metro={val:'Yes',note:'metropolitan Adelaide'};
+  S.needs.metro={val:'Yes',note:''};
   S.needs.country={val:'On occasions',note:''};
   S.needs.traffic={val:'Low to medium density, building with experience',note:''};
   Object.assign(S.tests,{
-    trailsB:{on:true,secs:'227',errors:'0',note:'This is likely to affect {his} management of high-density traffic and complex intersections, where attention must be shifted quickly between multiple vehicles, signs and signals. It is consistent with the cognitive-load difficulties {he} reports and is a key focus for supervised practice.'},
+    trailsB:{on:true,secs:'227',errors:'0',note:'This is most likely to affect busy intersections and high-density traffic, where attention must shift quickly between vehicles, signs and signals, and is a key focus for supervised practice.'},
     maze:{on:true,secs:'23',errors:'0',note:''},
     driveSafe:{on:true,score:'83',detail:'0 objects missed; 1 location/direction detail missed',note:''},
     driveAware:{on:true,score:'14',note:''},
-    dsdaCat:{on:true,cat:'likely',note:'This reflects cognitive and perceptual readiness only. As a learner driver {he} still requires substantial supervised on-road practice and specialised instruction to develop the physical and procedural skills needed to drive independently and to pass a practical driving test.'},
+    dsdaCat:{on:true,cat:'likely',note:'This reflects cognitive and perceptual readiness only. As a learner driver {he} still requires substantial supervised on-road practice and specialised instruction to develop the skills needed to drive independently and to pass a practical driving test.'},
     intersection:{on:true,score:'8',note:''},
     bells:{on:true,omissions:'0',time:'',note:''},
   });
   Object.assign(S.checklist,{pc7:'issue', ob1:'issue', ob3:'issue', ob4:'issue', pj2:'issue', pc8:'na'});
   S.domainComments={
-   'Observation':"{name} did not consistently maintain continuous scanning to near, middle and far distances, tending to fixate on the road immediately ahead as task demands increased. Mirror checking was also inconsistent and less frequent than required for a learner preparing for a practical test — {he} used the mirrors when cornering or changing lanes but did not scan them often enough overall. In addition, {he} rarely performed physical blind-spot head checks when changing lanes, merging or leaving the kerb, relying almost entirely on {his} mirrors. These observation skills demand considerable divided attention and are likely compounded by the reduced speed of divided attention identified on the pre-drive screen; they are common development areas in novice drivers and will require targeted instruction and repeated supervised practice to establish.",
-   'Planning and Judgement':"While {his} gap selection was consistently safe, {name} demonstrated over-caution at roundabouts. {He} was slow to move off and missed several safe, viable opportunities to enter, waiting instead for completely clear traffic. This indicates difficulty judging dynamic gaps and managing the cognitive load of tracking moving vehicles, and links to the reduced speed of divided attention identified on the pre-drive screen. Positively, {he} planned ahead, managed multiple instructions appropriately for {his} level of experience, and showed developing defensive driving skills, including covering the brake in some hazardous situations.",
+   'Observation':"{name} did not consistently maintain continuous scanning to near, middle and far distances, tending to focus on the road immediately ahead as task demands increased. Mirror checks and physical blind-spot head checks were also less frequent than required for a learner preparing for a practical test. These observation skills demand considerable divided attention and are common development areas in novice drivers; they will require targeted instruction and repeated supervised practice to establish.",
+   'Planning and Judgement':"While {his} gap selection was consistently safe, {name} was over-cautious at roundabouts — slow to move off and missing several safe, viable opportunities to enter while waiting for completely clear traffic. This links to the reduced speed of divided attention identified on the pre-drive screen. Positively, {he} planned ahead, managed multiple instructions appropriately for {his} level of experience, and showed developing defensive driving skills.",
    'Vehicle Positioning':"",
    'Speed Control':"Speed control was consistent and appropriate for conditions, including a school zone (25 km/h) and 50 and 60 km/h zones.",
-   'Physical Control':"Because the assessment vehicle's indicator stalk was on the left (contrasting with {his} familiar family vehicle), {he} triggered the wipers instead of the indicators on 3 occasions. {He} managed this calmly and self-corrected. However, {he} required verbal prompting to use indicators generally, and consistently missed applying {his} left indicator when exiting roundabouts. Indicator errors of this kind are common in novice drivers, particularly in an unfamiliar vehicle, and will require targeted instruction and repeated supervised practice. Of note, {he} physically demonstrated the cervical range of motion for shoulder checks, but rarely initiated the movement spontaneously (recorded under Observation).",
+   'Physical Control':"{name} required occasional verbal prompting to use the indicators, and regularly missed applying {his} left indicator when exiting roundabouts. Indicator errors of this kind are common in novice drivers and improve with practice. All other vehicle controls were operated smoothly and safely.",
   };
   Object.assign(S,{
     gpOn:true, gpName:'Dr A Practitioner', gpRole:'General Practitioner', gpPractice:'Example Medical Centre',
