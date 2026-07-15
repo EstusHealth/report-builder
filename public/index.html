@@ -19,7 +19,7 @@ body{margin:0;font-family:'Barlow',sans-serif;background:var(--bg);color:var(--i
 /* ============ APP LAYOUT ============ */
 #app{display:flex;height:100vh;overflow:hidden}
 #formPane{width:46%;min-width:420px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line)}
-#previewPane{flex:1;overflow-y:auto;background:#dcdad5;padding:28px 20px}
+#previewPane{flex:1;overflow-y:auto;background:#dcdad5;padding:0}
 
 /* toolbar */
 #toolbar{position:sticky;top:0;z-index:50;background:var(--ink);padding:10px 16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -91,9 +91,45 @@ details.sec>summary .n{font-size:10px;color:var(--faint);letter-spacing:.05em;ma
 .reccard .params{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;align-items:center;font-size:12px}
 .reccard .params input,.reccard .params select{border:1px solid #d6d4cf;border-radius:4px;padding:3px 6px;font-size:12px;font-family:'Barlow',sans-serif;width:auto}
 
+/* form quickbar */
+#quickbar{display:flex;gap:16px;align-items:center;padding:7px 18px;border-bottom:1px solid var(--line);background:#e9e7e4;font-size:11px;position:sticky;top:0;z-index:40}
+#quickbar .tip{margin-left:auto;color:var(--faint);letter-spacing:.02em}
+
+/* section completion chips */
+details.sec>summary .secchip{margin-left:auto}
+details.sec>summary .secchip .pill{font-size:10px;padding:1px 7px}
+
+/* assessment picker */
+.addwrap{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 2px}
+.addwrap select{border:1px solid #d6d4cf;border-radius:4px;padding:6px 8px;font-family:'Barlow',sans-serif;font-size:12.5px;background:#fff;max-width:320px}
+.testcard.custom{border-left-color:var(--plum)}
+
+/* preview bar (document tabs + zoom) */
+#previewBar{position:sticky;top:0;z-index:40;display:flex;gap:10px;align-items:center;padding:8px 14px;background:#cfccc6;border-bottom:1px solid #bdbab4;flex-wrap:wrap}
+#docTabs{display:flex;gap:6px;flex-wrap:wrap}
+.ptab{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:12px;letter-spacing:.04em;padding:5px 12px;border:1px solid #b3b0aa;border-radius:14px;background:#e6e4df;color:#3a3934;cursor:pointer}
+.ptab:hover{background:#f2f0ec}
+.ptab.active{background:var(--navy);border-color:var(--navy);color:#fff}
+#zoomSel{margin-left:auto;border:1px solid #b3b0aa;border-radius:4px;padding:4px 6px;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11.5px;background:#e6e4df;color:#3a3934;cursor:pointer}
+
+/* toolbar extras */
+#saveStamp{font-family:'Barlow Semi Condensed',sans-serif;font-size:11px;color:#a8d8e0;letter-spacing:.04em}
+#clientChip{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:12px;color:#cfe9ee;background:#3a3934;border-radius:12px;padding:3px 10px;letter-spacing:.03em}
+#clientChip:empty{display:none}
+
 /* ============ REPORT PREVIEW ============ */
 .page{width:210mm;min-height:297mm;background:#fff;margin:0 auto 18px;box-shadow:0 8px 28px -12px rgba(0,0,0,.35);position:relative;padding:16mm 18mm 20mm;font-family:'Barlow',sans-serif;font-size:10.5pt;line-height:1.5;color:#1c1c1c}
-#reportRoot{max-width:210mm;margin:0 auto}
+.page,.page *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+#reportRoot{padding:22px 16px}
+
+/* responsive — stack panes on small screens */
+@media (max-width:920px){
+  body{overflow:auto}
+  #app{flex-direction:column;height:auto;overflow:visible}
+  #formPane{width:100%;min-width:0;border-right:none;border-bottom:3px solid var(--line);overflow:visible}
+  #previewPane{overflow:visible}
+  #quickbar{position:static}
+}
 .rep-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5mm}
 .rep-wordmark{font-family:'Oswald',sans-serif;font-weight:700;font-size:26px;line-height:.95;color:var(--ink)}
 .rep-wordmark span{font-weight:500;letter-spacing:.12em}
@@ -131,9 +167,11 @@ ul.rep li{margin-bottom:2mm}
 .flash{outline:2px solid var(--plum)!important;outline-offset:1px;transition:outline .2s}
 @media print{
   body{background:#fff}
-  #formPane,#toolbar,#gradbar{display:none!important}
+  .page,.page *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  #formPane,#toolbar,#gradbar,#previewBar,#quickbar{display:none!important}
   #app{display:block;height:auto;overflow:visible}
   #previewPane{overflow:visible;padding:0;background:#fff}
+  #reportRoot{zoom:1!important;padding:0}
   .page{box-shadow:none;margin:0;width:auto;min-height:0;page-break-after:always}
   .page:last-child{page-break-after:auto}
 }
@@ -142,6 +180,8 @@ ul.rep li{margin-bottom:2mm}
 <body>
 <div id="toolbar">
   <div class="brand">ESTUS <span>HEALTH</span><small>OT DRIVING REPORT BUILDER</small></div>
+  <span id="clientChip" title="Current client"></span>
+  <span id="saveStamp" title="Autosaved to this browser"></span>
   <button class="btn" onclick="loadExample()">Load example</button>
   <button class="btn" onclick="newReport()">New</button>
   <button class="btn" onclick="saveJSON()">Save draft</button>
@@ -154,11 +194,17 @@ ul.rep li{margin-bottom:2mm}
 <div id="gradbar"></div>
 <div id="app">
 <div id="formPane">
+<div id="quickbar">
+  <span class="resetlink" onclick="setAllSections(true)">Expand all sections</span>
+  <span class="resetlink" onclick="setAllSections(false)">Collapse all</span>
+  <span class="tip">Ctrl/⌘ + S saves a draft file</span>
+</div>
 
 <!-- ================= 1. CLIENT DETAILS ================= -->
 <details class="sec" open>
-<summary>1 · Client &amp; Assessment Details</summary>
+<summary>1 · Client &amp; Assessment Details<span class="secchip" id="secchip_1"></span></summary>
 <div class="secbody">
+  <div class="hint">Who was assessed, who referred them, and who completed the report. Everything here fills the client details table on page one — the preview on the right updates as you type.</div>
   <div class="row">
     <div class="f w25"><label>Title</label><select data-bind="title"><option>Mr</option><option>Mrs</option><option>Ms</option><option>Miss</option><option>Mx</option><option value="">(none)</option></select></div>
     <div class="f"><label>First name</label><input type="text" data-bind="firstName"></div>
@@ -170,9 +216,9 @@ ul.rep li{margin-bottom:2mm}
     <div class="f w25"><label>Date of birth</label><input type="date" data-bind="dob"></div>
     <div class="f"><label>NDIS number</label><input type="text" data-bind="ndis" placeholder="if applicable"></div>
   </div>
-  <div class="row"><div class="f w100"><label>Address</label><input type="text" data-bind="address"></div></div>
+  <div class="row"><div class="f w100"><label>Address</label><input type="text" data-bind="address" placeholder="Street, suburb, state, postcode"></div></div>
   <div class="row">
-    <div class="f"><label>Licence number</label><input type="text" data-bind="licNo"></div>
+    <div class="f"><label>Licence number</label><input type="text" data-bind="licNo" placeholder="e.g. 123456789"></div>
     <div class="f w25"><label>Sighted?</label><select data-bind="licSighted"><option>Yes</option><option>No</option></select></div>
     <div class="f w25"><label>Licence expiry</label><input type="text" data-bind="licExpiry" placeholder="or [TBC]"></div>
   </div>
@@ -189,20 +235,28 @@ ul.rep li{margin-bottom:2mm}
     </div>
   </div>
   <div class="row"><div class="f w100"><label>Other conditions</label><input type="text" data-bind="licCondOther" placeholder="optional, e.g. daylight driving only"></div></div>
-  <div class="row"><div class="f w100"><label>Presenting condition / diagnoses</label><input type="text" data-bind="diagnoses" placeholder="e.g. Autism Spectrum Disorder (Level 2); Schizophrenia"></div></div>
+  <div class="row"><div class="f w100"><label>Presenting condition / diagnoses</label><input type="text" data-bind="diagnoses" placeholder="the condition(s) relevant to driving, separated by semicolons — e.g. acquired brain injury; anxiety"></div></div>
 
   <div class="subhead">Medications</div>
   <div id="medRows"></div>
   <button class="addbtn" onclick="addMed()">+ Add medication</button>
 
+  <div class="subhead">Letterhead contact details</div>
+  <div class="hint">Prints top-right of every document (report and letters). Leave a line blank to omit it.</div>
+  <div class="row">
+    <div class="f w33"><label>Email</label><input type="text" data-bind="ehEmail" placeholder="e.g. hello@estushealth.com"></div>
+    <div class="f w33"><label>Phone</label><input type="text" data-bind="ehPhone" placeholder="e.g. +61 3 9000 0000"></div>
+    <div class="f w33"><label>Website</label><input type="text" data-bind="ehWeb" placeholder="e.g. www.estushealth.com"></div>
+  </div>
+
   <div class="subhead">Referral &amp; Report</div>
   <div class="row">
-    <div class="f"><label>Referrer name</label><input type="text" data-bind="refName"></div>
+    <div class="f"><label>Referrer name</label><input type="text" data-bind="refName" placeholder="who asked for this assessment?"></div>
     <div class="f"><label>Referrer role</label><input type="text" data-bind="refRole" placeholder="e.g. Occupational Therapist"></div>
   </div>
   <div class="row">
-    <div class="f"><label>Referrer organisation</label><input type="text" data-bind="refOrg"></div>
-    <div class="f"><label>Referrer email / phone</label><input type="text" data-bind="refContact"></div>
+    <div class="f"><label>Referrer organisation</label><input type="text" data-bind="refOrg" placeholder="practice / clinic / service"></div>
+    <div class="f"><label>Referrer email / phone</label><input type="text" data-bind="refContact" placeholder="email and/or phone"></div>
   </div>
   <div class="row">
     <div class="f w33"><label>Date of assessment</label><input type="date" data-bind="dateAssess"></div>
@@ -215,15 +269,15 @@ ul.rep li{margin-bottom:2mm}
   </div>
   <div class="row">
     <div class="f"><label>Supervising OT (optional)</label><input type="text" data-bind="supervisor" placeholder="leave blank if none"></div>
-    <div class="f"><label>Motor Driving Instructor</label><input type="text" data-bind="mdi"></div>
+    <div class="f"><label>Motor Driving Instructor</label><input type="text" data-bind="mdi" placeholder="instructor who drove during the on-road assessment"></div>
   </div>
-  <div class="row"><div class="f w100"><label>Assessment location</label><input type="text" data-bind="location"></div></div>
+  <div class="row"><div class="f w100"><label>Assessment location</label><input type="text" data-bind="location" placeholder="where the off-road screen took place"></div></div>
 </div>
 </details>
 
 <!-- ================= 2. REPORTS REVIEWED ================= -->
 <details class="sec">
-<summary>2 · Reports Reviewed</summary>
+<summary>2 · Reports Reviewed<span class="secchip" id="secchip_2"></span></summary>
 <div class="secbody">
   <div class="hint">Tick what you reviewed — the sentence writes itself. Add anything else below.</div>
   <div id="reviewedChecks"></div>
@@ -233,9 +287,9 @@ ul.rep li{margin-bottom:2mm}
 
 <!-- ================= 3. BACKGROUND ================= -->
 <details class="sec">
-<summary>3 · Background Information</summary>
+<summary>3 · Background Information<span class="secchip" id="secchip_3"></span></summary>
 <div class="secbody">
-  <div class="hint">Narrative fields support tokens: <code>{name}</code> <code>{first}</code> <code>{He}</code> <code>{he}</code> <code>{His}</code> <code>{his}</code> <code>{him}</code> <code>{was}</code> <code>{is}</code> <code>{has}</code> — they adapt to the client's name and pronouns automatically. Leave a field blank to skip it in the report. Click <b>reset</b> to restore the standard wording.</div>
+  <div class="hint">The story behind the referral — each box below becomes its own heading in the report, and the grey prompt text in each box explains what to cover. Narrative fields support tokens: <code>{name}</code> <code>{first}</code> <code>{He}</code> <code>{he}</code> <code>{His}</code> <code>{his}</code> <code>{him}</code> <code>{was}</code> <code>{is}</code> <code>{has}</code> — they adapt to the client's name and pronouns automatically. Leave a field blank to skip it in the report. Click <b>reset</b> to restore the standard wording.</div>
 
   <div class="subhead">Reason for referral</div>
   <div class="row">
@@ -252,14 +306,14 @@ ul.rep li{margin-bottom:2mm}
   <div class="row"><div class="f w100"><label>Reason for referral <span class="resetlink" onclick="resetField('reasonReferral')">reset to standard wording</span></label><textarea data-bind="reasonReferral" rows="4"></textarea></div></div>
 
   <div class="subhead">Current symptoms &amp; functional challenges</div>
-  <div class="row"><div class="f w100"><label>Narrative</label><textarea data-bind="symptoms" rows="4" placeholder="Primary driving-related challenges, sensory factors, self-identified practice needs…"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Narrative</label><textarea data-bind="symptoms" rows="4" placeholder="What does the client find (or expect to find) hard about driving, in their own words? Cover: the main driving-related challenges, any sensory factors (light, noise, busy environments), fatigue or medication effects, and the skills they say they want to practise."></textarea></div></div>
 
   <div class="subhead">Medical history &amp; treatment</div>
-  <div class="row"><div class="f w100"><label>Medical history</label><textarea data-bind="medHistory" rows="3"></textarea></div></div>
-  <div class="row"><div class="f w100"><label>Medication response / side effects</label><textarea data-bind="medSideEffects" rows="2"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Medical history</label><textarea data-bind="medHistory" rows="3" placeholder="The diagnoses relevant to driving and their current status — when diagnosed, how stable the condition is, and who manages it (GP, specialist, allied health). One short paragraph is enough."></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Medication response / side effects</label><textarea data-bind="medSideEffects" rows="2" placeholder="How the client responds to their medication, noting anything that could affect driving (drowsiness, blurred vision, slowed reactions) — or state that no side effects were reported."></textarea></div></div>
 
   <div class="subhead">Driving history &amp; current status</div>
-  <div class="row"><div class="f w100"><label>Narrative</label><textarea data-bind="drivingHistory" rows="4" placeholder="Licence history, hours accrued, vehicle, previous instruction, collisions/infringements, goals…"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Narrative</label><textarea data-bind="drivingHistory" rows="4" placeholder="The client's driving story so far: when they got their permit/licence, roughly how many hours of experience and in what vehicle, any previous lessons, any collisions or infringements, and what they are hoping to achieve (their driving goal)."></textarea></div></div>
 
   <div class="subhead">Driving needs</div>
   <div id="needsRows"></div>
@@ -268,7 +322,7 @@ ul.rep li{margin-bottom:2mm}
 
 <!-- ================= 4. PRE ON-ROAD ================= -->
 <details class="sec">
-<summary>4 · Pre On-Road Screens</summary>
+<summary>4 · Pre On-Road Screens<span class="secchip" id="secchip_4"></span></summary>
 <div class="secbody">
 
   <div class="subhead">Hearing &amp; communication</div>
@@ -276,7 +330,7 @@ ul.rep li{margin-bottom:2mm}
     <div class="f w50"><label>Result</label>
       <select data-bind="hearing"><option value="wnl">No difficulties observed or reported</option><option value="aids">Hearing aids worn — adequate with aids</option><option value="issue">Difficulties observed / reported</option></select>
     </div>
-    <div class="f"><label>Comment (optional)</label><input type="text" data-bind="hearingNote"></div>
+    <div class="f"><label>Comment (optional)</label><input type="text" data-bind="hearingNote" placeholder="e.g. instructions repeated once in noisy room; no impact in vehicle"></div>
   </div>
 
   <div class="subhead">Visual screen</div>
@@ -287,11 +341,11 @@ ul.rep li{margin-bottom:2mm}
   </div>
   <div class="row">
     <div class="f"><label>Uncorrected R</label><input type="text" data-bind="vaUR" placeholder="6/24"></div>
-    <div class="f"><label>Uncorrected L</label><input type="text" data-bind="vaUL"></div>
-    <div class="f"><label>Uncorrected Binoc</label><input type="text" data-bind="vaUB"></div>
-    <div class="f"><label>Corrected R</label><input type="text" data-bind="vaCR"></div>
-    <div class="f"><label>Corrected L</label><input type="text" data-bind="vaCL"></div>
-    <div class="f"><label>Corrected Binoc</label><input type="text" data-bind="vaCB"></div>
+    <div class="f"><label>Uncorrected L</label><input type="text" data-bind="vaUL" placeholder="6/18"></div>
+    <div class="f"><label>Uncorrected Binoc</label><input type="text" data-bind="vaUB" placeholder="6/18 (or NT)"></div>
+    <div class="f"><label>Corrected R</label><input type="text" data-bind="vaCR" placeholder="6/12 (or N/A)"></div>
+    <div class="f"><label>Corrected L</label><input type="text" data-bind="vaCL" placeholder="6/9"></div>
+    <div class="f"><label>Corrected Binoc</label><input type="text" data-bind="vaCB" placeholder="6/6"></div>
   </div>
   <div class="row">
     <div class="f w50"><label>Visual fields (confrontation)</label><select data-bind="vFields"><option value="full">Full visual fields across all quadrants</option><option value="deficit">Deficit identified — describe below</option><option value="nt">Not tested</option></select></div>
@@ -308,35 +362,36 @@ ul.rep li{margin-bottom:2mm}
   <div id="physRows"></div>
   <div class="row"><div class="f w100"><label>Summary of physical skills for driving <span class="resetlink" onclick="resetField('physSummary')">reset</span></label><textarea data-bind="physSummary" rows="2"></textarea></div></div>
 
-  <div class="subhead">Cognition / perception — standardised tests</div>
-  <div class="hint">Enter raw scores; interpretation against driving thresholds is written automatically. Untick a test to leave it out. Add clinical comments where relevant.</div>
+  <div class="subhead">Cognition / perception — standardised assessments</div>
+  <div class="hint">Enter raw scores; interpretation against driving thresholds is written automatically. <b>Remove</b> any assessment you did not administer, add more from the library, or add a <b>custom assessment</b> with your own scoring and wording (its reference is added to section 7 automatically). Clinical comments are appended to the auto-interpretation.</div>
   <div id="testCards"></div>
-  <div class="row"><div class="f w100"><label>General cognitive skills (observations)</label><textarea data-bind="genCog" rows="3" placeholder="Alertness, engagement, instruction needs, concentration, communication, insight…"></textarea></div></div>
-  <div class="row"><div class="f w100"><label>Summary of cognitive skills for driving</label><textarea data-bind="cogSummary" rows="4"></textarea></div></div>
+  <div id="testAdd"></div>
+  <div class="row"><div class="f w100"><label>General cognitive skills (observations)</label><textarea data-bind="genCog" rows="3" placeholder="How the client presented during testing: were they alert and engaged, how much instruction did they need, did they hold concentration, how did they communicate, and did they show insight into their own abilities?"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Summary of cognitive skills for driving</label><textarea data-bind="cogSummary" rows="4" placeholder="Pull the results together in two or three sentences: what was intact, what (if anything) fell below threshold, and what that means for driving. The auto-interpretations above are good building blocks — the flagged issues also flow into the summary and letters automatically."></textarea></div></div>
 </div>
 </details>
 
 <!-- ================= 5. ON-ROAD ================= -->
 <details class="sec">
-<summary>5 · On-Road Assessment</summary>
+<summary>5 · On-Road Assessment<span class="secchip" id="secchip_5"></span></summary>
 <div class="secbody">
   <div class="row">
     <div class="f w50"><label>Vehicle</label><select data-bind="vehicle"><option>Dual-control automatic vehicle (dual brakes)</option><option>Dual-control manual vehicle</option><option>Client's own vehicle</option><option>Client's own vehicle with modifications</option></select></div>
-    <div class="f w25"><label>Duration (minutes)</label><input type="number" data-bind="duration"></div>
+    <div class="f w25"><label>Duration (minutes)</label><input type="number" data-bind="duration" placeholder="e.g. 45"></div>
   </div>
   <div class="row"><div class="f w100"><label>Weather conditions</label><input type="text" data-bind="weather" placeholder="e.g. Overcast with no rain; dry road surfaces."></div></div>
-  <div class="row"><div class="f w100"><label>Geographical area / route</label><textarea data-bind="route" rows="2"></textarea></div></div>
-  <div class="row"><div class="f w100"><label>Vehicle modifications used</label><input type="text" data-bind="vehicleMods"></div></div>
+  <div class="row"><div class="f w100"><label>Geographical area / route</label><textarea data-bind="route" rows="2" placeholder="Where the drive went, easiest to hardest — e.g. started in a quiet car park, then residential streets, multi-lane roads, traffic lights and roundabouts across 40–60 km/h zones."></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Vehicle modifications used</label><input type="text" data-bind="vehicleMods" placeholder="e.g. spinner knob, left-foot accelerator — or state that none were used"></div></div>
 
   <div class="subhead">Assessment results — by performance domain</div>
-  <div class="hint">Five domains, each with its own table in the report. Every item defaults to <b>Safe</b> — use <b>mark all safe</b> then flip the exceptions. Each domain has one <b>Further comments</b> box (required when issues are flagged); it prints under that domain's table.</div>
+  <div class="hint">Five domains, each with its own table in the report. Every item defaults to <b>Safe</b> — flip only the exceptions, or <span class="resetlink" onclick="markAllDomainsSafe()">mark every item safe</span> to start clean. Each domain has one <b>Further comments</b> box (required when issues are flagged); it prints under that domain's table.</div>
   <div id="checklist"></div>
 </div>
 </details>
 
 <!-- ================= 6. SUMMARY & RECOMMENDATIONS ================= -->
 <details class="sec">
-<summary>6 · Summary &amp; Recommendations</summary>
+<summary>6 · Summary &amp; Recommendations<span class="secchip" id="secchip_6"></span></summary>
 <div class="secbody">
   <div class="row">
     <div class="f w100"><label>Assessment outcome</label>
@@ -361,16 +416,16 @@ ul.rep li{margin-bottom:2mm}
 
 <!-- ================= 7. REFERENCES ================= -->
 <details class="sec">
-<summary>7 · References</summary>
+<summary>7 · References<span class="secchip" id="secchip_7"></span></summary>
 <div class="secbody">
   <div class="hint">References are added automatically for the tests you included (plus Austroads). Add extras below, one per line.</div>
-  <div class="row"><div class="f w100"><label>Additional references</label><textarea data-bind="refsExtra" rows="2"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Additional references</label><textarea data-bind="refsExtra" rows="2" placeholder="One per line, only if you cited something extra — e.g. a state licensing standard or another test manual."></textarea></div></div>
 </div>
 </details>
 
 <!-- ================= 8. DECLARATIONS & SIGN-OFF ================= -->
 <details class="sec">
-<summary>8 · Declarations &amp; Sign-off</summary>
+<summary>8 · Declarations &amp; Sign-off<span class="secchip" id="secchip_8"></span></summary>
 <div class="secbody">
   <div class="hint">These sections protect you medicolegally: who you are, what your opinion is based on, its limits, who consented, and who the report is for. Standard wording is pre-filled — adjust per client as needed.</div>
   <div class="row">
@@ -388,9 +443,9 @@ ul.rep li{margin-bottom:2mm}
 
 <!-- ================= 9. LETTERS ================= -->
 <details class="sec">
-<summary>9 · Letters (GP, MDI, NDIS, family &amp; client)</summary>
+<summary>9 · Letters (GP, MDI, NDIS, family &amp; client)<span class="secchip" id="secchip_9"></span></summary>
 <div class="secbody">
-  <div class="hint">All letters are auto-drafted from the report data — ticking <b>Include</b> drafts the body automatically (edit freely, or <b>reset to auto-draft</b> any time). The <b>GP cover letter</b> prints/exports as page 1 of the report package. The <b>MDI referral</b>, <b>NDIS support letter</b>, <b>family letter</b> and <b>client letter</b> are separate documents (separate downloads) — each goes to a different recipient.</div>
+  <div class="hint">All letters are auto-drafted from the report data — ticking <b>Include</b> drafts the body automatically (edit freely, or <b>reset to auto-draft</b> any time). The <b>GP cover letter</b> prints/exports as page 1 of the report package. The <b>MDI referral</b>, <b>NDIS support letter</b>, <b>family letter</b> and <b>client letter</b> are separate documents for different recipients — preview each with the tabs above the preview (Print / PDF prints the active tab), or use the download buttons below.</div>
 
   <label class="chk" style="margin:4px 0"><input type="checkbox" data-bindbool="gpOn"><b>Include cover letter to treating medical practitioner / referrer</b></label>
   <div class="row">
@@ -411,7 +466,7 @@ ul.rep li{margin-bottom:2mm}
   <div class="row"><div class="f w100"><label>Functional issues <span class="resetlink" onclick="resetField('mdiFunctional')">reset to auto-draft</span></label><textarea data-bind="mdiFunctional" rows="4"></textarea></div></div>
   <div class="row"><div class="f w100"><label>Lesson plan <span class="resetlink" onclick="resetField('mdiPlan')">reset to auto-draft</span></label><textarea data-bind="mdiPlan" rows="3"></textarea></div></div>
   <div class="row"><div class="f w100"><label>Specific instructions</label><textarea data-bind="mdiInstructions" rows="2"></textarea></div></div>
-  <button class="btn plum" style="margin-top:6px" onclick="guard(exportMDIWord)">Download MDI referral (.doc)</button>
+  <button class="btn plum" style="margin-top:6px" onclick="guard(exportMDIWord)">Download MDI referral (.docx)</button>
 
   <div class="subhead">NDIS funding support letter</div>
   <div class="hint">Letter of support for NDIS funding of specialised driver training. Auto-draft pulls in the NDIS number, diagnoses, approved hours/funding (section 6 recommendations) and the on-road focus areas.</div>
@@ -422,27 +477,35 @@ ul.rep li{margin-bottom:2mm}
     <div class="f w33"><label>Organisation</label><input type="text" data-bind="ndisOrg"></div>
   </div>
   <div class="row"><div class="f w100"><label>Letter body <span class="resetlink" onclick="resetField('ndisBody')">reset to auto-draft</span></label><textarea data-bind="ndisBody" rows="10"></textarea></div></div>
-  <button class="btn plum" style="margin-top:6px" onclick="guard(exportNDISWord)">Download NDIS support letter (.doc)</button>
+  <button class="btn plum" style="margin-top:6px" onclick="guard(exportNDISWord)">Download NDIS support letter (.docx)</button>
 
   <div class="subhead">Family &amp; supervising driver letter</div>
   <div class="hint">Plain-language letter for the extended family / supervising drivers on how to support the learner between lessons. Auto-draft pulls in the practice focus areas flagged on road so everyone reinforces the same skills.</div>
   <label class="chk" style="margin:4px 0"><input type="checkbox" data-bindbool="famOn"><b>Include letter for family / supervising drivers</b></label>
   <div class="row"><div class="f w100"><label>Addressed to <span style="font-weight:400;color:var(--faint)">(optional — defaults to "the family and supervising drivers of [first name]")</span></label><input type="text" data-bind="famName" placeholder="e.g. Mr &amp; Mrs Citizen"></div></div>
   <div class="row"><div class="f w100"><label>Letter body <span class="resetlink" onclick="resetField('famBody')">reset to auto-draft</span></label><textarea data-bind="famBody" rows="12"></textarea></div></div>
-  <button class="btn plum" style="margin-top:6px" onclick="guard(exportFamWord)">Download family letter (.doc)</button>
+  <button class="btn plum" style="margin-top:6px" onclick="guard(exportFamWord)">Download family letter (.docx)</button>
 
   <div class="subhead">Client letter (plain language)</div>
   <div class="hint">Explains the outcome and next steps directly to the client in accessible language. Auto-draft adapts to the assessment outcome and lists the practice focus areas.</div>
   <label class="chk" style="margin:4px 0"><input type="checkbox" data-bindbool="clientOn"><b>Include plain-language letter to the client</b></label>
   <div class="row"><div class="f w100"><label>Letter body <span class="resetlink" onclick="resetField('clientBody')">reset to auto-draft</span></label><textarea data-bind="clientBody" rows="10"></textarea></div></div>
-  <button class="btn plum" style="margin-top:6px" onclick="guard(exportClientWord)">Download client letter (.doc)</button>
+  <button class="btn plum" style="margin-top:6px" onclick="guard(exportClientWord)">Download client letter (.docx)</button>
 </div>
 </details>
 
-<div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. Estus Health · OT Driving Assessment Report Builder v1.4 — segmented on-road · expanded letters (NDIS · family · client)</div>
+<div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. Estus Health · OT Driving Assessment Report Builder v2.1 — native .docx export · full-colour print/PDF · assessment library (add · remove · custom) · document tabs &amp; zoom</div>
 </div>
 
-<div id="previewPane"><div id="reportRoot"></div></div>
+<div id="previewPane">
+  <div id="previewBar">
+    <div id="docTabs"></div>
+    <select id="zoomSel" onchange="setZoom(this.value)" title="Preview zoom">
+      <option value="fit">Fit width</option><option value="70">70%</option><option value="85">85%</option><option value="100">100%</option><option value="120">120%</option>
+    </select>
+  </div>
+  <div id="reportRoot"></div>
+</div>
 </div>
 <div id="valModal" onclick="if(event.target===this)this.classList.remove('open')">
   <div id="valBox">
@@ -542,6 +605,10 @@ const REFS = {
   dsda2:"Kay LG, Bundy AC & Clemson LM, 2009, 'Predicting fitness to drive in people with cognitive impairments by using DriveSafe and DriveAware', Archives of Physical Medicine and Rehabilitation, vol. 90, no. 9, pp. 1514–1522",
   trails:"Tombaugh T, 2004, 'Trail Making Test A and B: Normative data stratified by age and education', Archives of Clinical Neuropsychology, vol. 19, pp. 203–214",
   otdora:"Unsworth C, 2011, OT-DORA: Occupational Therapy Driver Off-Road Assessment Battery, American Occupational Therapy Association, Bethesda, USA",
+  moca:"Nasreddine ZS, Phillips NA, Bédirian V et al., 2005, 'The Montreal Cognitive Assessment, MoCA: A brief screening tool for mild cognitive impairment', Journal of the American Geriatrics Society, vol. 53, no. 4, pp. 695–699",
+  mmse:"Folstein MF, Folstein SE & McHugh PR, 1975, '“Mini-mental state”: A practical method for grading the cognitive state of patients for the clinician', Journal of Psychiatric Research, vol. 12, no. 3, pp. 189–198",
+  clock:"Agrell B & Dehlin O, 1998, 'The clock-drawing test', Age and Ageing, vol. 27, no. 3, pp. 399–403",
+  ufov:"Ball K & Owsley C, 1993, 'The useful field of view test: A new technique for evaluating age-related declines in visual function', Journal of the American Optometric Association, vol. 64, no. 1, pp. 71–79",
 };
 
 /* ---------- default state ---------- */
@@ -553,6 +620,7 @@ function freshState(){
     refName:'', refRole:'', refOrg:'', refContact:'',
     dateAssess:'', dateReport:'',
     assessor:'Liam Fagan', assessorRole:'Occupational Therapist', ahpra:'OCC0002674997',
+    ehEmail:'liam@estushealth.com', ehPhone:'+61 3 9000 0000', ehWeb:'www.estushealth.com',
     supervisor:'', mdi:'', location:'Flinders University Tonsley campus',
     reviewed:{referral:true, licence:true, background:true, gp:false, prevOT:false}, reviewedExtra:'', supportPerson:'',
     purpose:'learner', reasonReferral:'', symptoms:'', medHistory:'', medSideEffects:'', drivingHistory:'',
@@ -569,12 +637,18 @@ function freshState(){
       dsdaCat:{on:true, cat:'likely', note:''},
       intersection:{on:true, score:'', note:''},
       bells:{on:true, omissions:'', time:'', note:''},
+      tmtA:{on:false, secs:'', errors:'', note:''},
+      moca:{on:false, score:'', note:''},
+      mmse:{on:false, score:'', note:''},
+      clock:{on:false, result:'ok', note:''},
+      ufov:{on:false, cat:'1', note:''},
     },
+    customTests:[],
     genCog:'', cogSummary:'',
     vehicle:'Dual-control automatic vehicle (dual brakes)', duration:'', weather:'', route:'',
     vehicleMods:'No modifications to the vehicle were used during the assessment.',
     checklist:{}, domainComments:{}, outcome:'learner-continue', summaryText:'',
-    recs:{}, recParams:{hours:10, funder:'NDIS plan (capacity building)'},
+    recs:{}, customRecs:[], recParams:{hours:10, funder:'NDIS plan (capacity building)'},
     refsExtra:'',
     reportRef:'', reportVersion:'1.0 (Final)', consentObtained:false,
     consentText:'', qualifications:'', limitations:'', declarationText:'',
@@ -637,7 +711,7 @@ const AUTOTEXT = {
       conditions:`{name} was referred ${by}for an occupational therapy driver assessment to review {his} current licence conditions and determine whether they remain appropriate.`,
       mods:`{name} was referred ${by}for an occupational therapy driver assessment to determine {his} requirements for vehicle modifications to support safe, independent driving.`,
     }[S.purpose];
-    return base + ` The assessment considers the potential impact of {his} ${S.diagnoses? 'diagnoses of '+S.diagnoses : 'presenting condition'} on the cognitive, physical and perceptual skills required for safe driving.`;
+    return base + ` The assessment considers the potential impact of {his} ${S.diagnoses? 'diagnoses of '+S.diagnoses : 'presenting condition'} on the sensory, physical, cognitive and perceptual skills required for safe driving. It comprised a review of the available documentation, a clinical interview, an off-road screen of vision, physical and cognitive skills, and an on-road assessment conducted with a Motor Driving Instructor in a dual-control vehicle.`;
   },
   physSummary(){
     return `{name}'s physical abilities are within functional limits for driving a light automatic vehicle; no physical restrictions or modifications are indicated.`;
@@ -776,6 +850,48 @@ function interpBells(){
   txt += ` The time taken gives an indication of visual search speed when scanning a field of competing information.`;
   return {pill: ok?'pass':'fail', scoreTxt:`${o===0?'All targets identified; 0 omissions':o+' omissions'}${time? ' (completed in '+time+')':''}.`, txt};
 }
+function interpTrailsA(){
+  const t=S.tests.tmtA, s=parseFloat(t.secs), e=parseInt(t.errors||0);
+  if(isNaN(s)) return {pill:'na', txt:'Enter time in seconds.'};
+  const pass = s<=78 && e<=1;
+  let txt = `Completion within 78 seconds with no more than one error is the commonly used screening threshold in the driving literature. `;
+  txt += pass
+    ? `{name} completed the test within this threshold, indicating intact visual scanning, sequencing and speed of processing.`
+    : `{name}'s result falls outside this threshold, indicating reduced visual scanning and speed of processing; this is interpreted alongside Part B and on-road performance.`;
+  return {pill: pass?'pass':'fail', scoreTxt:`${s} seconds, ${e===0?'no errors':e+' error'+(e>1?'s':'')}.`, txt};
+}
+function interpMoCA(){
+  const v=parseFloat(S.tests.moca.score);
+  if(isNaN(v)) return {pill:'na', txt:'Enter score out of 30.'};
+  const ok=v>=26;
+  return {pill: ok?'pass':'fail', scoreTxt:`${v}/30`,
+    txt: ok? `A score of 26 or above is within the normal range, indicating no cognitive impairment on general screening.`
+           : `A score below 26 suggests possible cognitive impairment on general screening. The MoCA does not have a validated driving-specific cut-off; this result is interpreted alongside the driving-specific cognitive screens and on-road performance.`};
+}
+function interpMMSE(){
+  const v=parseFloat(S.tests.mmse.score);
+  if(isNaN(v)) return {pill:'na', txt:'Enter score out of 30.'};
+  const ok=v>=24;
+  return {pill: ok?'pass':'fail', scoreTxt:`${v}/30`,
+    txt: ok? `A score of 24 or above is within the normal range on this screen.`
+           : `A score below 24 indicates cognitive impairment on general screening; this result is interpreted alongside the driving-specific cognitive screens and on-road performance.`};
+}
+function interpClock(){
+  const ok = S.tests.clock.result==='ok';
+  return {pill: ok?'pass':'fail', pillLabel: ok?'No errors':'Errors observed',
+    scoreTxt: ok? 'Completed accurately; no errors.' : 'Errors / inaccuracies observed.',
+    txt: ok? `The clock was drawn accurately, with no evidence of difficulty with planning, sequencing or visuospatial organisation.`
+           : `Errors on clock drawing may reflect difficulty with executive function, planning or visuospatial organisation, and warrant consideration alongside the other cognitive screens and on-road performance.`};
+}
+function interpUFOV(){
+  const c=parseInt(S.tests.ufov.cat);
+  const lbl={1:'Category 1 (very low risk)',2:'Category 2 (low risk)',3:'Category 3 (low to moderate risk)',4:'Category 4 (moderate to high risk)',5:'Category 5 (high risk)'}[c];
+  const pill = c<=2? 'pass' : c===3? 'na' : 'fail';
+  const txt = c<=2? `This risk category indicates intact speed of visual processing and divided attention, with a low predicted crash risk.`
+    : c===3? `This risk category indicates some reduction in speed of visual processing and/or divided attention; on-road performance is the key determinant of driving safety.`
+    : `This risk category indicates significantly reduced speed of visual processing and divided attention, and is associated with elevated crash risk.`;
+  return {pill, pillLabel:lbl.replace(/ \(/,' — ').replace(/\)$/,''), scoreTxt:lbl, txt};
+}
 const DSDA_CATS = {
   likely:'Likely to pass an on-road assessment',
   further:'Requires further on-road assessment to determine impact on driving',
@@ -809,6 +925,8 @@ const REC_DEFS = [
   }},
  {id:'reassess', label:'On-road reassessment after lessons', when:()=>S.outcome==='lessons-reassess',
   def:()=>`Following completion of the recommended driving instruction, an occupational therapy on-road reassessment is recommended to review {his} progress and determine {his} readiness to drive.`},
+ {id:'logbook', label:'Supervised practice & logbook (between lessons)', when:()=>S.purpose==='learner',
+  def:()=>`In addition to formal lessons, regular short supervised practice drives with {his} family and supervising drivers are recommended between lessons, consolidating the skills introduced by the driving instructor and recording hours in the logbook. Practice should begin in quiet, familiar areas and progress to busier conditions only as skills consolidate.`},
  {id:'mods', label:'Vehicle modifications', when:()=>S.outcome==='mods',
   def:()=>`The following vehicle modifications are recommended to support safe driving: [list modifications]. Prescription and fitting should be completed by an appropriately qualified provider, with driver training in the modified vehicle.`},
  {id:'cease', label:'Cease driving', when:()=>S.outcome==='cease',
@@ -831,10 +949,16 @@ function flaggedShorts(){
 /* ---------- auto summary draft ---------- */
 function cogFlagList(){
   const cogFlags=[];
-  if(S.tests.trailsB.on){ const r=interpTrailsB(); if(r.pill==='fail') cogFlags.push('reduced speed of divided attention and mental flexibility under load (Trail Making Test Part B above the driving threshold)'); }
-  if(S.tests.maze.on){ const r=interpMaze(); if(r.pill==='fail') cogFlags.push('difficulty with planning and visuoconstructional skills (OT Drive Home Maze outside the driving threshold)'); }
-  if(S.tests.driveAware.on){ const r=interpDriveAware(); if(r.pill==='fail') cogFlags.push('reduced insight into driving-related abilities (DriveAware below cut-off)'); }
-  if(S.tests.bells.on){ const r=interpBells(); if(r.pill==='fail') cogFlags.push('visual inattention on the Bells Test'); }
+  const T=S.tests;
+  if(T.trailsB.on){ const r=interpTrailsB(); if(r.pill==='fail') cogFlags.push('reduced speed of divided attention and mental flexibility under load (Trail Making Test Part B above the driving threshold)'); }
+  if(T.tmtA && T.tmtA.on){ const r=interpTrailsA(); if(r.pill==='fail') cogFlags.push('reduced visual scanning and speed of processing (Trail Making Test Part A above the screening threshold)'); }
+  if(T.maze.on){ const r=interpMaze(); if(r.pill==='fail') cogFlags.push('difficulty with planning and visuoconstructional skills (OT Drive Home Maze outside the driving threshold)'); }
+  if(T.driveAware.on){ const r=interpDriveAware(); if(r.pill==='fail') cogFlags.push('reduced insight into driving-related abilities (DriveAware below cut-off)'); }
+  if(T.bells.on){ const r=interpBells(); if(r.pill==='fail') cogFlags.push('visual inattention on the Bells Test'); }
+  if(T.moca && T.moca.on){ const r=interpMoCA(); if(r.pill==='fail') cogFlags.push('possible cognitive impairment on general screening (MoCA below the normal-range cut-off)'); }
+  if(T.mmse && T.mmse.on){ const r=interpMMSE(); if(r.pill==='fail') cogFlags.push('cognitive impairment on general screening (MMSE below the normal-range cut-off)'); }
+  if(T.clock && T.clock.on){ const r=interpClock(); if(r.pill==='fail') cogFlags.push('errors on clock drawing suggesting executive or visuospatial difficulty'); }
+  if(T.ufov && T.ufov.on){ const r=interpUFOV(); if(r.pill==='fail') cogFlags.push('significantly reduced speed of visual processing and divided attention (UFOV risk category '+T.ufov.cat+')'); }
   return cogFlags;
 }
 function autoSummary(){
@@ -864,7 +988,17 @@ function autoSummary(){
       p2 += ` No areas of concern were identified during the on-road assessment.`;
     }
   }
-  return p1+'\n\n'+p2;
+
+  const p3 = {
+    'learner-continue':`Overall, {name} demonstrated sufficient foundational skills and cognitive readiness to continue learning to drive. With the approval of {his} treating medical practitioner, it is recommended that {he} continue as a learner driver and complete the program of specialised driving instruction outlined below, after which {his} progress and readiness for a practical driving test should be reviewed.`,
+    'fit':`Overall, {name} demonstrated the physical, cognitive, visual and perceptual skills required for safe, independent driving, and no licence restrictions are recommended on the basis of this assessment.`,
+    'fit-cond':`Overall, {name} demonstrated the skills required for safe driving subject to the licence conditions recommended below. It is recommended that the licensing authority be advised of these conditions.`,
+    'lessons-reassess':`Overall, this assessment identified skill areas that are best addressed through a structured program of specialised driving instruction. An occupational therapy on-road reassessment is recommended on completion of the program to review {his} progress and readiness to drive.`,
+    'mods':`Overall, {name} demonstrated the capacity to drive safely with appropriate vehicle modifications. The recommended modifications, prescription arrangements and driver training in the modified vehicle are outlined below.`,
+    'cease':`Overall, {name} did not demonstrate the skills currently required for safe driving, and it is recommended that {he} cease driving at this time. This outcome, the reasons for it, and the circumstances under which it could be reviewed have been discussed with {name}{support}. {His} treating medical practitioner and the licensing authority should be advised of this outcome.`,
+  }[S.outcome];
+
+  return p1+'\n\n'+p2+'\n\n'+p3;
 }
 
 /* ================================================================
@@ -873,9 +1007,9 @@ function autoSummary(){
 function buildMedRows(){
   const el=document.getElementById('medRows');
   el.innerHTML = S.meds.map((m,i)=>`<div class="medrow">
-    <input placeholder="Name" value="${esc(m.name)}" oninput="S.meds[${i}].name=this.value;update()">
-    <input placeholder="Dosage / frequency" value="${esc(m.dose)}" oninput="S.meds[${i}].dose=this.value;update()">
-    <input placeholder="Purpose" value="${esc(m.purpose)}" oninput="S.meds[${i}].purpose=this.value;update()">
+    <input placeholder="Medication name (or “Nil reported”)" value="${esc(m.name)}" oninput="S.meds[${i}].name=this.value;update()">
+    <input placeholder="Dose / frequency, e.g. 10 mg daily" value="${esc(m.dose)}" oninput="S.meds[${i}].dose=this.value;update()">
+    <input placeholder="What it's for" value="${esc(m.purpose)}" oninput="S.meds[${i}].purpose=this.value;update()">
     <button class="xbtn" onclick="S.meds.splice(${i},1);buildMedRows();update()">×</button></div>`).join('');
 }
 function addMed(){ S.meds.push({name:'',dose:'',purpose:''}); buildMedRows(); update(); }
@@ -883,7 +1017,7 @@ function addMed(){ S.meds.push({name:'',dose:'',purpose:''}); buildMedRows(); up
 function buildReviewed(){
   document.getElementById('reviewedChecks').innerHTML = REVIEWED_OPTS.map(o=>
    `<label class="chk"><input type="checkbox" ${S.reviewed[o.id]?'checked':''} onchange="S.reviewed['${o.id}']=this.checked;update()">${o.label}</label>`).join('')
-   + `<div class="row" style="margin-top:6px"><div class="f w100"><label>Support person present at interview (for "history provided" wording)</label><input type="text" value="${esc(S.supportPerson)}" oninput="S.supportPerson=this.value;update()" placeholder="e.g. his father"></div></div>`;
+   + `<div class="row" style="margin-top:6px"><div class="f w100"><label>Support person present at interview (for "history provided" wording)</label><input type="text" value="${esc(S.supportPerson)}" oninput="S.supportPerson=this.value;update()" placeholder="e.g. a parent or support worker — leave blank if the client attended alone"></div></div>`;
 }
 
 function buildNeeds(){
@@ -892,7 +1026,7 @@ function buildNeeds(){
     return `<div class="row" style="margin-bottom:5px">
       <div class="f w33"><label>${r.label}</label>
         <select onchange="S.needs['${r.id}'].val=this.value;update()">${r.opts.map(o=>`<option ${n.val===o?'selected':''}>${o}</option>`).join('')}</select></div>
-      <div class="f"><label>Detail (optional)</label><input type="text" value="${esc(n.note)}" oninput="S.needs['${r.id}'].note=this.value;update()" placeholder=""></div></div>`;
+      <div class="f"><label>Detail (optional)</label><input type="text" value="${esc(n.note)}" oninput="S.needs['${r.id}'].note=this.value;update()" placeholder="e.g. where, how far, what for"></div></div>`;
   }).join('');
 }
 
@@ -922,23 +1056,63 @@ const TEST_META = {
     fields:[{k:'score',label:'Score / 8',type:'number',w:'100px'}]},
   bells:{name:'Bells Test', purpose:'Tests for visual inattention', interp:interpBells,
     fields:[{k:'omissions',label:'Omissions',type:'number',w:'100px'},{k:'time',label:'Time (optional)',type:'text',w:'130px'}]},
+  tmtA:{name:'Trail Making Test — Part A', purpose:'Measures visual scanning, sequencing and speed of processing', interp:interpTrailsA,
+    fields:[{k:'secs',label:'Time (seconds)',type:'number',w:'110px'},{k:'errors',label:'Errors',type:'number',w:'80px'}]},
+  moca:{name:'Montreal Cognitive Assessment (MoCA)', purpose:'General cognitive screen — attention, memory, language, visuospatial and executive function', interp:interpMoCA,
+    fields:[{k:'score',label:'Score / 30',type:'number',w:'100px'}]},
+  mmse:{name:'Mini-Mental State Examination (MMSE)', purpose:'General cognitive screen', interp:interpMMSE,
+    fields:[{k:'score',label:'Score / 30',type:'number',w:'100px'}]},
+  clock:{name:'Clock Drawing Test', purpose:'Screens executive function, planning and visuospatial organisation', interp:interpClock,
+    fields:[{k:'result',label:'Result',type:'select',w:'230px',opts:[['ok','Completed accurately — no errors'],['errors','Errors / inaccuracies observed']]}]},
+  ufov:{name:'Useful Field of View (UFOV)', purpose:'Measures speed of visual processing and divided attention for driving', interp:interpUFOV,
+    fields:[{k:'cat',label:'Risk category',type:'select',w:'260px',opts:[['1','Category 1 — very low risk'],['2','Category 2 — low risk'],['3','Category 3 — low to moderate risk'],['4','Category 4 — moderate to high risk'],['5','Category 5 — high risk']]}]},
 };
+const TEST_ORDER=['trailsB','maze','driveSafe','driveAware','dsdaCat','intersection','bells','tmtA','moca','mmse','clock','ufov'];
+function pillHTML(r){
+  const label = r.pillLabel || (r.pill==='pass'?'Within threshold':r.pill==='fail'?'Outside threshold':'awaiting score');
+  return `<span class="pill ${r.pill}">${label}</span>`;
+}
 function buildTests(){
-  document.getElementById('testCards').innerHTML = Object.keys(TEST_META).map(id=>{
+  const cards = TEST_ORDER.filter(id=>S.tests[id]&&S.tests[id].on).map(id=>{
     const m=TEST_META[id], t=S.tests[id];
     const r = m.interp? m.interp() : null;
-    const pill = id==='dsdaCat' ? `<span class="pill ${S.tests.dsdaCat.cat==='likely'?'pass':S.tests.dsdaCat.cat==='unlikely'?'fail':'na'}">${DSDA_CATS[S.tests.dsdaCat.cat]}</span>`
-      : (r? `<span class="pill ${r.pill}">${r.pill==='pass'?'Within threshold':r.pill==='fail'?'Outside threshold':'awaiting score'}</span>`:'');
-    let fields = m.fields.map(f=>`<div class="f" style="flex:0 0 auto;min-width:0"><label>${f.label}</label><input type="${f.type}" style="width:${f.w}" value="${esc(t[f.k])}" oninput="S.tests.${id}.${f.k}=this.value;buildTestPill('${id}');update()"></div>`).join('');
+    const pill = id==='dsdaCat' ? `<span class="pill ${t.cat==='likely'?'pass':t.cat==='unlikely'?'fail':'na'}">${DSDA_CATS[t.cat]}</span>` : (r? pillHTML(r) : '');
+    let fields = m.fields.map(f=>{
+      if(f.type==='select') return `<div class="f" style="flex:0 0 auto;min-width:0"><label>${f.label}</label><select style="width:${f.w}" onchange="S.tests.${id}.${f.k}=this.value;buildTestPill('${id}');update()">${f.opts.map(o=>`<option value="${o[0]}" ${t[f.k]===o[0]?'selected':''}>${o[1]}</option>`).join('')}</select></div>`;
+      return `<div class="f" style="flex:0 0 auto;min-width:0"><label>${f.label}</label><input type="${f.type}" style="width:${f.w}" value="${esc(t[f.k])}" oninput="S.tests.${id}.${f.k}=this.value;buildTestPill('${id}');update()"></div>`;
+    }).join('');
     if(id==='dsdaCat') fields = `<div class="f" style="flex:1"><label>Outcome category (from DSDA report)</label><select onchange="S.tests.dsdaCat.cat=this.value;buildTests();update()">${Object.keys(DSDA_CATS).map(c=>`<option value="${c}" ${t.cat===c?'selected':''}>${DSDA_CATS[c]}</option>`).join('')}</select></div>`;
-    return `<div class="testcard ${t.on?'':'off'}" id="card_${id}">
-      <h4><label class="chk" style="padding:0"><input type="checkbox" ${t.on?'checked':''} onchange="S.tests.${id}.on=this.checked;buildTests();update()"></label>${m.name} <span id="pill_${id}">${pill}</span></h4>
-      <div style="font-size:11.5px;color:var(--faint);margin:2px 0 0 23px">${m.purpose}</div>
-      ${t.on? `<div class="trow">${fields}<div class="f" style="flex:1;min-width:160px"><label>Clinical comment (optional — appended to interpretation)</label><input type="text" value="${esc(t.note)}" oninput="S.tests.${id}.note=this.value;update()"></div></div>
-      <div class="autonote" id="auto_${id}">${autoNoteHTML(id)}</div>`:''}
+    return `<div class="testcard" id="card_${id}">
+      <h4>${m.name} <span id="pill_${id}">${pill}</span><span class="resetlink" style="margin-left:auto" onclick="removeTest('${id}')">remove</span></h4>
+      <div style="font-size:11.5px;color:var(--faint);margin:2px 0 0">${m.purpose}</div>
+      <div class="trow">${fields}<div class="f" style="flex:1;min-width:160px"><label>Clinical comment (optional — appended to interpretation)</label><input type="text" value="${esc(t.note)}" oninput="S.tests.${id}.note=this.value;update()"></div></div>
+      <div class="autonote" id="auto_${id}">${autoNoteHTML(id)}</div>
     </div>`;
   }).join('');
+  const custom = S.customTests.map((t,i)=>`<div class="testcard custom" id="cardCustom_${i}">
+      <h4>${t.name? esc(t.name) : 'Custom assessment'} <span class="pill na">custom</span><span class="resetlink" style="margin-left:auto" onclick="removeCustomTest(${i})">remove</span></h4>
+      <div class="trow">
+        <div class="f" style="flex:1;min-width:150px"><label>Assessment name</label><input type="text" placeholder="e.g. Road Law and Road Craft Test (OT-DORA)" value="${esc(t.name)}" oninput="S.customTests[${i}].name=this.value;update()"></div>
+        <div class="f" style="flex:1;min-width:150px"><label>Purpose / what it measures</label><input type="text" placeholder="e.g. Knowledge of road law" value="${esc(t.purpose)}" oninput="S.customTests[${i}].purpose=this.value;update()"></div>
+        <div class="f" style="flex:0 0 150px"><label>Score / result</label><input type="text" placeholder="e.g. 24/25" value="${esc(t.score)}" oninput="S.customTests[${i}].score=this.value;update()"></div>
+      </div>
+      <div class="row" style="margin-top:7px"><div class="f w100"><label>Interpretation (printed in the report — tokens supported)</label><textarea rows="2" placeholder="One or two sentences on what the result indicates for driving — e.g. {name} demonstrated sound knowledge of road law, with one minor error corrected on discussion." oninput="S.customTests[${i}].interp=this.value;update()">${esc(t.interp)}</textarea></div></div>
+      <div class="row"><div class="f w100"><label>Reference (optional — added to section 7 automatically)</label><input type="text" placeholder="Author(s), year, title, journal/publisher" value="${esc(t.ref)}" oninput="S.customTests[${i}].ref=this.value;update()"></div></div>
+    </div>`).join('');
+  document.getElementById('testCards').innerHTML = cards + custom;
+  buildTestAdd();
 }
+function buildTestAdd(){
+  const off = TEST_ORDER.filter(id=>S.tests[id] && !S.tests[id].on);
+  document.getElementById('testAdd').innerHTML = `<div class="addwrap">`+
+    (off.length? `<select id="libSel">${off.map(id=>`<option value="${id}">${TEST_META[id].name}</option>`).join('')}</select>
+     <button class="addbtn" onclick="addLibTest()">+ Add assessment</button>`:'')+
+    `<button class="addbtn" onclick="addCustomTest()">+ Add custom assessment</button></div>`;
+}
+function addLibTest(){ const sel=document.getElementById('libSel'); if(!sel||!sel.value) return; S.tests[sel.value].on=true; buildTests(); update(); }
+function removeTest(id){ S.tests[id].on=false; buildTests(); update(); }
+function addCustomTest(){ S.customTests.push({name:'',purpose:'',score:'',interp:'',ref:''}); buildTests(); update(); }
+function removeCustomTest(i){ S.customTests.splice(i,1); buildTests(); update(); }
 function autoNoteHTML(id){
   if(id==='dsdaCat') return '<b>Auto-text:</b> '+esc(fill(dsdaCombined())||'Enable DriveSafe + DriveAware to compose the combined outcome.');
   const m=TEST_META[id]; if(!m.interp) return '';
@@ -949,7 +1123,7 @@ function buildTestPill(id){
   const el=document.getElementById('auto_'+id); if(el) el.innerHTML=autoNoteHTML(id);
   const m=TEST_META[id];
   if(m.interp){ const r=m.interp(); const p=document.getElementById('pill_'+id);
-    if(p) p.innerHTML=`<span class="pill ${r.pill}">${r.pill==='pass'?'Within threshold':r.pill==='fail'?'Outside threshold':'awaiting score'}</span>`; }
+    if(p) p.innerHTML=pillHTML(r); }
   const d=document.getElementById('auto_dsdaCat'); if(d) d.innerHTML=autoNoteHTML('dsdaCat');
 }
 
@@ -978,6 +1152,11 @@ function markAllSafe(gname){
   g.items.forEach(it=>S.checklist[it.id]='safe');
   buildChecklist(); update();
 }
+function markAllDomainsSafe(){
+  CHECKLIST.forEach(g=>g.items.forEach(it=>S.checklist[it.id]='safe'));
+  buildChecklist(); update();
+}
+function setAllSections(open){ document.querySelectorAll('details.sec').forEach(d=>d.open=open); }
 
 function buildRecs(){
   document.getElementById('recCards').innerHTML = REC_DEFS.map(r=>{
@@ -993,7 +1172,13 @@ function buildRecs(){
        ${st.on?`<span class="resetlink" onclick="S.recs['${r.id}'].text=REC_DEFS.find(x=>x.id==='${r.id}').def();buildRecs();update()">reset wording</span>`:''}</div>
       ${st.on? params+`<textarea oninput="S.recs['${r.id}'].text=this.value;update()">${esc(st.text)}</textarea>`:''}
     </div>`;
-  }).join('');
+  }).join('')
+  + S.customRecs.map((txt,i)=>`<div class="reccard" style="border-left:3px solid var(--plum)">
+      <div class="rectop"><label style="color:var(--plum)">Custom recommendation ${i+1}</label>
+      <span class="resetlink" onclick="S.customRecs.splice(${i},1);buildRecs();update()">remove</span></div>
+      <textarea placeholder="Write the recommendation as it should appear in the report — tokens like {name} and {his} are supported." oninput="S.customRecs[${i}]=this.value;update()">${esc(txt)}</textarea>
+    </div>`).join('')
+  + `<button class="addbtn" onclick="S.customRecs.push('');buildRecs();update()">+ Add custom recommendation</button>`;
 }
 /* ================================================================
    REPORT GENERATION (inline-styled — shared by preview, print, Word)
@@ -1014,12 +1199,20 @@ function P(t){ return t? `<p style="${ST.p}">${paraSplit(t)}</p>`.replace(/<p st
 function paraSplit(t){ return esc(fill(t)).replace(/\n{2,}/g,`</p><p style="${ST.p}">`).replace(/\n/g,'<br>'); }
 function TR(label,val){ return `<tr><td style="${ST.lbl}">${label}</td><td style="${ST.td}">${paraSplit(val||'')}</td></tr>`; }
 
+function lhContactLines(){
+  const lines=[S.ehEmail,S.ehPhone].map(x=>String(x||'').trim()).filter(Boolean);
+  const web=String(S.ehWeb||'').trim();
+  return {lines,web};
+}
 function letterhead(){
-  return `<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5mm">
+  const {lines,web}=lhContactLines();
+  let contact=lines.map(esc).join('<br>');
+  if(web) contact+=(contact?'<br>':'')+`<span style="color:#2ca5b8;font-weight:600">${esc(web)}</span>`;
+  return `<div class="eh-lh" style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5mm">
     <div><div style="font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:700;font-size:26px;line-height:.95;color:#171410">ESTUS <span style="font-weight:500;letter-spacing:.12em">HEALTH</span></div>
     <div style="font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:9px;letter-spacing:.34em;color:#ab5c95;margin-top:3px;text-transform:uppercase">OCCUPATIONAL THERAPY</div></div>
-    <div style="text-align:right;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:8.5pt;color:#55534e;line-height:1.6">liam@estushealth.com<br>+61 3 9000 0000<br><span style="color:#2ca5b8;font-weight:600">www.estushealth.com</span></div></div>
-    <div style="height:3px;background:linear-gradient(90deg,#344982 0%,#2f6f9e 34%,#2ca5b8 66%,#ab5c95 100%);margin:0 0 8mm;border-radius:2px;font-size:0">&nbsp;</div>`;
+    <div style="text-align:right;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:8.5pt;color:#55534e;line-height:1.6">${contact}</div></div>
+    <div class="eh-grad" style="height:3px;background:linear-gradient(90deg,#344982 0%,#2f6f9e 34%,#2ca5b8 66%,#ab5c95 100%);margin:0 0 8mm;border-radius:2px;font-size:0">&nbsp;</div>`;
 }
 function signBlock(){
   return `<p style="${ST.p};margin-top:6mm">Kind regards,</p>
@@ -1178,14 +1371,21 @@ function buildReport(){
   h+=`<h3 style="${ST.h3}">Cognition / Perception Abilities &amp; Restrictions</h3>`;
   h+=`<table style="${ST.tbl}"><tr><th style="${ST.th}">Test</th><th style="${ST.th}">Purpose</th><th style="${ST.th}">Score</th><th style="${ST.th}">Indicates</th></tr>`;
   const testRow=(id)=>{
-    const t=S.tests[id]; if(!t.on) return '';
+    const t=S.tests[id]; if(!t||!t.on) return '';
     const m=TEST_META[id], r=m.interp();
     return `<tr><td style="${ST.td}"><b>${m.name}</b></td><td style="${ST.td}">${m.purpose}</td><td style="${ST.td}">${esc(r.scoreTxt||'')}</td><td style="${ST.td}">${paraSplit(r.txt+(t.note? ' '+t.note:''))}</td></tr>`;
   };
-  h+= testRow('trailsB')+testRow('maze')+testRow('driveSafe')+testRow('driveAware');
-  const comb=dsdaCombined();
-  if(comb) h+=`<tr><td colspan="4" style="${ST.td};background:#f4f8f9">${paraSplit(comb)}</td></tr>`;
-  h+= testRow('intersection')+testRow('bells');
+  TEST_ORDER.forEach(id=>{
+    if(id==='dsdaCat'){
+      const comb=dsdaCombined();
+      if(comb) h+=`<tr><td colspan="4" style="${ST.td};background:#f4f8f9">${paraSplit(comb)}</td></tr>`;
+      return;
+    }
+    h+=testRow(id);
+  });
+  S.customTests.filter(t=>t.name.trim()).forEach(t=>{
+    h+=`<tr><td style="${ST.td}"><b>${esc(t.name)}</b></td><td style="${ST.td}">${esc(t.purpose)}</td><td style="${ST.td}">${esc(t.score)}</td><td style="${ST.td}">${paraSplit(t.interp)}</td></tr>`;
+  });
   if(S.genCog) h+=`<tr><td style="${ST.td}"><b>General Cognitive Skills</b></td><td colspan="3" style="${ST.td}">${paraSplit(S.genCog)}</td></tr>`;
   h+=`</table>`;
   if(S.cogSummary) h+=`<p style="${ST.p}"><b>Summary of cognitive skills for driving:</b> ${paraSplit(S.cogSummary)}</p>`;
@@ -1204,7 +1404,7 @@ function buildReport(){
   CHECKLIST.forEach(g=>{
     const nIss=g.items.filter(it=>S.checklist[it.id]==='issue').length;
     h+=`<h3 style="${ST.h3}">${g.g}${nIss===0? '' : ''}</h3>
-    <table style="${ST.tbl}"><tr><th style="${ST.th}">Performance area</th><th style="${ST.th};width:14%;text-align:center">Appropriate &amp; safe</th><th style="${ST.th};width:14%;text-align:center">Issues observed</th></tr>`;
+    <table style="${ST.tbl}"><tr><th style="${ST.th}">Performance area</th><th style="${ST.th};width:17%;text-align:center">Appropriate &amp; safe</th><th style="${ST.th};width:17%;text-align:center">Issues observed</th></tr>`;
     g.items.forEach(it=>{
       const st=S.checklist[it.id];
       h+=`<tr><td style="${ST.td}">${it.text}</td>`+
@@ -1222,9 +1422,11 @@ function buildReport(){
   /* summary + recs */
   h+=`<h2 style="${ST.h2}">Summary and Recommendations</h2>`+P(S.summaryText);
   const recsOn = REC_DEFS.filter(r=>S.recs[r.id]&&S.recs[r.id].on&&S.recs[r.id].text);
-  if(recsOn.length){
+  const customOn = S.customRecs.filter(t=>t.trim());
+  if(recsOn.length||customOn.length){
     h+=`<p style="${ST.p}"><b>Recommendations:</b></p><ul style="margin:1mm 0 4mm;padding-left:6mm">`+
-      recsOn.map(r=>`<li style="margin-bottom:2mm">${paraSplit(S.recs[r.id].text)}</li>`).join('')+`</ul>`;
+      recsOn.map(r=>`<li style="margin-bottom:2mm">${paraSplit(S.recs[r.id].text)}</li>`).join('')+
+      customOn.map(t=>`<li style="margin-bottom:2mm">${paraSplit(t)}</li>`).join('')+`</ul>`;
   }
 
   /* basis of opinion, limitations, declaration */
@@ -1241,9 +1443,15 @@ function buildReport(){
 
   /* references */
   const refs=[REFS.austroads];
-  if(S.tests.driveSafe.on||S.tests.driveAware.on){refs.push(REFS.dsda1,REFS.dsda2);}
-  if(S.tests.trailsB.on) refs.push(REFS.trails);
-  if(S.tests.maze.on||S.tests.intersection.on||S.tests.bells.on) refs.push(REFS.otdora);
+  const T=S.tests;
+  if(T.driveSafe.on||T.driveAware.on){refs.push(REFS.dsda1,REFS.dsda2);}
+  if(T.trailsB.on||(T.tmtA&&T.tmtA.on)) refs.push(REFS.trails);
+  if(T.maze.on||T.intersection.on||T.bells.on) refs.push(REFS.otdora);
+  if(T.moca&&T.moca.on) refs.push(REFS.moca);
+  if(T.mmse&&T.mmse.on) refs.push(REFS.mmse);
+  if(T.clock&&T.clock.on) refs.push(REFS.clock);
+  if(T.ufov&&T.ufov.on) refs.push(REFS.ufov);
+  S.customTests.forEach(t=>{ if(t.ref&&t.ref.trim()) refs.push(t.ref.trim()); });
   if(S.refsExtra) S.refsExtra.split('\n').map(x=>x.trim()).filter(Boolean).forEach(x=>refs.push(x));
   h+=`<h2 style="${ST.h2}">References</h2>`+refs.map(r=>`<p style="${ST.p};font-size:9pt;color:#55534e">${esc(r)}</p>`).join('');
 
@@ -1260,16 +1468,40 @@ function footerID(){
 ================================================================ */
 let renderTimer=null;
 function update(){ clearTimeout(renderTimer); renderTimer=setTimeout(()=>{ render(); autosave(); },250); }
+
+/* preview document tabs + zoom */
+let activeDoc='report';
+let zoomMode='fit';
+try{ zoomMode=localStorage.getItem('estus-ot-zoom')||'fit'; }catch(e){}
+function setDoc(d){ activeDoc=d; render(); }
+function setZoom(z){ zoomMode=z; try{ localStorage.setItem('estus-ot-zoom',z); }catch(e){} applyZoom(); }
+function applyZoom(){
+  const root=document.getElementById('reportRoot'), pane=document.getElementById('previewPane');
+  if(!root||!pane) return;
+  let z = zoomMode==='fit'? Math.min(1.4, Math.max(.3,(pane.clientWidth-46)/794)) : parseInt(zoomMode,10)/100;
+  if(!isFinite(z)||z<=0) z=1;
+  root.style.zoom=z;
+}
+function page(h){ return `<div class="page">${h}</div>`; }
 function render(){
+  const docs=[['report', S.gpOn? 'Report + GP letter':'Report']];
+  if(S.mdiOn) docs.push(['mdi','MDI referral']);
+  if(S.ndisOn) docs.push(['ndis','NDIS letter']);
+  if(S.famOn) docs.push(['fam','Family letter']);
+  if(S.clientOn) docs.push(['client','Client letter']);
+  if(!docs.some(d=>d[0]===activeDoc)) activeDoc='report';
+  document.getElementById('docTabs').innerHTML = docs.map(d=>
+    `<button class="ptab ${activeDoc===d[0]?'active':''}" onclick="setDoc('${d[0]}')">${d[1]}</button>`).join('');
   let pages='';
-  if(S.gpOn) pages+=`<div class="page">${buildLetterGP()}</div>`;
-  pages+=`<div class="page">${buildReport()}</div>`;
-  if(S.mdiOn) pages+=`<div class="page">${buildLetterMDI()}</div>`;
-  if(S.ndisOn) pages+=`<div class="page">${buildLetterNDIS()}</div>`;
-  if(S.famOn) pages+=`<div class="page">${buildLetterFam()}</div>`;
-  if(S.clientOn) pages+=`<div class="page">${buildLetterClient()}</div>`;
+  if(activeDoc==='report'){ if(S.gpOn) pages+=page(buildLetterGP()); pages+=page(buildReport()); }
+  else if(activeDoc==='mdi') pages=page(buildLetterMDI());
+  else if(activeDoc==='ndis') pages=page(buildLetterNDIS());
+  else if(activeDoc==='fam') pages=page(buildLetterFam());
+  else if(activeDoc==='client') pages=page(buildLetterClient());
   document.getElementById('reportRoot').innerHTML = pages;
-  updatePageStyle(); updateBadge();
+  const chip=document.getElementById('clientChip');
+  if(chip) chip.textContent = (S.firstName||S.surname)? fullNm() : '';
+  updatePageStyle(); updateBadge(); applyZoom();
 }
 function updatePageStyle(){
   let st=document.getElementById('pageStyle');
@@ -1300,22 +1532,32 @@ function bindInputs(){
 }
 function syncForm(){
   document.querySelectorAll('[data-bind]').forEach(el=>{ el.value = S[el.dataset.bind]??''; });
-  document.querySelectorAll('[data-bindbool]').forEach(el=>{
-    el.addEventListener('change',()=>{ S[el.dataset.bindbool]=el.checked; update(); });
-  });
   document.querySelectorAll('[data-bindchk]').forEach(el=>{ el.checked = (S[el.dataset.bindchk]||[]).includes(el.value); });
   document.querySelectorAll('[data-bindbool]').forEach(el=>{ el.checked = !!S[el.dataset.bindbool]; });
   buildMedRows(); buildReviewed(); buildNeeds(); buildPhys(); buildTests(); buildChecklist(); buildRecs();
 }
 
 /* autosave */
-function autosave(){ try{ localStorage.setItem('estus-ot-report', JSON.stringify(S)); }catch(e){} }
+function autosave(){
+  try{
+    localStorage.setItem('estus-ot-report', JSON.stringify(S));
+    const el=document.getElementById('saveStamp');
+    if(el){ const d=new Date(); el.textContent='Saved '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+  }catch(e){}
+}
 function loadAutosave(){ try{ const d=localStorage.getItem('estus-ot-report'); if(d){ S = migrateState(Object.assign(freshState(), JSON.parse(d))); return true; } }catch(e){} return false; }
 function migrateState(s){
   const fresh=freshState();
   if(!s.domainComments||typeof s.domainComments!=='object') s.domainComments=fresh.domainComments;
   CHECKLIST.forEach(g=>{ if(s.domainComments[g.g]===undefined) s.domainComments[g.g]=''; });
   if(!s.vehicleMods) s.vehicleMods=fresh.vehicleMods;
+  // v2.0: assessment library + custom items
+  if(!s.tests||typeof s.tests!=='object') s.tests=fresh.tests;
+  Object.keys(fresh.tests).forEach(k=>{ if(!s.tests[k]||typeof s.tests[k]!=='object') s.tests[k]=fresh.tests[k]; });
+  if(!Array.isArray(s.customTests)) s.customTests=[];
+  s.customTests=s.customTests.map(t=>Object.assign({name:'',purpose:'',score:'',interp:'',ref:''},t));
+  if(!Array.isArray(s.customRecs)) s.customRecs=[];
+  s.customRecs=s.customRecs.map(t=>String(t??''));
   const vals=s.checklist||{};
   const isOld=Object.values(vals).some(v=>v&&typeof v==='object');
   const nc=Object.assign({},fresh.checklist);
@@ -1361,82 +1603,350 @@ function newReport(){
   syncForm(); render(); autosave();
 }
 
-/* Word export */
+/* ================================================================
+   WORD EXPORT — real .docx (OOXML), so table shading, brand colours
+   and fonts survive Word / Word Online / Pages / Google Docs.
+================================================================ */
+const W_NS='xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
+function xesc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function cssColorToHex(c){
+  if(!c) return null; c=String(c).trim();
+  if(c[0]==='#'){ let h=c.slice(1); if(h.length===3) h=h.split('').map(x=>x+x).join(''); return h.length===6? h.toUpperCase():null; }
+  const m=c.match(/^rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/);
+  if(m) return [1,2,3].map(i=>(+m[i]).toString(16).padStart(2,'0')).join('').toUpperCase();
+  return null;
+}
+function cssPt(v){ // css length -> points
+  if(v==null||v==='') return null;
+  const m=String(v).match(/^(-?[\d.]+)(pt|px|mm)?$/); if(!m) return null;
+  const n=parseFloat(m[1]);
+  return m[2]==='px'? n*0.75 : m[2]==='mm'? n*2.83465 : n;
+}
+function cssTwip(v){ const pt=cssPt(v); return pt==null? null : Math.round(pt*20); }
+function wRPr(p){
+  let x='';
+  if(p.font) x+=`<w:rFonts w:ascii="${xesc(p.font)}" w:hAnsi="${xesc(p.font)}" w:cs="${xesc(p.font)}"/>`;
+  if(p.bold) x+='<w:b/>';
+  if(p.italic) x+='<w:i/>';
+  if(p.caps) x+='<w:caps/>';
+  if(p.color) x+=`<w:color w:val="${p.color}"/>`;
+  if(p.charSpacing) x+=`<w:spacing w:val="${p.charSpacing}"/>`;
+  if(p.size) x+=`<w:sz w:val="${Math.round(p.size*2)}"/><w:szCs w:val="${Math.round(p.size*2)}"/>`;
+  return x? '<w:rPr>'+x+'</w:rPr>' : '';
+}
+function wRun(text,p){ return text===''? '' : `<w:r>${wRPr(p||{})}<w:t xml:space="preserve">${xesc(text)}</w:t></w:r>`; }
+function applyCssToProps(el,p){
+  const st=el.style; if(!st) return p;
+  const c=cssColorToHex(st.color); if(c) p.color=c;
+  const fs=cssPt(st.fontSize); if(fs) p.size=fs;
+  const fw=st.fontWeight; if(fw==='bold'||parseInt(fw)>=600) p.bold=true;
+  if(st.fontStyle==='italic') p.italic=true;
+  if(st.textTransform==='uppercase') p.caps=true;
+  if(st.fontFamily){ const f=st.fontFamily.split(',')[0].replace(/['"]/g,'').trim(); if(f) p.font=f; }
+  return p;
+}
+function inlineRunsList(nodes, base){
+  let out='';
+  nodes.forEach(ch=>{
+    if(ch.nodeType===3){ out+=wRun(ch.textContent.replace(/\s+/g,' '), base); return; }
+    if(ch.nodeType!==1) return;
+    if(ch.tagName==='BR'){ out+=`<w:r>${wRPr(base)}<w:br/></w:r>`; return; }
+    const p=Object.assign({},base);
+    if(ch.tagName==='B'||ch.tagName==='STRONG') p.bold=true;
+    if(ch.tagName==='I'||ch.tagName==='EM') p.italic=true;
+    applyCssToProps(ch,p);
+    out+=inlineRunsList([...ch.childNodes],p);
+  });
+  return out;
+}
+function wEdge(st,side,tag){
+  const w=st['border'+side+'Width'], s=st['border'+side+'Style'], c=st['border'+side+'Color'];
+  if(!s||s==='none'||!w||cssPt(w)===0) return '';
+  const sz=Math.max(4,Math.round((cssPt(w)||1)*8));
+  return `<w:${tag} w:val="single" w:sz="${sz}" w:space="6" w:color="${cssColorToHex(c)||'000000'}"/>`;
+}
+function wParaBorders(st){
+  const b=wEdge(st,'Top','top')+wEdge(st,'Bottom','bottom');
+  return b? '<w:pBdr>'+b+'</w:pBdr>' : '';
+}
+function wPara(el, inherited, opts){
+  opts=opts||{};
+  const st=el.style||{};
+  const base=applyCssToProps(el,Object.assign({},inherited));
+  let pPr='';
+  if(opts.keepNext) pPr+='<w:keepNext/>';
+  pPr+=wParaBorders(st);
+  let before=cssTwip(st.marginTop), after=cssTwip(st.marginBottom);
+  if(after==null) after=opts.afterDefault!=null? opts.afterDefault : 113;
+  if(opts.afterMax!=null) after=Math.min(after,opts.afterMax);
+  pPr+=`<w:spacing${before? ` w:before="${before}"`:''} w:after="${after}" w:line="264" w:lineRule="auto"/>`;
+  if(opts.indent) pPr+=opts.indent;
+  const jc=st.textAlign==='center'?'center':st.textAlign==='right'?'right':opts.jc||null;
+  if(jc) pPr+=`<w:jc w:val="${jc}"/>`;
+  const runs=(opts.prefixRuns||'')+inlineRunsList([...el.childNodes],base);
+  return `<w:p><w:pPr>${pPr}${wRPr(base)}</w:pPr>${runs}</w:p>`;
+}
+function wParaFromNodes(nodes, inherited, opts){
+  opts=opts||{};
+  let pPr='';
+  let after=opts.afterDefault!=null? opts.afterDefault : 113;
+  pPr+=`<w:spacing w:after="${after}" w:line="264" w:lineRule="auto"/>`;
+  if(opts.jc) pPr+=`<w:jc w:val="${opts.jc}"/>`;
+  return `<w:p><w:pPr>${pPr}${wRPr(inherited)}</w:pPr>${inlineRunsList(nodes,inherited)}</w:p>`;
+}
+function wList(ul, inherited){
+  const base=applyCssToProps(ul,Object.assign({},inherited));
+  return [...ul.children].filter(li=>li.tagName==='LI').map(li=>
+    wPara(li,base,{indent:'<w:ind w:left="425" w:hanging="200"/>',prefixRuns:wRun('•  ',base)})
+  ).join('');
+}
+function wCellBlocks(cell, inherited, jc){
+  let out='', buf=[];
+  const flush=()=>{ if(buf.length){ if(buf.some(n=>n.nodeType===1||n.textContent.trim())) out+=wParaFromNodes(buf,inherited,{afterDefault:0,jc}); buf=[]; } };
+  [...cell.childNodes].forEach(ch=>{
+    if(ch.nodeType===1&&(ch.tagName==='P'||/^H[1-6]$/.test(ch.tagName))){ flush(); out+=wPara(ch,inherited,{afterMax:80,jc}); }
+    else if(ch.nodeType===1&&ch.tagName==='TABLE'){ flush(); out+=wTable(ch,inherited)+'<w:p><w:pPr><w:spacing w:after="0"/></w:pPr></w:p>'; }
+    else if(ch.nodeType===1&&(ch.tagName==='UL'||ch.tagName==='OL')){ flush(); out+=wList(ch,inherited); }
+    else buf.push(ch);
+  });
+  flush();
+  return out || '<w:p><w:pPr><w:spacing w:after="0"/></w:pPr></w:p>';
+}
+function wTable(tbl, inherited){
+  const st=tbl.style||{};
+  const base=applyCssToProps(tbl,Object.assign({},inherited));
+  let pct=5000;
+  if(st.width&&/%$/.test(st.width)) pct=Math.round(parseFloat(st.width)*50);
+  const rows=[...tbl.rows];
+  if(!rows.length) return '';
+  const nCols=Math.max(...rows.map(r=>[...r.cells].reduce((a,c)=>a+(c.colSpan||1),0)));
+  // derive column widths from the first full-width row that declares widths
+  const totalTw=Math.round(9860*pct/5000);
+  let colTw=null, fixed=false;
+  for(const r of rows){
+    const cells=[...r.cells];
+    if(cells.reduce((a,c)=>a+(c.colSpan||1),0)!==nCols) continue;
+    if(!cells.some(c=>/%$/.test(c.style.width||''))) continue;
+    const declared=cells.map(c=>/%$/.test(c.style.width||'')? parseFloat(c.style.width)/100 : null);
+    const used=declared.reduce((a,d)=>a+(d||0),0);
+    const nAuto=declared.filter(d=>d==null).length;
+    if(used>1.001) break;
+    const autoShare=nAuto? Math.max(0,(1-used))/nAuto : 0;
+    colTw=[];
+    cells.forEach((c,i)=>{
+      const share=declared[i]!=null? declared[i] : autoShare;
+      const span=c.colSpan||1;
+      for(let k=0;k<span;k++) colTw.push(Math.round(totalTw*share/span));
+    });
+    fixed=true;
+    break;
+  }
+  if(!colTw) colTw=Array.from({length:nCols},()=>Math.floor(totalTw/nCols));
+  let x=`<w:tbl><w:tblPr><w:tblW w:w="${pct}" w:type="pct"/><w:tblBorders>`+
+    ['top','left','bottom','right','insideH','insideV'].map(s=>`<w:${s} w:val="single" w:sz="4" w:space="0" w:color="D6D4CF"/>`).join('')+
+    `</w:tblBorders><w:tblLayout w:type="${fixed?'fixed':'autofit'}"/><w:tblCellMar><w:top w:w="80" w:type="dxa"/><w:left w:w="120" w:type="dxa"/><w:bottom w:w="80" w:type="dxa"/><w:right w:w="120" w:type="dxa"/></w:tblCellMar></w:tblPr>`;
+  x+=`<w:tblGrid>${colTw.map(w=>`<w:gridCol w:w="${w}"/>`).join('')}</w:tblGrid>`;
+  rows.forEach(r=>{
+    x+='<w:tr>';
+    [...r.cells].forEach(c=>{
+      const cst=c.style||{};
+      const cb=Object.assign({},base);
+      if(c.tagName==='TH') cb.bold=true;
+      applyCssToProps(c,cb);
+      let tcPr='';
+      if(cst.width&&/%$/.test(cst.width)) tcPr+=`<w:tcW w:w="${Math.round(parseFloat(cst.width)*50)}" w:type="pct"/>`;
+      if((c.colSpan||1)>1) tcPr+=`<w:gridSpan w:val="${c.colSpan}"/>`;
+      const bg=cssColorToHex(cst.backgroundColor);
+      if(bg&&bg!=='FFFFFF') tcPr+=`<w:shd w:val="clear" w:color="auto" w:fill="${bg}"/>`;
+      tcPr+='<w:vAlign w:val="top"/>';
+      const jc=cst.textAlign==='center'?'center':cst.textAlign==='right'?'right':null;
+      x+=`<w:tc><w:tcPr>${tcPr}</w:tcPr>${wCellBlocks(c,cb,jc)}</w:tc>`;
+    });
+    x+='</w:tr>';
+  });
+  return x+'</w:tbl>';
+}
+function wLetterhead(){
+  const noBdr='<w:tblBorders>'+['top','left','bottom','right','insideH','insideV'].map(s=>`<w:${s} w:val="none" w:sz="0" w:space="0" w:color="auto"/>`).join('')+'</w:tblBorders>';
+  const noMar='<w:tblCellMar><w:top w:w="0" w:type="dxa"/><w:left w:w="0" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="0" w:type="dxa"/></w:tblCellMar>';
+  const brand=`<w:p><w:pPr><w:spacing w:after="0"/></w:pPr>`+
+    wRun('ESTUS ',{font:'Oswald',bold:true,size:19.5,color:'171410'})+
+    wRun('HEALTH',{font:'Oswald',size:19.5,color:'171410',charSpacing:47})+`</w:p>`+
+    `<w:p><w:pPr><w:spacing w:before="30" w:after="0"/></w:pPr>`+
+    wRun('O C C U P A T I O N A L   T H E R A P Y',{font:'Barlow Semi Condensed',bold:true,size:6.5,color:'AB5C95'})+`</w:p>`;
+  const cp={font:'Barlow Semi Condensed',size:8.5,color:'55534E'};
+  const {lines,web}=lhContactLines();
+  let contactRuns='';
+  lines.forEach((l,i)=>{ if(i) contactRuns+=`<w:r>${wRPr(cp)}<w:br/></w:r>`; contactRuns+=wRun(l,cp); });
+  if(web){ if(contactRuns) contactRuns+=`<w:r>${wRPr(cp)}<w:br/></w:r>`; contactRuns+=wRun(web,{font:'Barlow Semi Condensed',size:8.5,color:'2CA5B8',bold:true}); }
+  const contact=`<w:p><w:pPr><w:spacing w:after="0" w:line="276" w:lineRule="auto"/><w:jc w:val="right"/></w:pPr>${contactRuns}</w:p>`;
+  return `<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/>${noBdr}<w:tblLayout w:type="fixed"/>${noMar}</w:tblPr>`+
+    `<w:tblGrid><w:gridCol w:w="4930"/><w:gridCol w:w="4930"/></w:tblGrid>`+
+    `<w:tr><w:tc><w:tcPr><w:tcW w:w="2500" w:type="pct"/></w:tcPr>${brand}</w:tc>`+
+    `<w:tc><w:tcPr><w:tcW w:w="2500" w:type="pct"/></w:tcPr>${contact}</w:tc></w:tr></w:tbl>`+
+    `<w:p><w:pPr><w:spacing w:after="60"/></w:pPr></w:p>`;
+}
+function wGradBar(){
+  const cols=['344982','2F6F9E','2CA5B8','AB5C95'];
+  const noBdr='<w:tblBorders>'+['top','left','bottom','right','insideH','insideV'].map(s=>`<w:${s} w:val="none" w:sz="0" w:space="0" w:color="auto"/>`).join('')+'</w:tblBorders>';
+  const noMar='<w:tblCellMar><w:top w:w="0" w:type="dxa"/><w:left w:w="0" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="0" w:type="dxa"/></w:tblCellMar>';
+  return `<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/>${noBdr}<w:tblLayout w:type="fixed"/>${noMar}</w:tblPr>`+
+    `<w:tblGrid>${cols.map(()=> '<w:gridCol w:w="2465"/>').join('')}</w:tblGrid>`+
+    `<w:tr><w:trPr><w:trHeight w:val="60" w:hRule="exact"/></w:trPr>`+
+    cols.map(c=>`<w:tc><w:tcPr><w:tcW w:w="1250" w:type="pct"/><w:shd w:val="clear" w:color="auto" w:fill="${c}"/></w:tcPr><w:p><w:pPr><w:spacing w:after="0" w:line="60" w:lineRule="exact"/></w:pPr></w:p></w:tc>`).join('')+
+    `</w:tr></w:tbl><w:p><w:pPr><w:spacing w:after="340"/><w:rPr><w:sz w:val="2"/></w:rPr></w:pPr></w:p>`;
+}
+function wBlocks(el, inherited){
+  let out='', buf=[];
+  const flush=()=>{ if(buf.length){ if(buf.some(n=>n.nodeType===1||n.textContent.trim())) out+=wParaFromNodes(buf,inherited,{}); buf=[]; } };
+  [...el.childNodes].forEach(ch=>{
+    if(ch.nodeType===3){ if(ch.textContent.trim()) buf.push(ch); return; }
+    if(ch.nodeType!==1) return;
+    const t=ch.tagName;
+    if(t==='P'||/^H[1-6]$/.test(t)){ flush(); out+=wPara(ch,inherited,{keepNext:/^H[1-6]$/.test(t)}); }
+    else if(t==='TABLE'){ flush(); out+=wTable(ch,inherited)+'<w:p><w:pPr><w:spacing w:after="120"/><w:rPr><w:sz w:val="2"/></w:rPr></w:pPr></w:p>'; }
+    else if(t==='UL'||t==='OL'){ flush(); out+=wList(ch,inherited); }
+    else if(t==='DIV'){
+      flush();
+      if(ch.classList.contains('eh-lh')) out+=wLetterhead();
+      else if(ch.classList.contains('eh-grad')) out+=wGradBar();
+      else{
+        const hasBlock=[...ch.children].some(k=>/^(P|H[1-6]|TABLE|UL|OL|DIV)$/.test(k.tagName));
+        if(hasBlock){ const nb=applyCssToProps(ch,Object.assign({},inherited)); out+=wBlocks(ch,nb); }
+        else out+=wPara(ch,inherited,{});
+      }
+    }
+    else buf.push(ch);
+  });
+  flush();
+  return out;
+}
+/* minimal ZIP writer (stored entries, UTF-8 names) */
+const CRC_TABLE=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c;}return t;})();
+function crc32(u8){let c=0xFFFFFFFF;for(let i=0;i<u8.length;i++)c=CRC_TABLE[(c^u8[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function makeZip(files){
+  const enc=new TextEncoder();
+  const parts=[], central=[]; let offset=0, cdSize=0;
+  files.forEach(f=>{
+    const name=enc.encode(f.name);
+    const data=typeof f.data==='string'? enc.encode(f.data) : f.data;
+    const crc=crc32(data);
+    const lh=new DataView(new ArrayBuffer(30));
+    lh.setUint32(0,0x04034b50,true); lh.setUint16(4,20,true); lh.setUint16(6,0x0800,true); lh.setUint16(8,0,true);
+    lh.setUint32(14,crc,true); lh.setUint32(18,data.length,true); lh.setUint32(22,data.length,true);
+    lh.setUint16(26,name.length,true);
+    parts.push(new Uint8Array(lh.buffer),name,data);
+    const ch=new DataView(new ArrayBuffer(46));
+    ch.setUint32(0,0x02014b50,true); ch.setUint16(4,20,true); ch.setUint16(6,20,true); ch.setUint16(8,0x0800,true); ch.setUint16(10,0,true);
+    ch.setUint32(16,crc,true); ch.setUint32(20,data.length,true); ch.setUint32(24,data.length,true);
+    ch.setUint16(28,name.length,true); ch.setUint32(42,offset,true);
+    central.push(new Uint8Array(ch.buffer),name);
+    cdSize+=46+name.length;
+    offset+=30+name.length+data.length;
+  });
+  const eocd=new DataView(new ArrayBuffer(22));
+  eocd.setUint32(0,0x06054b50,true);
+  eocd.setUint16(8,files.length,true); eocd.setUint16(10,files.length,true);
+  eocd.setUint32(12,cdSize,true); eocd.setUint32(16,offset,true);
+  return new Blob([...parts,...central,new Uint8Array(eocd.buffer)],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+}
+function wFooterXml(){
+  const p={font:'Barlow Semi Condensed',size:7.5,color:'8A8880'};
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:ftr ${W_NS}><w:p><w:pPr><w:pBdr><w:top w:val="single" w:sz="4" w:space="4" w:color="E6E4DF"/></w:pBdr><w:tabs><w:tab w:val="right" w:pos="9860"/></w:tabs><w:spacing w:after="0"/>${wRPr(p)}</w:pPr>`+
+    wRun(footerID()+' · CONFIDENTIAL',p)+
+    `<w:r>${wRPr(p)}<w:tab/></w:r>`+
+    wRun('Page ',p)+`<w:fldSimple w:instr=" PAGE "><w:r>${wRPr(p)}<w:t>1</w:t></w:r></w:fldSimple>`+
+    wRun(' of ',p)+`<w:fldSimple w:instr=" NUMPAGES "><w:r>${wRPr(p)}<w:t>1</w:t></w:r></w:fldSimple>`+
+    `</w:p></w:ftr>`;
+}
+function buildDocx(htmlBodies){
+  const baseProps={font:'Barlow',size:10.5,color:'1C1C1C'};
+  let body='';
+  htmlBodies.forEach((h,i)=>{
+    if(i) body+='<w:p><w:pPr><w:spacing w:after="0"/></w:pPr><w:r><w:br w:type="page"/></w:r></w:p>';
+    const doc=new DOMParser().parseFromString('<div id="docx-root">'+h+'</div>','text/html');
+    body+=wBlocks(doc.getElementById('docx-root'),Object.assign({},baseProps));
+  });
+  const sectPr=`<w:sectPr><w:footerReference w:type="default" r:id="rId2"/><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="1021" w:bottom="1361" w:left="1021" w:header="720" w:footer="567" w:gutter="0"/></w:sectPr>`;
+  const documentXml=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document ${W_NS}><w:body>${body}${sectPr}</w:body></w:document>`;
+  const stylesXml=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles ${W_NS}><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Barlow" w:hAnsi="Barlow" w:cs="Barlow"/><w:color w:val="1C1C1C"/><w:sz w:val="21"/><w:szCs w:val="21"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="113" w:line="264" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults></w:styles>`;
+  const contentTypes=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/></Types>`;
+  const relsRoot=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
+  const relsDoc=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/></Relationships>`;
+  return makeZip([
+    {name:'[Content_Types].xml',data:contentTypes},
+    {name:'_rels/.rels',data:relsRoot},
+    {name:'word/document.xml',data:documentXml},
+    {name:'word/styles.xml',data:stylesXml},
+    {name:'word/footer1.xml',data:wFooterXml()},
+    {name:'word/_rels/document.xml.rels',data:relsDoc},
+  ]);
+}
+function downloadDocx(htmlBodies, filename){
+  const blob=buildDocx(htmlBodies);
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; a.click();
+}
 function exportWord(){
-  const foot=esc(footerID());
-  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-<head><meta charset="utf-8"><title>OT Driver Assessment Report</title>
-<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
-<style>
-@page Section1{size:A4;margin:20mm 18mm 24mm 18mm;mso-footer:f1;}
-div.Section1{page:Section1}
-p.MsoFooter{margin:0;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:7.5pt;color:#8a8880;letter-spacing:.04em;border-top:1pt solid #e6e4df;padding-top:4pt}
-body{${ST.body}} table{border-collapse:collapse} li{margin-bottom:6pt}
-</style>
-</head><body><div class="Section1">${S.gpOn? buildLetterGP()+'<br clear="all" style="page-break-before:always">':''}${buildReport()}
-<div style="mso-element:footer" id="f1"><p class="MsoFooter">${foot} · CONFIDENTIAL<span style="mso-tab-count:2"></span>Page <span style='mso-field-code:" PAGE "'>1</span> of <span style='mso-field-code:" NUMPAGES "'>1</span></p></div>
-</div></body></html>`;
-  const blob=new Blob(['﻿'+html],{type:'application/msword'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  const bodies=[]; if(S.gpOn) bodies.push(buildLetterGP()); bodies.push(buildReport());
   const d=(S.dateReport||'').replaceAll('-','');
-  a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} Driving Assessment Report${d? ' '+d:''}.doc`;
-  a.click();
+  downloadDocx(bodies, `${(S.firstName+' '+S.surname).trim()||'Client'} Driving Assessment Report${d? ' '+d:''}.docx`);
 }
 
 /* ================================================================
    EXAMPLE (de-identified sample client) — for demo / QA
 ================================================================ */
 function loadExample(){
+  if(!confirm('Load the sample report? It replaces the current draft (save it first if needed). All names, conditions and results in the sample are fictional — use it to see what a finished report looks like.')) return;
   S=freshState();
   Object.assign(S,{
     title:'Mr', firstName:'John', prefName:'Johnny', surname:'Citizen', pronouns:'he', dob:'2000-01-01',
-    ndis:'430 123 456', address:'123 Sample Street, Adelaide SA 5000', licNo:'AB1234', licSighted:'Yes', licExpiry:'[TBC]',
+    ndis:'430 123 456', address:'123 Sample Street, Sampletown SA 5000', licNo:'123456789', licSighted:'Yes', licExpiry:'01/01/2030',
     licType:"Learner's permit (Class C)",
     licCond:['L-plates to be displayed','must be accompanied by a fully licensed supervising driver','zero BAC','automatic vehicles only','corrective lenses to be worn'],
-    diagnoses:'Autism Spectrum Disorder (Level 2); Schizophrenia',
-    meds:[{name:'Paliperidone',dose:'3-monthly intramuscular (IM) injection',purpose:'Stabilisation of schizophrenia'}],
+    diagnoses:'Example Condition A; Example Condition B',
+    meds:[{name:'Example Medication',dose:'10 mg daily',purpose:'Management of Example Condition A'}],
     refName:'Jane Referrer', refRole:'Occupational Therapist', refOrg:'Example Allied Health', refContact:'referrals@example.com.au',
     dateAssess:'2026-06-01', dateReport:'2026-06-08',
-    supervisor:'Sarah Supervisor', mdi:'David Instructor', supportPerson:'his father',
+    supervisor:'Sarah Supervisor', mdi:'David Instructor', supportPerson:'a family member',
     purpose:'learner',
-    symptoms:"{name} presents with diagnoses of Autism Spectrum Disorder (Level 2) and Schizophrenia. {His} primary driving-related challenge is managing cognitive load when several factors occur simultaneously (for example, at intersections or when tracking multiple vehicles pulling out at once). {He} reports no major sensory sensitivities, although {his} father notes that {he} dislikes large, crowded environments and tends to withdraw in highly stimulating settings. {He} identifies that {he} requires further practice with reverse parking and three-point turns.",
-    medHistory:"Autism Spectrum Disorder (Level 2) and Schizophrenia. {name}'s schizophrenia is reported to be well managed and stabilised on a three-monthly intramuscular injection, which {his} father reports has placed {him} at a “good level.” {He} previously trialled daily oral medication but found this difficult to manage.",
-    medSideEffects:"{name} reported some general fatigue and localised pain for approximately one week following {his} most recent injection but did not report any other side effects from {his} medication.",
-    drivingHistory:"{name} obtained {his} Learner's Permit in approximately 2021 (held for approximately five years) and has accumulated just under 20 supervised daytime logbook hours, learning in the family's automatic vehicle. {He} has undertaken previous lessons through a community driving program and with an instructor (the latter {he} found frustrating), has not yet driven at night, and has no history of motor vehicle collisions or traffic infringements. {He} {is} working toward a provisional (P-plate) licence to support independent travel to employment, study and community activities, and to reduce {his} reliance on family and {his} support worker for transport.",
+    symptoms:"{name}'s main driving-related challenge is managing several demands at once — for example, tracking other vehicles while monitoring signs and signals at busy intersections. {He} reports no sensory sensitivities that affect driving, and identifies reverse parking and driving on busier roads as the skills {he} most wants to practise.",
+    medHistory:"{name} was diagnosed with Example Condition A in 2020 and Example Condition B in 2022. Both conditions are reported to be stable and well managed, and are reviewed regularly by {his} general practitioner and treating team.",
+    medSideEffects:"{name} reported no side effects from {his} current medication that would be expected to affect driving.",
+    drivingHistory:"{name} obtained {his} learner's permit in 2023 and has accumulated approximately 25 supervised daytime logbook hours in the family's automatic vehicle. {He} has completed a small number of professional lessons, has not yet driven at night, and has no history of motor vehicle collisions or traffic infringements. {His} goal is a provisional (P-plate) licence to support independent travel to work, study and community activities.",
     lenses:'Yes', lensesEndorsed:'To be confirmed', acuityBy:'Optometrist',
-    vaUR:'6/24', vaUL:'6/21', vaUB:'6/24', vaCR:'6/12', vaCL:'6/6', vaCB:'6/6 -2',
-    visionNotes:"{name} is short-sighted and wears corrective lenses for driving. {He} reports longstanding myodesopsias (floaters) in both eyes, which {he} does not feel affect {his} vision functionally, and no other visual symptoms.",
+    vaUR:'6/24', vaUL:'6/18', vaUB:'6/18', vaCR:'6/9', vaCL:'6/9', vaCB:'6/6',
+    visionNotes:"{name} is short-sighted and wears corrective lenses for driving. No other visual symptoms were reported.",
     austroadsVision:'Yes', eyeReview:'Yes',
-    genCog:"{name} was alert, engaged and cooperative throughout the pre-driving screen. {He} required only minimal instruction, maintained concentration throughout (despite some general fatigue and localised pain after a recent injection), communicated clearly, asked relevant and at times complex questions, and demonstrated good insight into the implications of {his} functional status for driving.",
-    cogSummary:"Cognitive and perceptual screening was broadly within functional limits for driving. {name} demonstrated intact visuoconstructional skills, planning and executive function, intact visual scanning and attention, accurate application of road rules, and realistic insight into {his} own abilities. {His} performance on the Trail Making Test Part B, however, exceeded the driving time threshold, indicating reduced speed of divided attention and mental flexibility under load. This is {his} main area of cognitive vulnerability and is consistent with the difficulty {he} reports managing several driving demands at once. {His} combined DriveSafe and DriveAware scores place {him} in the highest (likely to pass) category from a cognitive standpoint. This indicates cognitive readiness to progress to supervised on-road learning rather than readiness to drive unsupervised, and is best developed through graded, repeated practice.",
+    genCog:"{name} was alert, engaged and cooperative throughout the pre-driving screen. {He} required only standard instruction, maintained concentration throughout, communicated clearly, and demonstrated good insight into the implications of {his} functional status for driving.",
+    cogSummary:"Cognitive and perceptual screening was broadly within functional limits for driving. {name} demonstrated intact planning, visual scanning and attention, accurate application of road rules, and realistic insight into {his} own abilities. {His} performance on the Trail Making Test Part B, however, exceeded the driving time threshold, indicating reduced speed of divided attention and mental flexibility under load — {his} main area of cognitive vulnerability and a key focus for supervised practice. {His} combined DriveSafe and DriveAware scores place {him} in the highest (likely to pass) category, indicating cognitive readiness to continue supervised on-road learning.",
     location:'the Estus Health assessment centre',
-    vehicle:'Dual-control automatic vehicle (dual brakes)', duration:'40',
+    vehicle:'Dual-control automatic vehicle (dual brakes)', duration:'45',
     weather:'Overcast with no rain; dry road surfaces.',
-    route:'Commenced in a quiet car park for vehicle familiarisation, progressing to two-way and multi-lane roads, traffic lights and roundabouts across 25, 50 and 60 km/h zones in low-to-moderate traffic.',
+    route:'Commenced in a quiet car park for vehicle familiarisation, progressing to residential streets, multi-lane roads, traffic lights and roundabouts across 25, 50 and 60 km/h zones in low-to-moderate traffic.',
     outcome:'learner-continue',
     recParams:{hours:10, funder:'NDIS plan (capacity building)'},
   });
   S.reviewed={referral:true,licence:true,background:true,gp:false,prevOT:false};
   S.needs.night={val:'Future need (no night-driving experience to date)',note:''};
-  S.needs.metro={val:'Yes',note:'metropolitan Adelaide'};
+  S.needs.metro={val:'Yes',note:''};
   S.needs.country={val:'On occasions',note:''};
   S.needs.traffic={val:'Low to medium density, building with experience',note:''};
   Object.assign(S.tests,{
-    trailsB:{on:true,secs:'227',errors:'0',note:'This is likely to affect {his} management of high-density traffic and complex intersections, where attention must be shifted quickly between multiple vehicles, signs and signals. It is consistent with the cognitive-load difficulties {he} reports and is a key focus for supervised practice.'},
+    trailsB:{on:true,secs:'227',errors:'0',note:'This is most likely to affect busy intersections and high-density traffic, where attention must shift quickly between vehicles, signs and signals, and is a key focus for supervised practice.'},
     maze:{on:true,secs:'23',errors:'0',note:''},
     driveSafe:{on:true,score:'83',detail:'0 objects missed; 1 location/direction detail missed',note:''},
     driveAware:{on:true,score:'14',note:''},
-    dsdaCat:{on:true,cat:'likely',note:'This reflects cognitive and perceptual readiness only. As a learner driver {he} still requires substantial supervised on-road practice and specialised instruction to develop the physical and procedural skills needed to drive independently and to pass a practical driving test.'},
+    dsdaCat:{on:true,cat:'likely',note:'This reflects cognitive and perceptual readiness only. As a learner driver {he} still requires substantial supervised on-road practice and specialised instruction to develop the skills needed to drive independently and to pass a practical driving test.'},
     intersection:{on:true,score:'8',note:''},
     bells:{on:true,omissions:'0',time:'',note:''},
   });
   Object.assign(S.checklist,{pc7:'issue', ob1:'issue', ob3:'issue', ob4:'issue', pj2:'issue', pc8:'na'});
   S.domainComments={
-   'Observation':"{name} did not consistently maintain continuous scanning to near, middle and far distances, tending to fixate on the road immediately ahead as task demands increased. Mirror checking was also inconsistent and less frequent than required for a learner preparing for a practical test — {he} used the mirrors when cornering or changing lanes but did not scan them often enough overall. In addition, {he} rarely performed physical blind-spot head checks when changing lanes, merging or leaving the kerb, relying almost entirely on {his} mirrors. These observation skills demand considerable divided attention and are likely compounded by the reduced speed of divided attention identified on the pre-drive screen; they are common development areas in novice drivers and will require targeted instruction and repeated supervised practice to establish.",
-   'Planning and Judgement':"While {his} gap selection was consistently safe, {name} demonstrated over-caution at roundabouts. {He} was slow to move off and missed several safe, viable opportunities to enter, waiting instead for completely clear traffic. This indicates difficulty judging dynamic gaps and managing the cognitive load of tracking moving vehicles, and links to the reduced speed of divided attention identified on the pre-drive screen. Positively, {he} planned ahead, managed multiple instructions appropriately for {his} level of experience, and showed developing defensive driving skills, including covering the brake in some hazardous situations.",
+   'Observation':"{name} did not consistently maintain continuous scanning to near, middle and far distances, tending to focus on the road immediately ahead as task demands increased. Mirror checks and physical blind-spot head checks were also less frequent than required for a learner preparing for a practical test. These observation skills demand considerable divided attention and are common development areas in novice drivers; they will require targeted instruction and repeated supervised practice to establish.",
+   'Planning and Judgement':"While {his} gap selection was consistently safe, {name} was over-cautious at roundabouts — slow to move off and missing several safe, viable opportunities to enter while waiting for completely clear traffic. This links to the reduced speed of divided attention identified on the pre-drive screen. Positively, {he} planned ahead, managed multiple instructions appropriately for {his} level of experience, and showed developing defensive driving skills.",
    'Vehicle Positioning':"",
    'Speed Control':"Speed control was consistent and appropriate for conditions, including a school zone (25 km/h) and 50 and 60 km/h zones.",
-   'Physical Control':"Because the assessment vehicle's indicator stalk was on the left (contrasting with {his} familiar family vehicle), {he} triggered the wipers instead of the indicators on 3 occasions. {He} managed this calmly and self-corrected. However, {he} required verbal prompting to use indicators generally, and consistently missed applying {his} left indicator when exiting roundabouts. Indicator errors of this kind are common in novice drivers, particularly in an unfamiliar vehicle, and will require targeted instruction and repeated supervised practice. Of note, {he} physically demonstrated the cervical range of motion for shoulder checks, but rarely initiated the movement spontaneously (recorded under Observation).",
+   'Physical Control':"{name} required occasional verbal prompting to use the indicators, and regularly missed applying {his} left indicator when exiting roundabouts. Indicator errors of this kind are common in novice drivers and improve with practice. All other vehicle controls were operated smoothly and safely.",
   };
   Object.assign(S,{
     gpOn:true, gpName:'Dr A Practitioner', gpRole:'General Practitioner', gpPractice:'Example Medical Centre',
@@ -1461,36 +1971,19 @@ function loadExample(){
 
 function exportMDIWord(){
   if(!S.mdiOn){ alert('Tick "Include referral letter to Motor Driving Instructor" first (section 9).'); return; }
-  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-<head><meta charset="utf-8"><title>MDI Referral</title>
-<style>@page{size:A4;margin:20mm 18mm} body{${ST.body}} table{border-collapse:collapse}</style>
-</head><body>${buildLetterMDI()}</body></html>`;
-  const blob=new Blob(['\ufeff'+html],{type:'application/msword'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} MDI Referral.doc`;
-  a.click();
-}
-function downloadLetterDoc(bodyHtml, docTitle, fileSuffix){
-  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-<head><meta charset="utf-8"><title>${docTitle}</title>
-<style>@page{size:A4;margin:20mm 18mm} body{${ST.body}} table{border-collapse:collapse}</style>
-</head><body>${bodyHtml}</body></html>`;
-  const blob=new Blob(['\ufeff'+html],{type:'application/msword'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} ${fileSuffix}.doc`;
-  a.click();
+  downloadDocx([buildLetterMDI()], `${(S.firstName+' '+S.surname).trim()||'Client'} MDI Referral.docx`);
 }
 function exportNDISWord(){
   if(!S.ndisOn){ alert('Tick "Include letter of support for NDIS funding" first (section 9).'); return; }
-  downloadLetterDoc(buildLetterNDIS(),'NDIS Support Letter','NDIS Support Letter');
+  downloadDocx([buildLetterNDIS()], `${(S.firstName+' '+S.surname).trim()||'Client'} NDIS Support Letter.docx`);
 }
 function exportFamWord(){
   if(!S.famOn){ alert('Tick "Include letter for family / supervising drivers" first (section 9).'); return; }
-  downloadLetterDoc(buildLetterFam(),'Family Support Letter','Family Support Letter');
+  downloadDocx([buildLetterFam()], `${(S.firstName+' '+S.surname).trim()||'Client'} Family Support Letter.docx`);
 }
 function exportClientWord(){
   if(!S.clientOn){ alert('Tick "Include plain-language letter to the client" first (section 9).'); return; }
-  downloadLetterDoc(buildLetterClient(),'Client Letter','Client Letter');
+  downloadDocx([buildLetterClient()], `${(S.firstName+' '+S.surname).trim()||'Client'} Client Letter.docx`);
 }
 
 /* ================================================================
@@ -1522,16 +2015,24 @@ function missingItems(){
   if(!S.meds.some(m=>m.name.trim())) out.push({label:"Medications — add at least one row (or 'Nil reported')", sec:'1', sel:'#medRows'});
   if(S.meds.some(m=>m.name.trim()) && !String(S.medSideEffects||'').trim()) out.push({label:'Medication response / side effects', sec:'3', sel:'[data-bind=medSideEffects]'});
   Object.keys(TEST_META).forEach(id=>{
-    const t=S.tests[id]; if(!t.on) return;
+    const t=S.tests[id]; if(!t||!t.on) return;
     const m=TEST_META[id];
-    if(m.interp){ const need=m.fields[0]; if(!String(t[need.k]??'').trim()) out.push({label:m.name+' — score required (or untick the test)', sec:'4', sel:'#card_'+id}); }
+    if(m.interp){ const need=m.fields[0];
+      if(need && need.type!=='select' && !String(t[need.k]??'').trim()) out.push({label:m.name+' — score required (or remove the assessment)', sec:'4', sel:'#card_'+id}); }
+  });
+  S.customTests.forEach((t,i)=>{
+    const label=t.name.trim()? '“'+t.name.trim()+'”' : 'Custom assessment '+(i+1);
+    if(!t.name.trim()) out.push({label:label+' — name required (or remove it)', sec:'4', sel:'#cardCustom_'+i});
+    if(!t.score.trim()) out.push({label:label+' — score / result required', sec:'4', sel:'#cardCustom_'+i});
+    if(!t.interp.trim()) out.push({label:label+' — interpretation required', sec:'4', sel:'#cardCustom_'+i});
   });
   CHECKLIST.forEach(g=>{
     const nIss=g.items.filter(it=>S.checklist[it.id]==='issue').length;
     if(nIss && !String(S.domainComments[g.g]||'').trim())
       out.push({label:g.g+' — further comments required ('+nIss+' issue'+(nIss>1?'s':'')+' flagged)', sec:'5', sel:'#dc_'+g.g.replace(/[^A-Za-z]/g,'')});
   });
-  if(!REC_DEFS.some(r=>S.recs[r.id]&&S.recs[r.id].on&&S.recs[r.id].text.trim())) out.push({label:'At least one recommendation must be included', sec:'6', sel:'#recCards'});
+  if(!REC_DEFS.some(r=>S.recs[r.id]&&S.recs[r.id].on&&S.recs[r.id].text.trim()) && !S.customRecs.some(t=>t.trim())) out.push({label:'At least one recommendation must be included', sec:'6', sel:'#recCards'});
+  S.customRecs.forEach((t,i)=>{ if(!t.trim()) out.push({label:'Custom recommendation '+(i+1)+' is empty — complete or remove it', sec:'6', sel:'#recCards'}); });
   if(!S.consentObtained) out.push({label:'Confirm informed consent was obtained (tick box)', sec:'8', sel:'[data-bindbool=consentObtained]'});
   if(S.gpOn){
     [['gpName','Cover letter — addressee name'],['gpAddress','Cover letter — postal address'],['gpBody','Cover letter — body']].forEach(([k,l])=>{
@@ -1553,18 +2054,34 @@ function missingItems(){
   if(S.clientOn && !String(S.clientBody||'').trim()) out.push({label:'Client letter — body', sec:'9', sel:'[data-bind=clientBody]'});
   return out;
 }
+const SEC_NAMES={1:'Client & assessment details',2:'Reports reviewed',3:'Background information',4:'Pre on-road screens',5:'On-road assessment',6:'Summary & recommendations',7:'References',8:'Declarations & sign-off',9:'Letters'};
 function updateBadge(){
   const b=document.getElementById('checkBadge'); if(!b) return;
-  const n=missingItems().length;
+  const list=missingItems(), n=list.length;
   b.className = n? 'bad':'ok';
   b.textContent = n? n+' item'+(n>1?'s':'')+' outstanding' : '✓ ready to export';
+  const per={};
+  list.forEach(m=>{ per[m.sec]=(per[m.sec]||0)+1; });
+  for(let i=1;i<=9;i++){
+    const el=document.getElementById('secchip_'+i); if(!el) continue;
+    const c=per[i]||0;
+    el.innerHTML = c? `<span class="pill fail">${c} to do</span>` : `<span class="pill pass">✓</span>`;
+  }
 }
 function showValidation(){
   const list=missingItems();
   document.getElementById('valHead').textContent = list.length? list.length+' outstanding item'+(list.length>1?'s':'')+' — complete these before export' : 'All required items complete';
-  document.getElementById('valList').innerHTML = list.length? list.map((m,i)=>
-    `<div class="vitem" onclick="jumpTo(${i})"><span class="sec">§${m.sec}</span>${esc(m.label)}</div>`).join('')
-    : '<div style="padding:14px;font-size:13.5px;color:#1e6b3a"><b>✓ Everything required is filled in.</b> You can export or print.</div>';
+  let html='';
+  if(list.length){
+    let lastSec=null;
+    list.forEach((m,i)=>{
+      if(m.sec!==lastSec){ html+=`<div class="vsec" style="font-family:'Oswald',sans-serif;font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);margin:10px 0 4px;border-bottom:1px solid var(--line);padding-bottom:2px">§${m.sec} · ${SEC_NAMES[m.sec]||''}</div>`; lastSec=m.sec; }
+      html+=`<div class="vitem" onclick="jumpTo(${i})"><span class="sec">§${m.sec}</span>${esc(m.label)}</div>`;
+    });
+  } else {
+    html='<div style="padding:14px;font-size:13.5px;color:#1e6b3a"><b>✓ Everything required is filled in.</b> You can export or print.</div>';
+  }
+  document.getElementById('valList').innerHTML=html;
   window._valList=list;
   document.getElementById('valModal').classList.add('open');
 }
@@ -1586,7 +2103,12 @@ function guard(fn){
 window.addEventListener('DOMContentLoaded',()=>{
   const had=loadAutosave();
   if(!had){ ['reasonReferral','physSummary','consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]()); }
+  const zs=document.getElementById('zoomSel'); if(zs) zs.value=zoomMode;
   bindInputs(); syncForm(); render();
+});
+window.addEventListener('resize',()=>{ if(zoomMode==='fit') applyZoom(); });
+window.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); saveJSON(); }
 });
 </script>
 </body>
