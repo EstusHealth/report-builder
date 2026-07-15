@@ -119,6 +119,7 @@ details.sec>summary .secchip .pill{font-size:10px;padding:1px 7px}
 
 /* ============ REPORT PREVIEW ============ */
 .page{width:210mm;min-height:297mm;background:#fff;margin:0 auto 18px;box-shadow:0 8px 28px -12px rgba(0,0,0,.35);position:relative;padding:16mm 18mm 20mm;font-family:'Barlow',sans-serif;font-size:10.5pt;line-height:1.5;color:#1c1c1c}
+.page,.page *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 #reportRoot{padding:22px 16px}
 
 /* responsive — stack panes on small screens */
@@ -166,6 +167,7 @@ ul.rep li{margin-bottom:2mm}
 .flash{outline:2px solid var(--plum)!important;outline-offset:1px;transition:outline .2s}
 @media print{
   body{background:#fff}
+  .page,.page *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   #formPane,#toolbar,#gradbar,#previewBar,#quickbar{display:none!important}
   #app{display:block;height:auto;overflow:visible}
   #previewPane{overflow:visible;padding:0;background:#fff}
@@ -456,7 +458,7 @@ ul.rep li{margin-bottom:2mm}
   <div class="row"><div class="f w100"><label>Functional issues <span class="resetlink" onclick="resetField('mdiFunctional')">reset to auto-draft</span></label><textarea data-bind="mdiFunctional" rows="4"></textarea></div></div>
   <div class="row"><div class="f w100"><label>Lesson plan <span class="resetlink" onclick="resetField('mdiPlan')">reset to auto-draft</span></label><textarea data-bind="mdiPlan" rows="3"></textarea></div></div>
   <div class="row"><div class="f w100"><label>Specific instructions</label><textarea data-bind="mdiInstructions" rows="2"></textarea></div></div>
-  <button class="btn plum" style="margin-top:6px" onclick="guard(exportMDIWord)">Download MDI referral (.doc)</button>
+  <button class="btn plum" style="margin-top:6px" onclick="guard(exportMDIWord)">Download MDI referral (.docx)</button>
 
   <div class="subhead">NDIS funding support letter</div>
   <div class="hint">Letter of support for NDIS funding of specialised driver training. Auto-draft pulls in the NDIS number, diagnoses, approved hours/funding (section 6 recommendations) and the on-road focus areas.</div>
@@ -467,24 +469,24 @@ ul.rep li{margin-bottom:2mm}
     <div class="f w33"><label>Organisation</label><input type="text" data-bind="ndisOrg"></div>
   </div>
   <div class="row"><div class="f w100"><label>Letter body <span class="resetlink" onclick="resetField('ndisBody')">reset to auto-draft</span></label><textarea data-bind="ndisBody" rows="10"></textarea></div></div>
-  <button class="btn plum" style="margin-top:6px" onclick="guard(exportNDISWord)">Download NDIS support letter (.doc)</button>
+  <button class="btn plum" style="margin-top:6px" onclick="guard(exportNDISWord)">Download NDIS support letter (.docx)</button>
 
   <div class="subhead">Family &amp; supervising driver letter</div>
   <div class="hint">Plain-language letter for the extended family / supervising drivers on how to support the learner between lessons. Auto-draft pulls in the practice focus areas flagged on road so everyone reinforces the same skills.</div>
   <label class="chk" style="margin:4px 0"><input type="checkbox" data-bindbool="famOn"><b>Include letter for family / supervising drivers</b></label>
   <div class="row"><div class="f w100"><label>Addressed to <span style="font-weight:400;color:var(--faint)">(optional — defaults to "the family and supervising drivers of [first name]")</span></label><input type="text" data-bind="famName" placeholder="e.g. Mr &amp; Mrs Citizen"></div></div>
   <div class="row"><div class="f w100"><label>Letter body <span class="resetlink" onclick="resetField('famBody')">reset to auto-draft</span></label><textarea data-bind="famBody" rows="12"></textarea></div></div>
-  <button class="btn plum" style="margin-top:6px" onclick="guard(exportFamWord)">Download family letter (.doc)</button>
+  <button class="btn plum" style="margin-top:6px" onclick="guard(exportFamWord)">Download family letter (.docx)</button>
 
   <div class="subhead">Client letter (plain language)</div>
   <div class="hint">Explains the outcome and next steps directly to the client in accessible language. Auto-draft adapts to the assessment outcome and lists the practice focus areas.</div>
   <label class="chk" style="margin:4px 0"><input type="checkbox" data-bindbool="clientOn"><b>Include plain-language letter to the client</b></label>
   <div class="row"><div class="f w100"><label>Letter body <span class="resetlink" onclick="resetField('clientBody')">reset to auto-draft</span></label><textarea data-bind="clientBody" rows="10"></textarea></div></div>
-  <button class="btn plum" style="margin-top:6px" onclick="guard(exportClientWord)">Download client letter (.doc)</button>
+  <button class="btn plum" style="margin-top:6px" onclick="guard(exportClientWord)">Download client letter (.docx)</button>
 </div>
 </details>
 
-<div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. Estus Health · OT Driving Assessment Report Builder v2.0 — assessment library (add · remove · custom) · custom recommendations · document tabs &amp; zoom · section progress</div>
+<div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. Estus Health · OT Driving Assessment Report Builder v2.1 — native .docx export · full-colour print/PDF · assessment library (add · remove · custom) · document tabs &amp; zoom</div>
 </div>
 
 <div id="previewPane">
@@ -1189,11 +1191,11 @@ function paraSplit(t){ return esc(fill(t)).replace(/\n{2,}/g,`</p><p style="${ST
 function TR(label,val){ return `<tr><td style="${ST.lbl}">${label}</td><td style="${ST.td}">${paraSplit(val||'')}</td></tr>`; }
 
 function letterhead(){
-  return `<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5mm">
+  return `<div class="eh-lh" style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5mm">
     <div><div style="font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:700;font-size:26px;line-height:.95;color:#171410">ESTUS <span style="font-weight:500;letter-spacing:.12em">HEALTH</span></div>
     <div style="font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:9px;letter-spacing:.34em;color:#ab5c95;margin-top:3px;text-transform:uppercase">OCCUPATIONAL THERAPY</div></div>
     <div style="text-align:right;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:8.5pt;color:#55534e;line-height:1.6">liam@estushealth.com<br>+61 3 9000 0000<br><span style="color:#2ca5b8;font-weight:600">www.estushealth.com</span></div></div>
-    <div style="height:3px;background:linear-gradient(90deg,#344982 0%,#2f6f9e 34%,#2ca5b8 66%,#ab5c95 100%);margin:0 0 8mm;border-radius:2px;font-size:0">&nbsp;</div>`;
+    <div class="eh-grad" style="height:3px;background:linear-gradient(90deg,#344982 0%,#2f6f9e 34%,#2ca5b8 66%,#ab5c95 100%);margin:0 0 8mm;border-radius:2px;font-size:0">&nbsp;</div>`;
 }
 function signBlock(){
   return `<p style="${ST.p};margin-top:6mm">Kind regards,</p>
@@ -1385,7 +1387,7 @@ function buildReport(){
   CHECKLIST.forEach(g=>{
     const nIss=g.items.filter(it=>S.checklist[it.id]==='issue').length;
     h+=`<h3 style="${ST.h3}">${g.g}${nIss===0? '' : ''}</h3>
-    <table style="${ST.tbl}"><tr><th style="${ST.th}">Performance area</th><th style="${ST.th};width:14%;text-align:center">Appropriate &amp; safe</th><th style="${ST.th};width:14%;text-align:center">Issues observed</th></tr>`;
+    <table style="${ST.tbl}"><tr><th style="${ST.th}">Performance area</th><th style="${ST.th};width:17%;text-align:center">Appropriate &amp; safe</th><th style="${ST.th};width:17%;text-align:center">Issues observed</th></tr>`;
     g.items.forEach(it=>{
       const st=S.checklist[it.id];
       h+=`<tr><td style="${ST.td}">${it.text}</td>`+
@@ -1584,26 +1586,292 @@ function newReport(){
   syncForm(); render(); autosave();
 }
 
-/* Word export */
+/* ================================================================
+   WORD EXPORT — real .docx (OOXML), so table shading, brand colours
+   and fonts survive Word / Word Online / Pages / Google Docs.
+================================================================ */
+const W_NS='xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
+function xesc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function cssColorToHex(c){
+  if(!c) return null; c=String(c).trim();
+  if(c[0]==='#'){ let h=c.slice(1); if(h.length===3) h=h.split('').map(x=>x+x).join(''); return h.length===6? h.toUpperCase():null; }
+  const m=c.match(/^rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/);
+  if(m) return [1,2,3].map(i=>(+m[i]).toString(16).padStart(2,'0')).join('').toUpperCase();
+  return null;
+}
+function cssPt(v){ // css length -> points
+  if(v==null||v==='') return null;
+  const m=String(v).match(/^(-?[\d.]+)(pt|px|mm)?$/); if(!m) return null;
+  const n=parseFloat(m[1]);
+  return m[2]==='px'? n*0.75 : m[2]==='mm'? n*2.83465 : n;
+}
+function cssTwip(v){ const pt=cssPt(v); return pt==null? null : Math.round(pt*20); }
+function wRPr(p){
+  let x='';
+  if(p.font) x+=`<w:rFonts w:ascii="${xesc(p.font)}" w:hAnsi="${xesc(p.font)}" w:cs="${xesc(p.font)}"/>`;
+  if(p.bold) x+='<w:b/>';
+  if(p.italic) x+='<w:i/>';
+  if(p.caps) x+='<w:caps/>';
+  if(p.color) x+=`<w:color w:val="${p.color}"/>`;
+  if(p.charSpacing) x+=`<w:spacing w:val="${p.charSpacing}"/>`;
+  if(p.size) x+=`<w:sz w:val="${Math.round(p.size*2)}"/><w:szCs w:val="${Math.round(p.size*2)}"/>`;
+  return x? '<w:rPr>'+x+'</w:rPr>' : '';
+}
+function wRun(text,p){ return text===''? '' : `<w:r>${wRPr(p||{})}<w:t xml:space="preserve">${xesc(text)}</w:t></w:r>`; }
+function applyCssToProps(el,p){
+  const st=el.style; if(!st) return p;
+  const c=cssColorToHex(st.color); if(c) p.color=c;
+  const fs=cssPt(st.fontSize); if(fs) p.size=fs;
+  const fw=st.fontWeight; if(fw==='bold'||parseInt(fw)>=600) p.bold=true;
+  if(st.fontStyle==='italic') p.italic=true;
+  if(st.textTransform==='uppercase') p.caps=true;
+  if(st.fontFamily){ const f=st.fontFamily.split(',')[0].replace(/['"]/g,'').trim(); if(f) p.font=f; }
+  return p;
+}
+function inlineRunsList(nodes, base){
+  let out='';
+  nodes.forEach(ch=>{
+    if(ch.nodeType===3){ out+=wRun(ch.textContent.replace(/\s+/g,' '), base); return; }
+    if(ch.nodeType!==1) return;
+    if(ch.tagName==='BR'){ out+=`<w:r>${wRPr(base)}<w:br/></w:r>`; return; }
+    const p=Object.assign({},base);
+    if(ch.tagName==='B'||ch.tagName==='STRONG') p.bold=true;
+    if(ch.tagName==='I'||ch.tagName==='EM') p.italic=true;
+    applyCssToProps(ch,p);
+    out+=inlineRunsList([...ch.childNodes],p);
+  });
+  return out;
+}
+function wEdge(st,side,tag){
+  const w=st['border'+side+'Width'], s=st['border'+side+'Style'], c=st['border'+side+'Color'];
+  if(!s||s==='none'||!w||cssPt(w)===0) return '';
+  const sz=Math.max(4,Math.round((cssPt(w)||1)*8));
+  return `<w:${tag} w:val="single" w:sz="${sz}" w:space="6" w:color="${cssColorToHex(c)||'000000'}"/>`;
+}
+function wParaBorders(st){
+  const b=wEdge(st,'Top','top')+wEdge(st,'Bottom','bottom');
+  return b? '<w:pBdr>'+b+'</w:pBdr>' : '';
+}
+function wPara(el, inherited, opts){
+  opts=opts||{};
+  const st=el.style||{};
+  const base=applyCssToProps(el,Object.assign({},inherited));
+  let pPr='';
+  if(opts.keepNext) pPr+='<w:keepNext/>';
+  pPr+=wParaBorders(st);
+  let before=cssTwip(st.marginTop), after=cssTwip(st.marginBottom);
+  if(after==null) after=opts.afterDefault!=null? opts.afterDefault : 113;
+  if(opts.afterMax!=null) after=Math.min(after,opts.afterMax);
+  pPr+=`<w:spacing${before? ` w:before="${before}"`:''} w:after="${after}" w:line="264" w:lineRule="auto"/>`;
+  if(opts.indent) pPr+=opts.indent;
+  const jc=st.textAlign==='center'?'center':st.textAlign==='right'?'right':opts.jc||null;
+  if(jc) pPr+=`<w:jc w:val="${jc}"/>`;
+  const runs=(opts.prefixRuns||'')+inlineRunsList([...el.childNodes],base);
+  return `<w:p><w:pPr>${pPr}${wRPr(base)}</w:pPr>${runs}</w:p>`;
+}
+function wParaFromNodes(nodes, inherited, opts){
+  opts=opts||{};
+  let pPr='';
+  let after=opts.afterDefault!=null? opts.afterDefault : 113;
+  pPr+=`<w:spacing w:after="${after}" w:line="264" w:lineRule="auto"/>`;
+  if(opts.jc) pPr+=`<w:jc w:val="${opts.jc}"/>`;
+  return `<w:p><w:pPr>${pPr}${wRPr(inherited)}</w:pPr>${inlineRunsList(nodes,inherited)}</w:p>`;
+}
+function wList(ul, inherited){
+  const base=applyCssToProps(ul,Object.assign({},inherited));
+  return [...ul.children].filter(li=>li.tagName==='LI').map(li=>
+    wPara(li,base,{indent:'<w:ind w:left="425" w:hanging="200"/>',prefixRuns:wRun('•  ',base)})
+  ).join('');
+}
+function wCellBlocks(cell, inherited, jc){
+  let out='', buf=[];
+  const flush=()=>{ if(buf.length){ if(buf.some(n=>n.nodeType===1||n.textContent.trim())) out+=wParaFromNodes(buf,inherited,{afterDefault:0,jc}); buf=[]; } };
+  [...cell.childNodes].forEach(ch=>{
+    if(ch.nodeType===1&&(ch.tagName==='P'||/^H[1-6]$/.test(ch.tagName))){ flush(); out+=wPara(ch,inherited,{afterMax:80,jc}); }
+    else if(ch.nodeType===1&&ch.tagName==='TABLE'){ flush(); out+=wTable(ch,inherited)+'<w:p><w:pPr><w:spacing w:after="0"/></w:pPr></w:p>'; }
+    else if(ch.nodeType===1&&(ch.tagName==='UL'||ch.tagName==='OL')){ flush(); out+=wList(ch,inherited); }
+    else buf.push(ch);
+  });
+  flush();
+  return out || '<w:p><w:pPr><w:spacing w:after="0"/></w:pPr></w:p>';
+}
+function wTable(tbl, inherited){
+  const st=tbl.style||{};
+  const base=applyCssToProps(tbl,Object.assign({},inherited));
+  let pct=5000;
+  if(st.width&&/%$/.test(st.width)) pct=Math.round(parseFloat(st.width)*50);
+  const rows=[...tbl.rows];
+  if(!rows.length) return '';
+  const nCols=Math.max(...rows.map(r=>[...r.cells].reduce((a,c)=>a+(c.colSpan||1),0)));
+  // derive column widths from the first full-width row that declares widths
+  const totalTw=Math.round(9860*pct/5000);
+  let colTw=null, fixed=false;
+  for(const r of rows){
+    const cells=[...r.cells];
+    if(cells.reduce((a,c)=>a+(c.colSpan||1),0)!==nCols) continue;
+    if(!cells.some(c=>/%$/.test(c.style.width||''))) continue;
+    const declared=cells.map(c=>/%$/.test(c.style.width||'')? parseFloat(c.style.width)/100 : null);
+    const used=declared.reduce((a,d)=>a+(d||0),0);
+    const nAuto=declared.filter(d=>d==null).length;
+    if(used>1.001) break;
+    const autoShare=nAuto? Math.max(0,(1-used))/nAuto : 0;
+    colTw=[];
+    cells.forEach((c,i)=>{
+      const share=declared[i]!=null? declared[i] : autoShare;
+      const span=c.colSpan||1;
+      for(let k=0;k<span;k++) colTw.push(Math.round(totalTw*share/span));
+    });
+    fixed=true;
+    break;
+  }
+  if(!colTw) colTw=Array.from({length:nCols},()=>Math.floor(totalTw/nCols));
+  let x=`<w:tbl><w:tblPr><w:tblW w:w="${pct}" w:type="pct"/><w:tblBorders>`+
+    ['top','left','bottom','right','insideH','insideV'].map(s=>`<w:${s} w:val="single" w:sz="4" w:space="0" w:color="D6D4CF"/>`).join('')+
+    `</w:tblBorders><w:tblLayout w:type="${fixed?'fixed':'autofit'}"/><w:tblCellMar><w:top w:w="80" w:type="dxa"/><w:left w:w="120" w:type="dxa"/><w:bottom w:w="80" w:type="dxa"/><w:right w:w="120" w:type="dxa"/></w:tblCellMar></w:tblPr>`;
+  x+=`<w:tblGrid>${colTw.map(w=>`<w:gridCol w:w="${w}"/>`).join('')}</w:tblGrid>`;
+  rows.forEach(r=>{
+    x+='<w:tr>';
+    [...r.cells].forEach(c=>{
+      const cst=c.style||{};
+      const cb=Object.assign({},base);
+      if(c.tagName==='TH') cb.bold=true;
+      applyCssToProps(c,cb);
+      let tcPr='';
+      if(cst.width&&/%$/.test(cst.width)) tcPr+=`<w:tcW w:w="${Math.round(parseFloat(cst.width)*50)}" w:type="pct"/>`;
+      if((c.colSpan||1)>1) tcPr+=`<w:gridSpan w:val="${c.colSpan}"/>`;
+      const bg=cssColorToHex(cst.backgroundColor);
+      if(bg&&bg!=='FFFFFF') tcPr+=`<w:shd w:val="clear" w:color="auto" w:fill="${bg}"/>`;
+      tcPr+='<w:vAlign w:val="top"/>';
+      const jc=cst.textAlign==='center'?'center':cst.textAlign==='right'?'right':null;
+      x+=`<w:tc><w:tcPr>${tcPr}</w:tcPr>${wCellBlocks(c,cb,jc)}</w:tc>`;
+    });
+    x+='</w:tr>';
+  });
+  return x+'</w:tbl>';
+}
+function wLetterhead(){
+  const noBdr='<w:tblBorders>'+['top','left','bottom','right','insideH','insideV'].map(s=>`<w:${s} w:val="none" w:sz="0" w:space="0" w:color="auto"/>`).join('')+'</w:tblBorders>';
+  const noMar='<w:tblCellMar><w:top w:w="0" w:type="dxa"/><w:left w:w="0" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="0" w:type="dxa"/></w:tblCellMar>';
+  const brand=`<w:p><w:pPr><w:spacing w:after="0"/></w:pPr>`+
+    wRun('ESTUS ',{font:'Oswald',bold:true,size:19.5,color:'171410'})+
+    wRun('HEALTH',{font:'Oswald',size:19.5,color:'171410',charSpacing:47})+`</w:p>`+
+    `<w:p><w:pPr><w:spacing w:before="30" w:after="0"/></w:pPr>`+
+    wRun('O C C U P A T I O N A L   T H E R A P Y',{font:'Barlow Semi Condensed',bold:true,size:6.5,color:'AB5C95'})+`</w:p>`;
+  const cp={font:'Barlow Semi Condensed',size:8.5,color:'55534E'};
+  const contact=`<w:p><w:pPr><w:spacing w:after="0" w:line="276" w:lineRule="auto"/><w:jc w:val="right"/></w:pPr>`+
+    wRun('liam@estushealth.com',cp)+`<w:r>${wRPr(cp)}<w:br/></w:r>`+
+    wRun('+61 3 9000 0000',cp)+`<w:r>${wRPr(cp)}<w:br/></w:r>`+
+    wRun('www.estushealth.com',{font:'Barlow Semi Condensed',size:8.5,color:'2CA5B8',bold:true})+`</w:p>`;
+  return `<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/>${noBdr}<w:tblLayout w:type="fixed"/>${noMar}</w:tblPr>`+
+    `<w:tblGrid><w:gridCol w:w="4930"/><w:gridCol w:w="4930"/></w:tblGrid>`+
+    `<w:tr><w:tc><w:tcPr><w:tcW w:w="2500" w:type="pct"/></w:tcPr>${brand}</w:tc>`+
+    `<w:tc><w:tcPr><w:tcW w:w="2500" w:type="pct"/></w:tcPr>${contact}</w:tc></w:tr></w:tbl>`+
+    `<w:p><w:pPr><w:spacing w:after="60"/></w:pPr></w:p>`;
+}
+function wGradBar(){
+  const cols=['344982','2F6F9E','2CA5B8','AB5C95'];
+  const noBdr='<w:tblBorders>'+['top','left','bottom','right','insideH','insideV'].map(s=>`<w:${s} w:val="none" w:sz="0" w:space="0" w:color="auto"/>`).join('')+'</w:tblBorders>';
+  const noMar='<w:tblCellMar><w:top w:w="0" w:type="dxa"/><w:left w:w="0" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="0" w:type="dxa"/></w:tblCellMar>';
+  return `<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/>${noBdr}<w:tblLayout w:type="fixed"/>${noMar}</w:tblPr>`+
+    `<w:tblGrid>${cols.map(()=> '<w:gridCol w:w="2465"/>').join('')}</w:tblGrid>`+
+    `<w:tr><w:trPr><w:trHeight w:val="60" w:hRule="exact"/></w:trPr>`+
+    cols.map(c=>`<w:tc><w:tcPr><w:tcW w:w="1250" w:type="pct"/><w:shd w:val="clear" w:color="auto" w:fill="${c}"/></w:tcPr><w:p><w:pPr><w:spacing w:after="0" w:line="60" w:lineRule="exact"/></w:pPr></w:p></w:tc>`).join('')+
+    `</w:tr></w:tbl><w:p><w:pPr><w:spacing w:after="340"/><w:rPr><w:sz w:val="2"/></w:rPr></w:pPr></w:p>`;
+}
+function wBlocks(el, inherited){
+  let out='', buf=[];
+  const flush=()=>{ if(buf.length){ if(buf.some(n=>n.nodeType===1||n.textContent.trim())) out+=wParaFromNodes(buf,inherited,{}); buf=[]; } };
+  [...el.childNodes].forEach(ch=>{
+    if(ch.nodeType===3){ if(ch.textContent.trim()) buf.push(ch); return; }
+    if(ch.nodeType!==1) return;
+    const t=ch.tagName;
+    if(t==='P'||/^H[1-6]$/.test(t)){ flush(); out+=wPara(ch,inherited,{keepNext:/^H[1-6]$/.test(t)}); }
+    else if(t==='TABLE'){ flush(); out+=wTable(ch,inherited)+'<w:p><w:pPr><w:spacing w:after="120"/><w:rPr><w:sz w:val="2"/></w:rPr></w:pPr></w:p>'; }
+    else if(t==='UL'||t==='OL'){ flush(); out+=wList(ch,inherited); }
+    else if(t==='DIV'){
+      flush();
+      if(ch.classList.contains('eh-lh')) out+=wLetterhead();
+      else if(ch.classList.contains('eh-grad')) out+=wGradBar();
+      else{
+        const hasBlock=[...ch.children].some(k=>/^(P|H[1-6]|TABLE|UL|OL|DIV)$/.test(k.tagName));
+        if(hasBlock){ const nb=applyCssToProps(ch,Object.assign({},inherited)); out+=wBlocks(ch,nb); }
+        else out+=wPara(ch,inherited,{});
+      }
+    }
+    else buf.push(ch);
+  });
+  flush();
+  return out;
+}
+/* minimal ZIP writer (stored entries, UTF-8 names) */
+const CRC_TABLE=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c;}return t;})();
+function crc32(u8){let c=0xFFFFFFFF;for(let i=0;i<u8.length;i++)c=CRC_TABLE[(c^u8[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function makeZip(files){
+  const enc=new TextEncoder();
+  const parts=[], central=[]; let offset=0, cdSize=0;
+  files.forEach(f=>{
+    const name=enc.encode(f.name);
+    const data=typeof f.data==='string'? enc.encode(f.data) : f.data;
+    const crc=crc32(data);
+    const lh=new DataView(new ArrayBuffer(30));
+    lh.setUint32(0,0x04034b50,true); lh.setUint16(4,20,true); lh.setUint16(6,0x0800,true); lh.setUint16(8,0,true);
+    lh.setUint32(14,crc,true); lh.setUint32(18,data.length,true); lh.setUint32(22,data.length,true);
+    lh.setUint16(26,name.length,true);
+    parts.push(new Uint8Array(lh.buffer),name,data);
+    const ch=new DataView(new ArrayBuffer(46));
+    ch.setUint32(0,0x02014b50,true); ch.setUint16(4,20,true); ch.setUint16(6,20,true); ch.setUint16(8,0x0800,true); ch.setUint16(10,0,true);
+    ch.setUint32(16,crc,true); ch.setUint32(20,data.length,true); ch.setUint32(24,data.length,true);
+    ch.setUint16(28,name.length,true); ch.setUint32(42,offset,true);
+    central.push(new Uint8Array(ch.buffer),name);
+    cdSize+=46+name.length;
+    offset+=30+name.length+data.length;
+  });
+  const eocd=new DataView(new ArrayBuffer(22));
+  eocd.setUint32(0,0x06054b50,true);
+  eocd.setUint16(8,files.length,true); eocd.setUint16(10,files.length,true);
+  eocd.setUint32(12,cdSize,true); eocd.setUint32(16,offset,true);
+  return new Blob([...parts,...central,new Uint8Array(eocd.buffer)],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+}
+function wFooterXml(){
+  const p={font:'Barlow Semi Condensed',size:7.5,color:'8A8880'};
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:ftr ${W_NS}><w:p><w:pPr><w:pBdr><w:top w:val="single" w:sz="4" w:space="4" w:color="E6E4DF"/></w:pBdr><w:tabs><w:tab w:val="right" w:pos="9860"/></w:tabs><w:spacing w:after="0"/>${wRPr(p)}</w:pPr>`+
+    wRun(footerID()+' · CONFIDENTIAL',p)+
+    `<w:r>${wRPr(p)}<w:tab/></w:r>`+
+    wRun('Page ',p)+`<w:fldSimple w:instr=" PAGE "><w:r>${wRPr(p)}<w:t>1</w:t></w:r></w:fldSimple>`+
+    wRun(' of ',p)+`<w:fldSimple w:instr=" NUMPAGES "><w:r>${wRPr(p)}<w:t>1</w:t></w:r></w:fldSimple>`+
+    `</w:p></w:ftr>`;
+}
+function buildDocx(htmlBodies){
+  const baseProps={font:'Barlow',size:10.5,color:'1C1C1C'};
+  let body='';
+  htmlBodies.forEach((h,i)=>{
+    if(i) body+='<w:p><w:pPr><w:spacing w:after="0"/></w:pPr><w:r><w:br w:type="page"/></w:r></w:p>';
+    const doc=new DOMParser().parseFromString('<div id="docx-root">'+h+'</div>','text/html');
+    body+=wBlocks(doc.getElementById('docx-root'),Object.assign({},baseProps));
+  });
+  const sectPr=`<w:sectPr><w:footerReference w:type="default" r:id="rId2"/><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="1021" w:bottom="1361" w:left="1021" w:header="720" w:footer="567" w:gutter="0"/></w:sectPr>`;
+  const documentXml=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document ${W_NS}><w:body>${body}${sectPr}</w:body></w:document>`;
+  const stylesXml=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles ${W_NS}><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Barlow" w:hAnsi="Barlow" w:cs="Barlow"/><w:color w:val="1C1C1C"/><w:sz w:val="21"/><w:szCs w:val="21"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="113" w:line="264" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults></w:styles>`;
+  const contentTypes=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/></Types>`;
+  const relsRoot=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
+  const relsDoc=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/></Relationships>`;
+  return makeZip([
+    {name:'[Content_Types].xml',data:contentTypes},
+    {name:'_rels/.rels',data:relsRoot},
+    {name:'word/document.xml',data:documentXml},
+    {name:'word/styles.xml',data:stylesXml},
+    {name:'word/footer1.xml',data:wFooterXml()},
+    {name:'word/_rels/document.xml.rels',data:relsDoc},
+  ]);
+}
+function downloadDocx(htmlBodies, filename){
+  const blob=buildDocx(htmlBodies);
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; a.click();
+}
 function exportWord(){
-  const foot=esc(footerID());
-  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-<head><meta charset="utf-8"><title>OT Driver Assessment Report</title>
-<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
-<style>
-@page Section1{size:A4;margin:20mm 18mm 24mm 18mm;mso-footer:f1;}
-div.Section1{page:Section1}
-p.MsoFooter{margin:0;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:7.5pt;color:#8a8880;letter-spacing:.04em;border-top:1pt solid #e6e4df;padding-top:4pt}
-body{${ST.body}} table{border-collapse:collapse} li{margin-bottom:6pt}
-</style>
-</head><body><div class="Section1">${S.gpOn? buildLetterGP()+'<br clear="all" style="page-break-before:always">':''}${buildReport()}
-<div style="mso-element:footer" id="f1"><p class="MsoFooter">${foot} · CONFIDENTIAL<span style="mso-tab-count:2"></span>Page <span style='mso-field-code:" PAGE "'>1</span> of <span style='mso-field-code:" NUMPAGES "'>1</span></p></div>
-</div></body></html>`;
-  const blob=new Blob(['﻿'+html],{type:'application/msword'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  const bodies=[]; if(S.gpOn) bodies.push(buildLetterGP()); bodies.push(buildReport());
   const d=(S.dateReport||'').replaceAll('-','');
-  a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} Driving Assessment Report${d? ' '+d:''}.doc`;
-  a.click();
+  downloadDocx(bodies, `${(S.firstName+' '+S.surname).trim()||'Client'} Driving Assessment Report${d? ' '+d:''}.docx`);
 }
 
 /* ================================================================
@@ -1685,36 +1953,19 @@ function loadExample(){
 
 function exportMDIWord(){
   if(!S.mdiOn){ alert('Tick "Include referral letter to Motor Driving Instructor" first (section 9).'); return; }
-  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-<head><meta charset="utf-8"><title>MDI Referral</title>
-<style>@page{size:A4;margin:20mm 18mm} body{${ST.body}} table{border-collapse:collapse}</style>
-</head><body>${buildLetterMDI()}</body></html>`;
-  const blob=new Blob(['\ufeff'+html],{type:'application/msword'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} MDI Referral.doc`;
-  a.click();
-}
-function downloadLetterDoc(bodyHtml, docTitle, fileSuffix){
-  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-<head><meta charset="utf-8"><title>${docTitle}</title>
-<style>@page{size:A4;margin:20mm 18mm} body{${ST.body}} table{border-collapse:collapse}</style>
-</head><body>${bodyHtml}</body></html>`;
-  const blob=new Blob(['\ufeff'+html],{type:'application/msword'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} ${fileSuffix}.doc`;
-  a.click();
+  downloadDocx([buildLetterMDI()], `${(S.firstName+' '+S.surname).trim()||'Client'} MDI Referral.docx`);
 }
 function exportNDISWord(){
   if(!S.ndisOn){ alert('Tick "Include letter of support for NDIS funding" first (section 9).'); return; }
-  downloadLetterDoc(buildLetterNDIS(),'NDIS Support Letter','NDIS Support Letter');
+  downloadDocx([buildLetterNDIS()], `${(S.firstName+' '+S.surname).trim()||'Client'} NDIS Support Letter.docx`);
 }
 function exportFamWord(){
   if(!S.famOn){ alert('Tick "Include letter for family / supervising drivers" first (section 9).'); return; }
-  downloadLetterDoc(buildLetterFam(),'Family Support Letter','Family Support Letter');
+  downloadDocx([buildLetterFam()], `${(S.firstName+' '+S.surname).trim()||'Client'} Family Support Letter.docx`);
 }
 function exportClientWord(){
   if(!S.clientOn){ alert('Tick "Include plain-language letter to the client" first (section 9).'); return; }
-  downloadLetterDoc(buildLetterClient(),'Client Letter','Client Letter');
+  downloadDocx([buildLetterClient()], `${(S.firstName+' '+S.surname).trim()||'Client'} Client Letter.docx`);
 }
 
 /* ================================================================
