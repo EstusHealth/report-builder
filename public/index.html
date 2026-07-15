@@ -241,6 +241,14 @@ ul.rep li{margin-bottom:2mm}
   <div id="medRows"></div>
   <button class="addbtn" onclick="addMed()">+ Add medication</button>
 
+  <div class="subhead">Letterhead contact details</div>
+  <div class="hint">Prints top-right of every document (report and letters). Leave a line blank to omit it.</div>
+  <div class="row">
+    <div class="f w33"><label>Email</label><input type="text" data-bind="ehEmail" placeholder="e.g. hello@estushealth.com"></div>
+    <div class="f w33"><label>Phone</label><input type="text" data-bind="ehPhone" placeholder="e.g. +61 3 9000 0000"></div>
+    <div class="f w33"><label>Website</label><input type="text" data-bind="ehWeb" placeholder="e.g. www.estushealth.com"></div>
+  </div>
+
   <div class="subhead">Referral &amp; Report</div>
   <div class="row">
     <div class="f"><label>Referrer name</label><input type="text" data-bind="refName" placeholder="who asked for this assessment?"></div>
@@ -612,6 +620,7 @@ function freshState(){
     refName:'', refRole:'', refOrg:'', refContact:'',
     dateAssess:'', dateReport:'',
     assessor:'Liam Fagan', assessorRole:'Occupational Therapist', ahpra:'OCC0002674997',
+    ehEmail:'liam@estushealth.com', ehPhone:'+61 3 9000 0000', ehWeb:'www.estushealth.com',
     supervisor:'', mdi:'', location:'Flinders University Tonsley campus',
     reviewed:{referral:true, licence:true, background:true, gp:false, prevOT:false}, reviewedExtra:'', supportPerson:'',
     purpose:'learner', reasonReferral:'', symptoms:'', medHistory:'', medSideEffects:'', drivingHistory:'',
@@ -1190,11 +1199,19 @@ function P(t){ return t? `<p style="${ST.p}">${paraSplit(t)}</p>`.replace(/<p st
 function paraSplit(t){ return esc(fill(t)).replace(/\n{2,}/g,`</p><p style="${ST.p}">`).replace(/\n/g,'<br>'); }
 function TR(label,val){ return `<tr><td style="${ST.lbl}">${label}</td><td style="${ST.td}">${paraSplit(val||'')}</td></tr>`; }
 
+function lhContactLines(){
+  const lines=[S.ehEmail,S.ehPhone].map(x=>String(x||'').trim()).filter(Boolean);
+  const web=String(S.ehWeb||'').trim();
+  return {lines,web};
+}
 function letterhead(){
+  const {lines,web}=lhContactLines();
+  let contact=lines.map(esc).join('<br>');
+  if(web) contact+=(contact?'<br>':'')+`<span style="color:#2ca5b8;font-weight:600">${esc(web)}</span>`;
   return `<div class="eh-lh" style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5mm">
     <div><div style="font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:700;font-size:26px;line-height:.95;color:#171410">ESTUS <span style="font-weight:500;letter-spacing:.12em">HEALTH</span></div>
     <div style="font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:9px;letter-spacing:.34em;color:#ab5c95;margin-top:3px;text-transform:uppercase">OCCUPATIONAL THERAPY</div></div>
-    <div style="text-align:right;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:8.5pt;color:#55534e;line-height:1.6">liam@estushealth.com<br>+61 3 9000 0000<br><span style="color:#2ca5b8;font-weight:600">www.estushealth.com</span></div></div>
+    <div style="text-align:right;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:8.5pt;color:#55534e;line-height:1.6">${contact}</div></div>
     <div class="eh-grad" style="height:3px;background:linear-gradient(90deg,#344982 0%,#2f6f9e 34%,#2ca5b8 66%,#ab5c95 100%);margin:0 0 8mm;border-radius:2px;font-size:0">&nbsp;</div>`;
 }
 function signBlock(){
@@ -1758,10 +1775,11 @@ function wLetterhead(){
     `<w:p><w:pPr><w:spacing w:before="30" w:after="0"/></w:pPr>`+
     wRun('O C C U P A T I O N A L   T H E R A P Y',{font:'Barlow Semi Condensed',bold:true,size:6.5,color:'AB5C95'})+`</w:p>`;
   const cp={font:'Barlow Semi Condensed',size:8.5,color:'55534E'};
-  const contact=`<w:p><w:pPr><w:spacing w:after="0" w:line="276" w:lineRule="auto"/><w:jc w:val="right"/></w:pPr>`+
-    wRun('liam@estushealth.com',cp)+`<w:r>${wRPr(cp)}<w:br/></w:r>`+
-    wRun('+61 3 9000 0000',cp)+`<w:r>${wRPr(cp)}<w:br/></w:r>`+
-    wRun('www.estushealth.com',{font:'Barlow Semi Condensed',size:8.5,color:'2CA5B8',bold:true})+`</w:p>`;
+  const {lines,web}=lhContactLines();
+  let contactRuns='';
+  lines.forEach((l,i)=>{ if(i) contactRuns+=`<w:r>${wRPr(cp)}<w:br/></w:r>`; contactRuns+=wRun(l,cp); });
+  if(web){ if(contactRuns) contactRuns+=`<w:r>${wRPr(cp)}<w:br/></w:r>`; contactRuns+=wRun(web,{font:'Barlow Semi Condensed',size:8.5,color:'2CA5B8',bold:true}); }
+  const contact=`<w:p><w:pPr><w:spacing w:after="0" w:line="276" w:lineRule="auto"/><w:jc w:val="right"/></w:pPr>${contactRuns}</w:p>`;
   return `<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/>${noBdr}<w:tblLayout w:type="fixed"/>${noMar}</w:tblPr>`+
     `<w:tblGrid><w:gridCol w:w="4930"/><w:gridCol w:w="4930"/></w:tblGrid>`+
     `<w:tr><w:tc><w:tcPr><w:tcW w:w="2500" w:type="pct"/></w:tcPr>${brand}</w:tc>`+
