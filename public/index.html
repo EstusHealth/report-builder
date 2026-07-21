@@ -1193,7 +1193,7 @@ const ST = {
   th:`font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:8.5pt;letter-spacing:.08em;text-transform:uppercase;text-align:left;background:#344982;color:#ffffff;padding:2mm 2.5mm;border:1px solid #344982`,
   td:`border:1px solid #d6d4cf;padding:1.8mm 2.5mm;vertical-align:top`,
   lbl:`border:1px solid #d6d4cf;padding:1.8mm 2.5mm;vertical-align:top;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;width:34%;background:#efe9db;color:#3a3934`,
-  ok:`border:1px solid #d6d4cf;padding:1.8mm 2.5mm;text-align:center;font-weight:700;color:#1e6b3a`,
+  ok:`border:1px solid #d6d4cf;padding:1.8mm 2.5mm;vertical-align:top;text-align:center;font-weight:700;color:#1e6b3a`,
 };
 function P(t){ return t? `<p style="${ST.p}">${paraSplit(t)}</p>`.replace(/<p style="[^"]*"><\/p>/g,'') : ''; }
 function paraSplit(t){ return esc(fill(t)).replace(/\n{2,}/g,`</p><p style="${ST.p}">`).replace(/\n/g,'<br>'); }
