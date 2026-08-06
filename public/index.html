@@ -129,6 +129,50 @@ ul.rep li{margin-bottom:2mm}
 .vitem:hover{background:var(--cream)}
 .vitem .sec{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10px;letter-spacing:.06em;color:#fff;background:var(--plum);border-radius:8px;padding:1px 7px;flex-shrink:0}
 .flash{outline:2px solid var(--plum)!important;outline-offset:1px;transition:outline .2s}
+
+/* ============ INTERVIEW MODE ============ */
+#ivModal{display:none;position:fixed;inset:0;background:rgba(23,20,16,.72);z-index:300;align-items:center;justify-content:center;padding:22px}
+#ivModal.open{display:flex}
+#ivBox{background:var(--bg);border-radius:9px;width:min(1180px,100%);height:min(760px,100%);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 26px 70px -22px rgba(0,0,0,.6)}
+#ivBox>header{background:var(--ink);color:#fff;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex-shrink:0}
+#ivBox>header .ivphase{font-family:'Oswald',sans-serif;font-weight:600;font-size:13.5px;letter-spacing:.12em;text-transform:uppercase}
+#ivBox>header .ivcount{font-family:'Barlow Semi Condensed',sans-serif;font-size:11.5px;letter-spacing:.06em;color:#a9a7a1}
+#ivBox>header select{background:#3a3934;color:#fff;border:none;border-radius:4px;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11.5px;padding:5px 7px;cursor:pointer}
+#ivBox>header .sp{margin-left:auto}
+.ivchip{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10px;letter-spacing:.08em;text-transform:uppercase;background:var(--plum);color:#fff;border-radius:9px;padding:2px 9px}
+#ivGrad{height:3px;background:var(--grad);flex-shrink:0}
+#ivRail{display:flex;gap:2px;padding:8px 16px 0;flex-wrap:wrap;flex-shrink:0}
+.ivdot{width:13px;height:5px;border-radius:3px;background:#d2d0cb;cursor:pointer;transition:background .15s}
+.ivdot.done{background:var(--teal)} .ivdot.skip{background:#d9c3d3} .ivdot.cur{background:var(--plum);height:7px;margin-top:-1px}
+#ivSplit{flex:1;display:flex;min-height:0}
+#ivMain{flex:1;overflow-y:auto;padding:16px 20px 20px;min-width:0}
+#ivTrans{width:0;overflow:hidden;border-left:1px solid var(--line);background:#fff;display:flex;flex-direction:column;transition:width .18s}
+#ivTrans.open{width:42%;min-width:300px}
+#ivTrans .ivtHead{padding:9px 12px;border-bottom:1px solid var(--line);display:flex;gap:7px;align-items:center;flex-shrink:0}
+#ivTrans .ivtHead input{flex:1;border:1px solid #d6d4cf;border-radius:4px;padding:5px 7px;font-family:'Barlow',sans-serif;font-size:12.5px}
+#ivTrans .ivtHead .src{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);flex-shrink:0}
+#ivTBody{flex:1;overflow-y:auto;padding:11px 13px;font-size:12.5px;line-height:1.6;white-space:pre-wrap;color:#2b2924;font-family:'Barlow',sans-serif}
+#ivTBody mark{background:#ffe9a8;color:var(--ink);border-radius:2px;padding:0 1px}
+#ivTBody mark.hit1{background:#ffd24d;box-shadow:0 0 0 2px #ffd24d}
+#ivTBody .empty{color:var(--faint);font-style:italic;white-space:normal}
+.ivq{font-family:'Oswald',sans-serif;font-weight:500;font-size:22px;line-height:1.3;letter-spacing:.01em;color:var(--ink);margin:2px 0 10px}
+.ivwhy{font-size:12.5px;line-height:1.5;color:var(--muted);border-left:3px solid var(--teal);padding:4px 0 4px 10px;margin-bottom:11px}
+.ivprobes{margin:0 0 14px;padding-left:17px;font-size:12.5px;line-height:1.55;color:var(--muted)}
+.ivprobes li{margin-bottom:3px}
+.ivfeeds{display:inline-flex;align-items:center;gap:6px;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--teal);cursor:pointer;border:1px solid #bfe0e6;background:#f2f9fa;border-radius:12px;padding:3px 10px;margin-bottom:12px}
+.ivfeeds:hover{background:#e2f2f5}
+.ivans{background:#fff;border:1px solid var(--line);border-radius:6px;padding:11px 13px}
+.ivans label{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+.ivans textarea,.ivans input[type=text],.ivans input[type=number],.ivans select{width:100%;border:1px solid #d6d4cf;border-radius:4px;padding:7px 9px;font-family:'Barlow',sans-serif;font-size:13.5px;color:var(--ink);background:#fff}
+.ivans textarea{min-height:110px;resize:vertical;line-height:1.5}
+.ivans textarea:focus,.ivans input:focus,.ivans select:focus{outline:2px solid var(--teal);outline-offset:-1px}
+.ivans .sub{margin-top:9px}
+.ivans .note{font-size:11.5px;color:var(--faint);margin-top:6px;line-height:1.45}
+#ivFoot{border-top:1px solid var(--line);background:var(--bg);padding:10px 16px;display:flex;gap:8px;align-items:center;flex-shrink:0}
+#ivFoot .hintk{font-family:'Barlow Semi Condensed',sans-serif;font-size:10.5px;letter-spacing:.05em;color:var(--faint);margin-right:auto}
+#ivFoot kbd{background:#e0dedA;border-radius:3px;padding:1px 5px;font-family:'Barlow Semi Condensed',sans-serif;font-size:10px}
+.ivdone{text-align:center;padding:38px 20px;color:var(--muted)}
+.ivdone h3{font-family:'Oswald',sans-serif;font-weight:600;font-size:19px;letter-spacing:.06em;color:var(--ink);margin:0 0 8px}
 @media print{
   body{background:#fff}
   #formPane,#toolbar,#gradbar{display:none!important}
@@ -142,6 +186,7 @@ ul.rep li{margin-bottom:2mm}
 <body>
 <div id="toolbar">
   <div class="brand">ESTUS <span>HEALTH</span><small>OT DRIVING REPORT BUILDER</small></div>
+  <button class="btn plum" onclick="openInterview()">▶ Interview mode</button>
   <button class="btn" onclick="loadExample()">Load example</button>
   <button class="btn" onclick="newReport()">New</button>
   <button class="btn" onclick="saveJSON()">Save draft</button>
@@ -155,9 +200,23 @@ ul.rep li{margin-bottom:2mm}
 <div id="app">
 <div id="formPane">
 
+<!-- ================= 0. INTERVIEW TRANSCRIPT ================= -->
+<details class="sec">
+<summary>0 · Interview Transcript<span class="resetlink" style="margin-left:auto" onclick="event.preventDefault();event.stopPropagation();openInterview()">▶ interview mode</span></summary>
+<div class="secbody">
+  <div class="hint">Run <b>Interview mode</b> to work through the question script one question at a time while Google Meet or Heidi records the session. Afterwards, paste the transcript or the processed note below — it stays in this browser and is never sent anywhere. Inside interview mode you can show the transcript beside each question, with the relevant keywords highlighted, so you can lift the answer straight into the right report field.</div>
+  <div class="row">
+    <div class="f w33"><label>Source</label>
+      <select data-bind="transcriptSource"><option>Heidi</option><option>Google Meet</option><option>Typed notes</option><option>Other</option></select>
+    </div>
+  </div>
+  <div class="row"><div class="f w100"><label>Transcript / session note</label><textarea data-bind="transcript" rows="10" placeholder="Paste the raw transcript, the Heidi note, or your own rough notes — any format is fine."></textarea></div></div>
+</div>
+</details>
+
 <!-- ================= 1. CLIENT DETAILS ================= -->
 <details class="sec" open>
-<summary>1 · Client &amp; Assessment Details</summary>
+<summary>1 · Client &amp; Assessment Details<span class="resetlink" style="margin-left:auto" onclick="event.preventDefault();event.stopPropagation();openInterview('intake')">▶ interview</span></summary>
 <div class="secbody">
   <div class="row">
     <div class="f w25"><label>Title</label><select data-bind="title"><option>Mr</option><option>Mrs</option><option>Ms</option><option>Miss</option><option>Mx</option><option value="">(none)</option></select></div>
@@ -233,7 +292,7 @@ ul.rep li{margin-bottom:2mm}
 
 <!-- ================= 3. BACKGROUND ================= -->
 <details class="sec">
-<summary>3 · Background Information</summary>
+<summary>3 · Background Information<span class="resetlink" style="margin-left:auto" onclick="event.preventDefault();event.stopPropagation();openInterview('background')">▶ interview</span></summary>
 <div class="secbody">
   <div class="hint">Narrative fields support tokens: <code>{name}</code> <code>{first}</code> <code>{He}</code> <code>{he}</code> <code>{His}</code> <code>{his}</code> <code>{him}</code> <code>{was}</code> <code>{is}</code> <code>{has}</code> — they adapt to the client's name and pronouns automatically. Leave a field blank to skip it in the report. Click <b>reset</b> to restore the standard wording.</div>
 
@@ -268,7 +327,7 @@ ul.rep li{margin-bottom:2mm}
 
 <!-- ================= 4. PRE ON-ROAD ================= -->
 <details class="sec">
-<summary>4 · Pre On-Road Screens</summary>
+<summary>4 · Pre On-Road Screens<span class="resetlink" style="margin-left:auto" onclick="event.preventDefault();event.stopPropagation();openInterview('predrive')">▶ interview</span></summary>
 <div class="secbody">
 
   <div class="subhead">Hearing &amp; communication</div>
@@ -318,7 +377,7 @@ ul.rep li{margin-bottom:2mm}
 
 <!-- ================= 5. ON-ROAD ================= -->
 <details class="sec">
-<summary>5 · On-Road Assessment</summary>
+<summary>5 · On-Road Assessment<span class="resetlink" style="margin-left:auto" onclick="event.preventDefault();event.stopPropagation();openInterview('debrief')">▶ debrief</span></summary>
 <div class="secbody">
   <div class="row">
     <div class="f w50"><label>Vehicle</label><select data-bind="vehicle"><option>Dual-control automatic vehicle (dual brakes)</option><option>Dual-control manual vehicle</option><option>Client's own vehicle</option><option>Client's own vehicle with modifications</option></select></div>
@@ -335,7 +394,7 @@ ul.rep li{margin-bottom:2mm}
 
 <!-- ================= 6. SUMMARY & RECOMMENDATIONS ================= -->
 <details class="sec">
-<summary>6 · Summary &amp; Recommendations</summary>
+<summary>6 · Summary &amp; Recommendations<span class="resetlink" style="margin-left:auto" onclick="event.preventDefault();event.stopPropagation();openInterview('outcome')">▶ interview</span></summary>
 <div class="secbody">
   <div class="row">
     <div class="f w100"><label>Assessment outcome</label>
@@ -395,6 +454,40 @@ ul.rep li{margin-bottom:2mm}
     <header id="valHead">Outstanding items</header>
     <div class="vbody" id="valList"></div>
     <div class="vfoot"><button class="btn" onclick="document.getElementById('valModal').classList.remove('open')">Close</button></div>
+  </div>
+</div>
+
+<div id="ivModal">
+  <div id="ivBox">
+    <header>
+      <span class="ivphase" id="ivPhaseName">Interview</span>
+      <span class="ivcount" id="ivCount"></span>
+      <span class="ivchip" id="ivPurpose"></span>
+      <select id="ivPhaseJump" onchange="ivGoPhase(this.value)"></select>
+      <span class="sp"></span>
+      <button class="btn" onclick="ivToggleTranscript()" id="ivTBtn">Transcript</button>
+      <button class="btn" onclick="ivCopyScript()">Copy script</button>
+      <button class="btn" onclick="ivPrintScript()">Print script</button>
+      <button class="btn" onclick="closeInterview()">✕ Close</button>
+    </header>
+    <div id="ivGrad"></div>
+    <div id="ivRail"></div>
+    <div id="ivSplit">
+      <div id="ivMain"></div>
+      <div id="ivTrans">
+        <div class="ivtHead">
+          <span class="src" id="ivTSrc">Transcript</span>
+          <input type="text" id="ivTSearch" placeholder="Search the transcript…" oninput="ivRenderTranscript(this.value)">
+        </div>
+        <div id="ivTBody"></div>
+      </div>
+    </div>
+    <div id="ivFoot">
+      <span class="hintk"><kbd>←</kbd> back · <kbd>→</kbd> next · <kbd>Esc</kbd> close — ask the question aloud; your recorder is capturing the answer</span>
+      <button class="btn" onclick="ivPrev()">← Back</button>
+      <button class="btn" onclick="ivSkip()">Skip</button>
+      <button class="btn primary" onclick="ivNext()">Next →</button>
+    </div>
   </div>
 </div>
 <script>
@@ -486,9 +579,456 @@ const REFS = {
   otdora:"Unsworth C, 2011, OT-DORA: Occupational Therapy Driver Off-Road Assessment Battery, American Occupational Therapy Association, Bethesda, USA",
 };
 
+/* ================================================================
+   INTERVIEW MODE — supervisor-style question script
+   Recording & transcription happen in a third-party tool (Google Meet
+   / Heidi). This bank only drives the questions and maps each answer
+   to the report field it feeds. Nothing here talks to a network.
+   bind forms: 'stateKey' | {checklist:id} | {needs:id} | {phys:id}
+               | {test:id} | {rec:id} | {bool:key} | {jump:selector}
+               | null (verbal only)
+================================================================ */
+const IV_PHASES = [
+  {id:'intake',     label:'Intake & referral',    blurb:'Identity, licence, who referred and what they are asking.'},
+  {id:'background', label:'Background history',   blurb:'Diagnoses, medications, symptoms, driving history and needs.'},
+  {id:'predrive',   label:'Pre on-road screen',   blurb:'Hearing, vision, physical and cognitive screening.'},
+  {id:'debrief',    label:'Post-drive debrief',   blurb:'Walk the drive back through, group by group.'},
+  {id:'outcome',    label:'Outcome & recommendations', blurb:'Justify the outcome and set the recommendations.'},
+];
+
+const INTERVIEW_SETS = { otDriving: [
+
+/* ---------------- INTAKE ---------------- */
+{id:'in-consent', phase:'intake', sec:'8', bind:{bool:'consentObtained'},
+ q:'Before anything else — has {name} given informed consent to the assessment and to this report being released?',
+ why:'Consent is a hard gate: the report will not export without it, and it belongs on the record from the first minute.',
+ probes:['Do they understand who receives the report?','Do they understand it may go to the licensing authority?','If a support person is answering, is that with consent?'],
+ keys:['consent','agree','happy for','permission']},
+
+{id:'in-identity', phase:'intake', sec:'1', bind:{jump:'[data-bind=firstName]'},
+ q:'Confirm full legal name, preferred name, date of birth and address.',
+ why:'These print on every page footer and identify the document medicolegally. Confirm against a document rather than from memory.',
+ probes:['Which name do they prefer to be called?','Which pronouns should the report use?','Is the address current?'],
+ keys:['date of birth','dob','address','born']},
+
+{id:'in-licence', phase:'intake', sec:'1', bind:'licExpiry',
+ q:'Can I sight the licence or learner\'s permit? Read me the number, the class and the expiry.',
+ why:'"[TBC]" on expiry blocks the export. Sighting the physical document is what lets you state it was sighted.',
+ probes:['Is the photo and name current?','What class is it?','Has it ever been suspended or cancelled?'],
+ keys:['licence','license','permit','expiry','expires']},
+
+{id:'in-licCond', phase:'intake', sec:'1', bind:{jump:'[data-bind=licCondOther]'},
+ q:'What conditions are on the licence right now?',
+ why:'The conditions you find here are the baseline your recommendations either keep, add to, or remove.',
+ probes:['L-plates and a supervising driver?','Zero BAC?','Automatic only?','Corrective lenses — and is that endorsed?'],
+ keys:['condition','L-plate','supervis','zero','automatic','lenses','glasses']},
+
+{id:'in-support', phase:'intake', sec:'2', bind:'supportPerson',
+ q:'Who has come along today, and what is their relationship to {name}?',
+ why:'The report states whose history it relies on. If a parent or support worker supplies half the picture, that must be visible.',
+ probes:['Are they answering on {his} behalf, or adding to it?','Do they see {him} drive?','How do they describe {his} driving?'],
+ keys:['father','mother','partner','support worker','carer','wife','husband','brother','sister']},
+
+{id:'in-referrer', phase:'intake', sec:'1', bind:'refName',
+ q:'Who referred {name}, and what exactly are they asking us to answer?',
+ why:'The referral question is the report\'s job description. A vague referral produces a vague report.',
+ probes:['Their role and organisation?','Email or phone for the report?','Is there a deadline?','Did they raise a specific concern?'],
+ keys:['referr','referred by','GP','doctor','occupational therapist','case manager']},
+
+{id:'in-purpose', phase:'intake', sec:'3', bind:'purpose',
+ q:'Given all that — which of the five assessment purposes does this actually fall under?',
+ why:'This single field re-routes the rest of the interview and rewrites the referral wording, the summary draft and the recommendation set.',
+ probes:['Learner progressing toward a provisional licence?','Fitness to drive after a medical event?','Return after time off the road?','Reviewing existing conditions?','Assessing for vehicle modifications?'],
+ keys:['learner','provisional','fitness to drive','return to driving','modification']},
+
+{id:'in-reason', phase:'intake', sec:'3', bind:'reasonReferral',
+ q:'Put the referral question into your own words, the way it will read in the report.',
+ why:'The standard wording is a starting point, not an answer. Say what this particular referral is really asking.',
+ probes:['What decision does the referrer need to make?','What would a useless version of this report fail to tell them?'],
+ keys:['referred for','assessment to determine','asked to']},
+
+{id:'in-reviewed', phase:'intake', sec:'2', bind:{jump:'#reviewedChecks'},
+ q:'Which documents have you actually read before today?',
+ why:'"Basis of opinion" has to be true. Tick only what you have genuinely reviewed.',
+ probes:['Referral correspondence?','GP or specialist reports?','Previous OT or allied health reports?','Neuropsychology?'],
+ keys:['report','letter','correspondence','neuropsych','specialist']},
+
+{id:'in-reviewedExtra', phase:'intake', sec:'2', bind:'reviewedExtra',
+ q:'Anything else you reviewed that is not on the standard list?',
+ why:'Named documents with dates and authors make the basis of opinion defensible.',
+ probes:['Author and date for each?','Anything you asked for but did not receive?'],
+ keys:['also reviewed','provided','sent me']},
+
+{id:'in-mdi', phase:'intake', sec:'1', bind:'mdi',
+ q:'Who is the Motor Driving Instructor for the on-road component?',
+ why:'The MDI is a named party to the assessment and appears in the report.',
+ probes:['Have they worked with {name} before?','Whose dual-control vehicle?'],
+ keys:['instructor','MDI','driving school']},
+
+{id:'in-location', phase:'intake', sec:'1', bind:'location',
+ q:'Where is the assessment taking place, and on what date?',
+ why:'Location and date anchor the report. Also set the target report date now so it does not drift.',
+ probes:['Date of assessment?','Date the report is due?'],
+ keys:['clinic','centre','campus','today']},
+
+/* ---------------- BACKGROUND ---------------- */
+{id:'bg-diagnoses', phase:'background', sec:'1', bind:'diagnoses',
+ q:'Talk me through {his} diagnoses — what is on the record, who made each one, and when?',
+ why:'Every subsequent finding gets read against this. It also drives the auto-drafted referral and summary wording.',
+ probes:['Which is the primary driving-relevant condition?','Anything diagnosed recently or still being investigated?','Anything {he} disputes?'],
+ keys:['diagnos','condition','ASD','autism','stroke','injury','epilep','schizophren','ADHD','dementia']},
+
+{id:'bg-meds', phase:'background', sec:'1', bind:{jump:'#medRows'},
+ q:'What medications is {he} taking? Name, dose and frequency, and what each one is for.',
+ why:'The medication table is required before export — "Nil reported" is a valid answer but silence is not.',
+ probes:['Anything sedating?','Anything recently started, stopped or changed?','Over-the-counter or PRN?','Who prescribes and monitors?'],
+ keys:['medication','mg','tablet','injection','daily','prescrib']},
+
+{id:'bg-medEffects', phase:'background', sec:'3', bind:'medSideEffects',
+ q:'How does {he} respond to those medications — any side effects that could touch driving?',
+ why:'Required whenever any medication is listed. Sedation, fatigue and blurred vision are all directly driving-relevant.',
+ probes:['Drowsiness, and at what time of day relative to the dose?','Blurred or double vision?','Tremor, stiffness, slowed reactions?','Any effect in the days right after an injection?'],
+ keys:['side effect','drowsy','tired','fatigue','sedat','blurred','dizzy','nausea']},
+
+{id:'bg-medHistory', phase:'background', sec:'3', bind:'medHistory',
+ q:'Give me the medical history and treatment picture — what is stable, what is not?',
+ why:'Stability, not just diagnosis, is what fitness to drive turns on.',
+ probes:['How long has the current treatment been in place?','Any hospital admissions?','Who is the treating team?','How stable over the last twelve months?'],
+ keys:['history','admitted','hospital','stable','managed','treatment']},
+
+{id:'bg-event', phase:'background', sec:'3', bind:'medHistory',
+ when:()=>['medical','return'].includes(S.purpose),
+ q:'Tell me about the event itself — when it happened, what happened, and what changed afterwards.',
+ why:'For a post-event assessment the timeline is the spine of the report: before, event, now.',
+ probes:['Date and setting?','Any loss of consciousness?','What deficits were there initially?','What has recovered and what has plateaued?'],
+ keys:['stroke','seizure','accident','surgery','episode','since then','after the']},
+
+{id:'bg-insight', phase:'background', sec:'4', bind:'genCog',
+ q:'Ask {him} directly: what do you think will be the hardest part of driving for you?',
+ why:'Self-reported insight is a clinical finding in its own right, and it is what you compare the DriveAware result against.',
+ probes:['Does {his} answer match what the referrer described?','Does it match what the support person says?','Does {he} identify anything, or is the answer "nothing"?'],
+ keys:['hardest','difficult','struggle','worried','confident','fine','no problem']},
+
+{id:'bg-symptoms', phase:'background', sec:'3', bind:'symptoms',
+ q:'What driving-related challenges does {he} notice day to day?',
+ why:'This is the functional baseline the on-road findings get compared against. Push for situations, not adjectives.',
+ probes:['What happens at a busy intersection?','When several things happen at once?','Anything {he} now avoids?','Anything that has got worse?'],
+ keys:['difficult','anxious','avoid','intersection','traffic','busy','overwhelm','concentrat']},
+
+{id:'bg-sensory', phase:'background', sec:'3', bind:'symptoms',
+ q:'Any sensory sensitivities — noise, light, glare, crowding — that show up in a car?',
+ why:'Sensory load is a real driving demand and is frequently missed when the interview stays on the diagnosis.',
+ probes:['Passengers or radio?','Sun glare or headlights at night?','Busy carparks or shopping centres?','What does {he} do when it becomes too much?'],
+ keys:['noise','loud','light','glare','bright','crowd','overwhelm','sensory']},
+
+{id:'bg-fatigue', phase:'background', sec:'3', bind:'medHistory',
+ q:'How is sleep and fatigue? Any seizures, blackouts, dizziness or falls?',
+ why:'These are the classic Austroads red flags. Ask them explicitly rather than waiting for them to come up.',
+ probes:['Any loss of consciousness ever?','Sleep apnoea or daytime sleepiness?','Dizziness on standing?','When was the last episode?'],
+ keys:['seizure','blackout','faint','dizzy','fall','sleep','apnoea','tired']},
+
+{id:'bg-substance', phase:'background', sec:'3', bind:'medHistory',
+ q:'Alcohol or other substances — anything that interacts with the medications or the licence conditions?',
+ why:'Uncomfortable to ask and negligent to skip, particularly where a zero-BAC condition applies.',
+ probes:['Is there a zero-BAC condition on the licence?','Any interaction with the current medications?','Any history of driving under the influence?'],
+ keys:['alcohol','drink','cannabis','BAC','substance']},
+
+{id:'bg-drivingHistory', phase:'background', sec:'3', bind:'drivingHistory',
+ q:'Walk me through the driving history — when did {he} get the permit or licence, and what has happened since?',
+ why:'Experience level changes what "safe" means. A five-year learner and a forty-year licence holder are different assessments.',
+ probes:['How long held?','Any gaps off the road, and why?','Any change in how much {he} drives?'],
+ keys:['permit','licence','learner','years','since','got my']},
+
+{id:'bg-hours', phase:'background', sec:'3', bind:'drivingHistory',
+ when:()=>S.purpose==='learner',
+ q:'How many supervised logbook hours are recorded, and who supervises?',
+ why:'Hours accrued sets a realistic expectation for on-road performance and sizes the lessons recommendation.',
+ probes:['Daytime only, or any night hours?','Who is the usual supervising driver?','How consistent is the practice?','How far off the required total?'],
+ keys:['hours','logbook','log book','supervis','practice']},
+
+{id:'bg-vehicle', phase:'background', sec:'3', bind:'drivingHistory',
+ q:'What vehicle does {he} usually drive, and whose is it?',
+ why:'An unfamiliar assessment vehicle explains a lot of on-road error. Capture the baseline now so you can distinguish the two later.',
+ probes:['Automatic or manual?','Whose car, and is it available going forward?','Any modifications already fitted?','Where are the indicators relative to the assessment vehicle?'],
+ keys:['automatic','manual','car','vehicle','family','own']},
+
+{id:'bg-lessons', phase:'background', sec:'3', bind:'drivingHistory',
+ q:'Any previous professional driving instruction? How did that go?',
+ why:'A poor previous experience shapes both the recommendation and how it should be worded.',
+ probes:['Who with, and how many lessons?','What worked and what did not?','Why did it stop?'],
+ keys:['lesson','instructor','driving school','taught']},
+
+{id:'bg-incidents', phase:'background', sec:'3', bind:'drivingHistory',
+ q:'Any collisions, near-misses, infringements or licence action — ever?',
+ why:'Ask it directly and record the answer either way. A clean history is a finding; an unasked question is a gap.',
+ probes:['At fault?','Any injuries?','Any demerit points or suspension?','Any near-misses that did not get reported?'],
+ keys:['accident','crash','collision','fine','infringement','demerit','suspend','near miss']},
+
+{id:'bg-lastDrove', phase:'background', sec:'3', bind:'drivingHistory',
+ when:()=>['return','medical','conditions'].includes(S.purpose),
+ q:'When did {he} last drive, and what stopped {him}?',
+ why:'Time off the road drives skill decay independently of the medical condition. It also tells you who made the decision to stop.',
+ probes:['Whose decision was it to stop?','Has {he} driven at all since?','How does {he} get around now?','How does {he} feel about that?'],
+ keys:['last drove','stopped','gave up','haven\'t driven','since']},
+
+{id:'bg-goals', phase:'background', sec:'3', bind:'drivingHistory',
+ q:'What does {he} actually want to drive for — work, study, family, independence?',
+ why:'Goals set the driving-needs profile and make the recommendations concrete rather than generic.',
+ probes:['Where would {he} need to get to?','How is {he} travelling there now?','Who is {he} relying on?','Is there a deadline — a job, a course?'],
+ keys:['work','job','study','uni','TAFE','independen','family','shopping','appointment']},
+
+{id:'bg-needs', phase:'background', sec:'3', bind:{jump:'#needsRows'},
+ q:'Let us map the driving needs profile against those goals.',
+ why:'The needs table scopes what you are actually signing off on. Recommending unrestricted driving for someone who only needs local daytime trips over-reaches.',
+ probes:['Day, night, or both?','Metro, country, or both?','What traffic density?','Familiar routes only, or unfamiliar too?','Short trips or long?','Any commercial driving?'],
+ keys:['night','country','highway','freeway','local','distance','commercial']},
+
+{id:'bg-needNight', phase:'background', sec:'3', bind:{needs:'night'},
+ q:'Night driving — does {he} need it, and has {he} ever done it?',
+ why:'Night driving is routinely assumed and rarely assessed. If it has never been done, say so rather than implying it was cleared.',
+ probes:['Any night hours in the logbook?','Any glare or night-vision difficulty?','Is night driving needed for work or study?'],
+ keys:['night','dark','evening','glare','headlight']},
+
+{id:'bg-needTraffic', phase:'background', sec:'3', bind:{needs:'traffic'},
+ q:'What traffic density does {he} need to cope with, realistically?',
+ why:'Traffic density is the single biggest cognitive-load variable, and it maps directly onto the divided-attention findings.',
+ probes:['Peak hour, or off-peak only?','Multi-lane and arterial roads?','Building up gradually, or needed now?'],
+ keys:['traffic','busy','peak','multi-lane','arterial','highway']},
+
+{id:'bg-needCountry', phase:'background', sec:'3', bind:{needs:'country'},
+ q:'Any country or highway driving in the picture?',
+ why:'Higher speeds and longer sustained attention are a different demand from suburban driving and need to be named if they apply.',
+ probes:['How far, and how often?','Anyone else in the car?','Overtaking or unsealed roads?'],
+ keys:['country','highway','freeway','rural','open road','100']},
+
+{id:'bg-modsExisting', phase:'background', sec:'3', bind:'symptoms',
+ when:()=>S.purpose==='mods',
+ q:'What is the current vehicle setup, and what has already been tried?',
+ why:'A modification assessment starts from what exists. Re-prescribing something that has already failed wastes funding.',
+ probes:['Any aids currently fitted?','What has been trialled and abandoned, and why?','How does {he} transfer in and out?','Who funds the modification?'],
+ keys:['modification','hand control','spinner','pedal','transfer','wheelchair','hoist']},
+
+/* ---------------- PRE ON-ROAD ---------------- */
+{id:'pd-hearing', phase:'predrive', sec:'4', bind:'hearing',
+ q:'Any hearing difficulty? Are aids worn, and were they worn today?',
+ why:'Hearing affects awareness of sirens, horns and the vehicle itself, and it changes how you deliver on-road instructions.',
+ probes:['Aids worn while driving?','Any difficulty following you just now?','Does {he} rely on lip-reading?'],
+ keys:['hearing','deaf','aid','hard of hearing']},
+
+{id:'pd-vision', phase:'predrive', sec:'4', bind:'acuityBy',
+ q:'Vision — glasses or contacts for driving? When were the eyes last tested, and by whom?',
+ why:'You need to name who did the acuity testing. An out-of-date optometry check is itself a recommendation.',
+ probes:['Worn for driving specifically, or reading only?','Is the lens condition endorsed on the licence?','How long since the last test?'],
+ keys:['glasses','contact','optometr','ophthal','eye test','vision']},
+
+{id:'pd-visionSx', phase:'predrive', sec:'4', bind:'visionNotes',
+ q:'Any visual symptoms — blurring, double vision, floaters, night glare, or gaps in the field?',
+ why:'Symptoms the client reports sit alongside the measured acuity and often matter more functionally.',
+ probes:['Worse at night or in glare?','Any field loss on either side?','Anything new or changing?','Does it affect {him} while driving?'],
+ keys:['blurr','double','floater','glare','field','peripheral','see']},
+
+{id:'pd-acuity', phase:'predrive', sec:'4', bind:{jump:'[data-bind=vaUR]'},
+ q:'Record the acuities — uncorrected and corrected, each eye and binocular.',
+ why:'All six values are required before export. Enter NT or N/A explicitly rather than leaving a blank.',
+ probes:['Uncorrected right, left, binocular?','Corrected right, left, binocular?','Visual fields on confrontation?','Eye movements — pursuits and saccades?'],
+ keys:['6/','acuity','20/','vision test']},
+
+{id:'pd-austroads', phase:'predrive', sec:'4', bind:'austroadsVision',
+ q:'Does that meet the Austroads vision standard — and does {he} need specialist review?',
+ why:'This is a stated conclusion in the report, and it feeds the summary draft directly.',
+ probes:['Binocular acuity against the standard?','Any field defect?','Optometrist or ophthalmologist referral warranted?'],
+ keys:['austroads','standard','meets','referral','optometr']},
+
+{id:'pd-pain', phase:'predrive', sec:'4', bind:{phys:'pain'},
+ q:'Any pain, stiffness or weakness that could affect steering, pedals or head checks?',
+ why:'The physical rows default to "within normal limits" — you are looking for what to overwrite.',
+ probes:['Where, and how bad?','Worse after sitting for a while?','Does it change through the day?','Does it stop {him} doing anything in the car?'],
+ keys:['pain','sore','stiff','weak','ache','arthritis','back','neck','shoulder']},
+
+{id:'pd-neck', phase:'predrive', sec:'4', bind:{phys:'tnRom'},
+ q:'Check neck and trunk rotation — can {he} physically perform a shoulder check?',
+ why:'This separates "cannot" from "does not". Physical capacity here changes how you interpret the on-road head-check finding entirely.',
+ probes:['Full rotation both directions?','Any pain limiting it?','Can {he} reach the seatbelt and mirrors comfortably?'],
+ keys:['neck','rotation','turn','shoulder','look behind','range']},
+
+{id:'pd-footPivot', phase:'predrive', sec:'4', bind:{phys:'llCoord'},
+ q:'Run the foot pivot — accelerator to brake. How accurate and controlled is the transfer?',
+ why:'The clearest off-road predictor of pedal control, and easy to describe concretely in the report.',
+ probes:['Accurate placement, or hunting for the pedal?','Any delay?','Any difference left versus right?'],
+ keys:['pedal','foot','brake','accelerator','pivot','transfer']},
+
+{id:'pd-physOther', phase:'predrive', sec:'4', bind:{jump:'#physRows'},
+ q:'Anything else physically that was not within normal limits?',
+ why:'Overwrite only the rows that differ — the standard wording covers the rest, which keeps the report honest and short.',
+ probes:['Upper limb range, strength, coordination, sensation?','Lower limb the same?','Balance, mobility and transfers?','Hand dominance?'],
+ keys:['range','strength','coordination','sensation','balance','grip','weakness']},
+
+{id:'pd-physSummary', phase:'predrive', sec:'4', bind:'physSummary',
+ q:'Sum up the physical picture for driving in one or two sentences.',
+ why:'Required before export. Say whether modifications or restrictions are indicated, not just that everything was tested.',
+ probes:['Any restriction indicated?','Any modification indicated?','Anything to re-check on road?'],
+ keys:['physical','within functional limits','no restriction']},
+
+{id:'pd-genCog', phase:'predrive', sec:'4', bind:'genCog',
+ q:'How did {he} present through the screen — alertness, attention, communication, insight?',
+ why:'Required before export, and it is your own observation rather than a test score. Be specific about behaviour you saw.',
+ probes:['Did {he} need instructions repeated?','Concentration held across the session?','Questions relevant and appropriate?','Realistic about {his} own abilities?','Any fatigue as it went on?'],
+ keys:['alert','engaged','attention','concentrat','communicat','insight','cooperat','fatigue']},
+
+{id:'pd-tests', phase:'predrive', sec:'4', bind:{jump:'#testCards'},
+ q:'Enter the raw scores for every test you ran, and untick the ones you did not.',
+ why:'Each enabled test needs its first score before export, and interpretation against the driving thresholds is written automatically from them.',
+ probes:['Trails B time and errors?','Maze time and errors?','DriveSafe and DriveAware scores?','Intersection Diagram and Bells?'],
+ keys:['seconds','score','errors','trails','maze','drivesafe','driveaware','bells']},
+
+{id:'pd-testTrails', phase:'predrive', sec:'4', bind:{test:'trailsB'},
+ when:()=>S.tests.trailsB.on,
+ q:'Trails B — what does that result mean for this client specifically?',
+ why:'The threshold interpretation is automatic; what it means for this person\'s driving is not. That is what the comment is for.',
+ probes:['Which real driving situations does this bear on?','Does it match what {he} reported struggling with?','Is it a focus for supervised practice?'],
+ keys:['trails','divided attention','flexibility','180','seconds']},
+
+{id:'pd-testDSDA', phase:'predrive', sec:'4', bind:{test:'dsdaCat'},
+ when:()=>S.tests.dsdaCat.on,
+ q:'DriveSafe and DriveAware — what does the combined category actually mean here?',
+ why:'The category is frequently over-read. Say plainly what it does and does not establish for this client.',
+ probes:['Does this indicate readiness to drive, or readiness to learn?','Does it match {his} own account of {his} abilities?','Any caveat a reader could misinterpret?'],
+ keys:['drivesafe','driveaware','category','likely','cognitive']},
+
+{id:'pd-cogSummary', phase:'predrive', sec:'4', bind:'cogSummary',
+ q:'Sum up the cognitive and perceptual picture for driving.',
+ why:'Required before export. Name the main area of vulnerability rather than listing every score again.',
+ probes:['What is the single biggest cognitive consideration?','What was intact and worth stating?','What does it imply for supervision or practice?'],
+ keys:['cognitive','perceptual','attention','insight','executive','within functional limits']},
+
+/* ---------------- POST-DRIVE DEBRIEF ---------------- */
+{id:'db-duration', phase:'debrief', sec:'5', bind:'duration',
+ q:'How long were you on the road?',
+ why:'Required before export, and it frames how much the assessment can reasonably claim to have covered.',
+ probes:['Total minutes including the carpark familiarisation?','Long enough to see fatigue?'],
+ keys:['minutes','hour','duration','drove for']},
+
+{id:'db-weather', phase:'debrief', sec:'5', bind:'weather',
+ q:'What were the weather and road-surface conditions?',
+ why:'Conditions bound the finding. A dry, clear assessment says nothing about wet-weather driving.',
+ probes:['Any rain or wet surfaces?','Sun glare at any point?','Any conditions you could not sample?'],
+ keys:['weather','rain','dry','overcast','sunny','wet','glare']},
+
+{id:'db-route', phase:'debrief', sec:'5', bind:'route',
+ q:'Set the scene — route, area, speed zones and traffic.',
+ why:'Required before export. This is what makes the on-road findings interpretable to somebody who was not there.',
+ probes:['Where did you start, and how did it progress?','Which speed zones?','School zones, roundabouts, traffic lights, multi-lane?','Traffic density at that time of day?','Anything you deliberately avoided?'],
+ keys:['route','carpark','roundabout','traffic light','zone','km','suburb','road']},
+
+{id:'db-overall', phase:'debrief', sec:'5', bind:null,
+ q:'Before we go item by item — overall, how did the drive go?',
+ why:'Capture the gestalt first. Your first impression is usually the one the summary should lead with, and it is easy to lose once you start itemising.',
+ probes:['Did you feel safe throughout?','Anything that surprised you?','Was the performance consistent, or did it fall away?'],
+ keys:['overall','generally','went well','concerned','safe']},
+
+{id:'db-intervene', phase:'debrief', sec:'5', bind:null,
+ q:'Did you or the instructor have to intervene at any point — verbally, or with the dual controls?',
+ why:'An intervention is the single most significant on-road event there is. It has to be recorded and described, not smoothed over.',
+ probes:['Verbal prompt, or physical intervention?','How many times?','What would have happened without it?','Did {he} recognise it was needed?'],
+ keys:['intervene','dual control','grabbed','prompt','had to','stopped {him}']},
+
+{id:'db-physOnRoad', phase:'debrief', sec:'4', bind:'physSummary',
+ q:'Anything physical on road that the pre-drive screen did not predict?',
+ why:'The screen is static and the car is not. Fatigue, reach and sustained control show up differently once driving.',
+ probes:['Steering control across the full session?','Any fatigue in the later stages?','Reach to any control awkward?','Comfortable posture and seat position?'],
+ keys:['steering','tired','fatigue','reach','uncomfortable','posture']},
+
+{id:'db-cogOnRoad', phase:'debrief', sec:'4', bind:'cogSummary',
+ q:'Where did cognitive load actually break down on road?',
+ why:'This is where the off-road test scores either get confirmed or get contradicted. Say which, explicitly.',
+ probes:['What was {he} doing when performance dropped?','Did it match the Trails B or DriveAware finding?','Did {he} recognise it happening?','Did {he} recover?'],
+ keys:['load','multiple','at once','overwhelm','missed','forgot','distract']},
+
+/* ---------------- OUTCOME ---------------- */
+{id:'oc-outcome', phase:'outcome', sec:'6', bind:'outcome',
+ q:'Bottom line — what is the outcome?',
+ why:'This gates which recommendations are offered and rewrites the summary draft. Decide it before you write the justification, not after.',
+ probes:['Can you say it in one sentence?','Would the referrer be able to act on it?','Is it the outcome you expected going in?'],
+ keys:['outcome','fit to drive','not safe','continue','cease','conditions']},
+
+{id:'oc-why', phase:'outcome', sec:'6', bind:'summaryText',
+ q:'Justify it — what specifically drives that conclusion?',
+ why:'Required before export. The reset link redrafts from your entries; then make it say what you actually think.',
+ probes:['Which two or three findings carry the most weight?','Does the evidence you cite actually support the conclusion?','Is anything in the draft overstated?'],
+ keys:['because','therefore','indicates','demonstrated','concluded']},
+
+{id:'oc-against', phase:'outcome', sec:'6', bind:'summaryText',
+ q:'What is the strongest argument against your outcome — and why does it not change it?',
+ why:'If you cannot argue the other side, you have not tested your own conclusion. This is the question a supervisor exists to ask.',
+ probes:['What would a sceptical reviewer challenge?','Any finding that points the other way?','Is anything being explained away too easily?'],
+ keys:['however','although','on the other hand','despite']},
+
+{id:'oc-change', phase:'outcome', sec:'6', bind:'summaryText',
+ q:'What would need to change for you to revise this?',
+ why:'Naming the conditions for review turns a verdict into clinical advice, and it is what makes a reassessment recommendation meaningful.',
+ probes:['A specific skill developed?','A medical review or a specialist opinion?','A period of practice, and how much?','Is that in the recommendations?'],
+ keys:['review','reassess','if','once','after']},
+
+{id:'oc-risk', phase:'outcome', sec:'6', bind:null,
+ q:'If this conclusion is wrong, who is harmed and how? Are you comfortable defending it?',
+ why:'Say it out loud before the report goes out. If the answer is uneasy, that belongs in the limitations section rather than nowhere.',
+ probes:['Wrong in which direction — too permissive or too restrictive?','Have you stated the limits of what you assessed?','Does the report claim more than it tested?'],
+ keys:['risk','safe','harm','limitation','did not assess']},
+
+{id:'oc-recs', phase:'outcome', sec:'6', bind:{jump:'#recCards'},
+ q:'Which recommendations follow from that outcome?',
+ why:'At least one recommendation is required before export. The suggested set changes with the outcome you just chose.',
+ probes:['Does each recommendation follow from a stated finding?','Is anything missing that the referrer will need?','Is anything included out of habit?'],
+ keys:['recommend','suggest','should']},
+
+{id:'oc-lessons', phase:'outcome', sec:'6', bind:{rec:'lessons'},
+ when:()=>['learner-continue','lessons-reassess'].includes(S.outcome),
+ q:'How many hours of instruction, funded how, and targeting what?',
+ why:'The draft pulls the focus areas straight from the on-road items you flagged. Check the hours and the funder are real rather than default.',
+ probes:['Is ten hours actually right for this client?','Who funds it — NDIS, self, insurer?','Are the flagged focus areas the right ones?','Anything to add that was not assessed on road?'],
+ keys:['hours','lesson','NDIS','fund','instructor']},
+
+{id:'oc-conditions', phase:'outcome', sec:'6', bind:{rec:'fitCond'},
+ when:()=>S.outcome==='fit-cond',
+ q:'Which licence conditions are you recommending, and why each one?',
+ why:'Conditions restrict a person\'s licence. Each one needs a finding behind it, and the licensing authority has to be advised.',
+ probes:['Which conditions, precisely worded?','Which finding supports each?','Are any existing conditions no longer needed?','Has the authority been notified?'],
+ keys:['condition','restrict','automatic','daylight','radius','lenses']},
+
+{id:'oc-cease', phase:'outcome', sec:'6', bind:{rec:'cease'},
+ when:()=>S.outcome==='cease',
+ q:'Has the cease-driving recommendation been discussed with {him}, and what alternatives were offered?',
+ why:'This is the hardest conversation in the job. The report must show it happened and that alternatives were canvassed.',
+ probes:['How did {he} take it?','Was a support person present?','What transport alternatives were discussed?','Have the GP and the licensing authority been advised?','Is there any prospect of reassessment?'],
+ keys:['cease','stop driving','alternative','transport','taxi','public']},
+
+{id:'oc-mods', phase:'outcome', sec:'6', bind:{rec:'mods'},
+ when:()=>S.outcome==='mods',
+ q:'Which modifications, prescribed by whom, and with what training?',
+ why:'The draft leaves a placeholder deliberately — a modification recommendation is worthless without the specifics.',
+ probes:['Exactly which modifications?','Who prescribes and fits them?','How much training in the modified vehicle?','Who funds it?','Does the licence need a modified-vehicle condition?'],
+ keys:['modification','hand control','fit','prescri','training']},
+
+{id:'oc-medReview', phase:'outcome', sec:'6', bind:{rec:'medReview'},
+ q:'What ongoing medical review does {he} need, and from whom?',
+ why:'Fitness to drive is a moving target. Name who holds the ongoing responsibility rather than leaving it implied.',
+ probes:['GP, specialist, or both?','At what interval?','What should trigger an earlier review?'],
+ keys:['GP','review','specialist','monitor','ongoing']},
+
+{id:'oc-distribution', phase:'outcome', sec:'8', bind:'distribution',
+ q:'Who receives this report?',
+ why:'Required before export, and it has to match what {he} consented to at the start of the session.',
+ probes:['Referrer, client, GP?','Anyone the client has asked you not to send it to?','Does the licensing authority need a copy?','Does that match the consent you took?'],
+ keys:['send','copy','distribut','referrer','GP']},
+
+]};
+
 /* ---------- default state ---------- */
 function freshState(){
   const s = {
+    reportType:'otDriving',
+    transcript:'', transcriptSource:'Heidi',
+    interview:{ lastId:null, phase:'intake', skipped:{}, seen:{} },
     title:'Mr', firstName:'', prefName:'', surname:'', pronouns:'he', dob:'', ndis:'', address:'',
     licNo:'', licSighted:'Yes', licExpiry:'', licType:"Learner's permit (Class C)", licCond:[], licCondOther:'',
     diagnoses:'', meds:[{name:'',dose:'',purpose:''}],
@@ -1067,9 +1607,6 @@ function bindInputs(){
 }
 function syncForm(){
   document.querySelectorAll('[data-bind]').forEach(el=>{ el.value = S[el.dataset.bind]??''; });
-  document.querySelectorAll('[data-bindbool]').forEach(el=>{
-    el.addEventListener('change',()=>{ S[el.dataset.bindbool]=el.checked; update(); });
-  });
   document.querySelectorAll('[data-bindchk]').forEach(el=>{ el.checked = (S[el.dataset.bindchk]||[]).includes(el.value); });
   document.querySelectorAll('[data-bindbool]').forEach(el=>{ el.checked = !!S[el.dataset.bindbool]; });
   buildMedRows(); buildReviewed(); buildNeeds(); buildPhys(); buildTests(); buildChecklist(); buildRecs();
@@ -1255,6 +1792,407 @@ function jumpTo(i){
 function guard(fn){
   if(missingItems().length){ showValidation(); return; }
   fn();
+}
+
+/* ================================================================
+   INTERVIEW ENGINE
+   Drives the question script one question at a time and writes each
+   answer straight into the report field it feeds. Entirely local —
+   no network, no audio capture, no inference.
+================================================================ */
+let ivList=[], ivIdx=0, ivPhaseFilter=null, ivTransOpen=false, ivKeyHandler=null;
+
+function ivState(){
+  const d={lastId:null, phase:'intake', skipped:{}, seen:{}};
+  if(!S.interview || typeof S.interview!=='object') S.interview=d;
+  else { if(!S.interview.skipped) S.interview.skipped={}; if(!S.interview.seen) S.interview.seen={}; }
+  return S.interview;
+}
+function ivBank(){ return INTERVIEW_SETS[S.reportType] || INTERVIEW_SETS.otDriving; }
+function ivPhaseLabel(id){ const p=IV_PHASES.find(x=>x.id===id); return p? p.label : id; }
+function rxEsc(s){ return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+
+/* Search terms for the transcript pane. A key like "blind-spot head checks"
+   rarely appears verbatim in speech, so match the whole phrase AND its
+   individual significant words. */
+const IV_STOP=new Set(['with','when','from','that','this','they','their','have','been','were','and','the','for','into','over','your','only','also','than','then','while','which','what','without','appropriate','ability','able','other','using','used','during','including','consistent','maintain','vehicle']);
+function ivTerms(q, search){
+  if(search && String(search).trim()) return [String(search).trim()];
+  const out=new Set();
+  ((q&&q.keys)||[]).forEach(k=>{
+    const t=fill(String(k)).trim(); if(!t) return;
+    out.add(t);
+    if(/[\s\-\/]/.test(t)) t.split(/[\s\-\/]+/).forEach(w=>{
+      w=w.replace(/[^\w']/g,'');
+      if(w.length>3 && !IV_STOP.has(w.toLowerCase())) out.add(w);
+    });
+  });
+  return [...out];
+}
+
+/* The live question list: the static bank filtered by each question's
+   `when`, with the on-road debrief expanded from CHECKLIST — one open
+   question per group, then a follow-up for every item flagged as an issue. */
+function ivQuestions(phase){
+  let out = ivBank().filter(q=>!q.when || q.when());
+  const gen=[];
+  CHECKLIST.forEach((g,gi)=>{
+    gen.push({id:'db-g'+gi, phase:'debrief', sec:'5', bind:{jump:'#checklist'}, generated:true,
+      q:g.g+' — anything in that group that was not as you would want it?',
+      why:'Every item defaults to safe and appropriate, so you are only looking for the exceptions. Mark them now and you will be asked to describe each one next.',
+      probes:g.items.map(it=>it.text),
+      keys:g.items.map(it=>it.short)});
+    g.items.forEach(it=>{
+      if(S.checklist[it.id] && S.checklist[it.id].st==='issue'){
+        gen.push({id:'db-i-'+it.id, phase:'debrief', sec:'5', bind:{checklist:it.id}, generated:true,
+          q:'You flagged "'+it.short+'". What exactly happened, how often, and how did {he} respond?',
+          why:'A flagged item with no comment blocks the export — and this comment is what prints in the report\'s "issues observed" column.',
+          probes:['How many times did it happen?','In what situation each time?','Did {he} notice and self-correct?','Is this typical for {his} level of experience?','What would address it?'],
+          keys:[it.short]});
+      }
+    });
+  });
+  const anchor = out.findIndex(q=>q.id==='db-overall');
+  if(anchor>=0) out = out.slice(0,anchor+1).concat(gen, out.slice(anchor+1));
+  else out = out.concat(gen);
+  return phase? out.filter(q=>q.phase===phase) : out;
+}
+
+function ivAnswered(q){
+  const b=q.bind, iv=ivState();
+  const nonEmpty=v=>!!String(v??'').trim();
+  if(!b) return !!iv.seen[q.id];
+  if(typeof b==='string') return nonEmpty(S[b]);
+  if(b.bool) return !!S[b.bool];
+  if(b.checklist) return nonEmpty((S.checklist[b.checklist]||{}).note);
+  if(b.needs) return !!iv.seen[q.id];
+  if(b.phys) return nonEmpty(S.phys[b.phys]);
+  if(b.test) return !!iv.seen[q.id];
+  if(b.rec){ const r=S.recs[b.rec]; return !!(r && r.on && nonEmpty(r.text)); }
+  if(b.jump) return !!iv.seen[q.id];
+  return false;
+}
+
+/* ---------- open / close ---------- */
+function openInterview(phase){
+  ivPhaseFilter = phase || null;
+  ivList = ivQuestions(ivPhaseFilter);
+  if(!ivList.length){ alert('No interview questions apply to this section yet.'); return; }
+  const iv=ivState();
+  const resume = ivList.findIndex(q=>q.id===iv.lastId);
+  ivIdx = (!phase && resume>=0) ? resume : 0;
+  document.getElementById('ivModal').classList.add('open');
+  ivKeyHandler = e=>{
+    if(e.key==='Escape'){ closeInterview(); return; }
+    const t=e.target.tagName;
+    if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT') return;
+    if(e.key==='ArrowRight'){ e.preventDefault(); ivNext(); }
+    if(e.key==='ArrowLeft'){ e.preventDefault(); ivPrev(); }
+  };
+  document.addEventListener('keydown', ivKeyHandler);
+  ivRender();
+}
+function closeInterview(){
+  document.getElementById('ivModal').classList.remove('open');
+  if(ivKeyHandler){ document.removeEventListener('keydown', ivKeyHandler); ivKeyHandler=null; }
+  syncForm(); render(); autosave();
+}
+function ivGoPhase(p){
+  ivPhaseFilter = p || null;
+  ivList = ivQuestions(ivPhaseFilter);
+  ivIdx = 0;
+  ivRender();
+}
+function ivGo(i){ if(i>=0 && i<ivList.length){ ivIdx=i; ivRender(); } }
+function ivNext(){ const q=ivList[ivIdx]; if(q) ivState().seen[q.id]=true; if(ivIdx<ivList.length){ ivIdx++; ivRender(); } }
+function ivPrev(){ if(ivIdx>0){ ivIdx--; ivRender(); } }
+function ivSkip(){ const q=ivList[ivIdx]; if(q){ ivState().skipped[q.id]=true; } ivNext(); }
+function ivToggleTranscript(){
+  ivTransOpen=!ivTransOpen;
+  document.getElementById('ivTrans').classList.toggle('open', ivTransOpen);
+  if(ivTransOpen) ivRenderTranscript(document.getElementById('ivTSearch').value);
+}
+
+/* ---------- render ---------- */
+function ivRender(){
+  const iv=ivState(), q=ivList[ivIdx];
+  const jump=document.getElementById('ivPhaseJump');
+  if(jump.options.length!==IV_PHASES.length+1){
+    jump.innerHTML = '<option value="">All phases</option>'+IV_PHASES.map(p=>`<option value="${p.id}">${p.label}</option>`).join('');
+  }
+  jump.value = ivPhaseFilter || '';
+  document.getElementById('ivPurpose').textContent =
+    ({learner:'Learner driver',medical:'Fitness to drive',return:'Return to driving',conditions:'Licence conditions',mods:'Vehicle modifications'})[S.purpose]||S.purpose;
+
+  document.getElementById('ivRail').innerHTML = ivList.map((x,i)=>{
+    const cls = i===ivIdx? 'cur' : (ivAnswered(x)? 'done' : (iv.skipped[x.id]? 'skip':''));
+    return `<div class="ivdot ${cls}" title="${esc(fill(x.q)).replace(/"/g,'&quot;')}" onclick="ivGo(${i})"></div>`;
+  }).join('');
+
+  const main=document.getElementById('ivMain');
+  if(!q){
+    const done = ivList.filter(ivAnswered).length, miss = missingItems().length;
+    document.getElementById('ivPhaseName').textContent = 'Interview complete';
+    document.getElementById('ivCount').textContent = '';
+    main.innerHTML = `<div class="ivdone">
+      <h3>End of the ${ivPhaseFilter? ivPhaseLabel(ivPhaseFilter).toLowerCase()+' questions' : 'interview script'}</h3>
+      <p>${done} of ${ivList.length} questions have an answer recorded against a report field.</p>
+      <p>${miss? '<b>'+miss+' item'+(miss>1?'s':'')+'</b> still outstanding before this report can be exported.' : '<b>Everything required is filled in.</b> You can export or print.'}</p>
+      <p style="margin-top:16px">
+        <button class="btn" onclick="ivGo(0)">↺ Start again</button>
+        <button class="btn" onclick="closeInterview();showValidation()">Show outstanding items</button>
+        <button class="btn primary" onclick="closeInterview()">Back to the form</button></p>
+    </div>`;
+    return;
+  }
+
+  iv.lastId = q.id; iv.phase = q.phase;
+  document.getElementById('ivPhaseName').textContent = ivPhaseLabel(q.phase);
+  document.getElementById('ivCount').textContent = `Question ${ivIdx+1} of ${ivList.length}`;
+
+  const probes = (q.probes||[]).map(p=>`<li>${esc(fill(p))}</li>`).join('');
+  main.innerHTML =
+    `<div class="ivq">${esc(fill(q.q))}</div>`
+    + (q.why? `<div class="ivwhy">${esc(fill(q.why))}</div>`:'')
+    + (probes? `<ul class="ivprobes">${probes}</ul>`:'')
+    + ivFeedsChip(q)
+    + ivAnswerBox(q);
+  ivWire(q);
+  if(ivTransOpen) ivRenderTranscript(document.getElementById('ivTSearch').value);
+}
+
+function ivFieldLabel(sel){
+  const src=document.querySelector(sel); if(!src) return '';
+  const lab=src.closest('.f') && src.closest('.f').querySelector('label');
+  if(!lab) return '';
+  const c=lab.cloneNode(true); c.querySelectorAll('.resetlink').forEach(x=>x.remove());
+  return c.textContent.trim();
+}
+function ivFeedsChip(q){
+  const b=q.bind;
+  if(!b) return `<div class="ivfeeds" style="cursor:default;color:var(--faint);border-color:var(--line);background:#f4f3f0">§${q.sec} · verbal only — nothing to record here</div>`;
+  let sel='', name='';
+  if(typeof b==='string'){ sel='[data-bind='+b+']'; name=ivFieldLabel(sel)||b; }
+  else if(b.bool){ sel='[data-bindbool='+b.bool+']'; name='Consent confirmation'; }
+  else if(b.jump){ sel=b.jump; name=ivFieldLabel(sel)||'this part of the form'; }
+  else if(b.checklist){ sel='#checklist'; const it=ivChecklistItem(b.checklist); name='On-road · '+(it? it.short:b.checklist); }
+  else if(b.needs){ sel='#needsRows'; const r=NEEDS_ROWS.find(x=>x.id===b.needs); name='Driving needs · '+(r? r.label:b.needs); }
+  else if(b.phys){ sel='#physRows'; const r=PHYS_ROWS.find(x=>x.id===b.phys); name='Physical · '+(r? r.label:b.phys); }
+  else if(b.test){ sel='#card_'+b.test; name=(TEST_META[b.test]||{}).name||b.test; }
+  else if(b.rec){ sel='#recCards'; const r=REC_DEFS.find(x=>x.id===b.rec); name='Recommendation · '+(r? r.label:b.rec); }
+  return `<div class="ivfeeds" onclick="ivJump('${sel.replace(/'/g,"\\'")}')">§${q.sec} · ${esc(name)} ↗</div>`;
+}
+function ivJump(sel){
+  closeInterview();
+  const el=document.querySelector(sel); if(!el) return;
+  const det=el.closest('details'); if(det) det.open=true;
+  el.scrollIntoView({behavior:'smooth',block:'center'});
+  el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'),2500);
+  if(el.focus) try{ el.focus({preventScroll:true}); }catch(e){}
+}
+function ivChecklistItem(id){
+  let found=null; CHECKLIST.forEach(g=>g.items.forEach(it=>{ if(it.id===id) found=it; })); return found;
+}
+
+const IV_TOKHINT='<div class="note">Tokens work here: <code>{name}</code> <code>{he}</code> <code>{his}</code> <code>{was}</code> — they adapt to the client automatically.</div>';
+function ivAnswerBox(q){
+  const b=q.bind;
+  if(!b) return `<div class="ivans"><label>Nothing to record</label><div class="note">Ask this one aloud — your recorder is capturing the answer. It shapes your clinical reasoning rather than a single field.</div></div>`;
+  if(b.jump){
+    return `<div class="ivans"><label>Where this goes</label>
+      <div class="note">This one fills in several fields at once, so record it in the form itself.</div>
+      <p style="margin:9px 0 0"><button class="btn primary" onclick="ivJump('${b.jump.replace(/'/g,"\\'")}')">Open it in the form ↗</button></p></div>`;
+  }
+  if(b.bool){
+    return `<div class="ivans"><label>Answer</label>
+      <label class="chk" style="font-size:14px"><input type="checkbox" id="ivC1"> Confirmed — informed consent was obtained</label></div>`;
+  }
+  if(b.checklist){
+    const it=ivChecklistItem(b.checklist);
+    return `<div class="ivans"><label>Status</label>
+      <select id="ivC1"><option value="safe">Safe &amp; appropriate</option><option value="issue">Issue observed</option><option value="na">Not assessed</option></select>
+      <div class="sub"><label>What happened</label><textarea id="ivC2" placeholder="Describe the behaviour, how often, the situation, and how they responded."></textarea></div>
+      <div class="note">${it? esc(it.text):''}</div>${IV_TOKHINT}</div>`;
+  }
+  if(b.needs){
+    const r=NEEDS_ROWS.find(x=>x.id===b.needs)||{opts:[]};
+    return `<div class="ivans"><label>${esc(r.label||b.needs)}</label>
+      <select id="ivC1">${r.opts.map(o=>`<option>${esc(o)}</option>`).join('')}</select>
+      <div class="sub"><label>Detail (optional)</label><input type="text" id="ivC2"></div></div>`;
+  }
+  if(b.phys){
+    const r=PHYS_ROWS.find(x=>x.id===b.phys)||{};
+    return `<div class="ivans"><label>${esc(r.label||b.phys)}${r.group? ' · '+esc(r.group):''}</label>
+      <textarea id="ivC1"></textarea>
+      <div class="note">Pre-filled with the standard "within normal limits" wording — overwrite it only if what you found was different.
+      <span class="resetlink" onclick="ivResetPhys('${b.phys}')">restore standard wording</span></div>${IV_TOKHINT}</div>`;
+  }
+  if(b.test){
+    const m=TEST_META[b.test]||{}, r=m.interp? m.interp():null;
+    return `<div class="ivans"><label>${esc(m.name||b.test)} — clinical comment</label>
+      <textarea id="ivC1" placeholder="What this result means for this client's driving."></textarea>
+      ${r? `<div class="note"><b>Auto-interpretation:</b> ${esc(fill(r.txt||''))}</div>`:''}${IV_TOKHINT}</div>`;
+  }
+  if(b.rec){
+    const r=REC_DEFS.find(x=>x.id===b.rec)||{};
+    return `<div class="ivans">
+      <label class="chk" style="font-size:14px;text-transform:none;letter-spacing:0;font-family:'Barlow',sans-serif;font-weight:600"><input type="checkbox" id="ivC1"> Include: ${esc(r.label||b.rec)}</label>
+      <div class="sub"><label>Wording</label><textarea id="ivC2"></textarea></div>
+      <div class="note"><span class="resetlink" onclick="ivDraftRec('${b.rec}')">draft the standard wording from your entries</span></div>${IV_TOKHINT}</div>`;
+  }
+  /* plain state key — mirror whatever control the form already uses */
+  const src=document.querySelector('[data-bind='+b+']');
+  const label=ivFieldLabel('[data-bind='+b+']')||b;
+  let ctl;
+  if(src && src.tagName==='SELECT') ctl=`<select id="ivC1">${src.innerHTML}</select>`;
+  else if(src && src.tagName==='TEXTAREA') ctl=`<textarea id="ivC1" placeholder="${src.getAttribute('placeholder')? esc(src.getAttribute('placeholder')).replace(/"/g,'&quot;'):''}"></textarea>`;
+  else ctl=`<input type="${src && src.type==='number'?'number':'text'}" id="ivC1">`;
+  const canReset = typeof AUTOTEXT!=='undefined' && AUTOTEXT[b];
+  return `<div class="ivans"><label>${esc(label)}</label>${ctl}
+    ${canReset? `<div class="note"><span class="resetlink" onclick="ivResetField('${b}')">reset to the standard wording</span></div>`:''}
+    ${(src&&src.tagName==='TEXTAREA')? IV_TOKHINT:''}</div>`;
+}
+
+function ivWire(q){
+  const b=q.bind; if(!b || b.jump) return;
+  const c1=document.getElementById('ivC1'), c2=document.getElementById('ivC2');
+  const touch=()=>{ ivState().seen[q.id]=true; update(); ivRefreshRail(); };
+  if(b.bool){ c1.checked=!!S[b.bool]; c1.addEventListener('change',()=>{ S[b.bool]=c1.checked; touch(); }); return; }
+  if(b.checklist){
+    const c=S.checklist[b.checklist];
+    c1.value=c.st; c2.value=c.note;
+    c1.addEventListener('change',()=>{ c.st=c1.value; touch(); });
+    c2.addEventListener('input',()=>{ c.note=c2.value; touch(); });
+    return;
+  }
+  if(b.needs){
+    const n=S.needs[b.needs];
+    c1.value=n.val; c2.value=n.note;
+    c1.addEventListener('change',()=>{ n.val=c1.value; touch(); });
+    c2.addEventListener('input',()=>{ n.note=c2.value; touch(); });
+    return;
+  }
+  if(b.phys){ c1.value=S.phys[b.phys]||''; c1.addEventListener('input',()=>{ S.phys[b.phys]=c1.value; touch(); }); return; }
+  if(b.test){ c1.value=(S.tests[b.test]||{}).note||''; c1.addEventListener('input',()=>{ S.tests[b.test].note=c1.value; touch(); }); return; }
+  if(b.rec){
+    if(!S.recs[b.rec]) S.recs[b.rec]={on:false,text:''};
+    const r=S.recs[b.rec];
+    c1.checked=!!r.on; c2.value=r.text||'';
+    c1.addEventListener('change',()=>{ r.on=c1.checked; if(r.on && !r.text.trim()) ivDraftRec(b.rec); else touch(); });
+    c2.addEventListener('input',()=>{ r.text=c2.value; touch(); });
+    return;
+  }
+  c1.value = S[b]??'';
+  const ev = c1.tagName==='SELECT' ? 'change':'input';
+  c1.addEventListener(ev,()=>{
+    S[b]=c1.value; touch();
+    /* purpose and outcome re-shape which questions apply */
+    if(b==='purpose'||b==='outcome'){ const id=q.id; ivList=ivQuestions(ivPhaseFilter); const i=ivList.findIndex(x=>x.id===id); if(i>=0) ivIdx=i; ivRefreshRail(); }
+  });
+}
+function ivRefreshRail(){
+  const iv=ivState();
+  document.querySelectorAll('#ivRail .ivdot').forEach((d,i)=>{
+    const x=ivList[i]; if(!x) return;
+    d.className='ivdot '+(i===ivIdx? 'cur' : (ivAnswered(x)? 'done' : (iv.skipped[x.id]? 'skip':'')));
+  });
+}
+function ivResetField(k){ S[k]=AUTOTEXT[k](); const c=document.getElementById('ivC1'); if(c) c.value=S[k]; update(); ivRefreshRail(); }
+function ivResetPhys(id){ const r=PHYS_ROWS.find(x=>x.id===id); if(!r) return; S.phys[id]=r.def; const c=document.getElementById('ivC1'); if(c) c.value=r.def; update(); ivRefreshRail(); }
+function ivDraftRec(id){
+  const d=REC_DEFS.find(x=>x.id===id); if(!d) return;
+  if(!S.recs[id]) S.recs[id]={on:true,text:''};
+  S.recs[id].on=true; S.recs[id].text=d.def();
+  const c1=document.getElementById('ivC1'), c2=document.getElementById('ivC2');
+  if(c1) c1.checked=true; if(c2) c2.value=S.recs[id].text;
+  update(); ivRefreshRail();
+}
+
+/* ---------- transcript pane ---------- */
+function ivRenderTranscript(search){
+  const body=document.getElementById('ivTBody');
+  document.getElementById('ivTSrc').textContent = S.transcriptSource || 'Transcript';
+  const src=String(S.transcript||'');
+  if(!src.trim()){
+    body.innerHTML='<div class="empty">No transcript yet. Once Google Meet or Heidi gives you the transcript or note, paste it into section 0 of the form and it will appear here beside every question, with the relevant words highlighted.</div>';
+    return;
+  }
+  const terms = ivTerms(ivList[ivIdx], search);
+  let html=esc(src);
+  if(terms.length){
+    const rx=new RegExp('('+terms.map(rxEsc).join('|')+')','gi');
+    let first=true;
+    html=html.replace(rx,m=>{ const c=first?' class="hit1"':''; first=false; return '<mark'+c+'>'+m+'</mark>'; });
+  }
+  body.innerHTML=html;
+  const hit=body.querySelector('mark.hit1');
+  if(hit) hit.scrollIntoView({block:'center'});
+  else body.scrollTop=0;
+}
+
+/* ---------- script export ---------- */
+function ivScriptText(){
+  const all=ivQuestions(null);
+  const who=fullNm();
+  let out=`OT DRIVING ASSESSMENT — INTERVIEW SCRIPT\n${who!=='the client'? who+'\n':''}Purpose: ${(document.querySelector('[data-bind=purpose] option[value="'+S.purpose+'"]')||{textContent:S.purpose}).textContent}\n`;
+  out+=`Recording and transcription: ${S.transcriptSource||'external tool'}\n\n`;
+  IV_PHASES.forEach(p=>{
+    const qs=all.filter(q=>q.phase===p.id);
+    if(!qs.length) return;
+    out+=`\n${'='.repeat(60)}\n${p.label.toUpperCase()}\n${p.blurb}\n${'='.repeat(60)}\n`;
+    qs.forEach((q,i)=>{
+      out+=`\n${i+1}. ${fill(q.q)}\n`;
+      (q.probes||[]).forEach(pr=>{ out+=`     · ${fill(pr)}\n`; });
+    });
+  });
+  return out;
+}
+function ivCopyScript(){
+  const txt=ivScriptText();
+  const done=()=>{ const b=event&&event.target; if(b&&b.tagName==='BUTTON'){ const o=b.textContent; b.textContent='Copied ✓'; setTimeout(()=>b.textContent=o,1600); } };
+  if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(txt).then(done, ()=>ivCopyFallback(txt)); }
+  else ivCopyFallback(txt);
+}
+function ivCopyFallback(txt){
+  const ta=document.createElement('textarea');
+  ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); }catch(e){ alert('Could not copy automatically — the script is selected, press Ctrl/Cmd+C.'); }
+  document.body.removeChild(ta);
+}
+function ivPrintScript(){
+  const all=ivQuestions(null);
+  const purposeTxt=(document.querySelector('[data-bind=purpose] option[value="'+S.purpose+'"]')||{textContent:S.purpose}).textContent;
+  let body='';
+  IV_PHASES.forEach(p=>{
+    const qs=all.filter(q=>q.phase===p.id);
+    if(!qs.length) return;
+    body+=`<h2>${esc(p.label)}</h2><p class="blurb">${esc(p.blurb)}</p><ol>`;
+    qs.forEach(q=>{
+      body+=`<li><div class="q">${esc(fill(q.q))}</div>`;
+      if(q.probes&&q.probes.length) body+=`<ul>${q.probes.map(pr=>`<li>${esc(fill(pr))}</li>`).join('')}</ul>`;
+      body+=`</li>`;
+    });
+    body+='</ol>';
+  });
+  const w=window.open('','_blank');
+  if(!w){ alert('Your browser blocked the print window. Allow pop-ups for this site, or use Copy script instead.'); return; }
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Interview script</title><style>
+    body{font-family:Georgia,'Times New Roman',serif;max-width:760px;margin:26px auto;padding:0 22px;color:#1c1c1c;line-height:1.5}
+    h1{font-size:19pt;margin:0 0 2px} .meta{color:#666;font-size:10pt;margin:0 0 22px}
+    h2{font-size:13pt;text-transform:uppercase;letter-spacing:.08em;border-bottom:2px solid #2ca5b8;padding-bottom:3px;margin:26px 0 2px;page-break-after:avoid}
+    .blurb{color:#666;font-size:9.5pt;font-style:italic;margin:0 0 10px}
+    ol{padding-left:22px} ol>li{margin-bottom:13px;page-break-inside:avoid}
+    .q{font-size:11.5pt;font-weight:bold}
+    ul{margin:4px 0 0;padding-left:18px;color:#555;font-size:10pt} ul li{margin-bottom:2px}
+    @media print{body{margin:0}}
+  </style></head><body>
+    <h1>Interview script</h1>
+    <p class="meta">${esc(fullNm())} · ${esc(purposeTxt)} · ${all.length} questions · recorded via ${esc(S.transcriptSource||'external tool')}</p>
+    ${body}</body></html>`);
+  w.document.close();
+  w.focus();
+  setTimeout(()=>w.print(),260);
 }
 
 /* init */
