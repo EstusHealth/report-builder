@@ -76,6 +76,17 @@ All 50 standards from the *Australian Competency Standards for Occupational Ther
 
 Fields exist for the competencies that previously had nowhere to be recorded: suitability screening, prior assessments, communication screen, MDI briefing, safety management during the drive, off-road and on-road feedback to the client, licensing/insurance information given, licence conditions considered, and report turnaround.
 
+## On a tablet
+
+The same page adapts — there is no separate mobile build to keep in sync. On any touch device up to desktop width (an iPad in either orientation, but not a 1280px laptop), the layout switches to **data entry first**:
+
+- The draft report is **hidden by default** and the form takes the full width. Tap **Report** in the toolbar to read it full-screen, and **✕ Close report** to get back. The choice is remembered, so it also works as a focus mode on desktop.
+- While the report is hidden it is not re-rendered on every keystroke — it is marked stale and rebuilt when you open it, print or export, which keeps typing responsive.
+- Controls are sized for fingers: 46px inputs, 42px buttons, 22px checkboxes, full-width rating selects on the on-road checklist. Inputs use 16px text so iOS does not zoom on focus.
+- The field notes panel becomes a full-height sheet with a large capture box — this is the view you want in the car.
+- Secondary actions (load example, new, save/open draft, export, print) collapse into a **⋯** menu so the toolbar stays one row.
+- Safe-area insets are respected on notched devices, and the page can be added to the home screen to run without browser chrome.
+
 ## Making it your own
 
 The app ships configured with the Estus Health letterhead and colours, so it works out of the box. Rebranding is entirely optional and takes a couple of minutes — no code required.

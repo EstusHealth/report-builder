@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="OT Driver Report">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#171410">
 <title>OT Driving Assessment Report Builder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow+Semi+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
@@ -229,11 +234,114 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 .vitem:hover{background:var(--cream)}
 .vitem .sec{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10px;letter-spacing:.06em;color:#fff;background:var(--plum);border-radius:8px;padding:1px 7px;flex-shrink:0}
 .flash{outline:2px solid var(--plum)!important;outline-offset:1px;transition:outline .2s}
+/* ============ PREVIEW TOGGLE (all widths) ============ */
+#tbActions{display:flex;gap:8px;align-items:center}
+#tbMoreBtn{display:none;font-size:15px;line-height:1;padding:6px 12px}
+#previewClose{display:none;position:sticky;top:0;z-index:5;width:100%;border:none;background:var(--ink);color:#fff;
+  font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:13px;letter-spacing:.06em;padding:13px;cursor:pointer}
+body.preview-hidden #previewPane{display:none}
+body.preview-hidden #formPane{width:100%;border-right:none}
+
+/* ============ TABLET LAYOUT ============
+   Single column with the report hidden behind a toggle. Applies to narrow
+   windows, and to any touch device up to desktop width — an iPad in
+   landscape is still a tablet, but a 1280px laptop is not. */
+@media (max-width:1100px), (pointer:coarse) and (max-width:1400px){
+  #app{height:100vh;height:100dvh}
+  #formPane{width:100%;min-width:0;border-right:none;-webkit-overflow-scrolling:touch}
+  #previewPane{position:fixed;inset:0;z-index:150;padding:0;background:#dcdad5}
+  #previewPane #reportRoot{padding:10px 8px 60px;overflow-x:auto}
+  #previewClose{display:block}
+  .page{width:auto;max-width:100%;min-height:0;padding:9mm 7mm 12mm;box-shadow:0 4px 14px -8px rgba(0,0,0,.4);margin:0 auto 14px}
+
+  /* toolbar collapses to an overflow menu */
+  #toolbar{padding:8px 10px;gap:6px;padding-top:max(8px,env(safe-area-inset-top))}
+  #toolbar .brand{font-size:13px}
+  #toolbar .brand small{font-size:8px;letter-spacing:.2em}
+  #tbMoreBtn{display:inline-block}
+  #tbActions{display:none;position:absolute;top:100%;right:6px;background:var(--ink);padding:10px;gap:8px;
+    flex-direction:column;align-items:stretch;min-width:210px;border-radius:0 0 10px 10px;box-shadow:0 14px 34px -12px rgba(0,0,0,.65)}
+  body.more-open #tbActions{display:flex}
+  #tbActions .btn{width:100%;text-align:left;padding:12px 14px;font-size:13.5px}
+
+  /* stop fields sprawling the full width of a landscape tablet */
+  .secbody{max-width:900px}
+  details.sec>summary .n{max-width:40%;text-align:right}
+
+  /* field notes become a full-height sheet */
+  #noteDock{width:min(100%,620px);top:0;z-index:200;border-left:none}
+  /* clear the floating notes button */
+  #formPane>div:last-child{padding-bottom:110px}
+}
+
+/* ============ TOUCH SIZING ============
+   Any coarse pointer, at any width, plus narrow windows. */
+@media (max-width:1100px), (pointer:coarse){
+  body{font-size:15px}
+  #noteBadge,#checkBadge{padding:8px 11px;font-size:12px}
+  .btn{padding:11px 14px;font-size:13px;min-height:42px}
+  details.sec>summary{padding:17px 16px;font-size:14px}
+  .secbody{padding:6px 16px 24px}
+  .f label{font-size:11.5px}
+  .f input[type=text],.f input[type=date],.f input[type=number],.f select,.f textarea,
+  .clrow textarea,.clrow select,.reccard textarea,.reccard .params input,.reccard .params select,
+  .medrow input,.mgrid select,.mgrid input.mnote,.eqrow select,.eqrow input.eqwhy,
+  .adminbox select,.adminbox input,#noteDock .ndcap textarea,#noteDock .ndcap select{
+    font-size:16px;padding:11px 12px;min-height:46px}          /* 16px stops iOS zoom-on-focus */
+  .f textarea,.clrow textarea,.reccard textarea{min-height:84px;line-height:1.5}
+  .chk{padding:9px 0;font-size:15px;min-height:44px}
+  .chk input{width:22px;height:22px}
+  .xbtn{width:40px;height:40px;font-size:17px}
+  .addbtn,.linkbtn{padding:10px 16px;font-size:13px;min-height:42px}
+  .clrow,.testcard,.reccard,.mgrid{padding:12px 13px;margin-bottom:11px}
+  .clrow .cltop{flex-direction:column;align-items:stretch;gap:9px}
+  .clrow .cltxt{font-size:14px}
+  .notechip{font-size:12px;padding:6px 10px}
+  .eqrow{padding:11px 2px;gap:10px;flex-wrap:wrap}
+  .eqrow .eqname{font-size:14px;min-width:190px}
+  .eqrow input.eqwhy{flex:1 0 100%}
+  .mgrid .mtop{gap:10px}
+  .mgrid .mname{font-size:14px;flex:1 0 100%}
+  .cprow{padding:10px 11px;font-size:13px}
+  .cst{padding:4px 10px}
+  .vitem{padding:12px 10px;font-size:14.5px}
+  .vitem .ack{width:22px;height:22px}
+  .swatch input[type=color]{width:56px;height:42px}
+  .refcard,.hint{font-size:13px}
+  .resetlink,.noteslink{font-size:12px;padding:3px 0;display:inline-block}
+
+  #noteDock header{padding:15px 16px;font-size:14px;padding-top:max(15px,env(safe-area-inset-top))}
+  #noteDock header .x{font-size:24px;padding:0 6px}
+  #noteDock .ndcap{padding:12px 14px}
+  #noteDock .ndcap textarea{min-height:96px}
+  #noteDock .ndlist{padding:10px 14px calc(48px + env(safe-area-inset-bottom))}
+  .nitem{padding:11px 12px;font-size:14px}
+  .nitem .nmeta{font-size:11px}
+  .nitem .nmeta .del{padding:0 8px;font-size:17px}
+  #noteFab{right:16px;bottom:calc(16px + env(safe-area-inset-bottom));padding:15px 22px;font-size:14.5px;border-radius:30px}
+
+  /* modals fill more of the screen */
+  #valBox{width:96%;max-height:88vh}
+  #valBox header{padding:16px 18px}
+  #valBox .vfoot{padding:14px 18px}
+}
+
+/* ============ PHONE ============ */
+@media (max-width:640px){
+  #toolbar .brand small{display:none}
+  .secbody{padding:6px 12px 22px}
+  details.sec>summary{padding:16px 12px}
+  .f.w25,.f.w33,.f.w50{flex:1 1 100%}
+  .row{gap:8px}
+  .page{padding:7mm 5mm 10mm}
+}
+
 @media print{
   body{background:#fff}
-  #formPane,#toolbar,#gradbar,#noteDock,#noteFab{display:none!important}
+  #formPane,#toolbar,#gradbar,#noteDock,#noteFab,#previewClose{display:none!important}
+  body.preview-hidden #previewPane{display:block!important}
   #app{display:block;height:auto;overflow:visible}
-  #previewPane{overflow:visible;padding:0;background:#fff}
+  #previewPane{position:static!important;inset:auto!important;z-index:auto!important;overflow:visible;padding:0;background:#fff}
   .page{box-shadow:none;margin:0;width:auto;min-height:0;page-break-after:always}
   .page:last-child{page-break-after:auto}
 }
@@ -242,15 +350,19 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 <body>
 <div id="toolbar">
   <div class="brand" id="tbBrand"></div>
-  <button class="btn" onclick="loadExample()">Load example</button>
-  <button class="btn" onclick="newReport()">New</button>
-  <button class="btn" onclick="saveJSON()">Save draft</button>
-  <button class="btn" onclick="document.getElementById('openFile').click()">Open draft</button>
+  <div id="tbActions">
+    <button class="btn" onclick="tbGo(loadExample)">Load example</button>
+    <button class="btn" onclick="tbGo(newReport)">New</button>
+    <button class="btn" onclick="tbGo(saveJSON)">Save draft</button>
+    <button class="btn" onclick="tbGo(()=>document.getElementById('openFile').click())">Open draft</button>
+    <button class="btn plum" onclick="tbGo(()=>guard(exportWord))">Export Word</button>
+    <button class="btn primary" onclick="tbGo(()=>guard(doPrint))">Print / PDF</button>
+  </div>
   <input type="file" id="openFile" accept=".json" style="display:none" onchange="openJSON(event)">
   <span id="noteBadge" onclick="toggleDock()">0 notes</span>
   <span id="checkBadge" class="bad" onclick="showValidation()">checking…</span>
-  <button class="btn plum" onclick="guard(exportWord)">Export Word</button>
-  <button class="btn primary" onclick="guard(()=>window.print())">Print / PDF</button>
+  <button class="btn" id="tbPreview" onclick="togglePreview()">Report</button>
+  <button class="btn" id="tbMoreBtn" onclick="toggleMore()" aria-label="More actions">⋯</button>
 </div>
 <div id="gradbar"></div>
 <div id="app">
@@ -617,7 +729,7 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 <div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. OT Driving Assessment Report Builder v2.0 · open source, MIT licensed</div>
 </div>
 
-<div id="previewPane"><div id="reportRoot"></div></div>
+<div id="previewPane"><button id="previewClose" onclick="togglePreview()">✕ Close report</button><div id="reportRoot"></div></div>
 </div>
 <button id="noteFab" onclick="toggleDock()">✎ Field notes</button>
 <div id="noteDock">
@@ -2079,8 +2191,49 @@ function footerID(){
 ================================================================ */
 let renderTimer=null;
 function update(){ clearTimeout(renderTimer); renderTimer=setTimeout(()=>{ render(); autosave(); },250); }
-function render(){
+
+/* ---------- preview pane ---------- */
+const PV_KEY='otdrb-preview';
+let reportStale=true;
+function previewOn(){ return !document.body.classList.contains('preview-hidden'); }
+function paintReport(){
   document.getElementById('reportRoot').innerHTML = `<div class="page">${buildReport()}</div>`;
+  reportStale=false;
+}
+/* When the pane is hidden the report is not rebuilt on every keystroke — it is
+   marked stale and painted on demand, which keeps typing smooth on a tablet. */
+function ensureReport(){ if(reportStale) paintReport(); }
+function togglePreview(){
+  const show=!previewOn();
+  document.body.classList.toggle('preview-hidden',!show);
+  try{ localStorage.setItem(PV_KEY, show?'1':'0'); }catch(e){}
+  if(show){ ensureReport(); const pp=document.getElementById('previewPane'); if(pp) pp.scrollTop=0; }
+  syncPreviewBtn();
+}
+function syncPreviewBtn(){
+  const b=document.getElementById('tbPreview'); if(!b) return;
+  b.textContent = previewOn()? 'Hide report' : 'Report';
+  b.className = previewOn()? 'btn' : 'btn primary';
+}
+/* Must match the tablet layout media query, so the default state agrees
+   with the layout the CSS actually applies. */
+const LAYOUT_Q='(max-width:1100px), (pointer:coarse) and (max-width:1400px)';
+function compactLayout(){
+  try{ return window.matchMedia(LAYOUT_Q).matches; }catch(e){ return window.innerWidth<=1100; }
+}
+function initPreview(){
+  let show;
+  try{ const v=localStorage.getItem(PV_KEY); show = v===null? !compactLayout() : v==='1'; }
+  catch(e){ show = !compactLayout(); }
+  document.body.classList.toggle('preview-hidden',!show);
+  syncPreviewBtn();
+}
+function toggleMore(){ document.body.classList.toggle('more-open'); }
+function tbGo(fn){ document.body.classList.remove('more-open'); fn(); }
+function doPrint(){ ensureReport(); window.print(); }
+
+function render(){
+  if(previewOn()) paintReport(); else reportStale=true;
   updatePageStyle(); updateBadge(); refreshPanels();
 }
 function updatePageStyle(){
@@ -2183,6 +2336,7 @@ function newReport(){
 
 /* Word export */
 function exportWord(){
+  ensureReport();
   const foot=esc(footerID());
   const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
 <head><meta charset="utf-8"><title>OT Driver Assessment Report</title>
@@ -2595,12 +2749,18 @@ function guard(fn){
 
 /* init */
 window.addEventListener('DOMContentLoaded',()=>{
+  initPreview();
   loadBrand(); applyBrand(); buildBrand();
   const had=loadAutosave();
   if(!had){ ['reasonReferral','consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]()); }
   bindInputs(); syncForm(); render();
   const ph=document.getElementById('ndPhase');
   if(ph){ ph.addEventListener('change',refreshTagSelect); refreshTagSelect(); }
+  document.addEventListener('click',e=>{
+    if(document.body.classList.contains('more-open') &&
+       !e.target.closest('#tbActions') && !e.target.closest('#tbMoreBtn'))
+      document.body.classList.remove('more-open');
+  });
 });
 </script>
 </body>
