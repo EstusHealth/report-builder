@@ -285,9 +285,6 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
       <option value="transcribe">Dictation/transcription of my own spoken notes recorded at the time</option>
     </select></div></div>
   <div class="hint">AI may refine wording you have already written from your own notes. It cannot supply observations, behaviours or clinical reasoning that were not recorded at the time — so this builder will not let a report be exported that has more auto-drafted text than field record behind it.</div>
-
-  <div class="subhead">Supervision status</div>
-  <div id="supervisionPanel"></div>
 </div>
 </details>
 
@@ -1731,14 +1728,6 @@ function buildPractice(){
     : '<div class="hint">No entries logged yet.</div>';
 }
 function supervisedMode(){ return !practiceMet() || !S.supervisorSignoff; }
-function buildSupervision(){
-  const el=document.getElementById('supervisionPanel'); if(!el) return;
-  const met=practiceMet();
-  el.innerHTML = `<div class="gate ${met?'locked':''}">
-    ${met? '<b>Supervised practice requirements met.</b>':'<b>Working under supervision.</b>'}
-    ${PRACTICE_REQ.map(r=>`${r.label}: <b>${practiceCount(r.k)}/${r.need}</b>`).join(' &nbsp;·&nbsp; ')}
-    <div style="margin-top:6px">Reports exported while supervised carry a <b>“Supervised draft — for supervisor review”</b> banner and cannot be issued as final. Log practice in <b>Section 9</b>.</div></div>`;
-}
 function compStatus(c){
   if(c.na && c.na()) return 'nap';
   if(c.ev){ try{ return c.ev()? 'met':'miss'; }catch(e){ return 'miss'; } }
@@ -2050,7 +2039,7 @@ function syncForm(){
   document.querySelectorAll('[data-bindchk]').forEach(el=>{ el.checked = (S[el.dataset.bindchk]||[]).includes(el.value); });
   document.querySelectorAll('[data-bindbool]').forEach(el=>{ el.checked = !!S[el.dataset.bindbool]; });
   buildMedRows(); buildReviewed(); buildNeeds(); buildPhys(); buildTests(); buildChecklist(); buildRecs();
-  buildEquip(); buildProfile(); buildMuscles(); buildPractice(); buildComp(); buildSupervision(); buildSignoff();
+  buildEquip(); buildProfile(); buildMuscles(); buildPractice(); buildComp(); buildSignoff();
   refreshPanels(); renderDock();
 }
 function refreshPanels(){
@@ -2058,7 +2047,7 @@ function refreshPanels(){
   const ns=document.getElementById('noteStats'); if(ns) ns.innerHTML=noteStats();
   const sv=document.getElementById('summaryVerify');
   if(sv) sv.innerHTML = txt(S.summaryText)? verifyBar('summaryText','I have written this summary from my field notes and test results, and every statement in it is something I recorded or observed.') : '';
-  buildSupervision(); buildSignoff(); buildComp();
+  buildSignoff(); buildComp();
 }
 
 /* merge a saved draft onto the current schema so older drafts keep working */
