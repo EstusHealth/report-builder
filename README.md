@@ -58,6 +58,10 @@ Two tiers, both enforced before export:
 
 **Advisories** — each must be individually ticked as considered. Contractions, unsupported phrasing ("seemed fine", "no issues", "I think", "obviously"), sentences over 45 words, missing terminal punctuation, thin sections by word count, short on-road duration, flagged issues that do not appear in the summary, and unedited template blocks.
 
+### Sign-off
+
+A single confirmation in Section 8: that you have read the report end to end against your field notes and every finding, interpretation and recommendation is traceable to something you recorded at the time. It is a hard blocker.
+
 ### Auto-draft discipline
 
 Auto-drafted text is a skeleton, not a report. The summary, cognitive summary and physical summary each carry a confirmation bar — you tick that the text reflects your notes. The tick stores a hash of the text, so **editing afterwards silently un-ticks it** and you confirm again. An untouched auto-draft summary is a hard blocker.
@@ -67,12 +71,6 @@ Auto-drafted text is a skeleton, not a report. The summary, cognitive summary an
 All 50 standards from the *Australian Competency Standards for Occupational Therapy Driver Assessors* (Fields, Unsworth & Harreveld, 2018), mapped to the report. Most are evidenced automatically from what you entered; the rest are confirmed manually; ones that do not apply to the outcome are marked N/A. The four documentation standards (4.1, 4.2, 4.4, 4.5) are hard blockers.
 
 Fields exist for the competencies that previously had nowhere to be recorded: suitability screening, prior assessments, communication screen, MDI briefing, safety management during the drive, off-road and on-road feedback to the client, licensing/insurance information given, licence conditions considered, and report turnaround.
-
-### Supervised practice
-
-A practice log kept separately from any one report (persists across clients in `localStorage`), tracking the requirements set by the supervisor: one observed return-to-driving assessment, one observed learner assessment, two supervised assessments, two supervised reports.
-
-Until those are met and a supervisor has signed off, every export is a **supervised draft** — a banner on page one, a draft version stamp, "SUPERVISED DRAFT" in the Word filename, and the supervising OT named on the report.
 
 ## Local preview
 

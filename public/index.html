@@ -196,8 +196,6 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 .cpbar div{height:100%;background:linear-gradient(90deg,#2ca5b8,#344982)}
 
 /* practice log */
-.plrow{display:flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:4px;background:#fff;padding:6px 8px;margin-bottom:6px;font-size:12.5px}
-.plrow .pltype{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;border-radius:9px;padding:2px 8px;background:#eef4f6;color:#27505a;flex-shrink:0}
 .plreq{display:flex;gap:8px;align-items:center;font-size:12.5px;padding:5px 0}
 .plreq .cnt{font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;flex:0 0 44px}
 .plreq .cnt.ok{color:#1e6b3a} .plreq .cnt.no{color:#8c2f2f}
@@ -205,8 +203,6 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 /* validation */
 #checkBadge{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11.5px;padding:5px 10px;border-radius:12px;cursor:pointer;letter-spacing:.04em}
 #checkBadge.ok{background:#1e6b3a;color:#fff} #checkBadge.bad{background:#8c2f2f;color:#fff} #checkBadge.warn{background:#8a6d1f;color:#fff}
-#modeBadge{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10.5px;padding:4px 9px;border-radius:12px;letter-spacing:.06em;text-transform:uppercase}
-#modeBadge.sup{background:#ab5c95;color:#fff} #modeBadge.ind{background:#2f6f9e;color:#fff}
 #noteBadge{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10.5px;padding:4px 9px;border-radius:12px;letter-spacing:.05em;background:#3a3934;color:#fff;cursor:pointer}
 .vgroup{font-family:'Oswald',sans-serif;font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin:12px 0 4px;padding-bottom:3px;border-bottom:1px solid var(--line)}
 .vgroup.blk{color:#8c2f2f} .vgroup.adv{color:#8a6d1f}
@@ -241,7 +237,6 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
   <button class="btn" onclick="saveJSON()">Save draft</button>
   <button class="btn" onclick="document.getElementById('openFile').click()">Open draft</button>
   <input type="file" id="openFile" accept=".json" style="display:none" onchange="openJSON(event)">
-  <span id="modeBadge" class="sup">supervised</span>
   <span id="noteBadge" onclick="toggleDock()">0 notes</span>
   <span id="checkBadge" class="bad" onclick="showValidation()">checking…</span>
   <button class="btn plum" onclick="guard(exportWord)">Export Word</button>
@@ -591,33 +586,13 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 </div>
 </details>
 
-<!-- ================= 9. COMPETENCY & SUPERVISED PRACTICE ================= -->
+<!-- ================= 9. COMPETENCY COVERAGE ================= -->
 <details class="sec">
-<summary>9 · Competency Coverage &amp; Supervised Practice <span class="n" id="n9"></span></summary>
+<summary>9 · Competency Coverage <span class="n" id="n9"></span></summary>
 <div class="secbody">
   <div class="hint">Mapped to the <b>Australian Competency Standards for Occupational Therapy Driver Assessors</b> (Fields, Unsworth &amp; Harreveld, 2018) — the standards this assessment is marked against. Items marked <b>auto</b> are evidenced by what you have entered in this report; the rest are yours to confirm. Anything unmet is visible before you export, not after someone marks it.</div>
   <div id="compBar"></div>
   <div id="compRows"></div>
-
-  <div class="subhead">Supervised practice log</div>
-  <div class="hint">This log is kept separately from any one report and persists across clients. It tracks the practice requirements set by your supervisor. Until they are met, every export is watermarked as a supervised draft and requires a named supervising OT.</div>
-  <div id="practiceReq"></div>
-  <div id="practiceRows"></div>
-  <div class="row" style="margin-top:8px">
-    <div class="f w33"><label>Date</label><input type="date" id="plDate"></div>
-    <div class="f"><label>Type</label><select id="plType">
-      <option value="obs-return">Observed — return-to-driving assessment</option>
-      <option value="obs-learner">Observed — learner driver assessment</option>
-      <option value="sup-assess">Supervised assessment (I assessed, supervisor present)</option>
-      <option value="sup-report">Supervised report writing (report reviewed by supervisor)</option>
-    </select></div>
-  </div>
-  <div class="row">
-    <div class="f w25"><label>Client initials</label><input type="text" id="plRef" placeholder="e.g. J.C."></div>
-    <div class="f"><label>Supervising OT</label><input type="text" id="plSup"></div>
-    <div class="f w25"><label>&nbsp;</label><button class="btn primary" onclick="addPractice()">+ Log entry</button></div>
-  </div>
-  <div class="row"><div class="f w100"><label>Key learning / feedback taken from it</label><input type="text" id="plNote" placeholder="what you would do differently next time"></div></div>
 </div>
 </details>
 
@@ -885,12 +860,6 @@ const COMPETENCIES = [
 
 /* ---------- thresholds that govern the record ---------- */
 const NOTE_MIN = {pre:6, onroad:10, perGroup:1};
-const PRACTICE_REQ = [
- {k:'obs-return', label:'Observed return-to-driving assessments', need:1},
- {k:'obs-learner', label:'Observed learner driver assessments', need:1},
- {k:'sup-assess', label:'Supervised assessments completed by me', need:2},
- {k:'sup-report', label:'Reports written with supervisor support', need:2},
-];
 
 const REFS = {
   austroads:"Austroads, 2022, 'Assessing Fitness to Drive', Austroads Inc, Sydney",
@@ -933,7 +902,7 @@ function freshState(){
     checklist:{}, outcome:'learner-continue', summaryText:'',
     recs:{}, recParams:{hours:10, funder:'NDIS plan (capacity building)'},
     refsExtra:'',
-    reportRef:'', reportVersion:'1.0 (Draft)', consentObtained:false,
+    reportRef:'', reportVersion:'1.0 (Final)', consentObtained:false,
     consentText:'', qualifications:'', limitations:'', declarationText:'',
     distribution:'Referrer; client; treating general practitioner',
 
@@ -945,7 +914,7 @@ function freshState(){
     suitability:'', prevAssess:'', commScreen:'', mdiBrief:'', safetyMgmt:'', furtherInfo:'',
     fbOffRoad:'', fbOnRoad:'', legalInfo:'', condConsidered:'', onroadSuitable:'',
     turnaround:'ok', turnaroundWhy:'', recordsRetained:'Field notes, raw test forms and report retained securely in the client file',
-    compManual:{}, supervisorSignoff:false, selfReview:false,
+    compManual:{}, selfReview:false,
   };
   PHYS_ROWS.forEach(r=> s.phys[r.id]='');
   MUSCLES.forEach(m=> s.muscles[m.id]={tested:'no', grade:'', note:''});
@@ -1693,41 +1662,8 @@ function adminComplete(id){
 }
 
 /* ================================================================
-   SUPERVISION & COMPETENCY
+   COMPETENCY COVERAGE
 ================================================================ */
-function loadPractice(){ try{ return JSON.parse(localStorage.getItem('estus-ot-practice')||'[]'); }catch(e){ return []; } }
-function savePractice(l){ try{ localStorage.setItem('estus-ot-practice', JSON.stringify(l)); }catch(e){} }
-let PRACTICE = [];
-function practiceCount(k){ return PRACTICE.filter(p=>p.type===k).length; }
-function practiceMet(){ return PRACTICE_REQ.every(r=>practiceCount(r.k)>=r.need); }
-function addPractice(){
-  const d=document.getElementById('plDate').value, ty=document.getElementById('plType').value;
-  const ref=txt(document.getElementById('plRef').value), sup=txt(document.getElementById('plSup').value);
-  const note=txt(document.getElementById('plNote').value);
-  if(!d||!sup){ alert('Date and supervising OT are both required.'); return; }
-  PRACTICE.push({d, type:ty, ref, sup, note});
-  savePractice(PRACTICE);
-  ['plRef','plSup','plNote'].forEach(i=>document.getElementById(i).value='');
-  buildPractice(); update();
-}
-function delPractice(i){ if(!confirm('Remove this log entry?')) return; PRACTICE.splice(i,1); savePractice(PRACTICE); buildPractice(); update(); }
-const PL_LABEL={'obs-return':'Observed · return','obs-learner':'Observed · learner','sup-assess':'Supervised assessment','sup-report':'Supervised report'};
-function buildPractice(){
-  const req=document.getElementById('practiceReq');
-  if(req) req.innerHTML = PRACTICE_REQ.map(r=>{
-    const c=practiceCount(r.k), ok=c>=r.need;
-    return `<div class="plreq"><span class="cnt ${ok?'ok':'no'}">${c}/${r.need}</span><span>${r.label}${ok?' <span style="color:#1e6b3a">✓</span>':''}</span></div>`;
-  }).join('') + `<div class="gate ${practiceMet()?'locked':''}" style="margin-top:8px">${practiceMet()
-      ? '<b>Supervised practice requirements met.</b> You can switch this report to independent sign-off in Section 8 once your supervisor confirms.'
-      : '<b>Supervised practice still in progress.</b> Until these are complete, every export carries a supervised-draft banner and requires a named supervising OT and their sign-off.'}</div>`;
-  const rows=document.getElementById('practiceRows');
-  if(rows) rows.innerHTML = PRACTICE.length? [...PRACTICE].map((p,i)=>`<div class="plrow">
-      <span class="pltype">${PL_LABEL[p.type]||p.type}</span>
-      <span style="flex:1">${esc(fmtDate(p.d))}${p.ref?' · '+esc(p.ref):''} · ${esc(p.sup)}${p.note?`<div style="font-size:11.5px;color:var(--faint);line-height:1.4">${esc(p.note)}</div>`:''}</span>
-      <button class="xbtn" onclick="delPractice(${i})">×</button></div>`).join('')
-    : '<div class="hint">No entries logged yet.</div>';
-}
-function supervisedMode(){ return !practiceMet() || !S.supervisorSignoff; }
 function compStatus(c){
   if(c.na && c.na()) return 'nap';
   if(c.ev){ try{ return c.ev()? 'met':'miss'; }catch(e){ return 'miss'; } }
@@ -1749,14 +1685,8 @@ function buildComp(){
 }
 function buildSignoff(){
   const el=document.getElementById('signoffPanel'); if(!el) return;
-  const met=practiceMet();
   el.innerHTML=`
-    <label class="chk"><input type="checkbox" ${S.selfReview?'checked':''} onchange="S.selfReview=this.checked;update()"><b>I have read this report end to end against my field notes</b>, and every finding, interpretation and recommendation in it is traceable to something I recorded at the time.</label>
-    <label class="chk"><input type="checkbox" ${S.supervisorSignoff?'checked':''} ${met?'':'disabled'} onchange="S.supervisorSignoff=this.checked;update()">
-      ${met? '<b>My supervising OT has reviewed and approved this report for issue.</b>' : '<b style="color:var(--faint)">Supervisor approval for independent issue</b> — unavailable until the supervised practice requirements in Section 9 are met.'}</label>
-    <div class="gate ${supervisedMode()?'':'locked'}" style="margin-top:8px">${supervisedMode()
-      ? '<b>This report will export as a supervised draft.</b> A banner is printed at the top of page one and the version is stamped as a draft. This is not a limitation to work around — it is an accurate statement of the report\'s status.'
-      : '<b>This report will export as a final report.</b>'}</div>`;
+    <label class="chk"><input type="checkbox" ${S.selfReview?'checked':''} onchange="S.selfReview=this.checked;update()"><b>I have read this report end to end against my field notes</b>, and every finding, interpretation and recommendation in it is traceable to something I recorded at the time.</label>`;
 }
 
 /* ================================================================
@@ -1786,11 +1716,6 @@ function buildReport(){
     <div style="font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:9px;letter-spacing:.34em;color:#ab5c95;margin-top:3px;text-transform:uppercase">OCCUPATIONAL THERAPY</div></div>
     <div style="text-align:right;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:8.5pt;color:#55534e;line-height:1.6">liam@estushealth.com<br>+61 3 9000 0000<br><span style="color:#2ca5b8;font-weight:600">www.estushealth.com</span></div></div>
     <div style="height:3px;background:linear-gradient(90deg,#344982 0%,#2f6f9e 34%,#2ca5b8 66%,#ab5c95 100%);margin:0 0 8mm;border-radius:2px;font-size:0">&nbsp;</div>`;
-  if(supervisedMode()){
-    h+=`<div style="border:2px solid #ab5c95;background:#fbf3f8;border-radius:3px;padding:3mm 4mm;margin:0 0 6mm;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:9pt;color:#7a3a66;line-height:1.45">
-      <b style="letter-spacing:.08em;text-transform:uppercase">Supervised draft — for supervisor review</b><br>
-      This report was prepared by an occupational therapist completing supervised practice in driver assessment. It has not been issued as a final report${S.supervisor? ' and requires review and approval by '+esc(S.supervisor)+' (Occupational Therapist)':' and requires review and approval by the supervising occupational therapist'}.</div>`;
-  }
   h+=`<h1 style="${ST.h1}">Occupational Therapy Driver Assessment Report</h1>`;
 
   /* client details */
@@ -2039,7 +1964,7 @@ function syncForm(){
   document.querySelectorAll('[data-bindchk]').forEach(el=>{ el.checked = (S[el.dataset.bindchk]||[]).includes(el.value); });
   document.querySelectorAll('[data-bindbool]').forEach(el=>{ el.checked = !!S[el.dataset.bindbool]; });
   buildMedRows(); buildReviewed(); buildNeeds(); buildPhys(); buildTests(); buildChecklist(); buildRecs();
-  buildEquip(); buildProfile(); buildMuscles(); buildPractice(); buildComp(); buildSignoff();
+  buildEquip(); buildProfile(); buildMuscles(); buildComp(); buildSignoff();
   refreshPanels(); renderDock();
 }
 function refreshPanels(){
@@ -2109,7 +2034,7 @@ body{${ST.body}} table{border-collapse:collapse} li{margin-bottom:6pt}
   const blob=new Blob(['﻿'+html],{type:'application/msword'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   const d=(S.dateReport||'').replaceAll('-','');
-  a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} Driving Assessment Report${d? ' '+d:''}${supervisedMode()?' SUPERVISED DRAFT':''}.doc`;
+  a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} Driving Assessment Report${d? ' '+d:''}.doc`;
   a.click();
 }
 
@@ -2275,7 +2200,7 @@ function loadExample(){
     fbOnRoad:'Feedback was provided to {name} in the vehicle immediately following the drive, and again at the desk with {his} father present. Strengths were discussed first, including speed control, forward planning and {his} calm management of the unfamiliar indicator stalk. Head checks and mirror use were identified as the two priority areas for instruction. {name} accepted the feedback and commented that head checks had not previously been taught to {him} in a structured way.',
     legalInfo:'{name} and {his} father were advised that this report will be provided to the referrer and to {his} treating general practitioner, that {his} learner permit conditions are unchanged as a result of this assessment, and that any future application for a provisional licence remains a matter for the licensing authority following a practical driving test. The requirement to notify the licensing authority of relevant changes in medical condition was explained.',
     condConsidered:'existing', turnaround:'ok',
-    reportVersion:'1.0 (Supervised draft)',
+    reportVersion:'1.0 (Final)',
   });
   COMPETENCIES.forEach(c=>{ if(!c.ev && !(c.na&&c.na())) S.compManual[c.id]=true; });
 
@@ -2447,8 +2372,6 @@ function validate(){
   COMPETENCIES.filter(c=>c.hard).forEach(c=>{ if(compStatus(c)==='miss') B('Competency '+c.id+' not evidenced','“'+c.t+'” — this is a documentation standard the report itself has to satisfy.','9','#compRows'); });
   COMPETENCIES.forEach(c=>{ if(compStatus(c)==='man') A('cp_'+c.id,'Competency '+c.id+' awaiting confirmation','“'+c.t+'” — confirm in Section 9 that you did this.','9','#compRows'); });
   if(!S.selfReview) B('Confirm you have read the report against your notes','The final check in Section 8.','8','#signoffPanel');
-  if(supervisedMode() && !txt(S.supervisor)) B('Supervising OT must be named','While in supervised practice, the supervising occupational therapist is named on the report.','1','[data-bind=supervisor]');
-  if(supervisedMode() && !/draft/i.test(S.reportVersion||'')) B('Version must be marked as a draft','This report exports as a supervised draft, so the version label has to say so.','8','[data-bind=reportVersion]');
 
   return {blockers, advisories};
 }
@@ -2461,8 +2384,6 @@ function updateBadge(){
   if(nb){ b.className='bad'; b.textContent=nb+' blocker'+(nb>1?'s':'')+(na?' · '+na+' to review':''); }
   else if(na){ b.className='warn'; b.textContent=na+' item'+(na>1?'s':'')+' to review'; }
   else { b.className='ok'; b.textContent='✓ ready to export'; }
-  const mb=document.getElementById('modeBadge');
-  if(mb){ const sup=supervisedMode(); mb.className=sup?'sup':'ind'; mb.textContent=sup?'supervised draft':'final'; }
   const nbg=document.getElementById('noteBadge');
   if(nbg) nbg.textContent=S.notes.length+' note'+(S.notes.length!==1?'s':'')+(S.notesLocked?' · locked':'');
   const n0=document.getElementById('n0'); if(n0) n0.textContent=(S.equipAt?'set-up ✓':'set-up pending')+' · '+(S.notesLocked?'record locked':'record open');
@@ -2504,7 +2425,6 @@ function guard(fn){
 
 /* init */
 window.addEventListener('DOMContentLoaded',()=>{
-  PRACTICE = loadPractice();
   const had=loadAutosave();
   if(!had){ ['reasonReferral','consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]()); }
   bindInputs(); syncForm(); render();
