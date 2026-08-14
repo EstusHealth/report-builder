@@ -342,7 +342,6 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
     <div class="f w33"><label>AHPRA no.</label><input type="text" data-bind="ahpra"></div>
   </div>
   <div class="row">
-    <div class="f"><label>Supervising OT (optional)</label><input type="text" data-bind="supervisor" placeholder="leave blank if none"></div>
     <div class="f"><label>Motor Driving Instructor</label><input type="text" data-bind="mdi"></div>
   </div>
   <div class="row"><div class="f w100"><label>Assessment location</label><input type="text" data-bind="location"></div></div>
@@ -879,7 +878,7 @@ function freshState(){
     refName:'', refRole:'', refOrg:'', refContact:'',
     dateAssess:'', dateReport:'',
     assessor:'Liam Fagan', assessorRole:'Occupational Therapist', ahpra:'OCC0002674997',
-    supervisor:'', mdi:'', location:'Flinders University Tonsley campus',
+    mdi:'', location:'Flinders University Tonsley campus',
     reviewed:{referral:true, licence:true, background:true, gp:false, prevOT:false}, reviewedExtra:'', supportPerson:'',
     purpose:'learner', reasonReferral:'', symptoms:'', medHistory:'', medSideEffects:'', drivingHistory:'',
     needs:{}, hearing:'wnl', hearingNote:'',
@@ -1010,7 +1009,7 @@ const AUTOTEXT = {
     return `The purpose and process of the assessment, and the limits of confidentiality, were explained to {name}{support}. {name} provided informed consent to participate in the assessment and for this report to be provided to the parties listed at the end of this report.`;
   },
   qualifications(){
-    return `${S.assessor} is an Occupational Therapist registered with the Australian Health Practitioner Regulation Agency (AHPRA No. ${S.ahpra||'[AHPRA]'}), practising in occupational therapy driver assessment and rehabilitation. This assessment and report were completed within the scope of that role${S.supervisor? ', under the supervision of '+S.supervisor+' (Occupational Therapist)':''}.`;
+    return `${S.assessor} is an Occupational Therapist registered with the Australian Health Practitioner Regulation Agency (AHPRA No. ${S.ahpra||'[AHPRA]'}), practising in occupational therapy driver assessment and rehabilitation. This assessment and report were completed within the scope of that role.`;
   },
   limitations(){
     return `This report reflects {name}'s presentation and performance at the time of the assessment and is based on the information available to me, including the documents listed under "Reports Reviewed" and the history provided by {name}{support}, which is assumed to be accurate. Driving performance may vary with medical status, fatigue, medication changes and environmental conditions, and this assessment represents performance on the day under the conditions described. Should new or conflicting information become available, or should {his} condition change, the opinions in this report may need to be reviewed.`;
@@ -1743,7 +1742,6 @@ function buildReport(){
   /* background */
   h+=`<h2 style="${ST.h2}">Background Information</h2>`;
   let admin=`This Occupational Therapy Driving Assessment was conducted at ${S.location||'[location]'}. The assessment was administered by ${S.assessor} (${S.assessorRole})`;
-  if(S.supervisor) admin+=`, under the supervision of ${S.supervisor} (Occupational Therapist)`;
   if(S.mdi) admin+=`. On-road instruction was provided by ${S.mdi} (Motor Driving Instructor)`;
   h+=P(admin+'.');
   h+=`<h3 style="${ST.h3}">Reason for Referral</h3>`+P(S.reasonReferral);
@@ -2052,7 +2050,7 @@ function loadExample(){
     meds:[{name:'Paliperidone',dose:'3-monthly intramuscular (IM) injection',purpose:'Stabilisation of schizophrenia'}],
     refName:'Jane Referrer', refRole:'Occupational Therapist', refOrg:'Example Allied Health', refContact:'referrals@example.com.au',
     dateAssess:'2026-06-01', dateReport:'2026-06-08',
-    supervisor:'Sarah Supervisor', mdi:'David Instructor', supportPerson:'his father',
+    mdi:'David Instructor', supportPerson:'his father',
     purpose:'learner',
     symptoms:"{name} presents with diagnoses of Autism Spectrum Disorder (Level 2) and Schizophrenia. {His} primary driving-related challenge is managing cognitive load when several factors occur simultaneously (for example, at intersections or when tracking multiple vehicles pulling out at once). {He} reports no major sensory sensitivities, although {his} father notes that {he} dislikes large, crowded environments and tends to withdraw in highly stimulating settings. {He} identifies that {he} requires further practice with reverse parking and three-point turns.",
     medHistory:"Autism Spectrum Disorder (Level 2) and Schizophrenia. {name}'s schizophrenia is reported to be well managed and stabilised on a three-monthly intramuscular injection, which {his} father reports has placed {him} at a “good level.” {He} previously trialled daily oral medication but found this difficult to manage.",
