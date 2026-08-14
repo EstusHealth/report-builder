@@ -116,9 +116,103 @@ table.rep td.iss{color:#8c2f2f}
 ul.rep{margin:1mm 0 4mm;padding-left:6mm}
 ul.rep li{margin-bottom:2mm}
 
+/* ============ GOVERNANCE / FIELD NOTES ============ */
+.gate{border:1px solid #e0cfa8;background:#fdf8ec;border-radius:5px;padding:10px 12px;margin:0 0 12px;font-size:12.5px;line-height:1.5;color:#5c4a20}
+.gate b{color:#6b5416}
+.gate.locked{border-color:#c9dfc9;background:#f1f8f1;color:#2c5233}
+.gate.stop{border-color:#e5c4c4;background:#fbf1f1;color:#7c2d2d}
+.gate .gbtn{margin-top:8px}
+
+#noteDock{position:fixed;right:0;bottom:0;top:46px;width:390px;background:#fff;border-left:1px solid var(--line);box-shadow:-8px 0 24px -14px rgba(0,0,0,.35);z-index:120;display:none;flex-direction:column}
+#noteDock.open{display:flex}
+#noteDock header{background:var(--navy);color:#fff;padding:10px 14px;font-family:'Oswald',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+#noteDock header .x{margin-left:auto;cursor:pointer;background:none;border:none;color:#fff;font-size:17px;line-height:1}
+#noteDock .ndcap{padding:10px 12px;border-bottom:1px solid var(--line);background:var(--cream)}
+#noteDock .ndcap textarea{width:100%;border:1px solid #d6d4cf;border-radius:4px;padding:6px 8px;font-family:'Barlow',sans-serif;font-size:13px;min-height:56px;resize:vertical}
+#noteDock .ndcap .ndrow{display:flex;gap:6px;margin-top:6px;align-items:center}
+#noteDock .ndcap select{border:1px solid #d6d4cf;border-radius:4px;padding:5px 6px;font-size:11.5px;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;flex:1;min-width:0}
+#noteDock .ndlist{flex:1;overflow-y:auto;padding:8px 12px 40px}
+.nitem{border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:4px;padding:6px 8px;margin-bottom:6px;font-size:12.5px;line-height:1.45;background:#fff}
+.nitem.pre{border-left-color:var(--blue)} .nitem.onroad{border-left-color:var(--plum)} .nitem.debrief{border-left-color:#8a8880}
+.nitem .nmeta{font-family:'Barlow Semi Condensed',sans-serif;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);display:flex;gap:6px;align-items:center;margin-bottom:3px}
+.nitem .nmeta .tm{font-weight:700;color:var(--navy)}
+.nitem .nmeta .del{margin-left:auto;cursor:pointer;color:#8c2f2f;font-weight:700}
+.nitem .amend{font-size:11px;color:var(--plum);margin-top:3px;font-style:italic}
+.nitem textarea{width:100%;border:1px dashed #d6d4cf;border-radius:3px;font-family:'Barlow',sans-serif;font-size:12.5px;padding:4px 6px;min-height:38px;resize:vertical;background:#fcfcfb}
+#noteFab{position:fixed;right:18px;bottom:18px;z-index:110;background:var(--plum);color:#fff;border:none;border-radius:26px;padding:11px 18px;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:13px;letter-spacing:.05em;cursor:pointer;box-shadow:0 6px 20px -6px rgba(0,0,0,.5)}
+#noteFab:hover{background:#8f4a7c}
+.noteslink{font-size:10.5px;color:var(--plum);cursor:pointer;text-decoration:underline;font-weight:600;letter-spacing:0;text-transform:none}
+.notechips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.notechip{font-family:'Barlow Semi Condensed',sans-serif;font-size:10.5px;font-weight:600;background:#eef4f6;border:1px solid #cfe1e6;color:#27505a;border-radius:9px;padding:2px 7px;display:flex;gap:5px;align-items:center}
+.notechip .rm{cursor:pointer;color:#8c2f2f}
+.notechip.none{background:#fbf1f1;border-color:#e5c4c4;color:#8c2f2f}
+.linkbtn{border:1px dashed var(--plum);background:none;color:var(--plum);font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11px;border-radius:9px;padding:2px 9px;cursor:pointer}
+
+/* verification bars */
+.vbar{display:flex;align-items:center;gap:7px;margin:4px 0 10px;padding:5px 9px;border-radius:4px;font-size:11.5px;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;letter-spacing:.03em}
+.vbar.unver{background:#fdf3e0;border:1px solid #e8d3a8;color:#7a5c14}
+.vbar.ver{background:#eef7f1;border:1px solid #c6e2ce;color:#1e6b3a}
+.vbar input{accent-color:var(--teal);width:14px;height:14px;cursor:pointer;flex-shrink:0}
+.vbar label{cursor:pointer}
+
+/* muscle grid */
+.mgrid{border:1px solid var(--line);border-radius:5px;background:#fff;padding:8px 10px;margin-bottom:7px}
+.mgrid .mtop{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.mgrid .mname{flex:1;font-size:12.5px;font-weight:600;min-width:130px}
+.mgrid select{border:1px solid #d6d4cf;border-radius:4px;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11.5px;padding:4px 6px}
+.mgrid select.g-untested{background:#fbf1f1;color:#8c2f2f} .mgrid select.g-full{background:#eef7f1;color:#1e6b3a} .mgrid select.g-red{background:#fdf3e0;color:#7a5c14}
+.mgrid input.mnote{width:100%;margin-top:6px;border:1px solid #d6d4cf;border-radius:4px;padding:5px 7px;font-size:12.5px;font-family:'Barlow',sans-serif}
+.refcard{border:1px solid #d9e8ec;background:#f4f8f9;border-radius:5px;padding:9px 11px;margin:8px 0 12px;font-size:12px;line-height:1.5;color:#274b53}
+.refcard h5{margin:0 0 5px;font-family:'Oswald',sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--navy)}
+.refcard ul{margin:4px 0 0;padding-left:16px} .refcard li{margin-bottom:3px}
+.refcard .say{color:#1e6b3a;font-weight:600} .refcard .dont{color:#8c2f2f;font-weight:600}
+details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);padding:3px 0;user-select:none}
+
+/* admin fidelity */
+.adminbox{border:1px solid #e4d6df;background:#fdf9fc;border-radius:4px;padding:8px 10px;margin-top:8px}
+.adminbox .ahead{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--plum);margin-bottom:5px}
+.adminbox .arow{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
+.adminbox select,.adminbox input{border:1px solid #d6d4cf;border-radius:4px;padding:4px 6px;font-size:12px;font-family:'Barlow',sans-serif}
+.invalidflag{background:#8c2f2f;color:#fff;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10px;letter-spacing:.08em;padding:2px 8px;border-radius:9px;text-transform:uppercase}
+
+/* equipment */
+.eqrow{display:flex;gap:8px;align-items:flex-start;border-bottom:1px solid var(--line);padding:6px 2px}
+.eqrow:last-child{border-bottom:none}
+.eqrow .eqname{flex:1;font-size:12.5px;line-height:1.4}
+.eqrow .eqname small{display:block;color:var(--faint);font-size:11px}
+.eqrow select{border:1px solid #d6d4cf;border-radius:4px;font-size:11.5px;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;padding:3px 5px;flex-shrink:0}
+.eqrow select.ok{background:#eef7f1;color:#1e6b3a} .eqrow select.no{background:#fbf1f1;color:#8c2f2f}
+.eqrow input.eqwhy{flex:0 0 150px;border:1px solid #d6d4cf;border-radius:4px;padding:3px 6px;font-size:12px;font-family:'Barlow',sans-serif}
+
+/* competency */
+.cpwrap{border:1px solid var(--line);border-radius:5px;background:#fff;overflow:hidden;margin-bottom:10px}
+.cprow{display:flex;gap:8px;align-items:flex-start;padding:5px 9px;border-bottom:1px solid #f0efec;font-size:12px;line-height:1.4}
+.cprow:last-child{border-bottom:none}
+.cprow .cid{font-family:'Barlow Semi Condensed',sans-serif;font-weight:700;color:var(--navy);flex:0 0 34px}
+.cprow .ctx{flex:1}
+.cprow .cst{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10px;letter-spacing:.05em;text-transform:uppercase;border-radius:9px;padding:1px 7px;flex-shrink:0}
+.cst.met{background:#dff0e4;color:#1e6b3a} .cst.miss{background:#f6e3e3;color:#8c2f2f} .cst.man{background:#e9e7e4;color:var(--muted);cursor:pointer} .cst.manok{background:#dff0e4;color:#1e6b3a;cursor:pointer} .cst.nap{background:#eef0f5;color:#4a5a80}
+.cpbar{height:8px;background:#e9e7e4;border-radius:4px;overflow:hidden;margin:6px 0 10px}
+.cpbar div{height:100%;background:linear-gradient(90deg,#2ca5b8,#344982)}
+
+/* practice log */
+.plrow{display:flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:4px;background:#fff;padding:6px 8px;margin-bottom:6px;font-size:12.5px}
+.plrow .pltype{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;border-radius:9px;padding:2px 8px;background:#eef4f6;color:#27505a;flex-shrink:0}
+.plreq{display:flex;gap:8px;align-items:center;font-size:12.5px;padding:5px 0}
+.plreq .cnt{font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;flex:0 0 44px}
+.plreq .cnt.ok{color:#1e6b3a} .plreq .cnt.no{color:#8c2f2f}
+
 /* validation */
 #checkBadge{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11.5px;padding:5px 10px;border-radius:12px;cursor:pointer;letter-spacing:.04em}
-#checkBadge.ok{background:#1e6b3a;color:#fff} #checkBadge.bad{background:#8c2f2f;color:#fff}
+#checkBadge.ok{background:#1e6b3a;color:#fff} #checkBadge.bad{background:#8c2f2f;color:#fff} #checkBadge.warn{background:#8a6d1f;color:#fff}
+#modeBadge{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10.5px;padding:4px 9px;border-radius:12px;letter-spacing:.06em;text-transform:uppercase}
+#modeBadge.sup{background:#ab5c95;color:#fff} #modeBadge.ind{background:#2f6f9e;color:#fff}
+#noteBadge{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10.5px;padding:4px 9px;border-radius:12px;letter-spacing:.05em;background:#3a3934;color:#fff;cursor:pointer}
+.vgroup{font-family:'Oswald',sans-serif;font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin:12px 0 4px;padding-bottom:3px;border-bottom:1px solid var(--line)}
+.vgroup.blk{color:#8c2f2f} .vgroup.adv{color:#8a6d1f}
+.vitem.advisory{align-items:flex-start}
+.vitem .ack{accent-color:var(--teal);width:14px;height:14px;margin-top:2px;flex-shrink:0}
+.vitem .vwhy{display:block;font-size:11.5px;color:var(--faint);line-height:1.4;margin-top:1px}
 #valModal{display:none;position:fixed;inset:0;background:rgba(23,20,16,.55);z-index:200;align-items:center;justify-content:center}
 #valModal.open{display:flex}
 #valBox{background:#fff;border-radius:8px;max-width:560px;width:92%;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px -20px rgba(0,0,0,.5)}
@@ -131,7 +225,7 @@ ul.rep li{margin-bottom:2mm}
 .flash{outline:2px solid var(--plum)!important;outline-offset:1px;transition:outline .2s}
 @media print{
   body{background:#fff}
-  #formPane,#toolbar,#gradbar{display:none!important}
+  #formPane,#toolbar,#gradbar,#noteDock,#noteFab{display:none!important}
   #app{display:block;height:auto;overflow:visible}
   #previewPane{overflow:visible;padding:0;background:#fff}
   .page{box-shadow:none;margin:0;width:auto;min-height:0;page-break-after:always}
@@ -147,6 +241,8 @@ ul.rep li{margin-bottom:2mm}
   <button class="btn" onclick="saveJSON()">Save draft</button>
   <button class="btn" onclick="document.getElementById('openFile').click()">Open draft</button>
   <input type="file" id="openFile" accept=".json" style="display:none" onchange="openJSON(event)">
+  <span id="modeBadge" class="sup">supervised</span>
+  <span id="noteBadge" onclick="toggleDock()">0 notes</span>
   <span id="checkBadge" class="bad" onclick="showValidation()">checking…</span>
   <button class="btn plum" onclick="guard(exportWord)">Export Word</button>
   <button class="btn primary" onclick="guard(()=>window.print())">Print / PDF</button>
@@ -155,8 +251,48 @@ ul.rep li{margin-bottom:2mm}
 <div id="app">
 <div id="formPane">
 
-<!-- ================= 1. CLIENT DETAILS ================= -->
+<!-- ================= 0. SET-UP & FIELD RECORD ================= -->
 <details class="sec" open>
+<summary>0 · Set-Up &amp; Contemporaneous Record <span class="n" id="n0"></span></summary>
+<div class="secbody">
+  <div class="hint">This section exists because a report can only be as good as the record it is written from. Equipment is confirmed <b>before</b> the client arrives; observations are logged <b>during</b> the assessment; the record is then locked, and the report is written from it. Report sections stay locked until the field record is locked.</div>
+
+  <div id="setupGate"></div>
+
+  <div class="subhead">Equipment &amp; set-up check (before the client arrives)</div>
+  <div class="hint">Everything needed for the whole assessment is laid out first, so you are not leaving the room mid-assessment. Mark anything genuinely not required as <b>N/A</b> and say why.</div>
+  <div id="equipRows"></div>
+  <div class="row" style="margin-top:10px">
+    <div class="f w50"><label>Set-up completed at</label><input type="text" data-bind="equipAt" readonly placeholder="not yet confirmed"></div>
+    <div class="f w50"><label>&nbsp;</label><button class="btn primary" onclick="confirmEquip()" id="equipBtn">Confirm set-up complete</button></div>
+  </div>
+
+  <div class="subhead">Contemporaneous field record</div>
+  <div class="hint">Log observations <b>as they happen</b>, in the room and in the car. Every on-road issue you flag later must point back to a note logged here. Use the <b>Field notes</b> button (bottom right) at any time — it stays available while you work through every section.</div>
+  <div id="noteStats"></div>
+  <div class="row" style="margin-top:8px">
+    <div class="f w100"><label>Who recorded the on-road notes</label>
+      <select data-bind="notesRecordedBy">
+        <option value="ot">Recorded by me (OT) during the drive</option>
+        <option value="otpost">Recorded by me immediately after the drive (before leaving the vehicle)</option>
+        <option value="shared">Recorded by me with the MDI's observations noted at the time</option>
+      </select></div>
+  </div>
+  <div class="row"><div class="f w100"><label>Use of AI or dictation tools in preparing this report</label>
+    <select data-bind="aiUse">
+      <option value="none">None — written directly from my contemporaneous notes</option>
+      <option value="language">Language editing only, applied after drafting from my contemporaneous notes</option>
+      <option value="transcribe">Dictation/transcription of my own spoken notes recorded at the time</option>
+    </select></div></div>
+  <div class="hint">AI may refine wording you have already written from your own notes. It cannot supply observations, behaviours or clinical reasoning that were not recorded at the time — so this builder will not let a report be exported that has more auto-drafted text than field record behind it.</div>
+
+  <div class="subhead">Supervision status</div>
+  <div id="supervisionPanel"></div>
+</div>
+</details>
+
+<!-- ================= 1. CLIENT DETAILS ================= -->
+<details class="sec">
 <summary>1 · Client &amp; Assessment Details</summary>
 <div class="secbody">
   <div class="row">
@@ -218,6 +354,14 @@ ul.rep li{margin-bottom:2mm}
     <div class="f"><label>Motor Driving Instructor</label><input type="text" data-bind="mdi"></div>
   </div>
   <div class="row"><div class="f w100"><label>Assessment location</label><input type="text" data-bind="location"></div></div>
+
+  <div class="subhead">Suitability &amp; assessment history</div>
+  <div class="row">
+    <div class="f w50"><label>Suitable to undergo a driver assessment <span style="color:var(--faint);text-transform:none;letter-spacing:0">(1.1)</span></label>
+      <select data-bind="suitability"><option value="">— select —</option><option value="yes">Yes — screened as suitable, assessment proceeded</option><option value="cond">Suitable with adjustments (recorded below)</option><option value="def">Deferred — not suitable on the day</option></select></div>
+    <div class="f w50"><label>Previous OT driver assessments <span style="color:var(--faint);text-transform:none;letter-spacing:0">(2.5)</span></label>
+      <select data-bind="prevAssess"><option value="">— select —</option><option value="none">None — this is the first OT driver assessment</option><option value="prior">Previous assessment(s) — details in background</option><option value="unknown">Client unable to recall / unconfirmed</option></select></div>
+  </div>
 </div>
 </details>
 
@@ -233,7 +377,7 @@ ul.rep li{margin-bottom:2mm}
 
 <!-- ================= 3. BACKGROUND ================= -->
 <details class="sec">
-<summary>3 · Background Information</summary>
+<summary>3 · Clinical Interview &amp; Occupational Profile <span class="n" id="n3"></span></summary>
 <div class="secbody">
   <div class="hint">Narrative fields support tokens: <code>{name}</code> <code>{first}</code> <code>{He}</code> <code>{he}</code> <code>{His}</code> <code>{his}</code> <code>{him}</code> <code>{was}</code> <code>{is}</code> <code>{has}</code> — they adapt to the client's name and pronouns automatically. Leave a field blank to skip it in the report. Click <b>reset</b> to restore the standard wording.</div>
 
@@ -261,6 +405,10 @@ ul.rep li{margin-bottom:2mm}
   <div class="subhead">Driving history &amp; current status</div>
   <div class="row"><div class="f w100"><label>Narrative</label><textarea data-bind="drivingHistory" rows="4" placeholder="Licence history, hours accrued, vehicle, previous instruction, collisions/infringements, goals…"></textarea></div></div>
 
+  <div class="subhead">Occupational profile — clinical interview</div>
+  <div class="hint">A driver assessment is an occupational assessment. Each domain below carries prompt questions — open the prompts and ask them. Domains marked <b>core</b> must be completed; the rest are completed where relevant and marked <b>Not applicable</b> with a reason where they are not. This is what turns a licence conversation into a comprehensive occupational profile.</div>
+  <div id="profileRows"></div>
+
   <div class="subhead">Driving needs</div>
   <div id="needsRows"></div>
 </div>
@@ -273,11 +421,12 @@ ul.rep li{margin-bottom:2mm}
 
   <div class="subhead">Hearing &amp; communication</div>
   <div class="row">
-    <div class="f w50"><label>Result</label>
+    <div class="f w50"><label>Hearing result</label>
       <select data-bind="hearing"><option value="wnl">No difficulties observed or reported</option><option value="aids">Hearing aids worn — adequate with aids</option><option value="issue">Difficulties observed / reported</option></select>
     </div>
     <div class="f"><label>Comment (optional)</label><input type="text" data-bind="hearingNote"></div>
   </div>
+  <div class="row"><div class="f w100"><label>Communication screen — expressive, receptive and comprehension for the driving task</label><textarea data-bind="commScreen" rows="2" placeholder="How instructions were understood and followed; ability to ask for clarification; any language, speech or processing factors relevant to taking direction from an instructor…"></textarea></div></div>
 
   <div class="subhead">Visual screen</div>
   <div class="row">
@@ -303,16 +452,57 @@ ul.rep li{margin-bottom:2mm}
     <div class="f w50"><label>Recommend Orthoptist / Ophthal / Optometrist review</label><select data-bind="eyeReview"><option>Yes</option><option>No</option></select></div>
   </div>
 
-  <div class="subhead">Physical abilities &amp; restrictions</div>
-  <div class="hint">Each row is pre-filled with standard "within normal limits" wording — only edit what was different.</div>
+  <div class="subhead">Manual muscle testing (MRC grades)</div>
+  <div class="hint">Nothing here is pre-filled as normal. Each muscle group starts as <b>not yet tested</b> and you record the grade you actually elicited — the report prints only what you tested, and says plainly what you did not.</div>
+  <details class="ref"><summary>▸ Muscle testing reference — MRC grading &amp; technique</summary>
+    <div class="refcard">
+      <h5>MRC / Oxford scale</h5>
+      <ul>
+        <li><b>0</b> — No contraction palpable.</li>
+        <li><b>1</b> — Flicker or trace of contraction, no joint movement.</li>
+        <li><b>2</b> — Active movement through full range with gravity eliminated.</li>
+        <li><b>3</b> — Active movement through full range against gravity, but not against resistance.</li>
+        <li><b>4</b> — Active movement through full range against gravity and <i>some</i> resistance (4−/4/4+ for mild, moderate, strong resistance).</li>
+        <li><b>5</b> — Normal power: full range against gravity and full resistance.</li>
+      </ul>
+      <h5>Technique</h5>
+      <ul>
+        <li>Position and stabilise the joint proximally so the target muscle is isolated; demonstrate the movement first.</li>
+        <li>Take the limb to end of available range, then apply resistance <b>at the end of range</b>, building gradually — a "break test" — rather than pushing against a moving limb.</li>
+        <li>Test the unaffected side first to establish that client's normal, then compare sides.</li>
+        <li>Grade 4 vs 5 is the common error: if you can break the hold at all, it is a 4, not a 5. Record 4−/4/4+ rather than defaulting to 5.</li>
+        <li>Note pain, effort, fatigue or inconsistency separately from the grade — a grade limited by pain is recorded as such, not as weakness.</li>
+        <li><span class="dont">Do not</span> record a grade for a group you did not physically test. Leave it as not tested and say why.</li>
+      </ul>
+      <h5>Why these groups for driving</h5>
+      <ul>
+        <li>Shoulder/elbow/wrist and grip — steering control, rapid corrective steering, handbrake, gear selection, seatbelt.</li>
+        <li>Hip flexion, knee extension/flexion, ankle dorsiflexion/plantarflexion — pedal transfer speed and sustained braking force.</li>
+        <li>Cervical and trunk rotation — shoulder checks, blind-spot checks, reversing.</li>
+      </ul>
+    </div>
+  </details>
+  <div id="muscleRows"></div>
+
+  <div class="subhead">Other physical abilities &amp; restrictions</div>
+  <div class="hint">Each row starts blank. Use <b>standard wording</b> only when you have actually performed that screen and it was unremarkable.</div>
   <div id="physRows"></div>
-  <div class="row"><div class="f w100"><label>Summary of physical skills for driving <span class="resetlink" onclick="resetField('physSummary')">reset</span></label><textarea data-bind="physSummary" rows="2"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Summary of physical skills for driving <span class="resetlink" onclick="resetField('physSummary')">draft from what I recorded</span></label><textarea data-bind="physSummary" rows="2"></textarea></div></div>
+  <div id="physVerify"></div>
 
   <div class="subhead">Cognition / perception — standardised tests</div>
-  <div class="hint">Enter raw scores; interpretation against driving thresholds is written automatically. Untick a test to leave it out. Add clinical comments where relevant.</div>
+  <div class="hint">Enter raw scores; interpretation against driving thresholds is written automatically. Untick a test to leave it out. <b>Every test also requires an administration record</b> — if standard administration was departed from, the score is reported as invalid rather than as a result.</div>
   <div id="testCards"></div>
   <div class="row"><div class="f w100"><label>General cognitive skills (observations)</label><textarea data-bind="genCog" rows="3" placeholder="Alertness, engagement, instruction needs, concentration, communication, insight…"></textarea></div></div>
   <div class="row"><div class="f w100"><label>Summary of cognitive skills for driving</label><textarea data-bind="cogSummary" rows="4"></textarea></div></div>
+  <div id="cogVerify"></div>
+
+  <div class="subhead">Off-road feedback &amp; decision to proceed</div>
+  <div class="row"><div class="f w100"><label>Feedback given to the client after the off-road assessment <span style="color:var(--faint);text-transform:none;letter-spacing:0">(competency 2.17)</span></label><textarea data-bind="fbOffRoad" rows="2" placeholder="What you told the client about the screen results, when, and how they responded…"></textarea></div></div>
+  <div class="row">
+    <div class="f w50"><label>Suitable to proceed to on-road (2.19)</label><select data-bind="onroadSuitable"><option value="">— select —</option><option value="yes">Yes — proceeded to on-road assessment</option><option value="deferred">Deferred — further information required first</option><option value="no">No — off-road findings precluded on-road assessment</option></select></div>
+    <div class="f w50"><label>Further information obtained first (2.18)</label><input type="text" data-bind="furtherInfo" placeholder="e.g. optometry report requested; or 'none required'"></div>
+  </div>
 </div>
 </details>
 
@@ -325,10 +515,13 @@ ul.rep li{margin-bottom:2mm}
     <div class="f w25"><label>Duration (minutes)</label><input type="number" data-bind="duration"></div>
   </div>
   <div class="row"><div class="f w100"><label>Weather conditions</label><input type="text" data-bind="weather" placeholder="e.g. Overcast with no rain; dry road surfaces."></div></div>
-  <div class="row"><div class="f w100"><label>Geographical area / route</label><textarea data-bind="route" rows="2"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Geographical area / route <span style="color:var(--faint);text-transform:none;letter-spacing:0">— planned in advance (competency 3.6)</span></label><textarea data-bind="route" rows="2"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Briefing given to the Motor Driving Instructor before the drive <span style="color:var(--faint);text-transform:none;letter-spacing:0">(competencies 3.2, 3.4)</span></label><textarea data-bind="mdiBrief" rows="2" placeholder="Relevant history shared, route and instruction plan agreed, roles clarified, what you asked the MDI to watch for and when to intervene…"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Safety management during the drive <span style="color:var(--faint);text-transform:none;letter-spacing:0">(competency 3.8)</span></label><textarea data-bind="safetyMgmt" rows="2" placeholder="Any instructor intervention (verbal or dual controls), how it was managed, grading of route difficulty, decision points about continuing…"></textarea></div></div>
 
   <div class="subhead">Assessment results checklist</div>
-  <div class="hint">Every item defaults to <b>Safe &amp; appropriate</b> — you only write about the exceptions. Comments appear in the report's "Issues observed" column (or as an observation note for safe items).</div>
+  <div class="hint">Nothing is pre-rated. Every item starts as <b>not yet rated</b> and you rate what you observed — a blank checklist cannot become a report full of ticks. Anything you rate as an <b>issue</b> must be linked to a note you logged at the time; the <b>link note</b> button lets you attach one (or capture the note now if you are still in the car).</div>
+  <div id="onroadGate"></div>
   <div id="checklist"></div>
 </div>
 </details>
@@ -350,11 +543,17 @@ ul.rep li{margin-bottom:2mm}
     </div>
   </div>
   <div class="row"><div class="f w100"><label>Summary paragraph(s) <span class="resetlink" onclick="resetField('summaryText')">reset to auto-draft</span></label><textarea data-bind="summaryText" rows="8"></textarea></div></div>
-  <div class="hint">The auto-draft pulls in the outcome, diagnoses, screen results and every on-road issue you flagged. Regenerate any time with <b>reset</b>, then fine-tune.</div>
+  <div class="hint">The auto-draft is a <b>skeleton, not a report</b>. It assembles the outcome, screen results and the issues you flagged, in your standard structure — you then write the clinical reasoning into it from your notes. It is deliberately blocked from export while it is still untouched auto-text.</div>
+  <div id="summaryVerify"></div>
 
   <div class="subhead">Recommendations</div>
   <div class="hint">Tick to include. Wording is pre-drafted from your entries (hours, funding, focus areas from flagged issues) and stays editable.</div>
   <div id="recCards"></div>
+
+  <div class="subhead">Feedback to the client &amp; licensing information</div>
+  <div class="row"><div class="f w100"><label>Feedback given to the client after the on-road assessment <span style="color:var(--faint);text-transform:none;letter-spacing:0">(competency 3.14)</span></label><textarea data-bind="fbOnRoad" rows="2" placeholder="What you told the client, when, who was present, and how they responded to the outcome…"></textarea></div></div>
+  <div class="row"><div class="f w100"><label>Legal, licensing and insurance information given <span style="color:var(--faint);text-transform:none;letter-spacing:0">(competency 3.15)</span></label><textarea data-bind="legalInfo" rows="2" placeholder="What was explained about reporting obligations, licensing authority processes, insurance implications and who notifies whom…"></textarea></div></div>
+  <div class="row"><div class="f w50"><label>Licence conditions considered <span style="color:var(--faint);text-transform:none;letter-spacing:0">(3.13)</span></label><select data-bind="condConsidered"><option value="">— select —</option><option value="none">Considered — no conditions recommended</option><option value="existing">Considered — existing conditions remain appropriate</option><option value="new">Considered — new or amended conditions recommended</option></select></div></div>
 </div>
 </details>
 
@@ -382,19 +581,86 @@ ul.rep li{margin-bottom:2mm}
   <div class="row"><div class="f w100"><label>Basis of opinion &amp; limitations <span class="resetlink" onclick="resetField('limitations')">reset</span></label><textarea data-bind="limitations" rows="5"></textarea></div></div>
   <div class="row"><div class="f w100"><label>Declaration <span class="resetlink" onclick="resetField('declarationText')">reset</span></label><textarea data-bind="declarationText" rows="3"></textarea></div></div>
   <div class="row"><div class="f w100"><label>Report prepared for / distribution</label><input type="text" data-bind="distribution" placeholder="e.g. Referrer; client; treating general practitioner"></div></div>
+
+  <div class="subhead">Record-keeping &amp; timeliness</div>
+  <div class="row">
+    <div class="f w50"><label>Report issued within</label><select data-bind="turnaround"><option value="ok">Agreed timeframe (report issued within 10 working days of assessment)</option><option value="late">Outside agreed timeframe — reason recorded below</option></select></div>
+    <div class="f w50"><label>Records retained</label><select data-bind="recordsRetained"><option>Field notes, raw test forms and report retained securely in the client file</option><option>Not yet filed</option></select></div>
+  </div>
+  <div class="row"><div class="f w100"><label>Reason if outside timeframe</label><input type="text" data-bind="turnaroundWhy" placeholder="only needed if late"></div></div>
+
+  <div class="subhead">Sign-off</div>
+  <div id="signoffPanel"></div>
 </div>
 </details>
 
-<div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. Estus Health · OT Driving Assessment Report Builder v1.1</div>
+<!-- ================= 9. COMPETENCY & SUPERVISED PRACTICE ================= -->
+<details class="sec">
+<summary>9 · Competency Coverage &amp; Supervised Practice <span class="n" id="n9"></span></summary>
+<div class="secbody">
+  <div class="hint">Mapped to the <b>Australian Competency Standards for Occupational Therapy Driver Assessors</b> (Fields, Unsworth &amp; Harreveld, 2018) — the standards this assessment is marked against. Items marked <b>auto</b> are evidenced by what you have entered in this report; the rest are yours to confirm. Anything unmet is visible before you export, not after someone marks it.</div>
+  <div id="compBar"></div>
+  <div id="compRows"></div>
+
+  <div class="subhead">Supervised practice log</div>
+  <div class="hint">This log is kept separately from any one report and persists across clients. It tracks the practice requirements set by your supervisor. Until they are met, every export is watermarked as a supervised draft and requires a named supervising OT.</div>
+  <div id="practiceReq"></div>
+  <div id="practiceRows"></div>
+  <div class="row" style="margin-top:8px">
+    <div class="f w33"><label>Date</label><input type="date" id="plDate"></div>
+    <div class="f"><label>Type</label><select id="plType">
+      <option value="obs-return">Observed — return-to-driving assessment</option>
+      <option value="obs-learner">Observed — learner driver assessment</option>
+      <option value="sup-assess">Supervised assessment (I assessed, supervisor present)</option>
+      <option value="sup-report">Supervised report writing (report reviewed by supervisor)</option>
+    </select></div>
+  </div>
+  <div class="row">
+    <div class="f w25"><label>Client initials</label><input type="text" id="plRef" placeholder="e.g. J.C."></div>
+    <div class="f"><label>Supervising OT</label><input type="text" id="plSup"></div>
+    <div class="f w25"><label>&nbsp;</label><button class="btn primary" onclick="addPractice()">+ Log entry</button></div>
+  </div>
+  <div class="row"><div class="f w100"><label>Key learning / feedback taken from it</label><input type="text" id="plNote" placeholder="what you would do differently next time"></div></div>
+</div>
+</details>
+
+<div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. Estus Health · OT Driving Assessment Report Builder v2.0</div>
 </div>
 
 <div id="previewPane"><div id="reportRoot"></div></div>
+</div>
+<button id="noteFab" onclick="toggleDock()">✎ Field notes</button>
+<div id="noteDock">
+  <header>Contemporaneous field record <button class="x" onclick="toggleDock()">×</button></header>
+  <div class="ndcap">
+    <textarea id="ndText" placeholder="What did you just observe? Write it as you saw it — behaviour, context, what you did." onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey))addNote()"></textarea>
+    <div class="ndrow">
+      <select id="ndPhase">
+        <option value="pre">Pre-drive</option>
+        <option value="onroad">On-road</option>
+        <option value="debrief">Debrief / feedback</option>
+      </select>
+      <select id="ndTag"></select>
+    </div>
+    <div class="ndrow">
+      <button class="btn primary" style="flex:1" onclick="addNote()">Log note (⌘/Ctrl + ↵)</button>
+    </div>
+    <div class="hint" style="margin:6px 0 0" id="ndLockMsg"></div>
+  </div>
+  <div class="ndlist" id="ndList"></div>
 </div>
 <div id="valModal" onclick="if(event.target===this)this.classList.remove('open')">
   <div id="valBox">
     <header id="valHead">Outstanding items</header>
     <div class="vbody" id="valList"></div>
     <div class="vfoot"><button class="btn" onclick="document.getElementById('valModal').classList.remove('open')">Close</button></div>
+  </div>
+</div>
+<div id="linkModal" class="" onclick="if(event.target===this)closeLink()" style="display:none;position:fixed;inset:0;background:rgba(23,20,16,.55);z-index:200;align-items:center;justify-content:center">
+  <div id="valBox">
+    <header id="linkHead">Link a field note</header>
+    <div class="vbody" id="linkList"></div>
+    <div class="vfoot"><button class="btn" onclick="closeLink()">Close</button></div>
   </div>
 </div>
 <script>
@@ -478,8 +744,160 @@ const CHECKLIST = [
   {id:'pj6', short:'compliance with road rules', text:'Obeying advisory signs, markings and road rules'}]},
 ];
 
+/* ---------- set-up / equipment ---------- */
+const EQUIP = [
+ {g:'Client file', items:[
+  {id:'e1', n:'Referral correspondence and client file reviewed', s:'Read before the client arrives, not in front of them'},
+  {id:'e2', n:'Consent form printed and ready'},
+  {id:'e3', n:'Blank field-note paper / device charged for contemporaneous notes', s:'The single item most often missing'},
+  {id:'e4', n:'Client advised to bring licence, glasses and hearing aids'},
+ ]},
+ {g:'Vision screen', items:[
+  {id:'e5', n:'Snellen chart set up at correct test distance, measured'},
+  {id:'e6', n:'Occluder and tape measure'},
+  {id:'e7', n:'Room lighting adequate and chart unobstructed'},
+ ]},
+ {g:'Physical screen', items:[
+  {id:'e8', n:'Plinth / chair positioned for muscle testing and ROM'},
+  {id:'e9', n:'Goniometer available (if ROM limitation anticipated)'},
+  {id:'e10', n:'Dynamometer available (if grip strength indicated)'},
+ ]},
+ {g:'Cognitive / perceptual battery', items:[
+  {id:'e11', n:'Trail Making Test A &amp; B — sample and test forms, both parts'},
+  {id:'e12', n:'OT Drive Home Maze — form and scoring sheet'},
+  {id:'e13', n:'Bells Test — form and scoring template'},
+  {id:'e14', n:'Intersection Diagram Test / road law materials'},
+  {id:'e15', n:'DriveSafe DriveAware — iPad charged, app updated, licence current'},
+  {id:'e16', n:'Stopwatch or timer (not a phone you will be interrupted on)'},
+  {id:'e17', n:'Test manuals accessible for administration instructions', s:'Especially for tests you administer less often'},
+ ]},
+ {g:'On-road', items:[
+  {id:'e18', n:'MDI booking confirmed for the assessment time'},
+  {id:'e19', n:'Dual-control vehicle confirmed and appropriate for the client'},
+  {id:'e20', n:'Route planned in advance and shared with the MDI'},
+  {id:'e21', n:'On-road recording form on a clipboard, ready in the vehicle'},
+  {id:'e22', n:'Insurance and licence-sighting requirements checked'},
+ ]},
+];
+
+/* ---------- occupational profile (clinical interview depth) ---------- */
+const PROFILE_DOMAINS = [
+ {id:'living', core:true, label:'Living situation & household',
+  prompts:['Who do you live with, and what does the household look like?','Is your housing stable? Any planned changes?','Who else in the household drives, and what vehicles are available to you?']},
+ {id:'roles', core:true, label:'Roles & responsibilities',
+  prompts:['What are your main roles right now — work, study, parent, carer, volunteer?','Which of those roles depend on getting somewhere at a fixed time?','Has any role changed since your condition or since you stopped driving?']},
+ {id:'routine', core:true, label:'Typical week & daily routine',
+  prompts:['Talk me through a typical weekday, start to finish.','How does a weekend differ?','When in the day do you function best, and when are you most tired?']},
+ {id:'workstudy', core:true, label:'Work / education demands',
+  prompts:['Where do you work or study, and how do you get there now?','What hours — any shift work, early starts or late finishes?','Would driving change what work or study is realistically open to you?']},
+ {id:'community', core:true, label:'Community participation & social roles',
+  prompts:['What do you do outside the house in a normal month?','What have you stopped doing that you would like to start again?','Who do you rely on to get to those things?']},
+ {id:'transport', core:true, label:'Current transport & reliance on others',
+  prompts:['How do you travel now — public transport, family, support worker, taxi?','How much of someone else\'s week goes into transporting you?','What does it cost you, in money and in flexibility?','Have you used public transport independently? How did it go?']},
+ {id:'goals', core:true, label:'What driving would change (client\'s own goals)',
+  prompts:['If you were driving in six months, what would be different?','What is the first trip you would want to make on your own?','What worries you about driving?']},
+ {id:'fatigue', core:true, label:'Fatigue, sleep, pain & symptom pattern across the day',
+  prompts:['How is your sleep, and do you feel rested?','Do you get tired at a predictable time of day?','Any pain, and does it change how long you can sit or turn?','Do you have any warning before symptoms come on?']},
+ {id:'meds', core:true, label:'Medication timing, adherence & effects on alertness',
+  prompts:['When in the day do you take each medication?','Do any of them make you drowsy, blurred, slowed or restless?','What happens if a dose is missed or late?','Who manages the medication, and how are changes communicated?']},
+ {id:'substance', core:true, label:'Alcohol & other substance use in relation to driving',
+  prompts:['Do you drink alcohol? How much, how often?','Any cannabis or other substances?','What is your understanding of the rules for your licence type?']},
+ {id:'insight', core:true, label:'Insight into abilities, risk & self-monitoring',
+  prompts:['What do you think you are good at behind the wheel?','What do you think you would find hard?','How would you know if you were not safe to drive that day?','What would you do if you noticed you were struggling?']},
+ {id:'supports', core:true, label:'Supports available for supervised practice',
+  prompts:['Who is available to supervise practice, and how often?','Is a suitable vehicle available for practice?','How does that supervisor find it — confident, anxious, conflicting advice?']},
+ {id:'learning', core:true, label:'Learning style & response to instruction',
+  prompts:['How have previous lessons or instructors gone?','What helps you learn best — demonstration, being talked through it, repetition?','How do you take feedback while you are driving?']},
+ {id:'sensory', core:false, label:'Sensory preferences & environmental tolerance',
+  prompts:['How do you cope with noisy, busy or crowded environments?','Does anything in a car bother you — radio, passengers, glare, road noise?','What helps you settle when things get overwhelming?']},
+ {id:'history', core:true, label:'Crashes, near-misses & infringements',
+  prompts:['Have you ever been in a crash, as driver or passenger?','Any near-misses that stuck with you?','Any fines, demerit points or licence action?','Has anyone ever expressed concern about your driving?']},
+ {id:'culture', core:false, label:'Cultural, language & communication needs',
+  prompts:['Is English your first language? Is an interpreter needed?','Anything about how you prefer information given to you?','Anything I should know that affects how we work together today?']},
+];
+
+/* ---------- manual muscle testing ---------- */
+const MUSCLES = [
+ {id:'m1', g:'UPPER LIMB', n:'Shoulder flexion / abduction', why:'Steering through range, seatbelt reach'},
+ {id:'m2', g:'UPPER LIMB', n:'Elbow flexion', why:'Pulling the wheel through a turn'},
+ {id:'m3', g:'UPPER LIMB', n:'Elbow extension', why:'Pushing the wheel, bracing'},
+ {id:'m4', g:'UPPER LIMB', n:'Wrist extension', why:'Wheel control, indicator and wiper stalks'},
+ {id:'m5', g:'UPPER LIMB', n:'Grip strength', why:'Sustained wheel grip, handbrake, gear selector'},
+ {id:'m6', g:'LOWER LIMB', n:'Hip flexion', why:'Lifting the foot between pedals'},
+ {id:'m7', g:'LOWER LIMB', n:'Knee extension', why:'Sustained pedal pressure'},
+ {id:'m8', g:'LOWER LIMB', n:'Knee flexion', why:'Withdrawing the foot from the accelerator'},
+ {id:'m9', g:'LOWER LIMB', n:'Ankle dorsiflexion', why:'Clearing the pedal on transfer — key for emergency braking'},
+ {id:'m10', g:'LOWER LIMB', n:'Ankle plantarflexion', why:'Braking force'},
+ {id:'m11', g:'NECK / TRUNK', n:'Cervical rotation (both directions)', why:'Shoulder and blind-spot checks'},
+ {id:'m12', g:'NECK / TRUNK', n:'Trunk rotation / stability', why:'Reversing, sustained seated posture'},
+];
+const MRC = ['0','1','2','3','4-','4','4+','5'];
+
+/* ---------- competency standards (Fields, Unsworth & Harreveld 2018) ---------- */
+const COMPETENCIES = [
+ {id:'1.1', t:"Determines the client's suitability to undergo a driver assessment", ev:()=>!!S.suitability},
+ {id:'1.2', t:'Informs the client of the driver assessment procedures'},
+ {id:'2.1', t:'Informs the client of the need for a driver assessment and what it will involve', ev:()=>!!txt(S.reasonReferral)},
+ {id:'2.2', t:'Obtains informed consent from the client', ev:()=>S.consentObtained && !!txt(S.consentText)},
+ {id:'2.3', t:"Establishes the client's driver licence or learner permit details", ev:()=>!!txt(S.licNo)&&!!txt(S.licExpiry)},
+ {id:'2.4', t:'Informs the client of relevant legislation (and vehicle/third-party insurance implications)'},
+ {id:'2.5', t:'Establishes whether previous OT driver assessments have been conducted', ev:()=>S.prevAssess!==''},
+ {id:'2.6', t:"Establishes the client's driving history", ev:()=>wc(S.drivingHistory)>=60},
+ {id:'2.7', t:"Establishes the client's current and future driving needs and goals", ev:()=>profileDone('goals')&&profileDone('transport')&&profileDone('community')},
+ {id:'2.8', t:"Establishes the client's medical history", ev:()=>wc(S.medHistory)>=40},
+ {id:'2.9', t:"Establishes the client's current medication regimen and substance use", ev:()=>S.meds.some(m=>txt(m.name))&&profileDone('meds')&&profileDone('substance')},
+ {id:'2.10', t:'Screens visual function; meets AFTD visual requirements (acuity and confrontation fields)', ev:()=>!!txt(S.vaUR)&&!!txt(S.vaCB)&&S.vFields!=='nt'},
+ {id:'2.11', t:'Screens communication skills as required for the driving task', ev:()=>!!txt(S.commScreen)},
+ {id:'2.12', t:'Screens hearing as required for the driving task', ev:()=>!!S.hearing},
+ {id:'2.13', t:'Screens sensory-motor function as required for the driving task', ev:()=>musclesTested()>0 && PHYS_ROWS.every(r=>txt(S.phys[r.id]))},
+ {id:'2.14', t:'Screens cognitive-behavioural and perceptual function as required for the driving task', ev:()=>validTests()>=3 && wc(S.genCog)>=40},
+ {id:'2.15', t:'Screens road law knowledge as required for the driving task', ev:()=>S.tests.intersection.on&&!!txt(S.tests.intersection.score)},
+ {id:'2.16', t:'Considers the impact of the off-road assessment results on the driving task', ev:()=>wc(S.cogSummary)>=50},
+ {id:'2.17', t:'Provides feedback to the client as soon as possible following the off-road assessment', ev:()=>!!txt(S.fbOffRoad)},
+ {id:'2.18', t:'Obtains further information prior to the on-road assessment if required'},
+ {id:'2.19', t:'Determines suitability to undergo the on-road assessment', ev:()=>!!S.onroadSuitable},
+ {id:'2.20', t:'Determines factors relevant to conducting the on-road assessment, including suitability on the day', ev:()=>!!txt(S.weather)&&!!txt(S.route)},
+ {id:'3.1', t:'Confirms the licence/permit is current according to DLA legislation', ev:()=>S.licSighted==='Yes'&&!!txt(S.licExpiry)},
+ {id:'3.2', t:'Briefs the driving instructor prior to the on-road assessment', ev:()=>!!txt(S.mdiBrief)},
+ {id:'3.3', t:'Conducts the on-road assessment with a driving instructor in a dual-control or modified vehicle', ev:()=>!!txt(S.mdi)&&/dual|modif/i.test(S.vehicle)},
+ {id:'3.4', t:'Works in collaboration with the driving instructor', ev:()=>!!txt(S.mdiBrief)},
+ {id:'3.5', t:'Ensures the client is appropriately oriented and prepared at the commencement of the on-road assessment'},
+ {id:'3.6', t:'Conducts the assessment with pre-determined instructions where possible', ev:()=>!!txt(S.route)},
+ {id:'3.7', t:'Ensures the on-road assessment is of adequate duration', ev:()=>parseFloat(S.duration)>=30},
+ {id:'3.8', t:'Maintains a safe assessment environment for all road users', ev:()=>!!txt(S.safetyMgmt)},
+ {id:'3.9', t:'Observes and records driver behaviour and skills during the on-road assessment', ev:()=>notesIn('onroad').length>=NOTE_MIN.onroad && groupsCovered()===CHECKLIST.length},
+ {id:'3.10', t:'Identifies factors affecting on-road performance', ev:()=>allRated() && wc(S.summaryText)>=120},
+ {id:'3.11', t:'Determines fitness to drive safely', ev:()=>!!S.outcome},
+ {id:'3.12', t:'Considers the need for driver rehabilitation', ev:()=>REC_DEFS.some(r=>S.recs[r.id]&&S.recs[r.id].on)},
+ {id:'3.13', t:'Considers the need for licence conditions', ev:()=>!!S.condConsidered},
+ {id:'3.14', t:'Provides feedback to the client as soon as possible following the on-road assessment', ev:()=>!!txt(S.fbOnRoad)},
+ {id:'3.15', t:'Informs the client of legal, licensing and insurance processes following a driver assessment', ev:()=>!!txt(S.legalInfo)},
+ {id:'3.16', t:'Conducts an on-road reassessment where appropriate', na:()=>S.outcome!=='lessons-reassess', ev:()=>!!(S.recs.reassess&&S.recs.reassess.on)},
+ {id:'4.1', t:'Documents findings of the driver assessment, including off-road and on-road', ev:()=>allRated()&&validTests()>0, hard:true},
+ {id:'4.2', t:'Documents recommendations in the report arising from the driver assessment', ev:()=>REC_DEFS.some(r=>S.recs[r.id]&&S.recs[r.id].on&&txt(S.recs[r.id].text)), hard:true},
+ {id:'4.3', t:'Documents a plan and ongoing driver rehabilitation interventions and outcomes', na:()=>!['learner-continue','lessons-reassess','mods'].includes(S.outcome), ev:()=>REC_DEFS.some(r=>['lessons','reassess','mods'].includes(r.id)&&S.recs[r.id]&&S.recs[r.id].on)},
+ {id:'4.4', t:'Provides documentation to relevant individuals or agencies within a reasonable timeframe', ev:()=>S.turnaround==='ok'||!!txt(S.turnaroundWhy), hard:true},
+ {id:'4.5', t:'Retains documentation securely', ev:()=>/retained/i.test(S.recordsRetained||''), hard:true},
+ {id:'5.1', t:'Establishes a plan for clients requiring driver training or rehabilitation', na:()=>!['learner-continue','lessons-reassess'].includes(S.outcome), ev:()=>!!(S.recs.lessons&&S.recs.lessons.on)},
+ {id:'5.2', t:'Refers the client to a driving instructor for lessons if appropriate', na:()=>!['learner-continue','lessons-reassess'].includes(S.outcome), ev:()=>!!(S.recs.lessons&&S.recs.lessons.on)},
+ {id:'5.3', t:'Refers to, or liaises with, other health professionals for interventions to assist driver training', ev:()=>!!(S.recs.medReview&&S.recs.medReview.on)||!!(S.recs.optom&&S.recs.optom.on)},
+ {id:'5.4', t:"Reassesses the client's driving skills following training and rehabilitation where required", na:()=>S.outcome!=='lessons-reassess', ev:()=>!!(S.recs.reassess&&S.recs.reassess.on)},
+ {id:'5.5', t:'Prescribes customised vehicle modifications or assistive technologies, or refers to a specialist OTDA', na:()=>S.outcome!=='mods'},
+ {id:'5.6', t:'Ensures the client is able to use the recommended modifications or assistive technologies', na:()=>S.outcome!=='mods'},
+];
+
+/* ---------- thresholds that govern the record ---------- */
+const NOTE_MIN = {pre:6, onroad:10, perGroup:1};
+const PRACTICE_REQ = [
+ {k:'obs-return', label:'Observed return-to-driving assessments', need:1},
+ {k:'obs-learner', label:'Observed learner driver assessments', need:1},
+ {k:'sup-assess', label:'Supervised assessments completed by me', need:2},
+ {k:'sup-report', label:'Reports written with supervisor support', need:2},
+];
+
 const REFS = {
   austroads:"Austroads, 2022, 'Assessing Fitness to Drive', Austroads Inc, Sydney",
+  competency:"Fields SM, Unsworth CA & Harreveld RE, 2018, Australian Competency Standards for Occupational Therapy Driver Assessors, Occupational Therapy Australia, Melbourne, Victoria",
   dsda1:"Kay LG & Bundy A, 2009, DriveSafe and DriveAware: An assessment tool for driver rehabilitation, NCS Pearson Inc, Sydney, Australia",
   dsda2:"Kay LG, Bundy AC & Clemson LM, 2009, 'Predicting fitness to drive in people with cognitive impairments by using DriveSafe and DriveAware', Archives of Physical Medicine and Rehabilitation, vol. 90, no. 9, pp. 1514–1522",
   trails:"Tombaugh T, 2004, 'Trail Making Test A and B: Normative data stratified by age and education', Archives of Clinical Neuropsychology, vol. 19, pp. 203–214",
@@ -502,7 +920,7 @@ function freshState(){
     lenses:'Yes', lensesEndorsed:'Yes', acuityBy:'Optometrist',
     vaUR:'',vaUL:'',vaUB:'',vaCR:'',vaCL:'',vaCB:'',
     vFields:'full', vMovements:'wnl', visionNotes:'', austroadsVision:'Yes', eyeReview:'No',
-    phys:{}, physSummary:'',
+    phys:{}, physSummary:'', muscles:{},
     tests:{
       trailsB:{on:true, secs:'', errors:'', note:''},
       maze:{on:true, secs:'', errors:'', note:''},
@@ -512,20 +930,51 @@ function freshState(){
       intersection:{on:true, score:'', note:''},
       bells:{on:true, omissions:'', time:'', note:''},
     },
+    admin:{},
     genCog:'', cogSummary:'',
     vehicle:'Dual-control automatic vehicle (dual brakes)', duration:'', weather:'', route:'',
     checklist:{}, outcome:'learner-continue', summaryText:'',
     recs:{}, recParams:{hours:10, funder:'NDIS plan (capacity building)'},
     refsExtra:'',
-    reportRef:'', reportVersion:'1.0 (Final)', consentObtained:false,
+    reportRef:'', reportVersion:'1.0 (Draft)', consentObtained:false,
     consentText:'', qualifications:'', limitations:'', declarationText:'',
     distribution:'Referrer; client; treating general practitioner',
+
+    /* ---- governance layer ---- */
+    equip:{}, equipAt:'', equipWhy:{},
+    notes:[], notesLocked:false, notesLockedAt:'', notesRecordedBy:'ot', aiUse:'none',
+    profile:{},
+    verify:{}, ackAdvisories:{},
+    suitability:'', prevAssess:'', commScreen:'', mdiBrief:'', safetyMgmt:'', furtherInfo:'',
+    fbOffRoad:'', fbOnRoad:'', legalInfo:'', condConsidered:'', onroadSuitable:'',
+    turnaround:'ok', turnaroundWhy:'', recordsRetained:'Field notes, raw test forms and report retained securely in the client file',
+    compManual:{}, supervisorSignoff:false, selfReview:false,
   };
-  PHYS_ROWS.forEach(r=> s.phys[r.id]=r.def);
+  PHYS_ROWS.forEach(r=> s.phys[r.id]='');
+  MUSCLES.forEach(m=> s.muscles[m.id]={tested:'no', grade:'', note:''});
   NEEDS_ROWS.forEach(r=> s.needs[r.id]={val:r.opts[0], note:''});
-  CHECKLIST.forEach(g=>g.items.forEach(it=> s.checklist[it.id]={st:'safe', note:''}));
+  CHECKLIST.forEach(g=>g.items.forEach(it=> s.checklist[it.id]={st:'unrated', note:'', refs:[]}));
+  EQUIP.forEach(g=>g.items.forEach(it=> s.equip[it.id]=''));
+  PROFILE_DOMAINS.forEach(d=> s.profile[d.id]={text:'', na:false, naWhy:''});
+  Object.keys(TEST_ADMIN_DEF).forEach(k=> s.admin[k]=Object.assign({},TEST_ADMIN_DEF[k]));
   return s;
 }
+const TEST_ADMIN_DEF = {
+  trailsB:{}, maze:{}, driveSafe:{}, driveAware:{}, intersection:{}, bells:{},
+};
+Object.keys(TEST_ADMIN_DEF).forEach(k=> TEST_ADMIN_DEF[k]={perManual:'', sample:'', cueing:'', quiet:'', why:''});
+
+/* small helpers used across validation & competency mapping */
+function txt(x){ return String(x??'').trim(); }
+function wc(x){ const t=txt(x); return t? t.split(/\s+/).length : 0; }
+function profileDone(id){ const p=S.profile[id]; return !!p && (p.na? !!txt(p.naWhy) : wc(p.text)>=15); }
+function musclesTested(){ return MUSCLES.filter(m=>S.muscles[m.id].tested==='yes'&&S.muscles[m.id].grade).length; }
+function notesIn(phase){ return S.notes.filter(n=>n.phase===phase); }
+function groupsCovered(){ return CHECKLIST.filter(g=> S.notes.some(n=>n.phase==='onroad'&&n.group===g.g)).length; }
+function allRated(){ return CHECKLIST.every(g=>g.items.every(it=>S.checklist[it.id].st!=='unrated')); }
+function testInvalid(id){ const a=S.admin[id]; if(!a) return false; return a.cueing==='answers'||a.perManual==='no'; }
+function validTests(){ return Object.keys(TEST_META).filter(id=>id!=='dsdaCat'&&S.tests[id].on&&!testInvalid(id)).length; }
+
 let S = freshState();
 
 /* ---------- pronouns & tokens ---------- */
@@ -574,7 +1023,17 @@ const AUTOTEXT = {
     return base + ` The assessment considers the potential impact of {his} ${S.diagnoses? 'diagnoses of '+S.diagnoses : 'presenting condition'} on the cognitive, physical and perceptual skills required for safe driving.`;
   },
   physSummary(){
-    return `{name}'s physical abilities are within functional limits for driving a light automatic vehicle; no physical restrictions or modifications are indicated.`;
+    const tested=MUSCLES.filter(m=>S.muscles[m.id].tested==='yes'&&S.muscles[m.id].grade);
+    const untested=MUSCLES.filter(m=>S.muscles[m.id].tested==='no');
+    const reduced=tested.filter(m=>S.muscles[m.id].grade!=='5');
+    if(!tested.length) return `No manual muscle testing has been recorded, so no summary of physical skills can be drafted. Record what you tested first.`;
+    let t=`Manual muscle testing was completed for ${tested.length} muscle group${tested.length!==1?'s':''} relevant to vehicle control. `;
+    t+= reduced.length
+      ? `Reduced power was identified in ${reduced.map(m=>m.n.toLowerCase()+' (grade '+S.muscles[m.id].grade+')').join(', ')}; the functional implications for ${reduced.some(m=>m.g==='LOWER LIMB')?'pedal control and emergency braking':'steering and vehicle control'} are considered below. `
+      : `Power was graded 5/5 throughout the groups tested, with full range against full resistance. `;
+    if(untested.length) t+=`${untested.length} group${untested.length!==1?'s were':' was'} not formally tested and no conclusion is drawn about ${untested.length!==1?'them':'it'}. `;
+    t+= reduced.length? `` : `On the basis of what was tested, {name}'s physical abilities are within functional limits for driving a light automatic vehicle and no vehicle modifications are indicated.`;
+    return t.trim();
   },
   summaryText(){ return autoSummary(); },
   reportRef(){
@@ -591,7 +1050,7 @@ const AUTOTEXT = {
     return `This report reflects {name}'s presentation and performance at the time of the assessment and is based on the information available to me, including the documents listed under "Reports Reviewed" and the history provided by {name}{support}, which is assumed to be accurate. Driving performance may vary with medical status, fatigue, medication changes and environmental conditions, and this assessment represents performance on the day under the conditions described. Should new or conflicting information become available, or should {his} condition change, the opinions in this report may need to be reviewed.`;
   },
   declarationText(){
-    return `I declare that the contents of this report are true and correct to the best of my knowledge and belief, and that the opinions expressed are my own, formed with reference to Austroads 'Assessing Fitness to Drive' (2022) and the assessment findings described in this report.`;
+    return `I declare that the contents of this report are true and correct to the best of my knowledge and belief, and that the opinions expressed are my own, formed with reference to Austroads 'Assessing Fitness to Drive' (2022), the Australian Competency Standards for Occupational Therapy Driver Assessors (2018), and the assessment findings described in this report. Each finding in this report is drawn from notes I recorded at the time of the assessment.`;
   },
 };
 function resetField(key){ S[key] = AUTOTEXT[key](); syncForm(); update(); }
@@ -657,6 +1116,8 @@ const DSDA_CATS = {
 function dsdaCombined(){
   const ds=S.tests.driveSafe, da=S.tests.driveAware;
   if(!(ds.on&&da.on&&S.tests.dsdaCat.on)) return '';
+  if(testInvalid('driveSafe')||testInvalid('driveAware'))
+    return `A combined DriveSafe DriveAware outcome category has not been reported, because the administration of ${[testInvalid('driveSafe')?'DriveSafe':'',testInvalid('driveAware')?'DriveAware':''].filter(Boolean).join(' and ')} departed from the standard protocol. The combined category depends on both scores being validly obtained.`;
   const cat=S.tests.dsdaCat.cat;
   let base = `{name}'s combined DriveSafe (${ds.score||'—'}/84) and DriveAware (${da.score||'—'}/17) results place {him} in the "${DSDA_CATS[cat]}" category`;
   if(cat==='likely') base += `, indicating {he} {is} likely able to manage the cognitive aspects of driving.`;
@@ -713,13 +1174,16 @@ function autoSummary(){
   }[S.purpose];
 
   const cogFlags=[];
-  if(S.tests.trailsB.on){ const r=interpTrailsB(); if(r.pill==='fail') cogFlags.push('reduced speed of divided attention and mental flexibility under load (Trail Making Test Part B above the driving threshold)'); }
-  if(S.tests.maze.on){ const r=interpMaze(); if(r.pill==='fail') cogFlags.push('difficulty with planning and visuoconstructional skills (OT Drive Home Maze outside the driving threshold)'); }
-  if(S.tests.driveAware.on){ const r=interpDriveAware(); if(r.pill==='fail') cogFlags.push('reduced insight into driving-related abilities (DriveAware below cut-off)'); }
-  if(S.tests.bells.on){ const r=interpBells(); if(r.pill==='fail') cogFlags.push('visual inattention on the Bells Test'); }
+  const live=(id)=>S.tests[id].on && !testInvalid(id);
+  if(live('trailsB')){ const r=interpTrailsB(); if(r.pill==='fail') cogFlags.push('reduced speed of divided attention and mental flexibility under load (Trail Making Test Part B above the driving threshold)'); }
+  if(live('maze')){ const r=interpMaze(); if(r.pill==='fail') cogFlags.push('difficulty with planning and visuoconstructional skills (OT Drive Home Maze outside the driving threshold)'); }
+  if(live('driveAware')){ const r=interpDriveAware(); if(r.pill==='fail') cogFlags.push('reduced insight into driving-related abilities (DriveAware below cut-off)'); }
+  if(live('bells')){ const r=interpBells(); if(r.pill==='fail') cogFlags.push('visual inattention on the Bells Test'); }
+  const voided=Object.keys(TEST_META).filter(id=>id!=='dsdaCat'&&S.tests[id].on&&testInvalid(id)).map(id=>TEST_META[id].name);
   const visOK = S.austroadsVision==='Yes';
   let p1 = purposeTxt + ` On the pre-drive screen {his} vision ${S.lenses==='Yes'?'(with correction) ':''}${visOK?'met the Austroads vision standard':'did not clearly meet the Austroads vision standard'}, and {his} physical abilities and cognition were ${cogFlags.length?'broadly ':''}within functional limits for driving.`;
   if(cogFlags.length) p1 += ` The screen did, however, identify ${cogFlags.join('; ')}. ${cogFlags.length===1?'This is {his} main cognitive consideration and is':'These are directly'} relevant to the demands of ${S.purpose==='learner'?'learning to drive':'safe driving'}.`;
+  if(voided.length) p1 += ` The ${voided.join(' and ')} ${voided.length>1?'were':'was'} attempted but not validly administered, and ${voided.length>1?'those results have':'that result has'} not been relied upon; the conclusions below rest on the remaining screen findings and the on-road assessment.`;
 
   const issues = flaggedShorts();
   let p2;
@@ -769,10 +1233,15 @@ function buildPhys(){
   let html='', lastGroup=null;
   PHYS_ROWS.forEach(r=>{
     if(r.group && r.group!==lastGroup){ html+=`<div class="grouphead">${r.group}</div>`; lastGroup=r.group; }
-    html+=`<div class="row" style="margin-bottom:5px"><div class="f w100"><label>${r.label} <span class="resetlink" onclick="S.phys['${r.id}']=PHYS_ROWS.find(x=>x.id==='${r.id}').def;syncPhys();update()">reset</span></label>
-      <textarea rows="1" style="min-height:34px" oninput="S.phys['${r.id}']=this.value;update()" id="phys_${r.id}">${esc(S.phys[r.id])}</textarea></div></div>`;
+    const filled=!!txt(S.phys[r.id]);
+    html+=`<div class="row" style="margin-bottom:5px"><div class="f w100"><label>${r.label}
+      <span class="resetlink" onclick="S.phys['${r.id}']=PHYS_ROWS.find(x=>x.id==='${r.id}').def;syncPhys();update()">use standard wording</span>
+      ${filled?'':'<span style="color:#8c2f2f;text-transform:none;letter-spacing:0"> · not yet recorded</span>'}</label>
+      <textarea rows="1" style="min-height:34px${filled?'':';border-color:#e5c4c4;background:#fdfafa'}" placeholder="What you actually observed on testing" oninput="S.phys['${r.id}']=this.value;buildPhys();update()" id="phys_${r.id}">${esc(S.phys[r.id])}</textarea></div></div>`;
   });
   document.getElementById('physRows').innerHTML=html;
+  const pv=document.getElementById('physVerify');
+  if(pv) pv.innerHTML = txt(S.physSummary)? verifyBar('physSummary','This physical summary reflects what I actually tested — I have not described screens I did not perform.') : '';
 }
 function syncPhys(){ PHYS_ROWS.forEach(r=>{ const el=document.getElementById('phys_'+r.id); if(el) el.value=S.phys[r.id]; }); }
 
@@ -800,19 +1269,32 @@ function buildTests(){
       : (r? `<span class="pill ${r.pill}">${r.pill==='pass'?'Within threshold':r.pill==='fail'?'Outside threshold':'awaiting score'}</span>`:'');
     let fields = m.fields.map(f=>`<div class="f" style="flex:0 0 auto;min-width:0"><label>${f.label}</label><input type="${f.type}" style="width:${f.w}" value="${esc(t[f.k])}" oninput="S.tests.${id}.${f.k}=this.value;buildTestPill('${id}');update()"></div>`).join('');
     if(id==='dsdaCat') fields = `<div class="f" style="flex:1"><label>Outcome category (from DSDA report)</label><select onchange="S.tests.dsdaCat.cat=this.value;buildTests();update()">${Object.keys(DSDA_CATS).map(c=>`<option value="${c}" ${t.cat===c?'selected':''}>${DSDA_CATS[c]}</option>`).join('')}</select></div>`;
-    return `<div class="testcard ${t.on?'':'off'}" id="card_${id}">
-      <h4><label class="chk" style="padding:0"><input type="checkbox" ${t.on?'checked':''} onchange="S.tests.${id}.on=this.checked;buildTests();update()"></label>${m.name} <span id="pill_${id}">${pill}</span></h4>
+    const bad=testInvalid(id);
+    return `<div class="testcard ${t.on?'':'off'}" id="card_${id}" style="${bad?'border-left-color:#8c2f2f':''}">
+      <h4><label class="chk" style="padding:0"><input type="checkbox" ${t.on?'checked':''} onchange="S.tests.${id}.on=this.checked;buildTests();update()"></label>${m.name} <span id="pill_${id}">${bad?'<span class="invalidflag">not scoreable</span>':pill}</span></h4>
       <div style="font-size:11.5px;color:var(--faint);margin:2px 0 0 23px">${m.purpose}</div>
       ${t.on? `<div class="trow">${fields}<div class="f" style="flex:1;min-width:160px"><label>Clinical comment (optional — appended to interpretation)</label><input type="text" value="${esc(t.note)}" oninput="S.tests.${id}.note=this.value;update()"></div></div>
+      ${id==='dsdaCat'? '' : buildAdminBox(id)}
       <div class="autonote" id="auto_${id}">${autoNoteHTML(id)}</div>`:''}
     </div>`;
   }).join('');
+  const cv=document.getElementById('cogVerify');
+  if(cv) cv.innerHTML = txt(S.cogSummary)? verifyBar('cogSummary','This cognitive summary is drawn from my own notes and the valid test results only — no invalidated score is relied on here.') : '';
 }
 function autoNoteHTML(id){
-  if(id==='dsdaCat') return '<b>Auto-text:</b> '+esc(fill(dsdaCombined())||'Enable DriveSafe + DriveAware to compose the combined outcome.');
+  if(id==='dsdaCat') return '<b>Auto-text:</b> '+esc(fill(dsdaCombined())||'Enable DriveSafe + DriveAware (both validly administered) to compose the combined outcome.');
   const m=TEST_META[id]; if(!m.interp) return '';
+  if(testInvalid(id)) return '<b style="color:#8c2f2f">Score withheld.</b> '+esc(fill(invalidText(id)));
   const r=m.interp();
   return '<b>Auto-interpretation:</b> '+esc((r.scoreTxt? r.scoreTxt+' ':'')+fill(r.txt));
+}
+function invalidText(id){
+  const a=S.admin[id]||{}, m=TEST_META[id];
+  const reason = a.cueing==='answers'
+    ? 'answers, targets or route guidance were provided to {name} during the test'
+    : 'the test was not administered in accordance with the standard instructions';
+  return `The ${m.name} was attempted but ${reason}. The result is therefore not a valid measure of ${m.purpose.toLowerCase().replace(/^(measures|screens|tests for|measures) /,'')} and no score is reported. `+
+    (txt(a.why)? txt(a.why) : 'This result has not been relied upon in forming the opinions in this report.');
 }
 function buildTestPill(id){
   const el=document.getElementById('auto_'+id); if(el) el.innerHTML=autoNoteHTML(id);
@@ -823,17 +1305,36 @@ function buildTestPill(id){
 }
 
 function buildChecklist(){
+  const gate=document.getElementById('onroadGate');
+  if(gate){
+    const unrated=CHECKLIST.flatMap(g=>g.items).filter(it=>S.checklist[it.id].st==='unrated').length;
+    const unlinked=CHECKLIST.flatMap(g=>g.items).filter(it=>S.checklist[it.id].st==='issue'&&!(S.checklist[it.id].refs||[]).length).length;
+    gate.innerHTML = (unrated||unlinked)
+      ? `<div class="gate stop"><b>${unrated} item${unrated!==1?'s':''} not yet rated</b>${unlinked?` · <b>${unlinked} flagged issue${unlinked!==1?'s':''} with no field note linked</b>`:''}. Both block export.</div>`
+      : `<div class="gate locked"><b>All ${CHECKLIST.flatMap(g=>g.items).length} items rated</b>, and every flagged issue points back to a note logged at the time.</div>`;
+  }
   document.getElementById('checklist').innerHTML = CHECKLIST.map(g=>
     `<div class="grouphead">${g.g}</div>` + g.items.map(it=>{
       const c=S.checklist[it.id];
-      return `<div class="clrow"><div class="cltop">
-        <select class="st-${c.st}" onchange="S.checklist['${it.id}'].st=this.value;buildChecklist();update()">
+      const refs=(c.refs||[]).map(id=>noteById(id)).filter(Boolean);
+      const chips = c.st==='issue'
+        ? `<div class="notechips">${refs.length? refs.map(n=>`<span class="notechip"><b>${esc(clock(n.t))}</b> ${esc(n.text.slice(0,44))}${n.text.length>44?'…':''}<span class="rm" onclick="unlinkNote('${it.id}','${n.id}')">×</span></span>`).join('')
+            : `<span class="notechip none">no field note linked — required</span>`}
+          <button class="linkbtn" onclick="openLink('${it.id}')">＋ link note</button></div>`
+        : (refs.length? `<div class="notechips">${refs.map(n=>`<span class="notechip"><b>${esc(clock(n.t))}</b> ${esc(n.text.slice(0,44))}${n.text.length>44?'…':''}<span class="rm" onclick="unlinkNote('${it.id}','${n.id}')">×</span></span>`).join('')}<button class="linkbtn" onclick="openLink('${it.id}')">＋ link note</button></div>`
+           : (c.st==='safe'? `<div class="notechips"><button class="linkbtn" onclick="openLink('${it.id}')">＋ link note</button></div>`:''));
+      return `<div class="clrow" style="${c.st==='unrated'?'border-left:3px solid #8c2f2f':''}"><div class="cltop">
+        <select class="st-${c.st==='issue'?'issue':c.st==='safe'?'safe':'na'}" onchange="S.checklist['${it.id}'].st=this.value;buildChecklist();update()">
+          <option value="unrated" ${c.st==='unrated'?'selected':''}>? Not yet rated</option>
           <option value="safe" ${c.st==='safe'?'selected':''}>✓ Safe &amp; appropriate</option>
           <option value="issue" ${c.st==='issue'?'selected':''}>⚠ Issue observed</option>
           <option value="na" ${c.st==='na'?'selected':''}>— Not assessed</option>
         </select>
         <div class="cltxt">${it.text}</div></div>
-        ${c.st!=='na' ? `<textarea placeholder="${c.st==='issue'?'Describe the issue, contributing factors and what it will take to develop…':'Optional observation note'}" oninput="S.checklist['${it.id}'].note=this.value;update()">${esc(c.note)}</textarea>`:''}
+        ${c.st==='na' ? `<textarea placeholder="Why this was not assessed" oninput="S.checklist['${it.id}'].note=this.value;update()">${esc(c.note)}</textarea>`
+          : c.st==='unrated' ? ''
+          : `<textarea placeholder="${c.st==='issue'?'Describe the issue, contributing factors and what it will take to develop…':'Optional observation note'}" oninput="S.checklist['${it.id}'].note=this.value;update()">${esc(c.note)}</textarea>`}
+        ${chips}
       </div>`;
     }).join('')).join('');
 }
@@ -854,6 +1355,421 @@ function buildRecs(){
     </div>`;
   }).join('');
 }
+/* ================================================================
+   CONTEMPORANEOUS FIELD RECORD
+   The report is written from this. Not the other way round.
+================================================================ */
+function nowStamp(){ const d=new Date(); return d.toISOString(); }
+function clock(iso){ try{ const d=new Date(iso); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }catch(e){ return ''; } }
+function dayStamp(iso){ try{ const d=new Date(iso); return fmtDate(d.toISOString().slice(0,10))+' '+clock(iso); }catch(e){ return ''; } }
+
+const PRE_TAGS = [
+  {id:'interview', label:'Clinical interview'},
+  {id:'vision', label:'Vision screen'},
+  {id:'hearing', label:'Hearing / communication'},
+  {id:'physical', label:'Physical / muscle testing'},
+  {id:'test-trailsB', label:'Trail Making Test B'},
+  {id:'test-maze', label:'Drive Home Maze'},
+  {id:'test-driveSafe', label:'DriveSafe'},
+  {id:'test-driveAware', label:'DriveAware'},
+  {id:'test-intersection', label:'Intersection Diagram'},
+  {id:'test-bells', label:'Bells Test'},
+  {id:'gencog', label:'General cognitive observation'},
+  {id:'other-pre', label:'Other pre-drive observation'},
+];
+const DEBRIEF_TAGS = [
+  {id:'fb-offroad', label:'Off-road feedback to client'},
+  {id:'fb-onroad', label:'On-road feedback to client'},
+  {id:'fb-mdi', label:'Discussion with MDI'},
+  {id:'other-debrief', label:'Other'},
+];
+function tagsFor(phase){
+  if(phase==='pre') return PRE_TAGS.map(t=>({id:t.id,label:t.label,group:t.label}));
+  if(phase==='debrief') return DEBRIEF_TAGS.map(t=>({id:t.id,label:t.label,group:t.label}));
+  const out=[];
+  CHECKLIST.forEach(g=>{
+    out.push({id:'grp-'+g.g, label:'— '+g.g+' (general) —', group:g.g});
+    g.items.forEach(it=> out.push({id:it.id, label:'   '+g.g+': '+it.short, group:g.g}));
+  });
+  out.push({id:'other-onroad', label:'Other on-road observation', group:'General'});
+  return out;
+}
+function tagLabel(n){
+  const t=tagsFor(n.phase).find(x=>x.id===n.tag);
+  return t? t.label.trim().replace(/^—\s*|\s*—$/g,'') : (n.tag||'general');
+}
+function refreshTagSelect(){
+  const ph=document.getElementById('ndPhase').value;
+  const sel=document.getElementById('ndTag');
+  sel.innerHTML = tagsFor(ph).map(t=>`<option value="${t.id}">${esc(t.label)}</option>`).join('');
+}
+function toggleDock(){
+  const d=document.getElementById('noteDock');
+  d.classList.toggle('open');
+  if(d.classList.contains('open')){ refreshTagSelect(); renderDock(); document.getElementById('ndText').focus(); }
+}
+function addNote(){
+  const el=document.getElementById('ndText'), t=txt(el.value);
+  if(!t){ el.focus(); return; }
+  const phase=document.getElementById('ndPhase').value;
+  const tag=document.getElementById('ndTag').value;
+  const grp=(tagsFor(phase).find(x=>x.id===tag)||{}).group||'';
+  S.notes.push({id:'n'+Date.now()+Math.floor(Math.random()*999), t:nowStamp(), phase, tag, group:grp, text:t, amended:[], post:S.notesLocked});
+  el.value='';
+  renderDock(); update();
+}
+function delNote(id){
+  const n=S.notes.find(x=>x.id===id); if(!n) return;
+  if(S.notesLocked){ alert('The field record is locked. Notes recorded at the time cannot be deleted — add an addendum instead.'); return; }
+  if(!confirm('Delete this note?')) return;
+  S.notes=S.notes.filter(x=>x.id!==id);
+  renderDock(); update();
+}
+function editNote(id,v){
+  const n=S.notes.find(x=>x.id===id); if(!n) return;
+  n.text=v; update();
+}
+function amendNote(id){
+  const n=S.notes.find(x=>x.id===id); if(!n) return;
+  const a=prompt('Addendum (the original note is kept unchanged and this is timestamped separately):');
+  if(!txt(a||'')) return;
+  n.amended.push({t:nowStamp(), text:txt(a)});
+  renderDock(); update();
+}
+function lockNotes(){
+  const pre=notesIn('pre').length, on=notesIn('onroad').length;
+  let warn='';
+  if(pre<NOTE_MIN.pre) warn+=`\n· Pre-drive notes: ${pre} of ${NOTE_MIN.pre} minimum`;
+  if(on<NOTE_MIN.onroad) warn+=`\n· On-road notes: ${on} of ${NOTE_MIN.onroad} minimum`;
+  const missing=CHECKLIST.filter(g=>!S.notes.some(n=>n.phase==='onroad'&&n.group===g.g)).map(g=>g.g);
+  if(missing.length) warn+='\n· No on-road note logged for: '+missing.join(', ');
+  if(warn){ alert('The field record does not yet meet the minimum for a report:\n'+warn+'\n\nAdd the observations you made before locking. If you genuinely did not observe an area, log a note saying so and why.'); return; }
+  if(!confirm('Lock the field record?\n\nAfter locking, existing notes cannot be edited or deleted — you can only add timestamped addenda. This is what makes them a contemporaneous record.')) return;
+  S.notesLocked=true; S.notesLockedAt=nowStamp();
+  S.notes.forEach(n=>n.locked=true);
+  renderDock(); syncForm(); update();
+}
+function renderDock(){
+  const list=document.getElementById('ndList'); if(!list) return;
+  const lm=document.getElementById('ndLockMsg');
+  if(lm) lm.innerHTML = S.notesLocked
+    ? `<b style="color:#1e6b3a">Record locked ${esc(dayStamp(S.notesLockedAt))}.</b> New notes are logged as post-assessment addenda and marked as such.`
+    : `Record open. Lock it before you write the report — <b>Section 0</b>.`;
+  const sorted=[...S.notes].sort((a,b)=> a.t<b.t? -1:1);
+  list.innerHTML = sorted.length? sorted.map(n=>`
+    <div class="nitem ${n.phase}">
+      <div class="nmeta"><span class="tm">${esc(clock(n.t))}</span><span>${esc(n.phase==='onroad'?'on-road':n.phase)}</span><span>· ${esc(tagLabel(n))}</span>
+      ${n.post?'<span style="color:#8c2f2f">· post-lock</span>':''}
+      ${!S.notesLocked? `<span class="del" onclick="delNote('${n.id}')">×</span>`:''}</div>
+      ${S.notesLocked
+        ? `<div>${esc(n.text)}</div>`
+        : `<textarea oninput="editNote('${n.id}',this.value)">${esc(n.text)}</textarea>`}
+      ${n.amended.map(a=>`<div class="amend">Addendum ${esc(clock(a.t))}: ${esc(a.text)}</div>`).join('')}
+      ${S.notesLocked? `<div style="margin-top:4px"><span class="noteslink" onclick="amendNote('${n.id}')">+ addendum</span></div>`:''}
+    </div>`).join('')
+    : `<div class="hint" style="padding:10px 2px">No notes yet. Log what you observe as it happens — this is the record the whole report has to be traceable to.</div>`;
+}
+function noteStats(){
+  const pre=notesIn('pre').length, on=notesIn('onroad').length, db=notesIn('debrief').length;
+  const covered=groupsCovered(), needG=CHECKLIST.length;
+  const okPre=pre>=NOTE_MIN.pre, okOn=on>=NOTE_MIN.onroad, okG=covered>=needG;
+  const ready=okPre&&okOn&&okG;
+  const row=(ok,label,val)=>`<div class="plreq"><span class="cnt ${ok?'ok':'no'}">${ok?'✓':'✗'}</span><span>${label}: <b>${val}</b></span></div>`;
+  let h=`<div class="gate ${S.notesLocked?'locked':(ready?'':'stop')}">`;
+  h+= S.notesLocked
+    ? `<b>Field record locked ${esc(dayStamp(S.notesLockedAt))}.</b> ${S.notes.length} note${S.notes.length!==1?'s':''} recorded. Report sections are unlocked. Anything added now is marked as a post-assessment addendum.`
+    : `<b>Field record is open.</b> The report cannot be exported until it is locked, and it cannot be locked until it holds enough observation to write a report from.`;
+  h+=`</div>`;
+  h+= row(okPre,'Pre-drive notes',`${pre} / ${NOTE_MIN.pre} minimum`);
+  h+= row(okOn,'On-road notes',`${on} / ${NOTE_MIN.onroad} minimum`);
+  h+= row(okG,'On-road performance areas with at least one note',`${covered} / ${needG}`);
+  h+= `<div class="plreq"><span class="cnt ok">·</span><span>Debrief / feedback notes: <b>${db}</b></span></div>`;
+  if(!S.notesLocked) h+=`<button class="btn primary gbtn" onclick="lockNotes()">Lock field record &amp; begin the report</button>`;
+  return h;
+}
+
+/* ---------- linking on-road findings back to the record ---------- */
+let _linkTarget=null;
+function openLink(itemId){
+  _linkTarget=itemId;
+  const item=CHECKLIST.flatMap(g=>g.items).find(i=>i.id===itemId);
+  const grp=CHECKLIST.find(g=>g.items.some(i=>i.id===itemId));
+  document.getElementById('linkHead').textContent='Link a field note — '+item.short;
+  const cand=S.notes.filter(n=>n.phase==='onroad').sort((a,b)=>a.t<b.t?-1:1);
+  const rel=cand.filter(n=>n.tag===itemId||n.group===grp.g);
+  const rest=cand.filter(n=>!rel.includes(n));
+  const rowFor=n=>{
+    const on=(S.checklist[itemId].refs||[]).includes(n.id);
+    return `<div class="vitem" onclick="linkNote('${n.id}')"><input type="checkbox" class="ack" ${on?'checked':''} onclick="event.preventDefault()">
+      <span><b>${esc(clock(n.t))}</b> · ${esc(tagLabel(n))}<span class="vwhy">${esc(n.text)}</span></span></div>`;
+  };
+  document.getElementById('linkList').innerHTML =
+    (rel.length? `<div class="vgroup">Notes logged against this area</div>`+rel.map(rowFor).join('') : '')+
+    (rest.length? `<div class="vgroup">Other on-road notes</div>`+rest.map(rowFor).join('') : '')+
+    (cand.length? '' : `<div class="hint" style="padding:12px 2px">No on-road notes logged yet. Open the field notes panel and record what you saw — a finding with nothing behind it is exactly what this is here to prevent.</div>`);
+  document.getElementById('linkModal').style.display='flex';
+}
+function linkNote(nid){
+  const c=S.checklist[_linkTarget]; if(!c) return;
+  c.refs=c.refs||[];
+  c.refs = c.refs.includes(nid)? c.refs.filter(x=>x!==nid) : c.refs.concat([nid]);
+  openLink(_linkTarget); buildChecklist(); update();
+}
+function closeLink(){ document.getElementById('linkModal').style.display='none'; _linkTarget=null; }
+function unlinkNote(itemId,nid){
+  S.checklist[itemId].refs=(S.checklist[itemId].refs||[]).filter(x=>x!==nid);
+  buildChecklist(); update();
+}
+function noteById(id){ return S.notes.find(n=>n.id===id); }
+
+/* ================================================================
+   VERIFICATION — auto-draft text must be checked against the record
+================================================================ */
+function hashOf(s){ let h=5381; s=String(s??''); for(let i=0;i<s.length;i++) h=((h<<5)+h+s.charCodeAt(i))|0; return String(h); }
+function verified(key){ const v=S.verify[key]; return !!(v&&v.ok&&v.h===hashOf(S[key])); }
+function setVerify(key,on){ S.verify[key]= on? {ok:true,h:hashOf(S[key])} : {ok:false,h:''}; syncForm(); update(); }
+function verifyBar(key,label){
+  const ok=verified(key);
+  return `<div class="vbar ${ok?'ver':'unver'}">
+    <input type="checkbox" id="vb_${key}" ${ok?'checked':''} onchange="setVerify('${key}',this.checked)">
+    <label for="vb_${key}">${ok?'✓ ':''}${esc(label)}</label></div>`;
+}
+function isUntouchedDraft(key){
+  return AUTOTEXT[key] ? hashOf(S[key])===hashOf(AUTOTEXT[key]()) : false;
+}
+
+/* ================================================================
+   SET-UP, PROFILE, MUSCLE TESTING, TEST ADMINISTRATION
+================================================================ */
+function equipDone(){
+  return EQUIP.every(g=>g.items.every(it=>{
+    const v=S.equip[it.id];
+    return v==='yes' || (v==='na' && txt(S.equipWhy[it.id]));
+  }));
+}
+function buildEquip(){
+  const el=document.getElementById('equipRows'); if(!el) return;
+  el.innerHTML = EQUIP.map(g=>`<div class="grouphead">${g.g}</div>`+g.items.map(it=>{
+    const v=S.equip[it.id]||'';
+    return `<div class="eqrow">
+      <select class="${v==='yes'?'ok':(v?'no':'')}" onchange="S.equip['${it.id}']=this.value;buildEquip();update()">
+        <option value="" ${!v?'selected':''}>— not checked —</option>
+        <option value="yes" ${v==='yes'?'selected':''}>✓ Ready</option>
+        <option value="na" ${v==='na'?'selected':''}>N/A</option>
+      </select>
+      <div class="eqname">${it.n}${it.s?`<small>${it.s}</small>`:''}</div>
+      ${v==='na'? `<input class="eqwhy" placeholder="why not required" value="${esc(S.equipWhy[it.id]||'')}" oninput="S.equipWhy['${it.id}']=this.value;update()">`:''}
+    </div>`;
+  }).join('')).join('');
+  const b=document.getElementById('equipBtn');
+  if(b){ b.disabled=!equipDone(); b.style.opacity=equipDone()?'1':'.5'; b.textContent=S.equipAt?'Set-up confirmed':'Confirm set-up complete'; }
+}
+function confirmEquip(){
+  if(!equipDone()){ alert('Every item needs to be marked Ready, or N/A with a reason.'); return; }
+  S.equipAt=dayStamp(nowStamp());
+  syncForm(); update();
+}
+function setupGate(){
+  const done=!!S.equipAt;
+  return `<div class="gate ${done?'locked':'stop'}">${done
+    ? `<b>Set-up confirmed ${esc(S.equipAt)}.</b> Everything was laid out before the client arrived.`
+    : `<b>Set-up not yet confirmed.</b> Work through the equipment list below before the client arrives. Leaving the room mid-assessment to fetch a form costs you the client's ease and costs you the observation you were about to make.`}</div>`;
+}
+
+function buildProfile(){
+  const el=document.getElementById('profileRows'); if(!el) return;
+  el.innerHTML = PROFILE_DOMAINS.map(d=>{
+    const p=S.profile[d.id], done=profileDone(d.id);
+    return `<div class="reccard" style="border-left:3px solid ${done?'#1e6b3a':(d.core?'#8c2f2f':'#c8c6c1')}">
+      <div class="rectop">
+        <label style="flex:1">${d.label} ${d.core?'<span style="color:#8c2f2f;font-size:10.5px">· core</span>':'<span style="color:var(--faint);font-size:10.5px">· where relevant</span>'}</label>
+        <label class="chk" style="font-size:11.5px"><input type="checkbox" ${p.na?'checked':''} onchange="S.profile['${d.id}'].na=this.checked;buildProfile();update()">Not applicable</label>
+      </div>
+      <details class="ref"><summary>▸ prompt questions</summary><div class="refcard"><ul>${d.prompts.map(q=>`<li>${esc(q)}</li>`).join('')}</ul></div></details>
+      ${p.na
+        ? `<input style="width:100%;margin-top:6px;border:1px solid #d6d4cf;border-radius:4px;padding:6px 8px;font-size:12.5px;font-family:'Barlow',sans-serif" placeholder="why this domain is not applicable for this client" value="${esc(p.naWhy)}" oninput="S.profile['${d.id}'].naWhy=this.value;update()">`
+        : `<textarea placeholder="What the client told you, in enough detail to be useful to whoever reads this report…" oninput="S.profile['${d.id}'].text=this.value;buildProfile();update()">${esc(p.text)}</textarea>
+           <div class="params"><span style="color:${wc(p.text)>=15?'#1e6b3a':'var(--faint)'}">${wc(p.text)} words${wc(p.text)>=15?' ✓':' · 15 minimum'}</span></div>`}
+    </div>`;
+  }).join('');
+}
+
+function gradeClass(g){ if(!g) return 'g-untested'; if(g==='5') return 'g-full'; if(g.indexOf('4')===0) return 'g-red'; return 'g-untested'; }
+function buildMuscles(){
+  const el=document.getElementById('muscleRows'); if(!el) return;
+  let lastG=null;
+  el.innerHTML = MUSCLES.map(m=>{
+    const v=S.muscles[m.id];
+    let head='';
+    if(m.g!==lastG){ head=`<div class="grouphead">${m.g}</div>`; lastG=m.g; }
+    return head+`<div class="mgrid">
+      <div class="mtop">
+        <div class="mname">${m.n}<div style="font-size:11px;color:var(--faint);font-weight:400">${m.why}</div></div>
+        <select onchange="S.muscles['${m.id}'].tested=this.value;buildMuscles();update()">
+          <option value="no" ${v.tested==='no'?'selected':''}>Not tested</option>
+          <option value="yes" ${v.tested==='yes'?'selected':''}>Tested</option>
+          <option value="na" ${v.tested==='na'?'selected':''}>N/A for this client</option>
+        </select>
+        ${v.tested==='yes'? `<select class="${gradeClass(v.grade)}" onchange="S.muscles['${m.id}'].grade=this.value;buildMuscles();update()">
+          <option value="">grade…</option>${MRC.map(g=>`<option ${v.grade===g?'selected':''}>${g}</option>`).join('')}</select>`:''}
+      </div>
+      ${v.tested!=='na'? `<input class="mnote" placeholder="${v.tested==='yes'?'Side difference, pain, effort, fatigue — anything the grade alone does not say':'Why this group was not tested'}" value="${esc(v.note)}" oninput="S.muscles['${m.id}'].note=this.value;update()">`:''}
+    </div>`;
+  }).join('');
+}
+
+const ADMIN_SCRIPTS = {
+  trailsB:{
+    title:'Trail Making Test — Part B administration',
+    must:[
+      'Give the sample (practice) sheet first and let the client complete it. Correct errors on the sample freely — that is what it is for.',
+      'Instructions once: "Draw a line from 1 to A, A to 2, 2 to B, and so on, alternating numbers and letters, as fast as you can without lifting the pen."',
+      'Start the stopwatch as the pen touches the page. The clock does not stop.',
+    ],
+    may:[
+      'If the client makes an error, say "You made a mistake" and return them to the last correct circle. The timer keeps running — the error cost is the time it takes them to recover.',
+      'If they lift the pen, remind them to keep it on the page.',
+      'If they stop and ask whether they are right, you may say "Keep going."',
+    ],
+    never:[
+      'Never name, point to, or indicate the next correct target. Not with a finger, not with your eyes, not with "you\'re nearly there".',
+      'Never tell them which sequence comes next when they hesitate.',
+      'Never let them restart to get a better time.',
+    ],
+    fail:'If any answer or cue was given, the timed score no longer measures divided attention — it measures your prompting. It must be reported as invalid, not as a slow score.',
+  },
+  maze:{
+    title:'OT Drive Home Maze administration',
+    must:[
+      'Present the maze with the standard instruction: find the way from the start to the home, without crossing any lines and without entering dead ends.',
+      'Confirm the client understands before starting; give the practice maze if the version includes one.',
+      'Time from pen-down to completion. Record errors: line crossings and dead-end entries.',
+    ],
+    may:[
+      'Repeat the standard instruction verbatim if asked.',
+      'Remind the client not to lift the pen.',
+    ],
+    never:[
+      'Never indicate the route, the correct turn, or that a chosen path is wrong.',
+      'Never trace part of the path as a demonstration on the live test sheet.',
+    ],
+    fail:'Guidance on route choice invalidates the planning and foresight measure entirely — that is the construct being tested.',
+  },
+  driveSafe:{title:'DriveSafe administration', must:['Screen positioned per manual, client seated at the specified distance.','Practice items completed and understood before the scored run.','Run without interruption; do not pause the scored sequence.'], may:['Repeat the standard instruction before the scored items begin.'], never:['Never name objects, directions or locations during the scored items.','Never replay a scored clip.'], fail:'Cueing during scored items inflates the awareness score.'},
+  driveAware:{title:'DriveAware administration', must:['Ask the questions as written, in order.','Record the client\'s own words where the manual calls for it.'], may:['Repeat a question verbatim.'], never:['Never rephrase a question to lead toward the "insightful" answer.','Never react in a way that signals whether an answer was right.'], fail:'Leading the client produces a measure of your prompts, not their insight.'},
+  intersection:{title:'Intersection Diagram Test administration', must:['Present each diagram in the standard order.','Allow the client to answer without time pressure unless the version is timed.'], may:['Confirm the client can see the diagram clearly.'], never:['Never confirm or deny correctness during the test.','Never explain the road rule until the whole test is finished.'], fail:'Teaching during the test converts a road-law measure into a road-law lesson.'},
+  bells:{title:'Bells Test administration', must:['Present the sheet at midline, in the standard orientation.','Standard instruction: circle every bell, as quickly as you can.','Time the search and record omissions by side.'], may:['Repeat the standard instruction.','Confirm when the client says they have finished.'], never:['Never point out a missed bell.','Never reposition the sheet mid-test.','Never say "keep looking, there are more" — that is the deficit you are measuring.'], fail:'Prompting the client to keep searching masks inattention and neglect.'},
+};
+function buildAdminBox(id){
+  const a=S.admin[id]; if(!a) return '';
+  const sc=ADMIN_SCRIPTS[id];
+  const bad=testInvalid(id);
+  const sel=(k,opts)=>`<select onchange="S.admin['${id}'].${k}=this.value;buildTests();update()">
+    <option value="" ${!a[k]?'selected':''}>— select —</option>
+    ${opts.map(([v,l])=>`<option value="${v}" ${a[k]===v?'selected':''}>${l}</option>`).join('')}</select>`;
+  return `<div class="adminbox">
+    <div class="ahead">Administration record ${bad?'<span class="invalidflag">score invalid</span>':''}</div>
+    ${sc? `<details class="ref"><summary>▸ ${esc(sc.title)} — what you may and may not say</summary><div class="refcard">
+      <h5>Must do</h5><ul>${sc.must.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+      <h5><span class="say">You may say</span></h5><ul>${sc.may.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+      <h5><span class="dont">Never</span></h5><ul>${sc.never.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+      <p style="margin:6px 0 0"><b>If this is breached:</b> ${esc(sc.fail)}</p></div></details>`:''}
+    <div class="arow" style="margin-top:6px">
+      <div class="f" style="flex:1;min-width:150px"><label>Administered per manual</label>${sel('perManual',[['yes','Yes — standard administration'],['no','No — departed from standard administration']])}</div>
+      <div class="f" style="flex:1;min-width:150px"><label>Practice / sample item completed</label>${sel('sample',[['yes','Yes'],['na','N/A — no sample item in this test'],['no','No — omitted']])}</div>
+    </div>
+    <div class="arow" style="margin-top:6px">
+      <div class="f" style="flex:1;min-width:230px"><label>Prompting or cueing during the test</label>${sel('cueing',[['none','None beyond the standard instruction'],['permitted','Permitted error-correction only (per manual)'],['answers','Answers, targets or route guidance were provided']])}</div>
+      <div class="f" style="flex:1;min-width:130px"><label>Environment free of distraction</label>${sel('quiet',[['yes','Yes'],['no','No — noted below']])}</div>
+    </div>
+    ${bad? `<div class="gate stop" style="margin:8px 0 0">
+      <b>This score cannot be reported as a result.</b> ${esc(sc? sc.fail : 'Standard administration was not maintained.')}
+      The report will state that the test was attempted but is not scoreable, with the reason — and the score is excluded from the summary, the combined outcome and the recommendations.
+      <div style="margin-top:6px"><input style="width:100%;border:1px solid #d6d4cf;border-radius:4px;padding:6px 8px;font-size:12.5px;font-family:'Barlow',sans-serif" placeholder="What happened, and what you will do about it (re-test with a different form, defer to on-road findings, refer on)…" value="${esc(a.why)}" oninput="S.admin['${id}'].why=this.value;update()"></div></div>`:''}
+  </div>`;
+}
+function adminComplete(id){
+  const a=S.admin[id]; if(!a) return true;
+  if(!a.perManual||!a.sample||!a.cueing||!a.quiet) return false;
+  if(testInvalid(id) && !txt(a.why)) return false;
+  return true;
+}
+
+/* ================================================================
+   SUPERVISION & COMPETENCY
+================================================================ */
+function loadPractice(){ try{ return JSON.parse(localStorage.getItem('estus-ot-practice')||'[]'); }catch(e){ return []; } }
+function savePractice(l){ try{ localStorage.setItem('estus-ot-practice', JSON.stringify(l)); }catch(e){} }
+let PRACTICE = [];
+function practiceCount(k){ return PRACTICE.filter(p=>p.type===k).length; }
+function practiceMet(){ return PRACTICE_REQ.every(r=>practiceCount(r.k)>=r.need); }
+function addPractice(){
+  const d=document.getElementById('plDate').value, ty=document.getElementById('plType').value;
+  const ref=txt(document.getElementById('plRef').value), sup=txt(document.getElementById('plSup').value);
+  const note=txt(document.getElementById('plNote').value);
+  if(!d||!sup){ alert('Date and supervising OT are both required.'); return; }
+  PRACTICE.push({d, type:ty, ref, sup, note});
+  savePractice(PRACTICE);
+  ['plRef','plSup','plNote'].forEach(i=>document.getElementById(i).value='');
+  buildPractice(); update();
+}
+function delPractice(i){ if(!confirm('Remove this log entry?')) return; PRACTICE.splice(i,1); savePractice(PRACTICE); buildPractice(); update(); }
+const PL_LABEL={'obs-return':'Observed · return','obs-learner':'Observed · learner','sup-assess':'Supervised assessment','sup-report':'Supervised report'};
+function buildPractice(){
+  const req=document.getElementById('practiceReq');
+  if(req) req.innerHTML = PRACTICE_REQ.map(r=>{
+    const c=practiceCount(r.k), ok=c>=r.need;
+    return `<div class="plreq"><span class="cnt ${ok?'ok':'no'}">${c}/${r.need}</span><span>${r.label}${ok?' <span style="color:#1e6b3a">✓</span>':''}</span></div>`;
+  }).join('') + `<div class="gate ${practiceMet()?'locked':''}" style="margin-top:8px">${practiceMet()
+      ? '<b>Supervised practice requirements met.</b> You can switch this report to independent sign-off in Section 8 once your supervisor confirms.'
+      : '<b>Supervised practice still in progress.</b> Until these are complete, every export carries a supervised-draft banner and requires a named supervising OT and their sign-off.'}</div>`;
+  const rows=document.getElementById('practiceRows');
+  if(rows) rows.innerHTML = PRACTICE.length? [...PRACTICE].map((p,i)=>`<div class="plrow">
+      <span class="pltype">${PL_LABEL[p.type]||p.type}</span>
+      <span style="flex:1">${esc(fmtDate(p.d))}${p.ref?' · '+esc(p.ref):''} · ${esc(p.sup)}${p.note?`<div style="font-size:11.5px;color:var(--faint);line-height:1.4">${esc(p.note)}</div>`:''}</span>
+      <button class="xbtn" onclick="delPractice(${i})">×</button></div>`).join('')
+    : '<div class="hint">No entries logged yet.</div>';
+}
+function supervisedMode(){ return !practiceMet() || !S.supervisorSignoff; }
+function buildSupervision(){
+  const el=document.getElementById('supervisionPanel'); if(!el) return;
+  const met=practiceMet();
+  el.innerHTML = `<div class="gate ${met?'locked':''}">
+    ${met? '<b>Supervised practice requirements met.</b>':'<b>Working under supervision.</b>'}
+    ${PRACTICE_REQ.map(r=>`${r.label}: <b>${practiceCount(r.k)}/${r.need}</b>`).join(' &nbsp;·&nbsp; ')}
+    <div style="margin-top:6px">Reports exported while supervised carry a <b>“Supervised draft — for supervisor review”</b> banner and cannot be issued as final. Log practice in <b>Section 9</b>.</div></div>`;
+}
+function compStatus(c){
+  if(c.na && c.na()) return 'nap';
+  if(c.ev){ try{ return c.ev()? 'met':'miss'; }catch(e){ return 'miss'; } }
+  return S.compManual[c.id]? 'manok':'man';
+}
+function buildComp(){
+  const rows=document.getElementById('compRows'); if(!rows) return;
+  const st=COMPETENCIES.map(compStatus);
+  const applicable=st.filter(x=>x!=='nap').length;
+  const good=st.filter(x=>x==='met'||x==='manok').length;
+  const bar=document.getElementById('compBar');
+  if(bar) bar.innerHTML=`<div style="font-size:12.5px;margin-bottom:2px"><b>${good}</b> of <b>${applicable}</b> applicable standards evidenced</div><div class="cpbar"><div style="width:${applicable?Math.round(good/applicable*100):0}%"></div></div>`;
+  const lbl={met:'auto ✓',miss:'not yet',man:'confirm',manok:'confirmed ✓',nap:'n/a'};
+  rows.innerHTML=`<div class="cpwrap">`+COMPETENCIES.map((c,i)=>{
+    const s=st[i];
+    const click=(s==='man'||s==='manok')? ` onclick="S.compManual['${c.id}']=${s==='man'};buildComp();update()"`:'';
+    return `<div class="cprow"><span class="cid">${c.id}</span><span class="ctx">${esc(c.t)}</span><span class="cst ${s}"${click}>${lbl[s]}</span></div>`;
+  }).join('')+`</div>`;
+}
+function buildSignoff(){
+  const el=document.getElementById('signoffPanel'); if(!el) return;
+  const met=practiceMet();
+  el.innerHTML=`
+    <label class="chk"><input type="checkbox" ${S.selfReview?'checked':''} onchange="S.selfReview=this.checked;update()"><b>I have read this report end to end against my field notes</b>, and every finding, interpretation and recommendation in it is traceable to something I recorded at the time.</label>
+    <label class="chk"><input type="checkbox" ${S.supervisorSignoff?'checked':''} ${met?'':'disabled'} onchange="S.supervisorSignoff=this.checked;update()">
+      ${met? '<b>My supervising OT has reviewed and approved this report for issue.</b>' : '<b style="color:var(--faint)">Supervisor approval for independent issue</b> — unavailable until the supervised practice requirements in Section 9 are met.'}</label>
+    <div class="gate ${supervisedMode()?'':'locked'}" style="margin-top:8px">${supervisedMode()
+      ? '<b>This report will export as a supervised draft.</b> A banner is printed at the top of page one and the version is stamped as a draft. This is not a limitation to work around — it is an accurate statement of the report\'s status.'
+      : '<b>This report will export as a final report.</b>'}</div>`;
+}
+
 /* ================================================================
    REPORT GENERATION (inline-styled — shared by preview, print, Word)
 ================================================================ */
@@ -881,10 +1797,16 @@ function buildReport(){
     <div style="font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:9px;letter-spacing:.34em;color:#ab5c95;margin-top:3px;text-transform:uppercase">OCCUPATIONAL THERAPY</div></div>
     <div style="text-align:right;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:8.5pt;color:#55534e;line-height:1.6">liam@estushealth.com<br>+61 3 9000 0000<br><span style="color:#2ca5b8;font-weight:600">www.estushealth.com</span></div></div>
     <div style="height:3px;background:linear-gradient(90deg,#344982 0%,#2f6f9e 34%,#2ca5b8 66%,#ab5c95 100%);margin:0 0 8mm;border-radius:2px;font-size:0">&nbsp;</div>`;
+  if(supervisedMode()){
+    h+=`<div style="border:2px solid #ab5c95;background:#fbf3f8;border-radius:3px;padding:3mm 4mm;margin:0 0 6mm;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:9pt;color:#7a3a66;line-height:1.45">
+      <b style="letter-spacing:.08em;text-transform:uppercase">Supervised draft — for supervisor review</b><br>
+      This report was prepared by an occupational therapist completing supervised practice in driver assessment. It has not been issued as a final report${S.supervisor? ' and requires review and approval by '+esc(S.supervisor)+' (Occupational Therapist)':' and requires review and approval by the supervising occupational therapist'}.</div>`;
+  }
   h+=`<h1 style="${ST.h1}">Occupational Therapy Driver Assessment Report</h1>`;
 
   /* client details */
-  const conds=[S.licType, ...S.licCond, S.licCondOther].filter(Boolean).join('. ');
+  const sentence=x=>{ x=txt(x); return x? x.charAt(0).toUpperCase()+x.slice(1):''; };
+  const conds=[S.licType, ...S.licCond, S.licCondOther].filter(Boolean).map(sentence).join('. ')+(S.licType||S.licCond.length||S.licCondOther?'.':'');
   h+=`<table style="${ST.tbl}">`+
     TR('Report Reference / Version', [S.reportRef, S.reportVersion].filter(Boolean).join(' · '))+
     TR('Name', fullNm())+TR('DOB', fmtDate(S.dob))+
@@ -921,6 +1843,16 @@ function buildReport(){
     h+=P(S.medSideEffects);
   }
   if(S.drivingHistory) h+=`<h3 style="${ST.h3}">Driving History &amp; Current Driving Status</h3>`+P(S.drivingHistory);
+  if(S.prevAssess) h+=P({none:'{name} has not previously undergone an occupational therapy driver assessment.',prior:'{name} has previously undergone an occupational therapy driver assessment; details are set out above.',unknown:'{name} was unable to confirm whether a previous occupational therapy driver assessment has been conducted.'}[S.prevAssess]);
+
+  /* occupational profile */
+  const profOn=PROFILE_DOMAINS.filter(d=>{const p=S.profile[d.id]; return p && !p.na && txt(p.text);});
+  if(profOn.length){
+    h+=`<h3 style="${ST.h3}">Occupational Profile</h3><table style="${ST.tbl}">`+
+      profOn.map(d=>TR(d.label, S.profile[d.id].text)).join('')+`</table>`;
+    const naOn=PROFILE_DOMAINS.filter(d=>{const p=S.profile[d.id]; return p&&p.na&&txt(p.naWhy);});
+    if(naOn.length) h+=P('Not explored at this assessment: '+naOn.map(d=>d.label.toLowerCase()+' ('+txt(S.profile[d.id].naWhy)+')').join('; ')+'.');
+  }
   h+=`<h3 style="${ST.h3}">Driving Needs</h3><table style="${ST.tbl}"><tr><th style="${ST.th}">Driving conditions</th><th style="${ST.th}">Current needs</th></tr>`+
     NEEDS_ROWS.map(r=>{const n=S.needs[r.id];return `<tr><td style="${ST.lbl}">${r.label}</td><td style="${ST.td}">${esc(n.val)}${n.note? (/^(Yes|No)$/.test(n.val)? ', ':' — ')+esc(n.note):''}</td></tr>`}).join('')+`</table>`;
 
@@ -954,6 +1886,27 @@ function buildReport(){
     h+=TR(r.label, S.phys[r.id]);
   });
   h+=`</table>`;
+
+  /* manual muscle testing */
+  const mTested=MUSCLES.filter(m=>S.muscles[m.id].tested==='yes'&&S.muscles[m.id].grade);
+  const mNot=MUSCLES.filter(m=>S.muscles[m.id].tested==='no');
+  const mNa=MUSCLES.filter(m=>S.muscles[m.id].tested==='na');
+  if(mTested.length){
+    h+=`<p style="${ST.p};font-size:9.5pt"><b>Manual muscle testing</b> — graded on the MRC (Oxford) 0–5 scale, where 5 indicates full range against full resistance.</p>`;
+    h+=`<table style="${ST.tbl}"><tr><th style="${ST.th};width:34%">Muscle group</th><th style="${ST.th};width:12%">Grade</th><th style="${ST.th}">Comment</th></tr>`;
+    let lg=null;
+    mTested.forEach(m=>{
+      if(m.g!==lg){ h+=`<tr><td colspan="3" style="${ST.td};background:#344982;color:#fff;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:8.5pt;letter-spacing:.08em;text-transform:uppercase">${m.g}</td></tr>`; lg=m.g; }
+      const v=S.muscles[m.id];
+      h+=`<tr><td style="${ST.lbl}">${m.n}</td><td style="${v.grade==='5'?ST.ok:ST.td+';text-align:center;font-weight:700'}">${esc(v.grade)}</td><td style="${ST.td}">${esc(v.note)}</td></tr>`;
+    });
+    h+=`</table>`;
+  }
+  if(mNot.length){
+    h+=P(`Manual muscle testing was not completed for the following groups: ${mNot.map(m=>m.n.toLowerCase()+(txt(S.muscles[m.id].note)? ' ('+txt(S.muscles[m.id].note)+')':'')).join('; ')}. No conclusion about strength in ${mNot.length>1?'these groups':'this group'} is drawn in this report.`);
+  }
+  if(mNa.length) h+=P(`Not applicable for this client: ${mNa.map(m=>m.n.toLowerCase()).join('; ')}.`);
+
   if(S.physSummary) h+=`<p style="${ST.p}"><b>Summary of physical skills for driving:</b> ${paraSplit(S.physSummary)}</p>`;
 
   /* cognition */
@@ -961,7 +1914,11 @@ function buildReport(){
   h+=`<table style="${ST.tbl}"><tr><th style="${ST.th}">Test</th><th style="${ST.th}">Purpose</th><th style="${ST.th}">Score</th><th style="${ST.th}">Indicates</th></tr>`;
   const testRow=(id)=>{
     const t=S.tests[id]; if(!t.on) return '';
-    const m=TEST_META[id], r=m.interp();
+    const m=TEST_META[id];
+    if(testInvalid(id)) return `<tr><td style="${ST.td}"><b>${m.name}</b></td><td style="${ST.td}">${m.purpose}</td>
+      <td style="${ST.td};text-align:center;color:#8c2f2f;font-weight:700">Not scoreable</td>
+      <td style="${ST.td};color:#8c2f2f">${paraSplit(invalidText(id))}</td></tr>`;
+    const r=m.interp();
     return `<tr><td style="${ST.td}"><b>${m.name}</b></td><td style="${ST.td}">${m.purpose}</td><td style="${ST.td}">${esc(r.scoreTxt||'')}</td><td style="${ST.td}">${paraSplit(r.txt+(t.note? ' '+t.note:''))}</td></tr>`;
   };
   h+= testRow('trailsB')+testRow('maze')+testRow('driveSafe')+testRow('driveAware');
@@ -971,6 +1928,8 @@ function buildReport(){
   if(S.genCog) h+=`<tr><td style="${ST.td}"><b>General Cognitive Skills</b></td><td colspan="3" style="${ST.td}">${paraSplit(S.genCog)}</td></tr>`;
   h+=`</table>`;
   if(S.cogSummary) h+=`<p style="${ST.p}"><b>Summary of cognitive skills for driving:</b> ${paraSplit(S.cogSummary)}</p>`;
+  if(txt(S.fbOffRoad)) h+=`<h3 style="${ST.h3}">Feedback Following the Off-Road Assessment</h3>`+P(S.fbOffRoad);
+  if(S.onroadSuitable) h+=P({yes:'On the basis of the off-road findings, {name} was considered suitable to proceed to the on-road assessment.',deferred:'The on-road assessment was deferred pending further information.',no:'The off-road findings precluded proceeding to an on-road assessment on this occasion.'}[S.onroadSuitable]+(txt(S.furtherInfo)&&!/^none/i.test(txt(S.furtherInfo))? ' '+fill(S.furtherInfo):''));
 
   /* on-road */
   h+=`<h2 style="${ST.h2}">On-Road Assessment</h2>`;
@@ -980,6 +1939,7 @@ function buildReport(){
     TR('Weather conditions', S.weather)+
     TR('Geographical area', S.route)+
     TR('MDI present for assessment', S.mdi)+`</table>`;
+  if(txt(S.mdiBrief)) h+=P('Prior to the on-road assessment the driving instructor was briefed on the relevant history, the planned route and the respective roles during the drive. '+fill(S.mdiBrief));
   h+=`<h3 style="${ST.h3}">Assessment Results</h3>`;
   h+=`<table style="${ST.tbl}"><tr><th style="${ST.th};width:14%">Performance area</th><th style="${ST.th};width:38%">Observations</th><th style="${ST.th};width:9%">Safe &amp; appropriate</th><th style="${ST.th}">Issues observed / comments</th></tr>`;
   CHECKLIST.forEach(g=>g.items.forEach(it=>{
@@ -988,10 +1948,13 @@ function buildReport(){
     const safe = c.st==='safe';
     h+=`<tr><td style="${ST.td};font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;color:#344982">${g.g}</td>
       <td style="${ST.td}">${it.text}</td>
-      <td style="${c.st==='safe'? ST.ok : ST.td+';text-align:center'}">${safe?'✓': c.st==='na'?'n/a':''}</td>
-      <td style="${ST.td}${c.st==='issue'?';color:#8c2f2f':''}">${c.st==='issue'&&!c.note? '<b>✗</b>':''}${paraSplit(c.note||'')}</td></tr>`;
+      <td style="${c.st==='safe'? ST.ok : ST.td+';text-align:center'}">${safe?'✓': c.st==='na'?'n/a': c.st==='unrated'?'—':''}</td>
+      <td style="${ST.td}${c.st==='issue'?';color:#8c2f2f':''}">${c.st==='unrated'? '<i style="color:#8c2f2f">not rated</i>':''}${c.st==='issue'&&!c.note? '<b>✗</b>':''}${paraSplit(c.note||'')}</td></tr>`;
   }));
   h+=`</table>`;
+  if(txt(S.safetyMgmt)) h+=`<p style="${ST.p}"><b>Safety management during the assessment:</b> ${paraSplit(S.safetyMgmt)}</p>`;
+  if(txt(S.fbOnRoad)) h+=`<h3 style="${ST.h3}">Feedback Provided to the Client</h3>`+P(S.fbOnRoad);
+  if(txt(S.legalInfo)) h+=P(S.legalInfo);
 
   /* summary + recs */
   h+=`<h2 style="${ST.h2}">Summary and Recommendations</h2>`+P(S.summaryText);
@@ -1004,6 +1967,7 @@ function buildReport(){
   /* basis of opinion, limitations, declaration */
   h+=`<h2 style="${ST.h2}">Basis of Opinion, Limitations and Declaration</h2>`;
   if(S.qualifications) h+=`<h3 style="${ST.h3}">Assessor Qualifications</h3>`+P(S.qualifications);
+  h+=`<h3 style="${ST.h3}">Basis of Record</h3>`+P(recordStatement());
   if(S.limitations) h+=`<h3 style="${ST.h3}">Basis of Opinion and Limitations</h3>`+P(S.limitations);
   if(S.declarationText) h+=`<h3 style="${ST.h3}">Declaration</h3>`+P(S.declarationText);
   if(S.distribution) h+=`<p style="${ST.p}"><b>This report has been prepared for:</b> ${esc(S.distribution)}. It is confidential and should not be released to other parties without appropriate consent.</p>`;
@@ -1014,7 +1978,7 @@ function buildReport(){
   <p style="${ST.p};margin-top:5mm"><b>${esc(S.assessor)}</b><br>${esc(S.assessorRole)}${S.ahpra? '<br>AHPRA No. '+esc(S.ahpra):''}<br>Estus Health<br>Signed: ${esc(fmtDate(S.dateReport))||'____________'}</p>`;
 
   /* references */
-  const refs=[REFS.austroads];
+  const refs=[REFS.austroads, REFS.competency];
   if(S.tests.driveSafe.on||S.tests.driveAware.on){refs.push(REFS.dsda1,REFS.dsda2);}
   if(S.tests.trailsB.on) refs.push(REFS.trails);
   if(S.tests.maze.on||S.tests.intersection.on||S.tests.bells.on) refs.push(REFS.otdora);
@@ -1026,6 +1990,19 @@ function buildReport(){
   h+=`<div style="border-top:1px solid #e6e4df;padding-top:2mm;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:7.5pt;letter-spacing:.08em;color:#8a8880">ESTUS HEALTH · OCCUPATIONAL THERAPY&nbsp;&nbsp;·&nbsp;&nbsp;${esc(footerID())}&nbsp;&nbsp;·&nbsp;&nbsp;CONFIDENTIAL</div>`;
   return h;
 }
+function recordStatement(){
+  const pre=notesIn('pre').length, on=notesIn('onroad').length, post=S.notes.filter(n=>n.post).length;
+  const when={ot:'during the drive',otpost:'immediately following the drive, before leaving the vehicle',shared:"during the drive, incorporating the driving instructor's observations as they were made"}[S.notesRecordedBy]||'during the assessment';
+  let t=`This report was written from contemporaneous notes recorded by the assessing occupational therapist at the time of the assessment — ${pre} note${pre!==1?'s':''} during the off-road assessment and ${on} recorded ${when}. `;
+  t+=`Those notes were closed${S.notesLockedAt? ' at '+dayStamp(S.notesLockedAt):''} before this report was drafted, and the findings, interpretations and recommendations set out above are traceable to them. `;
+  if(post) t+=`${post} entr${post!==1?'ies were':'y was'} added after the record was closed and ${post!==1?'are':'is'} identified in the file as a post-assessment addendum. `;
+  const ai={
+    none:'No generative artificial intelligence tool was used in the preparation of this report.',
+    language:'A generative artificial intelligence tool was used to refine the wording of text already drafted by the assessing occupational therapist from those contemporaneous notes. It was not used to generate observations, clinical findings or clinical reasoning.',
+    transcribe:'Transcription software was used to convert the assessing occupational therapist\'s own spoken notes, recorded at the time of the assessment, into written form. It was not used to generate observations, clinical findings or clinical reasoning.',
+  }[S.aiUse]||'';
+  return t+ai;
+}
 function footerID(){
   return [ (S.surname? S.surname.toUpperCase()+', '+(S.firstName||''):'').trim(), S.dob? 'DOB '+fmtDate(S.dob):'', S.reportRef? 'Ref '+S.reportRef:'', S.dateReport? fmtDate(S.dateReport):'' ].filter(Boolean).join(' · ');
 }
@@ -1036,7 +2013,7 @@ let renderTimer=null;
 function update(){ clearTimeout(renderTimer); renderTimer=setTimeout(()=>{ render(); autosave(); },250); }
 function render(){
   document.getElementById('reportRoot').innerHTML = `<div class="page">${buildReport()}</div>`;
-  updatePageStyle(); updateBadge();
+  updatePageStyle(); updateBadge(); refreshPanels();
 }
 function updatePageStyle(){
   let st=document.getElementById('pageStyle');
@@ -1073,11 +2050,38 @@ function syncForm(){
   document.querySelectorAll('[data-bindchk]').forEach(el=>{ el.checked = (S[el.dataset.bindchk]||[]).includes(el.value); });
   document.querySelectorAll('[data-bindbool]').forEach(el=>{ el.checked = !!S[el.dataset.bindbool]; });
   buildMedRows(); buildReviewed(); buildNeeds(); buildPhys(); buildTests(); buildChecklist(); buildRecs();
+  buildEquip(); buildProfile(); buildMuscles(); buildPractice(); buildComp(); buildSupervision(); buildSignoff();
+  refreshPanels(); renderDock();
+}
+function refreshPanels(){
+  const sg=document.getElementById('setupGate'); if(sg) sg.innerHTML=setupGate();
+  const ns=document.getElementById('noteStats'); if(ns) ns.innerHTML=noteStats();
+  const sv=document.getElementById('summaryVerify');
+  if(sv) sv.innerHTML = txt(S.summaryText)? verifyBar('summaryText','I have written this summary from my field notes and test results, and every statement in it is something I recorded or observed.') : '';
+  buildSupervision(); buildSignoff(); buildComp();
 }
 
+/* merge a saved draft onto the current schema so older drafts keep working */
+function normalise(raw){
+  const s=Object.assign(freshState(), raw||{});
+  const base=freshState();
+  ['equip','equipWhy','verify','ackAdvisories','compManual','muscles','profile','admin','phys','needs','checklist','tests'].forEach(k=>{
+    s[k]=Object.assign({}, base[k], raw&&raw[k]? raw[k]:{});
+  });
+  MUSCLES.forEach(m=> s.muscles[m.id]=Object.assign({tested:'no',grade:'',note:''}, s.muscles[m.id]||{}));
+  PROFILE_DOMAINS.forEach(d=> s.profile[d.id]=Object.assign({text:'',na:false,naWhy:''}, s.profile[d.id]||{}));
+  Object.keys(TEST_ADMIN_DEF).forEach(k=> s.admin[k]=Object.assign({perManual:'',sample:'',cueing:'',quiet:'',why:''}, s.admin[k]||{}));
+  CHECKLIST.forEach(g=>g.items.forEach(it=>{
+    s.checklist[it.id]=Object.assign({st:'unrated',note:'',refs:[]}, s.checklist[it.id]||{});
+    if(!Array.isArray(s.checklist[it.id].refs)) s.checklist[it.id].refs=[];
+  }));
+  if(!Array.isArray(s.notes)) s.notes=[];
+  s.notes.forEach(n=>{ if(!Array.isArray(n.amended)) n.amended=[]; });
+  return s;
+}
 /* autosave */
 function autosave(){ try{ localStorage.setItem('estus-ot-report', JSON.stringify(S)); }catch(e){} }
-function loadAutosave(){ try{ const d=localStorage.getItem('estus-ot-report'); if(d){ S = Object.assign(freshState(), JSON.parse(d)); return true; } }catch(e){} return false; }
+function loadAutosave(){ try{ const d=localStorage.getItem('estus-ot-report'); if(d){ S = normalise(JSON.parse(d)); return true; } }catch(e){} return false; }
 
 /* file save/load */
 function saveJSON(){
@@ -1088,13 +2092,13 @@ function saveJSON(){
 function openJSON(ev){
   const f=ev.target.files[0]; if(!f) return;
   const r=new FileReader();
-  r.onload=()=>{ try{ S=Object.assign(freshState(),JSON.parse(r.result)); syncForm(); render(); }catch(e){ alert('Could not read that draft file.'); } };
+  r.onload=()=>{ try{ S=normalise(JSON.parse(r.result)); syncForm(); render(); }catch(e){ alert('Could not read that draft file.'); } };
   r.readAsText(f); ev.target.value='';
 }
 function newReport(){
   if(!confirm('Start a new blank report? The current draft will be cleared (save it first if needed).')) return;
   S=freshState();
-  ['reasonReferral','physSummary','consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]());
+  ['reasonReferral','consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]());
   syncForm(); render(); autosave();
 }
 
@@ -1116,7 +2120,7 @@ body{${ST.body}} table{border-collapse:collapse} li{margin-bottom:6pt}
   const blob=new Blob(['﻿'+html],{type:'application/msword'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   const d=(S.dateReport||'').replaceAll('-','');
-  a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} Driving Assessment Report${d? ' '+d:''}.doc`;
+  a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} Driving Assessment Report${d? ' '+d:''}${supervisedMode()?' SUPERVISED DRAFT':''}.doc`;
   a.click();
 }
 
@@ -1127,7 +2131,7 @@ function loadExample(){
   S=freshState();
   Object.assign(S,{
     title:'Mr', firstName:'John', prefName:'Johnny', surname:'Citizen', pronouns:'he', dob:'2000-01-01',
-    address:'123 Sample Street, Adelaide SA 5000', licNo:'AB1234', licSighted:'Yes', licExpiry:'[TBC]',
+    address:'123 Sample Street, Adelaide SA 5000', licNo:'AB1234', licSighted:'Yes', licExpiry:'14/03/2028',
     licType:"Learner's permit (Class C)",
     licCond:['L-plates to be displayed','must be accompanied by a fully licensed supervising driver','zero BAC','automatic vehicles only','corrective lenses to be worn'],
     diagnoses:'Autism Spectrum Disorder (Level 2); Schizophrenia',
@@ -1167,24 +2171,137 @@ function loadExample(){
     intersection:{on:true,score:'8',note:''},
     bells:{on:true,omissions:'0',time:'',note:''},
   });
-  S.checklist.pc3={st:'safe',note:'Physically demonstrated the cervical range of motion to look over {his} shoulder, but rarely initiated this movement spontaneously. This is common in novice drivers who have not yet automated the movement, and is likely compounded by the higher cognitive load {he} manages when several driving tasks occur at once. It will require specific instruction and repeated supervised practice to establish.'};
-  S.checklist.pc6={st:'issue',note:"Because the assessment vehicle's indicator stalk was on the left (contrasting with {his} familiar family vehicle), {he} triggered the wipers instead of the indicators on 3 occasions. {He} managed this calmly and self-corrected. However, {he} required verbal prompting to use indicators generally, and consistently missed applying {his} left indicator when exiting roundabouts. Indicator errors of this kind are common in novice drivers, particularly in an unfamiliar vehicle, and will require targeted instruction and repeated supervised practice."};
-  S.checklist.ob1={st:'issue',note:'{name} did not consistently maintain continuous scanning to near, middle and far distances, tending to fixate on the road immediately ahead as task demands increased. This is common in novice drivers and is likely compounded by {his} reduced speed of divided attention. It will require targeted instruction and supervised practice to develop.'};
-  S.checklist.ob3={st:'issue',note:'Mirror checking was inconsistent and less frequent than required for a learner preparing for a practical test. {He} used the mirrors when cornering or changing lanes but did not scan them often enough overall. Building consistent mirror routines demands considerable divided attention and flexible thinking, and will require sustained instruction and supervised practice given {his} cognitive profile.'};
-  S.checklist.ob5={st:'issue',note:'{name} rarely performed physical blind-spot head checks when changing lanes, merging or leaving the kerb, relying almost entirely on {his} mirrors. For a learner preparing for a practical test, frequent and consistent head checks are required. This skill does not yet appear established, which is common at {his} stage, and will require specific instruction and repeated supervised practice to develop.'};
-  S.checklist.pj3={st:'issue',note:'While {his} gap selection was consistently safe, {name} demonstrated over-caution at roundabouts. {He} was slow to move off and missed several safe, viable opportunities to enter, waiting instead for completely clear traffic. This indicates difficulty judging dynamic gaps and managing the cognitive load of tracking moving vehicles, and links to the reduced speed of divided attention identified on the pre-drive screen. It will require further graded practice to build fluent, efficient decision-making.'};
-  S.checklist.sc1={st:'safe',note:'Speed control was consistent and appropriate for conditions, including a school zone (25 km/h) and 50 and 60 km/h zones.'};
-  S.checklist.pj5={st:'safe',note:'{name} planned ahead and managed multiple instructions appropriately for {his} level of experience, and showed developing defensive driving skills, including covering the brake in some hazardous situations.'};
-  S.consentObtained=true;
+  /* --- set-up complete before the client arrived --- */
+  EQUIP.forEach(g=>g.items.forEach(it=> S.equip[it.id]='yes'));
+  S.equip.e9='na'; S.equipWhy.e9='no ROM limitation anticipated from referral or history';
+  S.equip.e10='na'; S.equipWhy.e10='no grip concern reported; grip assessed clinically';
+  S.equipAt=fmtDate('2026-06-01')+' 08:42';
+
+  /* --- contemporaneous field record --- */
+  const base=new Date('2026-06-01T09:00:00');
+  let mins=0;
+  const N=(phase,tag,text,step)=>{ mins+=(step||3); const t=new Date(base.getTime()+mins*60000).toISOString();
+    const grp=(tagsFor(phase).find(x=>x.id===tag)||{}).group||'';
+    const id='n'+mins+'_'+tag; S.notes.push({id,t,phase,tag,group:grp,text,amended:[],post:false}); return id; };
+
+  N('pre','interview','Arrived with father. Settled quickly, no prompting needed to engage. Consent process explained, both nodded along, JC repeated back the purpose of the assessment in his own words.');
+  N('pre','interview','Reports main difficulty is "when lots happens at once" — gave example of a car pulling out while he was watching a pedestrian. Father agreed, said he goes quiet rather than panicking.');
+  N('pre','interview','Just under 20 logbook hours, all daytime, all in family auto Corolla. Held permit ~5 years. Previous instructor "frustrating" — said he was told off for hesitating.');
+  N('pre','interview','Wants licence to get to TAFE and to a Saturday job. Currently father drives him, ~6 trips/week. Father works shifts, says this is the hardest part.');
+  N('pre','vision','Wears glasses, brought them. Snellen at 6m. Uncorrected R 6/24, L 6/21, binoc 6/24. Corrected R 6/12, L 6/6, binoc 6/6-2. Confrontation full all quadrants both eyes.');
+  N('pre','vision','Reports floaters both eyes, longstanding, "doesn\'t bother me". No diplopia, no glare sensitivity reported. Pursuits and saccades smooth, no nystagmus, no dizziness on testing.');
+  N('pre','hearing','Responded to all questions at conversational volume, no repeats needed. Followed 3-stage instruction without difficulty. No hearing aids, none reported.');
+  N('pre','physical','MMT completed seated. All UL groups 5/5 bilaterally, break test at end range. Grip strong and symmetrical. LL 5/5 throughout, ankle DF/PF tested individually. Cervical rotation full and 5/5 both directions.');
+  N('pre','physical','Foot-pivot simulation accel-to-brake: accurate, controlled, no heel drag. Repeated x5 with no deterioration.');
+  N('pre','test-trailsB','Sample sheet completed correctly first attempt. Understood alternating rule when read back. Scored sheet: 227 sec, 0 errors. No prompting given — he paused twice at the 8/H transition, I said nothing.', 12);
+  N('pre','test-maze','23 sec, 0 errors. Fast and decisive, planned the route with his eyes before the pen moved.');
+  N('pre','test-driveSafe','83/84. Missed one location/direction detail. All objects identified.');
+  N('pre','test-driveAware','14/17. Answers realistic — identified his own difficulty with multiple demands unprompted.');
+  N('pre','test-intersection','8/8. Talked through the give-way reasoning on two of them without being asked.');
+  N('pre','test-bells','0 omissions, no lateral bias. Systematic left-to-right search pattern.');
+  N('pre','gencog','Alert and engaged for the full 90 minutes despite reporting fatigue and injection-site pain this week. Asked a genuinely complex question about how conditions get recorded on a licence.');
+  N('pre','other-pre','Off-road feedback given at the desk with father present before we went out. Explained TMT-B result in plain terms. He said "that\'s the thing I already knew about myself".');
+
+  N('onroad','pc1','Car park start. Adjusted seat, mirrors, steering column without prompting. Checked seatbelt.', 20);
+  N('onroad','pc6','Indicator stalk on left in assessment car, opposite to family Corolla. Triggered wipers instead of indicator — 3 separate occasions. Stayed calm each time, self-corrected within a second.');
+  N('onroad','pc6','Missed left indicator on exit from roundabout, 4 of 5 roundabouts. Needed verbal prompt from MDI for indicators generally at maybe half of turns.');
+  N('onroad','pc3','Has the neck range — demonstrated it fine off-road. On road, over-shoulder check happened maybe twice unprompted across the whole drive.');
+  N('onroad','ob1','Scanning narrowed as traffic built. On the 60 zone approaching the shopping strip he was locked on the car directly ahead — no far scanning, no scanning to the sides.');
+  N('onroad','ob3','Mirror checks present but sparse. Used them for lane changes and cornering. Long stretches with no mirror check at all.');
+  N('onroad','ob5','Blind-spot head checks: essentially absent. Relied on mirrors for both lane changes and for leaving the kerb. Prompted once by MDI, did it correctly when prompted.');
+  N('onroad','pj3','Roundabouts: safe but over-cautious. Waited for completely clear traffic on 3 occasions, missed viable gaps. Queue built behind us once.');
+  N('onroad','sc1','Speed accurate throughout. School zone 25 — slowed early and held it. 50 and 60 zones both held within limit, no drift.');
+  N('onroad','pj5','Covered the brake approaching a parked delivery van with a driver-side door open. Not instructed to. Good anticipation.');
+  N('onroad','vp3','Lane position consistently central, no drift on the dual-lane section.');
+  N('onroad','pc4','Pedal control smooth, no jerky braking, no over-acceleration from lights.');
+  N('onroad','pj1','Followed all MDI instructions, asked for clarification twice when an instruction came late. Appropriate.');
+  N('onroad','vp7','Reverse park not attempted — ran out of time in the 40 minutes. Flagged to revisit.');
+
+  N('debrief','fb-onroad','Feedback given in the car before we went back in, father joined at the desk. Led with what went well (speed, planning, staying calm with the wipers). Then head checks and mirrors as the two priorities. He accepted it, said he had "never really been taught the head check thing properly".', 45);
+  N('debrief','fb-mdi','MDI agreed with the head-check and roundabout hesitancy picture. His view: 10 hours would cover it, needs a consistent instructor.');
+  N('debrief','fb-onroad','Explained the licensing pathway, that this report goes to the referrer and GP, and that nothing about his permit changes as a result of today.');
+
+  S.notesLocked=true; S.notesLockedAt=new Date(base.getTime()+(mins+10)*60000).toISOString();
+  S.notes.forEach(n=>n.locked=true);
+  const noteFor=(tag)=> S.notes.filter(n=>n.tag===tag).map(n=>n.id);
+
+  /* --- muscle testing actually performed --- */
+  MUSCLES.forEach(m=>{ S.muscles[m.id]={tested:'yes', grade:'5', note:''}; });
+  S.muscles.m5.note='Symmetrical, no fatigue on repeated grip.';
+  S.muscles.m9.note='Tested individually given its role in pedal transfer; full power, no lag.';
+  S.muscles.m11.note='Full range and power both directions — the limitation on road was habit, not capacity.';
+
+  /* --- other physical screens --- */
+  PHYS_ROWS.forEach(r=> S.phys[r.id]=r.def);
+
+  /* --- occupational profile --- */
+  Object.assign(S.profile,{
+    living:{text:'Lives with his father and younger sister in a three-bedroom house in the northern suburbs. Housing is stable with no planned changes. His father owns an automatic Toyota Corolla which is available for supervised practice; his sister does not drive.',na:false,naWhy:''},
+    roles:{text:'Studying a Certificate III part-time, two days per week. Has been offered casual Saturday work at a hardware store contingent on being able to get there. Contributes to household tasks. No caring responsibilities. Both the study and the job offer depend on transport at fixed times.',na:false,naWhy:''},
+    routine:{text:'Wakes around 8am, TAFE Tuesday and Thursday, otherwise at home with gaming and a weekly social group. Reports he functions best mid-morning to mid-afternoon and is noticeably more tired after 6pm. Weekends are less structured and he rarely leaves the house without his father.',na:false,naWhy:''},
+    workstudy:{text:'TAFE campus is a 40-minute drive or two buses with a 25-minute gap between them. Classes start at 9am. The Saturday role would be 8am starts. He reports the bus route is manageable but that the transfer is the part he finds stressful, and that he has missed a class after a delayed connection.',na:false,naWhy:''},
+    community:{text:'Attends a weekly social group and occasional family outings. Has stopped attending a Sunday sports club since his father changed to shift work and could no longer drive him. Would like to return to it. Relies on his father for all community access.',na:false,naWhy:''},
+    transport:{text:'Currently transported by his father approximately six times per week, plus a support worker twice weekly. Has used public transport independently for the TAFE route with mixed success. Estimates his father spends around eight hours a week driving him. The financial cost is modest but the coordination burden is significant and constrains his father\'s shift availability.',na:false,naWhy:''},
+    goals:{text:'Wants to drive himself to TAFE and to the Saturday job, and to return to the Sunday sports club independently. His first intended solo trip would be the TAFE run, which he has been driven along many times. He is concerned about driving in heavy traffic and about "freezing" at a busy intersection.',na:false,naWhy:''},
+    fatigue:{text:'Sleeps approximately eight hours and reports waking rested. Predictable fatigue from early evening. Reported general fatigue and localised injection-site pain for about one week following his most recent three-monthly injection, which had settled at the time of assessment. No pain limiting sitting tolerance or trunk rotation.',na:false,naWhy:''},
+    meds:{text:'Paliperidone by three-monthly intramuscular injection, administered at his GP clinic and tracked by his father. Reports no drowsiness, blurred vision or slowing attributable to the medication. A previous daily oral regimen was difficult to maintain, which was the reason for the change. Missed or late doses have not occurred since moving to the injection; his father would be aware and would contact the treating team.',na:false,naWhy:''},
+    substance:{text:'Reports no alcohol use and no cannabis or other substance use. Correctly identified that a zero blood alcohol concentration applies to his learner permit and stated he would not drive after drinking regardless.',na:false,naWhy:''},
+    insight:{text:'Identified his own strengths as staying calm and keeping to the speed limit, and his difficulty as managing several things happening at once — which matched both his test performance and his on-road performance. Stated he would know he was not safe if he "couldn\'t keep up with what was going on", and that he would pull over and call his father. This is realistic and consistent with his DriveAware score.',na:false,naWhy:''},
+    supports:{text:'His father is available to supervise practice approximately three times per week around his shifts, in the family automatic. His father is confident supervising and has done the majority of the logged hours to date. He reports finding it hard to know what to correct and what to leave, which is a reason for structured instruction alongside private practice.',na:false,naWhy:''},
+    learning:{text:'Previous lessons through a community driving program went well; a subsequent private instructor was experienced as frustrating, with the client reporting he was criticised for hesitating. Reports he learns best when a skill is demonstrated first and then broken into steps, and that he takes correction better when it is given after a manoeuvre rather than during it.',na:false,naWhy:''},
+    sensory:{text:'Reports no significant sensory sensitivities in the vehicle. His father notes he dislikes large crowded environments and tends to withdraw in highly stimulating settings. Radio and conversation while driving were not reported as distracting, though this has not been tested in heavy traffic.',na:false,naWhy:''},
+    history:{text:'No history of motor vehicle collisions as a driver. No near-misses reported. No traffic infringements or demerit points. No party has expressed concern about his driving; the referral arises from his wish to progress toward a provisional licence rather than from a reported incident.',na:false,naWhy:''},
+    culture:{text:'English is his first language and no interpreter is required. Reports a preference for written summaries of verbal information, which was accommodated by providing feedback in writing as well as verbally.',na:false,naWhy:''},
+  });
+
+  /* --- test administration records --- */
+  Object.keys(S.admin).forEach(k=> S.admin[k]={perManual:'yes', sample:'yes', cueing:'none', quiet:'yes', why:''});
+  S.admin.driveAware.sample='na'; S.admin.bells.sample='na'; S.admin.intersection.sample='na';
+
+  /* --- on-road ratings, each traceable to the record --- */
+  const CL=(id,st,note,tags)=>{ S.checklist[id]={st, note, refs:[].concat(...(tags||[id]).map(noteFor))}; };
+  CL('pc1','safe','Adjusted the seat, mirrors and steering column independently at the start of the assessment, without prompting.');
+  CL('pc3','safe','Physically demonstrated the cervical range of motion to look over {his} shoulder, and manual muscle testing confirmed full cervical rotation and power. On road, however, {he} initiated the movement spontaneously on only two occasions across the assessment. The capacity is present; the habit is not yet established. This is common in novice drivers who have not yet automated the movement, and is likely compounded by the higher cognitive load {he} manages when several driving tasks occur at once. It will require specific instruction and repeated supervised practice.');
+  CL('pc4','safe','Pedal control was smooth throughout, with no jerky braking and controlled acceleration from a standing start at traffic lights.');
+  CL('pc6','issue',"Because the assessment vehicle's indicator stalk was on the left, contrasting with {his} familiar family vehicle, {he} triggered the wipers instead of the indicators on three occasions. {He} managed this calmly and self-corrected within a second each time. Separately, {he} required verbal prompting from the driving instructor to use indicators at approximately half of all turns, and omitted the left indicator when exiting four of the five roundabouts negotiated. Indicator errors of this kind are common in novice drivers, particularly in an unfamiliar vehicle, but the omission at roundabout exits is a consistent pattern rather than an unfamiliarity effect, and will require targeted instruction and repeated supervised practice.");
+  CL('vp3','safe','Lane position was consistently central with no observed drift on the dual-lane section of the route.');
+  CL('vp7','na','Reverse parking and three-point turns were not assessed. The 40-minute assessment was fully occupied by open-road driving and there was insufficient time remaining. {name} had identified these as {his} own practice priorities, and they are included in the recommended instruction.');
+  CL('sc1','safe','Speed control was consistent and appropriate for conditions throughout, including a 25 km/h school zone, where {he} slowed in good time and maintained the limit, and 50 and 60 km/h zones with no observed drift.');
+  CL('ob1','issue','{name} did not consistently maintain continuous scanning to near, middle and far distances. As traffic density increased on the 60 km/h section approaching a shopping strip, {his} scanning narrowed to the vehicle directly ahead, with no far scanning and no scanning to either side observed. This is common in novice drivers and is consistent with the reduced speed of divided attention identified on the Trail Making Test Part B. It will require targeted instruction and graded practice in progressively busier environments.');
+  CL('ob3','issue','Mirror checking was present but sparse and less frequent than required for a learner preparing for a practical test. {He} used the mirrors reliably when cornering and changing lanes, but there were extended stretches of the route with no mirror check observed. Building a consistent mirror routine demands sustained divided attention, which is {his} identified area of difficulty, and will require specific instruction and repeated practice.');
+  CL('ob5','issue','Physical blind-spot head checks were essentially absent. {name} relied on the mirrors alone when changing lanes and when leaving the kerb. When prompted once by the driving instructor, {he} performed the check correctly and in good time, indicating the skill is available but not yet integrated. For a learner preparing for a practical driving test, frequent and consistent head checks are required, and this is the highest-priority item for instruction arising from this assessment.');
+  CL('pj1','safe','{name} followed all instructions from the driving instructor, and appropriately requested clarification on the two occasions an instruction was given late.');
+  CL('pj3','issue','While {his} gap selection was consistently safe, {name} demonstrated marked over-caution at roundabouts. {He} waited for completely clear traffic on three occasions, missing viable gaps, and on one occasion a queue formed behind the assessment vehicle. This indicates difficulty judging dynamic gaps and managing the cognitive load of tracking several moving vehicles at once, and links directly to the reduced speed of divided attention identified on the pre-drive screen. It will require graded practice to build fluent and efficient decision-making without compromising the safety margin {he} currently maintains.');
+  CL('pj5','safe','{name} covered the brake on approach to a parked delivery van with its driver-side door open, without being instructed to do so. This indicates developing hazard anticipation and defensive driving skill appropriate to {his} stage.');
+  CHECKLIST.forEach(g=>g.items.forEach(it=>{ if(S.checklist[it.id].st==='unrated') S.checklist[it.id]={st:'safe',note:'',refs:[]}; }));
+
+  /* --- competency, feedback and sign-off narrative --- */
+  Object.assign(S,{
+    suitability:'yes', prevAssess:'none',
+    commScreen:'{name} heard and responded to all questions at conversational volume without repetition, and followed a three-stage instruction without difficulty. Expressive and receptive communication were appropriate for the driving task; {he} sought clarification appropriately when instructions were given late, and was able to describe {his} own difficulties clearly and accurately.',
+    fbOffRoad:'Feedback on the off-road screen was provided to {name} and {his} father immediately following the screen and prior to the on-road assessment. The Trail Making Test Part B result was explained in plain terms, along with its relevance to managing several driving demands at once. {name} responded that this was consistent with {his} own experience.',
+    onroadSuitable:'yes', furtherInfo:'None required prior to the on-road assessment.',
+    mdiBrief:'The driving instructor was briefed on {name}\'s learner status, logbook experience, the cognitive screen findings relevant to divided attention, and the planned graded route. It was agreed that the instructor would provide standard route directions only, would prompt for safety, and would intervene verbally or with the dual controls if required, with any intervention to be noted at the time.',
+    safetyMgmt:'The route was graded from a quiet car park through low-density suburban roads to a 60 km/h arterial section, with the option to curtail the higher-demand section if required. The driving instructor provided a single verbal prompt for a blind-spot check prior to a lane change. No dual-control intervention was required at any point, and no situation arose in which the safety of {name}, the assessment team or other road users was compromised.',
+    fbOnRoad:'Feedback was provided to {name} in the vehicle immediately following the drive, and again at the desk with {his} father present. Strengths were discussed first, including speed control, forward planning and {his} calm management of the unfamiliar indicator stalk. Head checks and mirror use were identified as the two priority areas for instruction. {name} accepted the feedback and commented that head checks had not previously been taught to {him} in a structured way.',
+    legalInfo:'{name} and {his} father were advised that this report will be provided to the referrer and to {his} treating general practitioner, that {his} learner permit conditions are unchanged as a result of this assessment, and that any future application for a provisional licence remains a matter for the licensing authority following a practical driving test. The requirement to notify the licensing authority of relevant changes in medical condition was explained.',
+    condConsidered:'existing', turnaround:'ok',
+    reportVersion:'1.0 (Supervised draft)',
+  });
+  COMPETENCIES.forEach(c=>{ if(!c.ev && !(c.na&&c.na())) S.compManual[c.id]=true; });
+
+  S.consentObtained=true; S.selfReview=true;
   S.reportRef=AUTOTEXT.reportRef();
   ['consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]());
   S.reasonReferral=AUTOTEXT.reasonReferral();
   S.physSummary=AUTOTEXT.physSummary();
-  S.summaryText=autoSummary();
+  S.summaryText=autoSummary()+'\n\nTaken together, the pre-drive screen and the on-road assessment point in the same direction. {name} has the physical capacity, the road law knowledge and the insight required for supervised learning, and {his} speed control, lane positioning and hazard anticipation are already sound for {his} stage. The skills that are not yet established — blind-spot head checks, consistent mirror routines, continuous distance scanning and efficient gap selection at roundabouts — all share a common demand: they require attention to be divided and shifted quickly between competing sources of information. That is precisely the area identified as reduced on the Trail Making Test Part B. This is not a barrier to progressing, but it does mean these skills will take {him} more repetition to automate than they would a learner without that profile, and that instruction should build them deliberately rather than assume they will develop with hours alone.';
   ['continueLearner','lessons','lenses','optom','medReview','reviewChange'].forEach(id=>{
     S.recs[id]={on:true,text:REC_DEFS.find(r=>r.id===id).def()};
   });
+  ['summaryText','cogSummary','physSummary'].forEach(k=> S.verify[k]={ok:true,h:hashOf(S[k])});
   syncForm(); render(); autosave();
+  setTimeout(()=>{ const {advisories}=validate(); advisories.forEach(a=>S.ackAdvisories[a.id]=true); update(); },0);
 }
 
 /* ================================================================
@@ -1192,7 +2309,7 @@ function loadExample(){
 ================================================================ */
 const REQ_FIELDS = [
  ['firstName','First name','1'],['surname','Surname','1'],['dob','Date of birth','1'],['address','Address','1'],
- ['licNo','Driver licence number','1'],['licExpiry','Licence expiry (or [TBC] is not acceptable for a final report — confirm it)','1'],
+ ['licNo','Driver licence number','1'],['licExpiry','Licence expiry — confirm it; [TBC] is not acceptable in a final report','1'],
  ['diagnoses','Presenting condition / diagnoses','1'],['refName','Referrer name','1'],['refRole','Referrer role','1'],
  ['dateAssess','Date of assessment','1'],['dateReport','Date of report','1'],
  ['assessor','Report completed by','1'],['ahpra','AHPRA number','1'],['mdi','Motor Driving Instructor','1'],['location','Assessment location','1'],
@@ -1202,45 +2319,183 @@ const REQ_FIELDS = [
  ['vaUR','Visual acuity — uncorrected right (enter NT if not tested)','4'],['vaUL','Visual acuity — uncorrected left','4'],['vaUB','Visual acuity — uncorrected binocular','4'],
  ['vaCR','Visual acuity — corrected right (enter N/A if no lenses)','4'],['vaCL','Visual acuity — corrected left','4'],['vaCB','Visual acuity — corrected binocular','4'],
  ['physSummary','Summary of physical skills','4'],['genCog','General cognitive skills observations','4'],['cogSummary','Summary of cognitive skills','4'],
+ ['commScreen','Communication screen (competency 2.11)','4'],['fbOffRoad','Feedback given after the off-road assessment (2.17)','4'],
  ['duration','On-road duration','5'],['weather','Weather conditions','5'],['route','Geographical area / route','5'],
- ['summaryText','Summary paragraph(s)','6'],
+ ['mdiBrief','Briefing given to the MDI (3.2, 3.4)','5'],['safetyMgmt','Safety management during the drive (3.8)','5'],
+ ['summaryText','Summary paragraph(s)','6'],['fbOnRoad','Feedback given after the on-road assessment (3.14)','6'],
+ ['legalInfo','Legal, licensing and insurance information given (3.15)','6'],
  ['reportRef','Report reference','8'],['reportVersion','Report version','8'],
  ['consentText','Consent statement','8'],['qualifications','Assessor qualifications','8'],
  ['limitations','Basis of opinion & limitations','8'],['declarationText','Declaration','8'],['distribution','Distribution list','8'],
 ];
-function missingItems(){
+/* Narrative fields scanned by the writing-quality checks */
+const NARR_FIELDS = [
+ ['reasonReferral','Reason for referral','3'],['symptoms','Current symptoms','3'],['medHistory','Medical history','3'],
+ ['medSideEffects','Medication response','3'],['drivingHistory','Driving history','3'],['commScreen','Communication screen','4'],
+ ['visionNotes','Visual notes','4'],['physSummary','Physical summary','4'],['genCog','General cognitive observations','4'],
+ ['cogSummary','Cognitive summary','4'],['fbOffRoad','Off-road feedback','4'],['mdiBrief','MDI briefing','5'],
+ ['safetyMgmt','Safety management','5'],['summaryText','Summary','6'],['fbOnRoad','On-road feedback','6'],
+ ['legalInfo','Licensing information','6'],['limitations','Limitations','8'],
+];
+function allProse(){
   const out=[];
-  REQ_FIELDS.forEach(([k,label,sec])=>{
-    if(!String(S[k]??'').trim()) out.push({label, sec, sel:`[data-bind=${k}]`});
-  });
-  if(!S.meds.some(m=>m.name.trim())) out.push({label:"Medications — add at least one row (or 'Nil reported')", sec:'1', sel:'#medRows'});
-  if(S.meds.some(m=>m.name.trim()) && !String(S.medSideEffects||'').trim()) out.push({label:'Medication response / side effects', sec:'3', sel:'[data-bind=medSideEffects]'});
-  Object.keys(TEST_META).forEach(id=>{
-    const t=S.tests[id]; if(!t.on) return;
-    const m=TEST_META[id];
-    if(m.interp){ const need=m.fields[0]; if(!String(t[need.k]??'').trim()) out.push({label:m.name+' — score required (or untick the test)', sec:'4', sel:'#card_'+id}); }
-  });
-  CHECKLIST.forEach(g=>g.items.forEach(it=>{
-    const c=S.checklist[it.id];
-    if(c.st==='issue' && !c.note.trim()) out.push({label:'On-road issue needs a comment: '+it.short, sec:'5', sel:'#checklist'});
-  }));
-  if(!REC_DEFS.some(r=>S.recs[r.id]&&S.recs[r.id].on&&S.recs[r.id].text.trim())) out.push({label:'At least one recommendation must be included', sec:'6', sel:'#recCards'});
-  if(!S.consentObtained) out.push({label:'Confirm informed consent was obtained (tick box)', sec:'8', sel:'[data-bindbool=consentObtained]'});
+  NARR_FIELDS.forEach(([k,l,s])=>{ if(txt(S[k])) out.push({k,label:l,sec:s,text:S[k],sel:`[data-bind=${k}]`}); });
+  PROFILE_DOMAINS.forEach(d=>{ const p=S.profile[d.id]; if(p&&!p.na&&txt(p.text)) out.push({k:'profile_'+d.id,label:'Profile — '+d.label,sec:'3',text:p.text,sel:'#profileRows'}); });
+  CHECKLIST.forEach(g=>g.items.forEach(it=>{ const c=S.checklist[it.id]; if(txt(c.note)) out.push({k:'cl_'+it.id,label:'On-road — '+it.short,sec:'5',text:c.note,sel:'#checklist'}); }));
+  REC_DEFS.forEach(r=>{ const st=S.recs[r.id]; if(st&&st.on&&txt(st.text)) out.push({k:'rec_'+r.id,label:'Recommendation — '+r.label,sec:'6',text:st.text,sel:'#recCards'}); });
   return out;
 }
+const BAD_PHRASES = [
+  [/\b(seemed|seems) (fine|good|ok|okay)\b/i,'“seemed fine” is not an observation — say what you saw'],
+  [/\bno (real )?(issues|problems)\b(?!\s+(with|were|observed))/i,'“no issues” without detail — name what was intact and how you know'],
+  [/\bdid (fine|well|ok|okay)\b/i,'“did fine” is not a clinical finding'],
+  [/\b(obviously|clearly|of course)\b/i,'“obviously/clearly” asserts rather than evidences'],
+  [/\bI (think|feel|reckon|guess)\b/i,'“I think/feel” — state the finding and its basis instead'],
+  [/\b(a bit|kind of|sort of|a little bit)\b/i,'vague qualifier — quantify it'],
+  [/\b(good|bad|poor) driver\b/i,'global judgement of the person — describe the specific skill'],
+  [/\b(seems to be|appears to be) (fine|ok|okay|good)\b/i,'hedged non-finding'],
+  [/\bnormal\b(?!\s*(limits|range|power|strength|for))/i,'“normal” alone — say normal against what standard'],
+];
+const CONTRACTIONS = /\b(didn't|doesn't|wasn't|weren't|isn't|aren't|can't|couldn't|wouldn't|shouldn't|hasn't|haven't|won't|he's|she's|they're|it's|I've|I'm)\b/i;
+
+function validate(){
+  const blockers=[], advisories=[];
+  const B=(label,why,sec,sel)=>blockers.push({label,why,sec,sel});
+  const A=(id,label,why,sec,sel)=>advisories.push({id,label,why,sec,sel});
+
+  /* ---- 1. the record itself ---- */
+  if(!S.equipAt) B('Set-up not confirmed','Confirm the equipment and set-up check in Section 0 before the assessment.','0','#equipRows');
+  if(!S.notesLocked) B('Field record not locked','The report has to be written from a closed contemporaneous record. Lock it in Section 0.','0','#noteStats');
+  if(notesIn('pre').length<NOTE_MIN.pre) B(`Only ${notesIn('pre').length} pre-drive field notes (minimum ${NOTE_MIN.pre})`,'A pre-drive screen that produced almost no notes cannot support a detailed report.','0','#noteStats');
+  if(notesIn('onroad').length<NOTE_MIN.onroad) B(`Only ${notesIn('onroad').length} on-road field notes (minimum ${NOTE_MIN.onroad})`,'This is the gap that shows up in the report as thin, generic on-road description.','0','#noteStats');
+  CHECKLIST.forEach(g=>{ if(!S.notes.some(n=>n.phase==='onroad'&&n.group===g.g)) B('No on-road note logged for '+g.g,'Every performance area needs at least one observation recorded at the time — including the ones that were fine.','0','#noteStats'); });
+
+  /* ---- 2. required fields ---- */
+  REQ_FIELDS.forEach(([k,label,sec])=>{ if(!txt(S[k])) B(label,'Required field.',sec,`[data-bind=${k}]`); });
+  if(/\[|TBC|TBA|unknown/i.test(S.licExpiry||'')) B('Licence expiry is still unconfirmed','“'+txt(S.licExpiry)+'” cannot go out in a report. Sight the licence or confirm with the licensing authority.','1','[data-bind=licExpiry]');
+  if(!S.meds.some(m=>txt(m.name))) B("Medications — add at least one row (or 'Nil reported')",'Required.','1','#medRows');
+  if(S.meds.some(m=>txt(m.name)) && !txt(S.medSideEffects)) B('Medication response / side effects','Required where medications are listed.','3','[data-bind=medSideEffects]');
+  ['suitability','prevAssess','onroadSuitable','condConsidered'].forEach(k=>{
+    const lbl={suitability:'Suitability to undergo assessment (1.1)',prevAssess:'Previous OT driver assessments (2.5)',onroadSuitable:'Suitability to proceed on-road (2.19)',condConsidered:'Licence conditions considered (3.13)'}[k];
+    if(!txt(S[k])) B(lbl,'Competency standard requires this to be recorded.', k==='suitability'||k==='prevAssess'?'1':(k==='condConsidered'?'6':'4'), `[data-bind=${k}]`);
+  });
+
+  /* ---- 3. occupational profile depth ---- */
+  PROFILE_DOMAINS.filter(d=>d.core).forEach(d=>{
+    if(!profileDone(d.id)) B('Occupational profile — '+d.label,'Core interview domain: at least 15 words, or marked not applicable with a reason.','3','#profileRows');
+  });
+
+  /* ---- 4. physical & muscle testing ---- */
+  PHYS_ROWS.forEach(r=>{ if(!txt(S.phys[r.id])) B('Physical screen not recorded — '+r.label,'Record what you observed, or say it was not tested and why.','4','#physRows'); });
+  MUSCLES.forEach(m=>{
+    const v=S.muscles[m.id];
+    if(v.tested==='yes' && !v.grade) B('Muscle grade missing — '+m.n,'Testing was recorded but no MRC grade entered.','4','#muscleRows');
+    if(v.tested==='no' && !txt(v.note)) B('Untested muscle group needs a reason — '+m.n,'A group left untested is a clinical decision; record it as one.','4','#muscleRows');
+  });
+  if(musclesTested()===0) B('No manual muscle testing recorded','At least one muscle group must be formally tested and graded, or every group given a documented reason for omission.','4','#muscleRows');
+
+  /* ---- 5. test administration ---- */
+  Object.keys(TEST_META).forEach(id=>{
+    const t=S.tests[id]; if(!t.on || id==='dsdaCat') return;
+    const m=TEST_META[id];
+    if(!adminComplete(id)) B(m.name+' — administration record incomplete','Every question in the administration box must be answered; an invalidated test also needs the reason recorded.','4','#card_'+id);
+    if(testInvalid(id)) return;
+    const need=m.fields[0];
+    if(need && !txt(t[need.k])) B(m.name+' — score required (or untick the test)','Required.','4','#card_'+id);
+  });
+
+  /* ---- 6. on-road ratings and traceability ---- */
+  CHECKLIST.forEach(g=>g.items.forEach(it=>{
+    const c=S.checklist[it.id];
+    if(c.st==='unrated') B('Not yet rated — '+it.short,'Every performance item needs a rating you actually made.','5','#checklist');
+    if(c.st==='issue' && !txt(c.note)) B('Issue needs a comment — '+it.short,'Describe the issue, the contributing factors, and what it will take to develop.','5','#checklist');
+    if(c.st==='issue' && !(c.refs||[]).length) B('Issue has no field note behind it — '+it.short,'Link the note you logged at the time. A finding with no contemporaneous record behind it is the exact problem this builder exists to stop.','5','#checklist');
+    if(c.st==='na' && !txt(c.note)) B('Not-assessed item needs a reason — '+it.short,'Say why it was not assessed.','5','#checklist');
+  }));
+
+  /* ---- 7. drafting discipline ---- */
+  ['summaryText','cogSummary','physSummary'].forEach(k=>{
+    const lbl={summaryText:'Summary',cogSummary:'Cognitive summary',physSummary:'Physical summary'}[k];
+    if(txt(S[k]) && !verified(k)) B(lbl+' not confirmed against your notes','Tick the confirmation bar under the field. If you edit the text afterwards, it un-ticks and you confirm again.', k==='summaryText'?'6':'4', `[data-bind=${k}]`);
+  });
+  if(isUntouchedDraft('summaryText')) B('Summary is still the untouched auto-draft','The auto-draft assembles your data into a skeleton. The clinical reasoning is yours to write into it.','6','[data-bind=summaryText]');
+  ['reasonReferral','limitations','consentText','qualifications','declarationText'].forEach(k=>{
+    if(isUntouchedDraft(k)) A('draft_'+k,'Standard wording unedited — '+k,'This block is still the stock template. Fine if it is accurate for this client; check that it is.','8',`[data-bind=${k}]`);
+  });
+
+  /* ---- 8. writing quality ---- */
+  allProse().forEach(f=>{
+    const t=f.text;
+    const left=(fill(t).match(/\{[A-Za-z_]+\}/g)||[]);
+    if(left.length) B('Unrecognised token in '+f.label,'“'+left[0]+'” did not substitute — check it against the token list, or it will print literally in the report.',f.sec,f.sel);
+    if(/\[(TBC|TBA|xxx|X{2,}|insert|list [a-z]+|[a-z ]+)\]/i.test(t)) B('Placeholder left in '+f.label,'Square-bracket placeholder still in the text.',f.sec,f.sel);
+    if(/\b(TODO|FIXME|\?\?\?)\b/i.test(t)) B('Working marker left in '+f.label,'Remove before issue.',f.sec,f.sel);
+    if(CONTRACTIONS.test(t)) A('contr_'+f.k,'Contractions in '+f.label,'Contractions read as informal in a medicolegal document — “did not” rather than “didn’t”.',f.sec,f.sel);
+    BAD_PHRASES.forEach(([re,why],i)=>{ if(re.test(t)) A('bad'+i+'_'+f.k,'Unsupported phrasing in '+f.label,why,f.sec,f.sel); });
+    const long=t.split(/(?<=[.!?])\s+/).filter(s=>s.split(/\s+/).length>45);
+    if(long.length) A('long_'+f.k,`${long.length} very long sentence${long.length>1?'s':''} in ${f.label}`,'Sentences over about 45 words lose the reader — and the reader here may be a licensing authority.',f.sec,f.sel);
+    if(/ {2,}/.test(t)) A('sp_'+f.k,'Double spacing in '+f.label,'Tidy before issue.',f.sec,f.sel);
+    if(!/[.!?]\s*$/.test(txt(t))) A('punc_'+f.k,'No terminal punctuation in '+f.label,'The field ends mid-sentence.',f.sec,f.sel);
+  });
+
+  /* ---- 9. depth ---- */
+  if(wc(S.summaryText)<150) A('len_sum',`Summary is ${wc(S.summaryText)} words`,'A summary under about 150 words rarely carries the reasoning from findings to recommendations.','6','[data-bind=summaryText]');
+  if(wc(S.drivingHistory)<60) A('len_dh',`Driving history is ${wc(S.drivingHistory)} words`,'Licence history, hours, vehicle, prior instruction, incidents and goals — that is more than a couple of sentences.','3','[data-bind=drivingHistory]');
+  if(wc(S.genCog)<40) A('len_gc',`General cognitive observations are ${wc(S.genCog)} words`,'This is where your own observation carries the section rather than the test scores.','4','[data-bind=genCog]');
+  if(parseFloat(S.duration)<40) A('dur',`On-road assessment was ${S.duration} minutes`,'Competency 3.7 requires adequate duration for a comprehensive assessment. Record why if it was shortened.','5','[data-bind=duration]');
+
+  /* ---- 10. internal consistency ---- */
+  const issues=flaggedShorts();
+  if(issues.length && ['fit'].includes(S.outcome)) B('Outcome contradicts the findings','The outcome is “fit to drive, no restrictions” while '+issues.length+' on-road issue'+(issues.length>1?'s are':' is')+' flagged. Resolve one or the other.','6','[data-bind=outcome]');
+  if(S.austroadsVision==='No' && ['fit','fit-cond','learner-continue'].includes(S.outcome)) B('Vision standard not met, but outcome supports driving','Austroads vision standard is recorded as not met. That has to be resolved before a supportive outcome.','6','[data-bind=outcome]');
+  const sumLow=(S.summaryText||'').toLowerCase();
+  issues.forEach(s=>{ const key=s.split(' ').filter(w=>w.length>4)[0]; if(key && !sumLow.includes(key.toLowerCase())) A('sum_'+key,'Flagged issue may not be reflected in the summary: '+s,'Every issue you raised on road should be visible in the summary and picked up by a recommendation.','6','[data-bind=summaryText]'); });
+  if(!REC_DEFS.some(r=>S.recs[r.id]&&S.recs[r.id].on&&txt(S.recs[r.id].text))) B('At least one recommendation must be included','Required.','6','#recCards');
+  if(issues.length && !(S.recs.lessons&&S.recs.lessons.on) && ['learner-continue','lessons-reassess'].includes(S.outcome)) A('rec_less','Issues flagged but no driving instruction recommended','Check that each flagged issue is answered by a recommendation.','6','#recCards');
+
+  /* ---- 11. consent, competency, sign-off ---- */
+  if(!S.consentObtained) B('Confirm informed consent was obtained','Tick the box in Section 8.','8','[data-bindbool=consentObtained]');
+  COMPETENCIES.filter(c=>c.hard).forEach(c=>{ if(compStatus(c)==='miss') B('Competency '+c.id+' not evidenced','“'+c.t+'” — this is a documentation standard the report itself has to satisfy.','9','#compRows'); });
+  COMPETENCIES.forEach(c=>{ if(compStatus(c)==='man') A('cp_'+c.id,'Competency '+c.id+' awaiting confirmation','“'+c.t+'” — confirm in Section 9 that you did this.','9','#compRows'); });
+  if(!S.selfReview) B('Confirm you have read the report against your notes','The final check in Section 8.','8','#signoffPanel');
+  if(supervisedMode() && !txt(S.supervisor)) B('Supervising OT must be named','While in supervised practice, the supervising occupational therapist is named on the report.','1','[data-bind=supervisor]');
+  if(supervisedMode() && !/draft/i.test(S.reportVersion||'')) B('Version must be marked as a draft','This report exports as a supervised draft, so the version label has to say so.','8','[data-bind=reportVersion]');
+
+  return {blockers, advisories};
+}
+function unackedAdvisories(){ return validate().advisories.filter(a=>!S.ackAdvisories[a.id]); }
+function missingItems(){ return validate().blockers; }
+
 function updateBadge(){
   const b=document.getElementById('checkBadge'); if(!b) return;
-  const n=missingItems().length;
-  b.className = n? 'bad':'ok';
-  b.textContent = n? n+' item'+(n>1?'s':'')+' outstanding' : '✓ ready to export';
+  const v=validate(); const nb=v.blockers.length, na=v.advisories.filter(a=>!S.ackAdvisories[a.id]).length;
+  if(nb){ b.className='bad'; b.textContent=nb+' blocker'+(nb>1?'s':'')+(na?' · '+na+' to review':''); }
+  else if(na){ b.className='warn'; b.textContent=na+' item'+(na>1?'s':'')+' to review'; }
+  else { b.className='ok'; b.textContent='✓ ready to export'; }
+  const mb=document.getElementById('modeBadge');
+  if(mb){ const sup=supervisedMode(); mb.className=sup?'sup':'ind'; mb.textContent=sup?'supervised draft':'final'; }
+  const nbg=document.getElementById('noteBadge');
+  if(nbg) nbg.textContent=S.notes.length+' note'+(S.notes.length!==1?'s':'')+(S.notesLocked?' · locked':'');
+  const n0=document.getElementById('n0'); if(n0) n0.textContent=(S.equipAt?'set-up ✓':'set-up pending')+' · '+(S.notesLocked?'record locked':'record open');
+  const n3=document.getElementById('n3'); if(n3){ const done=PROFILE_DOMAINS.filter(d=>d.core&&profileDone(d.id)).length, tot=PROFILE_DOMAINS.filter(d=>d.core).length; n3.textContent=`profile ${done}/${tot}`; }
+  const n9=document.getElementById('n9'); if(n9){ const st=COMPETENCIES.map(compStatus); n9.textContent=`competencies ${st.filter(x=>x==='met'||x==='manok').length}/${st.filter(x=>x!=='nap').length}`; }
 }
 function showValidation(){
-  const list=missingItems();
-  document.getElementById('valHead').textContent = list.length? list.length+' outstanding item'+(list.length>1?'s':'')+' — complete these before export' : 'All required items complete';
-  document.getElementById('valList').innerHTML = list.length? list.map((m,i)=>
-    `<div class="vitem" onclick="jumpTo(${i})"><span class="sec">§${m.sec}</span>${esc(m.label)}</div>`).join('')
-    : '<div style="padding:14px;font-size:13.5px;color:#1e6b3a"><b>✓ Everything required is filled in.</b> You can export or print.</div>';
-  window._valList=list;
+  const {blockers, advisories}=validate();
+  const nb=blockers.length, na=advisories.filter(a=>!S.ackAdvisories[a.id]).length;
+  document.getElementById('valHead').textContent = nb? nb+' blocker'+(nb>1?'s':'')+' — these prevent export'
+    : na? na+' item'+(na>1?'s':'')+' to review before export' : 'Ready to export';
+  window._valList=blockers.concat(advisories);
+  let html='';
+  if(nb) html+=`<div class="vgroup blk">Blockers · must be fixed</div>`+blockers.map((m,i)=>
+    `<div class="vitem" onclick="jumpTo(${i})"><span class="sec">§${m.sec}</span><span>${esc(m.label)}<span class="vwhy">${esc(m.why||'')}</span></span></div>`).join('');
+  if(advisories.length) html+=`<div class="vgroup adv">Review · tick each once you have considered it</div>`+advisories.map((m,i)=>{
+    const ack=!!S.ackAdvisories[m.id];
+    return `<div class="vitem advisory"><input type="checkbox" class="ack" ${ack?'checked':''} onchange="S.ackAdvisories['${m.id}']=this.checked;showValidation();update()">
+      <span onclick="jumpTo(${nb+i})" style="cursor:pointer;flex:1"><span class="sec">§${m.sec}</span> ${esc(m.label)}<span class="vwhy">${esc(m.why||'')}</span></span></div>`;
+  }).join('');
+  if(!nb && !na) html=`<div style="padding:14px;font-size:13.5px;color:#1e6b3a"><b>✓ Everything checks out.</b> Blockers cleared and every advisory reviewed.</div>`+html;
+  document.getElementById('valList').innerHTML=html;
   document.getElementById('valModal').classList.add('open');
 }
 function jumpTo(i){
@@ -1253,15 +2508,19 @@ function jumpTo(i){
   if(el.focus) try{el.focus({preventScroll:true})}catch(e){}
 }
 function guard(fn){
-  if(missingItems().length){ showValidation(); return; }
+  const {blockers}=validate();
+  if(blockers.length || unackedAdvisories().length){ showValidation(); return; }
   fn();
 }
 
 /* init */
 window.addEventListener('DOMContentLoaded',()=>{
+  PRACTICE = loadPractice();
   const had=loadAutosave();
-  if(!had){ ['reasonReferral','physSummary','consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]()); }
+  if(!had){ ['reasonReferral','consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]()); }
   bindInputs(); syncForm(); render();
+  const ph=document.getElementById('ndPhase');
+  if(ph){ ph.addEventListener('change',refreshTagSelect); refreshTagSelect(); }
 });
 </script>
 </body>
