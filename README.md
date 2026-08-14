@@ -1,12 +1,16 @@
 # OT Driving Assessment Report Builder
 
-A single-page, client-side tool for drafting Estus Health occupational therapy driving assessment reports.
+A single-page, client-side tool for drafting occupational therapy driving assessment reports. Free and open source under the [MIT licence](LICENSE) — fork it, rebrand it, adapt it to your own practice.
 
-The entire app lives in `public/index.html` (HTML/CSS/vanilla JS, no build step, no backend — all data stays in the browser).
+The entire app lives in `public/index.html` (HTML/CSS/vanilla JS, no build step, no backend, no dependencies).
+
+**Nothing leaves the browser.** There is no server, no analytics and no network call except the Google Fonts stylesheet. Client data, drafts, your practice profile and your logo all live in `localStorage` on the machine you are using. Drafts move between machines as files you save yourself. That also means clearing site data deletes your drafts, so keep file copies of anything you need.
+
+> ⚠️ This tool encodes **Australian** practice: Austroads *Assessing Fitness to Drive*, AHPRA registration, state driver licensing authorities, and the Australian competency standards for OT driver assessors. The test cut-offs and licensing wording will not be correct in other jurisdictions without review. It supports clinical documentation — it does not make clinical decisions, and the assessor remains responsible for every word that goes out.
 
 ## What this tool is for
 
-Version 2 was rebuilt around the Flinders University advanced competencies feedback. The core principle:
+It was rebuilt around a set of supervisor feedback on a driver assessment course. The core principle:
 
 > **The report is written from the record. Not the other way round.**
 
@@ -72,6 +76,51 @@ All 50 standards from the *Australian Competency Standards for Occupational Ther
 
 Fields exist for the competencies that previously had nowhere to be recorded: suitability screening, prior assessments, communication screen, MDI briefing, safety management during the drive, off-road and on-road feedback to the client, licensing/insurance information given, licence conditions considered, and report turnaround.
 
+## Making it your own
+
+Open the **⚙ Practice Profile & Branding** section at the top of the app. Everything there is set once, saved in your browser, and reused for every report — it is not part of any individual draft.
+
+- **Logo** — upload a PNG, JPG or SVG (under 400 KB). It replaces the text wordmark on the letterhead and is embedded directly into the report, so exported files stay self-contained and work offline. Word handles PNG and JPG most reliably; if an SVG renders oddly in an exported `.doc`, use a PNG. A transparent PNG around 600px wide works well.
+- **Wordmark & tagline** — used when no logo is set. The two name fields are styled differently (bold, then letter-spaced) so a two-word name reads as a wordmark; put the whole name in the first field if you prefer.
+- **Letterhead contact details** — email, phone, website. Blank fields are omitted from the report entirely.
+- **Brand colours** — four pickers driving the letterhead rule, section headings, sub-headings and table headers, in both the report and the app itself.
+- **Default assessor details** — name, role, AHPRA number and usual location, pre-filled into each new report and overridable per report.
+
+The report reference prefix is derived from your practice initials automatically.
+
+**Export profile** writes the whole thing to a JSON file, so you can move it to another machine or hand it to colleagues in the same practice rather than having everyone set it up by hand. **Import profile** reads it back.
+
+Nothing in the source is branded. If you want to change defaults for a fork rather than per-browser, edit `BRAND_DEF` near the top of the script.
+
+## Adapting the clinical content
+
+The data that drives the assessment lives in plain arrays at the top of the script, so most changes need no knowledge of the rest of the code:
+
+| Constant | What it controls |
+| --- | --- |
+| `EQUIP` | Pre-assessment equipment and set-up checklist |
+| `PROFILE_DOMAINS` | Occupational profile domains and their prompt questions |
+| `MUSCLES` / `MRC` | Muscle groups tested and the grading scale |
+| `PHYS_ROWS` | Other physical screens and their standard wording |
+| `CHECKLIST` | On-road performance areas and items |
+| `TEST_META` / `ADMIN_SCRIPTS` | Standardised tests, and the administration rules shown for each |
+| `interp*()` | Score thresholds and interpretation wording |
+| `REC_DEFS` | Recommendation library |
+| `COMPETENCIES` | Competency standards and how each is evidenced |
+| `NOTE_MIN` | Minimum field-note coverage before the record can be locked |
+| `BAD_PHRASES` / `CONTRACTIONS` | Writing-quality checks |
+| `REFS` | Reference list |
+
+If you adapt the thresholds for another jurisdiction, please check them against that jurisdiction's fitness-to-drive standard rather than trusting the defaults here.
+
+## Contributing
+
+Issues and pull requests are welcome. It is a single static file with no build step — edit `public/index.html`, open it in a browser, and click **Load example** to exercise a fully populated report. Please keep it dependency-free and buildless.
+
+## Licence
+
+MIT — see [LICENSE](LICENSE). Use it commercially, fork it, rebrand it. It comes with no warranty, and it is your professional responsibility to check that its outputs are accurate and appropriate for your clients and jurisdiction.
+
 ## Local preview
 
 Open `public/index.html` directly in a browser, or serve it locally:
@@ -80,7 +129,7 @@ Open `public/index.html` directly in a browser, or serve it locally:
 npx serve public
 ```
 
-Click **Load example** for a fully worked de-identified sample — 34 field notes, complete profile, muscle grades, administration records and linked on-road findings — which exports cleanly and shows what the finished discipline looks like.
+Click **Load example** for a fully worked de-identified sample — 34 field notes, complete profile, muscle grades, administration records and linked on-road findings — which exports cleanly and shows what the finished discipline looks like. The sample client is fictional.
 
 ## Deploying to Vercel
 

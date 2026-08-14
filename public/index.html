@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Estus Health · OT Driving Assessment Report Builder</title>
+<title>OT Driving Assessment Report Builder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow+Semi+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -200,6 +200,16 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 .plreq .cnt{font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;flex:0 0 44px}
 .plreq .cnt.ok{color:#1e6b3a} .plreq .cnt.no{color:#8c2f2f}
 
+/* branding */
+.logobox{border:1px dashed #c8c6c1;border-radius:5px;background:#fff;padding:12px;text-align:center;margin-bottom:8px}
+.logobox img{max-height:70px;max-width:100%;display:block;margin:0 auto 8px}
+.logobox .empty{color:var(--faint);font-size:12px;line-height:1.5;padding:10px 0}
+.swatches{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.swatch{display:flex;flex-direction:column;gap:3px;align-items:center;font-family:'Barlow Semi Condensed',sans-serif;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.swatch input[type=color]{width:44px;height:30px;border:1px solid #d6d4cf;border-radius:4px;padding:1px;background:#fff;cursor:pointer}
+.brandprev{border:1px solid var(--line);border-radius:5px;background:#fff;padding:12px 14px;margin-bottom:10px}
+.brandprev .bar{height:3px;background:var(--grad);border-radius:2px;margin-top:8px}
+
 /* validation */
 #checkBadge{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11.5px;padding:5px 10px;border-radius:12px;cursor:pointer;letter-spacing:.04em}
 #checkBadge.ok{background:#1e6b3a;color:#fff} #checkBadge.bad{background:#8c2f2f;color:#fff} #checkBadge.warn{background:#8a6d1f;color:#fff}
@@ -231,7 +241,7 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 </head>
 <body>
 <div id="toolbar">
-  <div class="brand">ESTUS <span>HEALTH</span><small>OT DRIVING REPORT BUILDER</small></div>
+  <div class="brand" id="tbBrand"></div>
   <button class="btn" onclick="loadExample()">Load example</button>
   <button class="btn" onclick="newReport()">New</button>
   <button class="btn" onclick="saveJSON()">Save draft</button>
@@ -245,6 +255,15 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 <div id="gradbar"></div>
 <div id="app">
 <div id="formPane">
+
+<!-- ================= PRACTICE PROFILE & BRANDING ================= -->
+<details class="sec" id="brandSec">
+<summary>⚙ · Practice Profile &amp; Branding <span class="n" id="nB"></span></summary>
+<div class="secbody">
+  <div class="hint">Set this up once. It is saved in <b>this browser</b> and reused for every report — it is not part of any individual draft, and nothing is uploaded anywhere. Use <b>Export profile</b> to move it to another machine or share it with colleagues in your practice.</div>
+  <div id="brandPanel"></div>
+</div>
+</details>
 
 <!-- ================= 0. SET-UP & FIELD RECORD ================= -->
 <details class="sec" open>
@@ -595,7 +614,7 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 </div>
 </details>
 
-<div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. Estus Health · OT Driving Assessment Report Builder v2.0</div>
+<div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. OT Driving Assessment Report Builder v2.0 · open source, MIT licensed</div>
 </div>
 
 <div id="previewPane"><div id="reportRoot"></div></div>
@@ -636,8 +655,127 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 </div>
 <script>
 /* ================================================================
-   ESTUS HEALTH · OT DRIVING ASSESSMENT REPORT BUILDER
+   OT DRIVING ASSESSMENT REPORT BUILDER
    ================================================================ */
+
+/* ================================================================
+   PRACTICE PROFILE & BRANDING
+   Stored per browser, separate from any single report.
+================================================================ */
+const BRAND_DEF = {
+  name1:'YOUR', name2:'PRACTICE', tagline:'OCCUPATIONAL THERAPY',
+  email:'', phone:'', web:'', logo:'',
+  c1:'#344982', c2:'#2f6f9e', c3:'#2ca5b8', c4:'#ab5c95',
+  assessor:'', assessorRole:'Occupational Therapist', ahpra:'', location:'',
+};
+let BRAND = Object.assign({}, BRAND_DEF);
+const LOGO_MAX_KB = 400;
+function loadBrand(){ try{ const d=localStorage.getItem('otdrb-brand'); if(d) BRAND=Object.assign({},BRAND_DEF,JSON.parse(d)); }catch(e){} }
+function saveBrand(){
+  try{ localStorage.setItem('otdrb-brand', JSON.stringify(BRAND)); }
+  catch(e){ alert('Could not save the practice profile — browser storage is full. A smaller logo file will usually fix it.'); }
+}
+function brandName(){ return [BRAND.name1,BRAND.name2].filter(x=>String(x||'').trim()).join(' ').trim(); }
+function brandConfigured(){ const n=brandName(); return !!n && n!=='YOUR PRACTICE'; }
+/* Text fields update live. The panel is not rebuilt on keystroke — that would
+   steal focus — so only the preview, the gate and the badge are refreshed. */
+function setBrand(k,v){ BRAND[k]=v; saveBrand(); applyBrand(); refreshBrandPreview(); render(); }
+function brandPreviewHTML(){
+  return `${BRAND.logo? `<img src="${BRAND.logo}" alt="" style="max-height:44px;max-width:100%">`
+      : `<div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:24px;line-height:.95;color:var(--ink)">${esc(BRAND.name1||'')} <span style="font-weight:500;letter-spacing:.12em">${esc(BRAND.name2||'')}</span></div>`}
+    ${txt(BRAND.tagline)? `<div style="font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:9px;letter-spacing:.34em;color:var(--plum);margin-top:3px;text-transform:uppercase">${esc(BRAND.tagline)}</div>`:''}
+    <div class="bar"></div>`;
+}
+function refreshBrandPreview(){
+  const pv=document.getElementById('brandPrev'); if(pv) pv.innerHTML=brandPreviewHTML();
+  const g=document.getElementById('brandGate');
+  if(g) g.innerHTML = brandConfigured()? '' : '<div class="gate stop"><b>Practice name not set.</b> Reports will carry a placeholder letterhead until you fill this in, and export is blocked.</div>';
+  const nb=document.getElementById('nB'); if(nb) nb.textContent = brandConfigured()? brandName() : 'not set up';
+}
+function applyBrand(){
+  const r=document.documentElement.style;
+  r.setProperty('--navy',BRAND.c1); r.setProperty('--blue',BRAND.c2);
+  r.setProperty('--teal',BRAND.c3); r.setProperty('--plum',BRAND.c4);
+  r.setProperty('--grad',`linear-gradient(90deg,${BRAND.c1} 0%,${BRAND.c2} 34%,${BRAND.c3} 66%,${BRAND.c4} 100%)`);
+  rebuildST();
+  const tb=document.getElementById('tbBrand');
+  if(tb) tb.innerHTML=`${esc(BRAND.name1||'')} <span>${esc(BRAND.name2||'')}</span><small>OT DRIVING REPORT BUILDER</small>`;
+}
+function onLogo(ev){
+  const f=ev.target.files[0]; if(!f) return;
+  if(!/^image\/(png|jpeg|svg\+xml|gif|webp)$/.test(f.type)){ alert('Please choose a PNG, JPG or SVG image.'); ev.target.value=''; return; }
+  if(f.size>LOGO_MAX_KB*1024){
+    alert(`That file is ${Math.round(f.size/1024)} KB. Please use one under ${LOGO_MAX_KB} KB — the logo is embedded into every exported report, so a large file bloats each one.`);
+    ev.target.value=''; return;
+  }
+  const r=new FileReader();
+  r.onload=()=>{ BRAND.logo=r.result; saveBrand(); buildBrand(); applyBrand(); render(); };
+  r.readAsDataURL(f); ev.target.value='';
+}
+function clearLogo(){ BRAND.logo=''; saveBrand(); buildBrand(); render(); }
+function resetBrandColours(){ ['c1','c2','c3','c4'].forEach(k=>BRAND[k]=BRAND_DEF[k]); saveBrand(); buildBrand(); applyBrand(); render(); }
+function exportBrand(){
+  const blob=new Blob([JSON.stringify(BRAND,null,1)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=(brandName().toLowerCase().replace(/[^a-z0-9]+/g,'-')||'practice')+'-profile.json'; a.click();
+}
+function importBrand(ev){
+  const f=ev.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{ try{ BRAND=Object.assign({},BRAND_DEF,JSON.parse(r.result)); saveBrand(); buildBrand(); applyBrand(); render(); }
+    catch(e){ alert('Could not read that profile file.'); } };
+  r.readAsText(f); ev.target.value='';
+}
+function applyProfileToReport(){
+  ['assessor','assessorRole','ahpra','location'].forEach(k=>{ if(txt(BRAND[k])) S[k]=BRAND[k]; });
+  syncForm(); update();
+}
+function buildBrand(){
+  const el=document.getElementById('brandPanel'); if(!el) return;
+  const F=(k,label,ph)=>`<div class="f"><label>${label}</label><input type="text" value="${esc(BRAND[k]||'')}" placeholder="${ph||''}" oninput="setBrand('${k}',this.value)"></div>`;
+  const C=(k,label)=>`<div class="swatch"><input type="color" value="${esc(BRAND[k])}" oninput="setBrand('${k}',this.value)">${label}</div>`;
+  el.innerHTML=`
+  <div id="brandGate"></div>
+  <div class="brandprev" id="brandPrev">${brandPreviewHTML()}</div>
+
+  <div class="subhead">Logo</div>
+  <div class="logobox">
+    ${BRAND.logo? `<img src="${BRAND.logo}" alt="logo preview">`
+      : `<div class="empty">No logo set — the report uses the text wordmark below.<br>PNG, JPG or SVG, under ${LOGO_MAX_KB} KB. A transparent PNG around 600px wide works well.</div>`}
+    <input type="file" id="logoFile" accept="image/png,image/jpeg,image/svg+xml,image/gif,image/webp" style="display:none" onchange="onLogo(event)">
+    <button class="btn primary" onclick="document.getElementById('logoFile').click()">${BRAND.logo?'Replace logo':'Choose logo image'}</button>
+    ${BRAND.logo? `<button class="btn" onclick="clearLogo()">Remove</button>`:''}
+  </div>
+  <div class="hint">The logo is embedded directly into the report, so exports stay self-contained and work offline. Word handles PNG and JPG most reliably; if an SVG looks wrong in an exported <code>.doc</code>, use a PNG instead.</div>
+
+  <div class="subhead">Wordmark &amp; tagline</div>
+  <div class="hint">Used when no logo image is set. The two parts are styled differently — bold, then letter-spaced — so a two-word name reads as a wordmark. Put the whole name in the first box if that suits you better.</div>
+  <div class="row">${F('name1','Name — first part','RIVERSIDE')}${F('name2','Name — second part','THERAPY')}</div>
+  <div class="row">${F('tagline','Tagline','OCCUPATIONAL THERAPY')}</div>
+
+  <div class="subhead">Letterhead contact details</div>
+  <div class="hint">Blank lines are left out of the report entirely.</div>
+  <div class="row">${F('email','Email','you@practice.com')}${F('phone','Phone','+61 3 0000 0000')}</div>
+  <div class="row">${F('web','Website','www.practice.com')}</div>
+
+  <div class="subhead">Brand colours <span class="resetlink" onclick="resetBrandColours()">reset to defaults</span></div>
+  <div class="hint">These drive the letterhead rule, section headings and table headers in the report, and the app itself.</div>
+  <div class="swatches">${C('c1','Headings')}${C('c2','Accent')}${C('c3','Rules')}${C('c4','Sub-headings')}</div>
+
+  <div class="subhead">Default assessor details</div>
+  <div class="hint">Pre-filled into each new report. Individual reports can still override them.</div>
+  <div class="row">${F('assessor','Name','')}${F('assessorRole','Role','Occupational Therapist')}</div>
+  <div class="row">${F('ahpra','AHPRA number','')}${F('location','Usual assessment location','')}</div>
+  <div class="row" style="margin-top:4px"><div class="f"><button class="btn" onclick="applyProfileToReport()">Apply these to the current report</button></div></div>
+
+  <div class="subhead">Move this profile</div>
+  <div class="row">
+    <div class="f"><button class="btn" onclick="exportBrand()">Export profile</button></div>
+    <div class="f"><button class="btn" onclick="document.getElementById('brandFile').click()">Import profile</button>
+      <input type="file" id="brandFile" accept=".json" style="display:none" onchange="importBrand(event)"></div>
+  </div>`;
+  refreshBrandPreview();
+}
 
 /* ---------- static data ---------- */
 const REVIEWED_OPTS = [
@@ -877,8 +1015,8 @@ function freshState(){
     diagnoses:'', meds:[{name:'',dose:'',purpose:''}],
     refName:'', refRole:'', refOrg:'', refContact:'',
     dateAssess:'', dateReport:'',
-    assessor:'Liam Fagan', assessorRole:'Occupational Therapist', ahpra:'OCC0002674997',
-    mdi:'', location:'Flinders University Tonsley campus',
+    assessor:BRAND.assessor||'', assessorRole:BRAND.assessorRole||'Occupational Therapist', ahpra:BRAND.ahpra||'',
+    mdi:'', location:BRAND.location||'',
     reviewed:{referral:true, licence:true, background:true, gp:false, prevOT:false}, reviewedExtra:'', supportPerson:'',
     purpose:'learner', reasonReferral:'', symptoms:'', medHistory:'', medSideEffects:'', drivingHistory:'',
     needs:{}, hearing:'wnl', hearingNote:'',
@@ -1003,7 +1141,8 @@ const AUTOTEXT = {
   summaryText(){ return autoSummary(); },
   reportRef(){
     const d=(S.dateAssess||'').replaceAll('-','');
-    return 'EH-'+(d||'DRAFT')+'-'+((S.surname||'XXX').substring(0,3).toUpperCase());
+    const initials=(brandName().match(/\b[A-Za-z]/g)||['O','T']).join('').slice(0,3).toUpperCase();
+    return initials+'-'+(d||'DRAFT')+'-'+((S.surname||'XXX').substring(0,3).toUpperCase());
   },
   consentText(){
     return `The purpose and process of the assessment, and the limits of confidentiality, were explained to {name}{support}. {name} provided informed consent to participate in the assessment and for this report to be provided to the parties listed at the end of this report.`;
@@ -1691,18 +1830,23 @@ function buildSignoff(){
 /* ================================================================
    REPORT GENERATION (inline-styled — shared by preview, print, Word)
 ================================================================ */
-const ST = {
-  body:`font-family:'Barlow',Calibri,sans-serif;font-size:10.5pt;line-height:1.5;color:#1c1c1c`,
-  h1:`font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:600;font-size:19pt;letter-spacing:.03em;margin:0 0 7mm;color:#171410`,
-  h2:`font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:600;font-size:13pt;letter-spacing:.09em;text-transform:uppercase;color:#344982;margin:9mm 0 3mm;border-bottom:2px solid #2ca5b8;padding-bottom:1.5mm`,
-  h3:`font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:500;font-size:11pt;letter-spacing:.05em;color:#ab5c95;margin:5mm 0 2mm`,
-  p:`margin:0 0 3mm`,
-  tbl:`width:100%;border-collapse:collapse;margin:2mm 0 4mm;font-size:9.5pt`,
-  th:`font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:8.5pt;letter-spacing:.08em;text-transform:uppercase;text-align:left;background:#344982;color:#ffffff;padding:2mm 2.5mm;border:1px solid #344982`,
-  td:`border:1px solid #d6d4cf;padding:1.8mm 2.5mm;vertical-align:top`,
-  lbl:`border:1px solid #d6d4cf;padding:1.8mm 2.5mm;vertical-align:top;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;width:34%;background:#efe9db;color:#3a3934`,
-  ok:`border:1px solid #d6d4cf;padding:1.8mm 2.5mm;text-align:center;font-weight:700;color:#1e6b3a`,
-};
+let ST = {};
+function rebuildST(){
+  ST = {
+    body:`font-family:'Barlow',Calibri,sans-serif;font-size:10.5pt;line-height:1.5;color:#1c1c1c`,
+    h1:`font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:600;font-size:19pt;letter-spacing:.03em;margin:0 0 7mm;color:#171410`,
+    h2:`font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:600;font-size:13pt;letter-spacing:.09em;text-transform:uppercase;color:${BRAND.c1};margin:9mm 0 3mm;border-bottom:2px solid ${BRAND.c3};padding-bottom:1.5mm`,
+    h3:`font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:500;font-size:11pt;letter-spacing:.05em;color:${BRAND.c4};margin:5mm 0 2mm`,
+    p:`margin:0 0 3mm`,
+    tbl:`width:100%;border-collapse:collapse;margin:2mm 0 4mm;font-size:9.5pt`,
+    th:`font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:8.5pt;letter-spacing:.08em;text-transform:uppercase;text-align:left;background:${BRAND.c1};color:#ffffff;padding:2mm 2.5mm;border:1px solid ${BRAND.c1}`,
+    td:`border:1px solid #d6d4cf;padding:1.8mm 2.5mm;vertical-align:top`,
+    lbl:`border:1px solid #d6d4cf;padding:1.8mm 2.5mm;vertical-align:top;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;width:34%;background:#efe9db;color:#3a3934`,
+    ok:`border:1px solid #d6d4cf;padding:1.8mm 2.5mm;text-align:center;font-weight:700;color:#1e6b3a`,
+    grouprow:`border:1px solid #d6d4cf;padding:1.8mm 2.5mm;background:${BRAND.c1};color:#fff;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:8.5pt;letter-spacing:.08em;text-transform:uppercase`,
+  };
+}
+rebuildST();
 function P(t){ return t? `<p style="${ST.p}">${paraSplit(t)}</p>`.replace(/<p style="[^"]*"><\/p>/g,'') : ''; }
 function paraSplit(t){ return esc(fill(t)).replace(/\n{2,}/g,`</p><p style="${ST.p}">`).replace(/\n/g,'<br>'); }
 function TR(label,val){ return `<tr><td style="${ST.lbl}">${label}</td><td style="${ST.td}">${paraSplit(val||'')}</td></tr>`; }
@@ -1710,11 +1854,20 @@ function TR(label,val){ return `<tr><td style="${ST.lbl}">${label}</td><td style
 function buildReport(){
   let h='';
   /* letterhead */
+  const mark = BRAND.logo
+    ? `<img src="${BRAND.logo}" alt="${esc(brandName())}" style="max-height:20mm;max-width:75mm">`
+    : `<div style="font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:700;font-size:26px;line-height:.95;color:#171410">${esc(BRAND.name1||'')} <span style="font-weight:500;letter-spacing:.12em">${esc(BRAND.name2||'')}</span></div>`;
+  const tagline = txt(BRAND.tagline)
+    ? `<div style="font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:9px;letter-spacing:.34em;color:${BRAND.c4};margin-top:3px;text-transform:uppercase">${esc(BRAND.tagline)}</div>` : '';
+  const contact = [
+    txt(BRAND.email)? esc(BRAND.email):'',
+    txt(BRAND.phone)? esc(BRAND.phone):'',
+    txt(BRAND.web)? `<span style="color:${BRAND.c3};font-weight:600">${esc(BRAND.web)}</span>`:'',
+  ].filter(Boolean).join('<br>');
   h+=`<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5mm">
-    <div><div style="font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:700;font-size:26px;line-height:.95;color:#171410">ESTUS <span style="font-weight:500;letter-spacing:.12em">HEALTH</span></div>
-    <div style="font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:9px;letter-spacing:.34em;color:#ab5c95;margin-top:3px;text-transform:uppercase">OCCUPATIONAL THERAPY</div></div>
-    <div style="text-align:right;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:8.5pt;color:#55534e;line-height:1.6">liam@estushealth.com<br>+61 3 9000 0000<br><span style="color:#2ca5b8;font-weight:600">www.estushealth.com</span></div></div>
-    <div style="height:3px;background:linear-gradient(90deg,#344982 0%,#2f6f9e 34%,#2ca5b8 66%,#ab5c95 100%);margin:0 0 8mm;border-radius:2px;font-size:0">&nbsp;</div>`;
+    <div>${mark}${tagline}</div>
+    <div style="text-align:right;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:8.5pt;color:#55534e;line-height:1.6">${contact}</div></div>
+    <div style="height:3px;background:linear-gradient(90deg,${BRAND.c1} 0%,${BRAND.c2} 34%,${BRAND.c3} 66%,${BRAND.c4} 100%);margin:0 0 8mm;border-radius:2px;font-size:0">&nbsp;</div>`;
   h+=`<h1 style="${ST.h1}">Occupational Therapy Driver Assessment Report</h1>`;
 
   /* client details */
@@ -1794,7 +1947,7 @@ function buildReport(){
   h+=`<h3 style="${ST.h3}">Physical Abilities &amp; Restrictions</h3><table style="${ST.tbl}"><tr><th style="${ST.th};width:34%"></th><th style="${ST.th}">Observed physical abilities and restrictions</th></tr>`;
   let lastG=null;
   PHYS_ROWS.forEach(r=>{
-    if(r.group && r.group!==lastG){ h+=`<tr><td colspan="2" style="${ST.td};background:#344982;color:#fff;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:8.5pt;letter-spacing:.08em;text-transform:uppercase">${r.group}</td></tr>`; lastG=r.group; }
+    if(r.group && r.group!==lastG){ h+=`<tr><td colspan="2" style="${ST.grouprow}">${r.group}</td></tr>`; lastG=r.group; }
     h+=TR(r.label, S.phys[r.id]);
   });
   h+=`</table>`;
@@ -1808,7 +1961,7 @@ function buildReport(){
     h+=`<table style="${ST.tbl}"><tr><th style="${ST.th};width:34%">Muscle group</th><th style="${ST.th};width:12%">Grade</th><th style="${ST.th}">Comment</th></tr>`;
     let lg=null;
     mTested.forEach(m=>{
-      if(m.g!==lg){ h+=`<tr><td colspan="3" style="${ST.td};background:#344982;color:#fff;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:8.5pt;letter-spacing:.08em;text-transform:uppercase">${m.g}</td></tr>`; lg=m.g; }
+      if(m.g!==lg){ h+=`<tr><td colspan="3" style="${ST.grouprow}">${m.g}</td></tr>`; lg=m.g; }
       const v=S.muscles[m.id];
       h+=`<tr><td style="${ST.lbl}">${m.n}</td><td style="${v.grade==='5'?ST.ok:ST.td+';text-align:center;font-weight:700'}">${esc(v.grade)}</td><td style="${ST.td}">${esc(v.note)}</td></tr>`;
     });
@@ -1858,7 +2011,7 @@ function buildReport(){
     const c=S.checklist[it.id];
     if(c.st==='na' && !c.note) return;
     const safe = c.st==='safe';
-    h+=`<tr><td style="${ST.td};font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;color:#344982">${g.g}</td>
+    h+=`<tr><td style="${ST.td};font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;color:${BRAND.c1}">${g.g}</td>
       <td style="${ST.td}">${it.text}</td>
       <td style="${c.st==='safe'? ST.ok : ST.td+';text-align:center'}">${safe?'✓': c.st==='na'?'n/a': c.st==='unrated'?'—':''}</td>
       <td style="${ST.td}${c.st==='issue'?';color:#8c2f2f':''}">${c.st==='unrated'? '<i style="color:#8c2f2f">not rated</i>':''}${c.st==='issue'&&!c.note? '<b>✗</b>':''}${paraSplit(c.note||'')}</td></tr>`;
@@ -1887,7 +2040,7 @@ function buildReport(){
   /* signature */
   h+=`<p style="${ST.p};margin-top:8mm">Please do not hesitate to contact me should you wish to discuss any aspect of this report.</p>
   <p style="${ST.p};margin-top:6mm">Kind regards,</p>
-  <p style="${ST.p};margin-top:5mm"><b>${esc(S.assessor)}</b><br>${esc(S.assessorRole)}${S.ahpra? '<br>AHPRA No. '+esc(S.ahpra):''}<br>Estus Health<br>Signed: ${esc(fmtDate(S.dateReport))||'____________'}</p>`;
+  <p style="${ST.p};margin-top:5mm"><b>${esc(S.assessor)}</b><br>${esc(S.assessorRole)}${S.ahpra? '<br>AHPRA No. '+esc(S.ahpra):''}${brandName()? '<br>'+esc(brandName()):''}<br>Signed: ${esc(fmtDate(S.dateReport))||'____________'}</p>`;
 
   /* references */
   const refs=[REFS.austroads, REFS.competency];
@@ -1899,7 +2052,7 @@ function buildReport(){
 
   /* end marker + footer strip */
   h+=`<p style="text-align:center;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:9pt;letter-spacing:.3em;color:#8a8880;margin:10mm 0 4mm">— END OF REPORT —</p>`;
-  h+=`<div style="border-top:1px solid #e6e4df;padding-top:2mm;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:7.5pt;letter-spacing:.08em;color:#8a8880">ESTUS HEALTH · OCCUPATIONAL THERAPY&nbsp;&nbsp;·&nbsp;&nbsp;${esc(footerID())}&nbsp;&nbsp;·&nbsp;&nbsp;CONFIDENTIAL</div>`;
+  h+=`<div style="border-top:1px solid #e6e4df;padding-top:2mm;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:7.5pt;letter-spacing:.08em;color:#8a8880">${esc([brandName(),BRAND.tagline].filter(x=>String(x||'').trim()).join(' · ').toUpperCase())}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(footerID())}&nbsp;&nbsp;·&nbsp;&nbsp;CONFIDENTIAL</div>`;
   return h;
 }
 function recordStatement(){
@@ -1992,8 +2145,19 @@ function normalise(raw){
   return s;
 }
 /* autosave */
-function autosave(){ try{ localStorage.setItem('estus-ot-report', JSON.stringify(S)); }catch(e){} }
-function loadAutosave(){ try{ const d=localStorage.getItem('estus-ot-report'); if(d){ S = normalise(JSON.parse(d)); return true; } }catch(e){} return false; }
+const DRAFT_KEY='otdrb-report', DRAFT_KEY_LEGACY='estus-ot-report';
+function autosave(){ try{ localStorage.setItem(DRAFT_KEY, JSON.stringify(S)); }catch(e){} }
+function loadAutosave(){
+  try{
+    let d=localStorage.getItem(DRAFT_KEY);
+    if(!d){ /* one-time migration from the pre-open-source key */
+      d=localStorage.getItem(DRAFT_KEY_LEGACY);
+      if(d){ localStorage.setItem(DRAFT_KEY,d); localStorage.removeItem(DRAFT_KEY_LEGACY); }
+    }
+    if(d){ S = normalise(JSON.parse(d)); return true; }
+  }catch(e){}
+  return false;
+}
 
 /* file save/load */
 function saveJSON(){
@@ -2041,6 +2205,10 @@ body{${ST.body}} table{border-collapse:collapse} li{margin-bottom:6pt}
 ================================================================ */
 function loadExample(){
   S=freshState();
+  /* the sample stands alone, so it still demonstrates a complete report
+     before anyone has filled in their own practice profile */
+  if(!txt(S.assessor)) S.assessor='Sample Therapist';
+  if(!txt(S.ahpra)) S.ahpra='OCC0000000000';
   Object.assign(S,{
     title:'Mr', firstName:'John', prefName:'Johnny', surname:'Citizen', pronouns:'he', dob:'2000-01-01',
     address:'123 Sample Street, Adelaide SA 5000', licNo:'AB1234', licSighted:'Yes', licExpiry:'14/03/2028',
@@ -2062,7 +2230,7 @@ function loadExample(){
     austroadsVision:'Yes', eyeReview:'Yes',
     genCog:"{name} was alert, engaged and cooperative throughout the pre-driving screen. {He} required only minimal instruction, maintained concentration throughout (despite some general fatigue and localised pain after a recent injection), communicated clearly, asked relevant and at times complex questions, and demonstrated good insight into the implications of {his} functional status for driving.",
     cogSummary:"Cognitive and perceptual screening was broadly within functional limits for driving. {name} demonstrated intact visuoconstructional skills, planning and executive function, intact visual scanning and attention, accurate application of road rules, and realistic insight into {his} own abilities. {His} performance on the Trail Making Test Part B, however, exceeded the driving time threshold, indicating reduced speed of divided attention and mental flexibility under load. This is {his} main area of cognitive vulnerability and is consistent with the difficulty {he} reports managing several driving demands at once. {His} combined DriveSafe and DriveAware scores place {him} in the highest (likely to pass) category from a cognitive standpoint. This indicates cognitive readiness to progress to supervised on-road learning rather than readiness to drive unsupervised, and is best developed through graded, repeated practice.",
-    location:'the Estus Health assessment centre',
+    location:'the practice assessment centre',
     vehicle:'Dual-control automatic vehicle (dual brakes)', duration:'40',
     weather:'Overcast with no rain; dry road surfaces.',
     route:'Commenced in a quiet car park for vehicle familiarisation, progressing to two-way and multi-lane roads, traffic lights and roundabouts across 25, 50 and 60 km/h zones in low-to-moderate traffic.',
@@ -2285,6 +2453,7 @@ function validate(){
   /* ---- 2. required fields ---- */
   REQ_FIELDS.forEach(([k,label,sec])=>{ if(!txt(S[k])) B(label,'Required field.',sec,`[data-bind=${k}]`); });
   if(/\[|TBC|TBA|unknown/i.test(S.licExpiry||'')) B('Licence expiry is still unconfirmed','“'+txt(S.licExpiry)+'” cannot go out in a report. Sight the licence or confirm with the licensing authority.','1','[data-bind=licExpiry]');
+  if(!brandConfigured()) B('Practice name not set','Set your practice name and letterhead details in the Practice Profile section — reports otherwise carry a placeholder letterhead.','⚙','#brandPanel');
   if(!S.meds.some(m=>txt(m.name))) B("Medications — add at least one row (or 'Nil reported')",'Required.','1','#medRows');
   if(S.meds.some(m=>txt(m.name)) && !txt(S.medSideEffects)) B('Medication response / side effects','Required where medications are listed.','3','[data-bind=medSideEffects]');
   ['suitability','prevAssess','onroadSuitable','condConsidered'].forEach(k=>{
@@ -2423,6 +2592,7 @@ function guard(fn){
 
 /* init */
 window.addEventListener('DOMContentLoaded',()=>{
+  loadBrand(); applyBrand(); buildBrand();
   const had=loadAutosave();
   if(!had){ ['reasonReferral','consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]()); }
   bindInputs(); syncForm(); render();
