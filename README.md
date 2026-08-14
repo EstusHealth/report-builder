@@ -1,6 +1,6 @@
 # OT Driving Assessment Report Builder
 
-A single-page, client-side tool for drafting occupational therapy driving assessment reports. Free and open source under the [MIT licence](LICENSE) — fork it, rebrand it, adapt it to your own practice.
+A single-page, client-side tool for drafting occupational therapy driving assessment reports. Free and open source under the [MIT licence](LICENSE) — fork it, rebrand it, adapt it to your own practice. It ships set up for Estus Health; [swapping in your own logo, colours and letterhead](#making-it-your-own) takes a couple of minutes and no code.
 
 The entire app lives in `public/index.html` (HTML/CSS/vanilla JS, no build step, no backend, no dependencies).
 
@@ -78,6 +78,8 @@ Fields exist for the competencies that previously had nowhere to be recorded: su
 
 ## Making it your own
 
+The app ships configured with the Estus Health letterhead and colours, so it works out of the box. Rebranding is entirely optional and takes a couple of minutes — no code required.
+
 Open the **⚙ Practice Profile & Branding** section at the top of the app. Everything there is set once, saved in your browser, and reused for every report — it is not part of any individual draft.
 
 - **Logo** — upload a PNG, JPG or SVG (under 400 KB). It replaces the text wordmark on the letterhead and is embedded directly into the report, so exported files stay self-contained and work offline. Word handles PNG and JPG most reliably; if an SVG renders oddly in an exported `.doc`, use a PNG. A transparent PNG around 600px wide works well.
@@ -90,7 +92,7 @@ The report reference prefix is derived from your practice initials automatically
 
 **Export profile** writes the whole thing to a JSON file, so you can move it to another machine or hand it to colleagues in the same practice rather than having everyone set it up by hand. **Import profile** reads it back.
 
-Nothing in the source is branded. If you want to change defaults for a fork rather than per-browser, edit `BRAND_DEF` near the top of the script.
+The profile overrides the shipped defaults per browser. If you are maintaining a fork and want to change what it ships with, edit the `BRAND_DEF` block near the top of the script — that is the only branded thing in the source.
 
 ## Adapting the clinical content
 

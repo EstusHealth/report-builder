@@ -260,7 +260,7 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 <details class="sec" id="brandSec">
 <summary>⚙ · Practice Profile &amp; Branding <span class="n" id="nB"></span></summary>
 <div class="secbody">
-  <div class="hint">Set this up once. It is saved in <b>this browser</b> and reused for every report — it is not part of any individual draft, and nothing is uploaded anywhere. Use <b>Export profile</b> to move it to another machine or share it with colleagues in your practice.</div>
+  <div class="hint">Optional — the app ships ready to use with the Estus Health letterhead. Change anything here to make it your own. It is saved in <b>this browser</b> and reused for every report, it is not part of any individual draft, and nothing is uploaded anywhere. Use <b>Export profile</b> to move it to another machine or share it with colleagues in your practice.</div>
   <div id="brandPanel"></div>
 </div>
 </details>
@@ -662,9 +662,12 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
    PRACTICE PROFILE & BRANDING
    Stored per browser, separate from any single report.
 ================================================================ */
+/* Ships configured for Estus Health. Fork it and edit this block to change
+   the shipped defaults, or just override it per browser in the app's
+   Practice Profile section — nothing here is baked into the report. */
 const BRAND_DEF = {
-  name1:'YOUR', name2:'PRACTICE', tagline:'OCCUPATIONAL THERAPY',
-  email:'', phone:'', web:'', logo:'',
+  name1:'ESTUS', name2:'HEALTH', tagline:'OCCUPATIONAL THERAPY',
+  email:'liam@estushealth.com', phone:'+61 3 9000 0000', web:'www.estushealth.com', logo:'',
   c1:'#344982', c2:'#2f6f9e', c3:'#2ca5b8', c4:'#ab5c95',
   assessor:'', assessorRole:'Occupational Therapist', ahpra:'', location:'',
 };
@@ -676,7 +679,7 @@ function saveBrand(){
   catch(e){ alert('Could not save the practice profile — browser storage is full. A smaller logo file will usually fix it.'); }
 }
 function brandName(){ return [BRAND.name1,BRAND.name2].filter(x=>String(x||'').trim()).join(' ').trim(); }
-function brandConfigured(){ const n=brandName(); return !!n && n!=='YOUR PRACTICE'; }
+function brandConfigured(){ return !!brandName(); }
 /* Text fields update live. The panel is not rebuilt on keystroke — that would
    steal focus — so only the preview, the gate and the badge are refreshed. */
 function setBrand(k,v){ BRAND[k]=v; saveBrand(); applyBrand(); refreshBrandPreview(); render(); }
@@ -689,7 +692,7 @@ function brandPreviewHTML(){
 function refreshBrandPreview(){
   const pv=document.getElementById('brandPrev'); if(pv) pv.innerHTML=brandPreviewHTML();
   const g=document.getElementById('brandGate');
-  if(g) g.innerHTML = brandConfigured()? '' : '<div class="gate stop"><b>Practice name not set.</b> Reports will carry a placeholder letterhead until you fill this in, and export is blocked.</div>';
+  if(g) g.innerHTML = brandConfigured()? '' : '<div class="gate stop"><b>Practice name is empty.</b> The report letterhead needs a name — export is blocked until one is set.</div>';
   const nb=document.getElementById('nB'); if(nb) nb.textContent = brandConfigured()? brandName() : 'not set up';
 }
 function applyBrand(){
@@ -2453,7 +2456,7 @@ function validate(){
   /* ---- 2. required fields ---- */
   REQ_FIELDS.forEach(([k,label,sec])=>{ if(!txt(S[k])) B(label,'Required field.',sec,`[data-bind=${k}]`); });
   if(/\[|TBC|TBA|unknown/i.test(S.licExpiry||'')) B('Licence expiry is still unconfirmed','“'+txt(S.licExpiry)+'” cannot go out in a report. Sight the licence or confirm with the licensing authority.','1','[data-bind=licExpiry]');
-  if(!brandConfigured()) B('Practice name not set','Set your practice name and letterhead details in the Practice Profile section — reports otherwise carry a placeholder letterhead.','⚙','#brandPanel');
+  if(!brandConfigured()) B('Practice name is empty','The report letterhead needs a practice name. Set one in the Practice Profile section.','⚙','#brandPanel');
   if(!S.meds.some(m=>txt(m.name))) B("Medications — add at least one row (or 'Nil reported')",'Required.','1','#medRows');
   if(S.meds.some(m=>txt(m.name)) && !txt(S.medSideEffects)) B('Medication response / side effects','Required where medications are listed.','3','[data-bind=medSideEffects]');
   ['suitability','prevAssess','onroadSuitable','condConsidered'].forEach(k=>{
