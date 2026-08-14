@@ -70,6 +70,7 @@ details.sec>summary .n{font-size:10px;color:var(--faint);letter-spacing:.05em;ma
 .clrow .cltxt{flex:1;font-size:12.5px;line-height:1.4;color:var(--ink)}
 .clrow select{border:1px solid #d6d4cf;border-radius:4px;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11.5px;padding:4px 6px;flex-shrink:0}
 .clrow select.st-safe{color:#1e6b3a;background:#eef7f1} .clrow select.st-issue{color:#8c2f2f;background:#fbf0f0} .clrow select.st-na{color:var(--muted)}
+.clrow select.sev-dev{color:#7a5c14;background:#fdf8ec} .clrow select.sev-sig{color:#8c2f2f;background:#fbf1f1} .clrow select.sev-crit{color:#fff;background:#8c2f2f}
 .clrow textarea{width:100%;margin-top:7px;border:1px solid #e4d6df;background:#fdf9fc;border-radius:4px;padding:6px 8px;font-family:'Barlow',sans-serif;font-size:12.5px;min-height:44px;resize:vertical}
 .grouphead{font-family:'Oswald',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);margin:14px 0 7px}
 
@@ -1153,13 +1154,13 @@ function freshState(){
     vFields:'full', vMovements:'wnl', visionNotes:'', austroadsVision:'Yes', eyeReview:'No',
     phys:{}, physSummary:'', muscles:{},
     tests:{
-      trailsB:{on:true, secs:'', errors:'', note:''},
-      maze:{on:true, secs:'', errors:'', note:''},
-      driveSafe:{on:true, score:'', detail:'', note:''},
-      driveAware:{on:true, score:'', note:''},
+      trailsB:{on:true, secs:'', errors:'', note:'', norm:''},
+      maze:{on:true, secs:'', errors:'', note:'', norm:''},
+      driveSafe:{on:true, score:'', detail:'', note:'', norm:''},
+      driveAware:{on:true, score:'', note:'', norm:''},
       dsdaCat:{on:true, cat:'likely', note:''},
-      intersection:{on:true, score:'', note:''},
-      bells:{on:true, omissions:'', time:'', note:''},
+      intersection:{on:true, score:'', note:'', norm:''},
+      bells:{on:true, omissions:'', left:'', right:'', time:'', note:'', norm:''},
     },
     admin:{},
     genCog:'', cogSummary:'',
@@ -1185,7 +1186,7 @@ function freshState(){
   PHYS_ROWS.forEach(r=> s.phys[r.id]='');
   MUSCLES.forEach(m=> s.muscles[m.id]={tested:'no', grade:'', note:''});
   NEEDS_ROWS.forEach(r=> s.needs[r.id]={val:r.opts[0], note:''});
-  CHECKLIST.forEach(g=>g.items.forEach(it=> s.checklist[it.id]={st:'unrated', note:'', refs:[]}));
+  CHECKLIST.forEach(g=>g.items.forEach(it=> s.checklist[it.id]={st:'unrated', note:'', refs:[], sev:'dev'}));
   EQUIP.forEach(g=>g.items.forEach(it=> s.equip[it.id]=''));
   PROFILE_DOMAINS.forEach(d=> s.profile[d.id]={text:'', na:false, naWhy:''});
   Object.keys(TEST_ADMIN_DEF).forEach(k=> s.admin[k]=Object.assign({},TEST_ADMIN_DEF[k]));
@@ -1288,58 +1289,138 @@ const AUTOTEXT = {
 };
 function resetField(key){ S[key] = AUTOTEXT[key](); syncForm(); update(); }
 
-/* ---------- score interpretation ---------- */
+/* ================================================================
+   CLINICAL LOGIC
+   Driving thresholds are the OT driver-assessment cut-offs. They are
+   NOT age-adjusted norms — where a manual publishes age-stratified
+   normative data, the assessor looks it up and records the comparison
+   in the test's "normative comparison" field, which is then reported
+   alongside the threshold rather than in place of it.
+================================================================ */
+function clientAge(){
+  if(!S.dob) return null;
+  const d=new Date(S.dob); if(isNaN(d)) return null;
+  const ref=S.dateAssess? new Date(S.dateAssess) : new Date();
+  if(isNaN(ref)) return null;
+  let a=ref.getFullYear()-d.getFullYear();
+  const m=ref.getMonth()-d.getMonth();
+  if(m<0||(m===0&&ref.getDate()<d.getDate())) a--;
+  return (a>=0&&a<130)? a : null;
+}
+const NORM_OPTS = {
+  '':'— not compared to normative data —',
+  wnl:'Within normal limits for age',
+  low:'Low average / borderline for age',
+  b1:'1–2 SD below the age-matched mean',
+  b2:'More than 2 SD below the age-matched mean',
+  above:'Above the age-matched mean',
+};
+const NORM_TXT = {
+  wnl:'Compared against the manual’s age-stratified normative data, this result is within normal limits for {his} age.',
+  low:'Compared against the manual’s age-stratified normative data, this result falls in the low average to borderline range for {his} age.',
+  b1:'Compared against the manual’s age-stratified normative data, this result falls one to two standard deviations below the age-matched mean.',
+  b2:'Compared against the manual’s age-stratified normative data, this result falls more than two standard deviations below the age-matched mean.',
+  above:'Compared against the manual’s age-stratified normative data, this result is above the age-matched mean.',
+};
+function normSentence(id){
+  const n=(S.tests[id]||{}).norm;
+  return n&&NORM_TXT[n]? ' '+NORM_TXT[n] : '';
+}
+function secStr(s){
+  const mins=Math.floor(s/60), rem=Math.round(s%60);
+  return s>=60? `${s} seconds (${mins} minute${mins!==1?'s':''} ${rem} second${rem!==1?'s':''})` : `${s} seconds`;
+}
+function errStr(e){ return e===0? 'no errors' : e+' error'+(e>1?'s':''); }
+
 function interpTrailsB(){
   const t=S.tests.trailsB, s=parseFloat(t.secs), e=parseInt(t.errors||0);
   if(isNaN(s)) return {pill:'na', txt:'Enter time in seconds.'};
-  const mins = Math.floor(s/60), rem = Math.round(s%60);
-  const tstr = s>=60? `${s} seconds (${mins} minute${mins!==1?'s':''} ${rem} seconds)` : `${s} seconds`;
-  const pass = s<=180 && e<=1;
-  let txt = `The driving threshold is 180 seconds with no more than one error. `;
-  txt += pass
-    ? `{name} completed the test within the threshold, indicating intact speed of divided attention and mental flexibility when shifting between competing demands.`
-    : (s>180 ? `{name} exceeded the time threshold, indicating reduced speed of divided attention and mental flexibility when shifting between competing demands.` :
-       `{name} completed the test within the time threshold but made ${e} errors, exceeding the error threshold.`);
-  return {pill: pass?'pass':'fail', scoreTxt:`${tstr}, ${e===0?'no errors':e+' error'+(e>1?'s':'')}.`, txt};
+  const overTime=s>180, overErr=e>1, pass=!overTime&&!overErr;
+  let txt=`The accepted driving threshold is 180 seconds with no more than one error.`;
+  if(pass){
+    const margin = s<=120? ' comfortably' : '';
+    txt+=` {name} completed the test${margin} within the threshold, indicating that {he} can hold two sequences in mind and alternate between them at a speed adequate for the demands of driving.`;
+  } else if(overTime&&overErr){
+    txt+=` {name} exceeded both the time and the error threshold (${Math.round(s-180)} seconds over, ${e} errors). This indicates a marked reduction in the speed and accuracy with which {he} can shift attention between competing demands.`;
+  } else if(overTime){
+    const pct=Math.round((s-180)/180*100);
+    txt+=` {name} exceeded the time threshold by ${Math.round(s-180)} seconds (${pct}% above the cut-off) while maintaining accuracy. The pattern — accurate but slow — indicates that the set-shifting itself is intact but effortful, and that speed is the limiting factor when several demands compete for attention.`;
+  } else {
+    txt+=` {name} completed the test within the time threshold but made ${e} errors, exceeding the error threshold. The pattern — fast but inaccurate — indicates that errors arise under time pressure rather than from an inability to perform the task.`;
+  }
+  txt+=normSentence('trailsB');
+  return {pill: pass?'pass':'fail', domain:'divided', scoreTxt:`${secStr(s)}, ${errStr(e)}.`, txt};
 }
 function interpMaze(){
   const t=S.tests.maze, s=parseFloat(t.secs), e=parseInt(t.errors||0);
   if(isNaN(s)) return {pill:'na', txt:'Enter time in seconds.'};
-  const pass = s<=100 && e<=1;
-  const txt = `Threshold for driving is 100 seconds with no more than one error. ` + (pass
-    ? `{name}'s result is well within this threshold, indicating intact visuoconstructional skills, planning and foresight.`
-    : `{name}'s result falls outside this threshold, indicating difficulty with visuoconstructional skills, planning and/or foresight.`);
-  return {pill: pass?'pass':'fail', scoreTxt:`Completed in ${s} seconds with ${e===0?'no errors':e+' error'+(e>1?'s':'')}.`, txt};
+  const overTime=s>100, overErr=e>1, pass=!overTime&&!overErr;
+  let txt=`The accepted driving threshold is 100 seconds with no more than one error.`;
+  if(pass) txt+= s<=50
+    ? ` {name} completed the maze in well under half the allowed time and without error, indicating that {he} planned the route before acting rather than solving it by trial and error — the visuoconstructional and forward-planning skills this screens for are intact.`
+    : ` {name} completed the maze within the threshold, indicating intact visuoconstructional skills, planning and foresight.`;
+  else if(overErr&&!overTime) txt+=` {name} completed the maze quickly but entered ${e} dead ends or crossed ${e===1?'a line':'lines'}, exceeding the error threshold. This pattern suggests {he} acted before planning the route, which on road corresponds to committing to a manoeuvre before checking that it works.`;
+  else txt+=` {name}'s result falls outside this threshold${overErr? ' on both time and errors':''}, indicating difficulty with visuoconstructional skill, route planning and foresight — anticipating what is coming rather than reacting to it.`;
+  txt+=normSentence('maze');
+  return {pill: pass?'pass':'fail', domain:'planning', scoreTxt:`Completed in ${s} seconds with ${errStr(e)}.`, txt};
 }
+/* DriveSafe bands per the DSDA manual: the combined category is produced
+   by the DSDA report itself, so this describes the band only. */
+function driveSafeBand(v){ return v>=74? 'upper' : (v<=50? 'lower':'middle'); }
 function interpDriveSafe(){
   const t=S.tests.driveSafe, v=parseFloat(t.score);
   if(isNaN(v)) return {pill:'na', txt:'Enter score out of 84.'};
-  const hi = v>=74;
-  return {pill: hi?'pass':'na', scoreTxt:`${v}/84${t.detail? ' ('+t.detail+')':''}`,
-    txt: hi? `Awareness of the driving environment is intact and within the upper range.` : `Awareness of the driving environment is below the upper range; interpret alongside the DriveAware score and the DSDA outcome category.`};
+  const band=driveSafeBand(v);
+  const txt={
+    upper:`A score in the upper band indicates that {name} noticed and correctly reported the objects, people and directional detail in the driving scenes, consistent with intact awareness of the driving environment.`,
+    middle:`A score in the middle band means awareness of the driving environment could not be determined from this test alone; it is interpreted alongside the DriveAware score, the combined DSDA category and the on-road assessment.`,
+    lower:`A score in the lower band indicates reduced awareness of the driving environment, with objects or directional detail missed at a rate that is relevant to on-road safety.`,
+  }[band];
+  return {pill: band==='upper'?'pass':(band==='lower'?'fail':'na'), domain:'awareness',
+    scoreTxt:`${v}/84${t.detail? ' ('+t.detail+')':''}`, txt:txt+normSentence('driveSafe')};
 }
 function interpDriveAware(){
   const t=S.tests.driveAware, v=parseFloat(t.score);
   if(isNaN(v)) return {pill:'na', txt:'Enter score out of 17.'};
   const ok=v>=13;
-  return {pill: ok?'pass':'fail', scoreTxt:`${v}/17`,
-    txt: ok? `A score of 13 or above indicates intact awareness of driving-related abilities. This is consistent with the insight shown during the assessment.` : `A score below 13 indicates reduced awareness of driving-related abilities, which may affect on-road safety and self-monitoring.`};
+  const txt = ok
+    ? `A score of 13 or above indicates that {name}'s appraisal of {his} own driving-related abilities matches {his} measured performance. Realistic self-appraisal matters because it predicts whether a driver will recognise and act on {his} own limits without supervision.`
+    : `A score below 13 indicates that {name}'s appraisal of {his} own driving-related abilities does not match {his} measured performance. Reduced insight is significant for on-road safety because it affects whether {he} will recognise a situation as beyond {his} capability and act accordingly, and it also affects how much weight can be placed on {his} own account of {his} driving.`;
+  return {pill: ok?'pass':'fail', domain:'insight', scoreTxt:`${v}/17`, txt:txt+normSentence('driveAware')};
 }
 function interpIntersection(){
   const t=S.tests.intersection, v=parseFloat(t.score);
   if(isNaN(v)) return {pill:'na', txt:'Enter score out of 8.'};
   const ok=v>=8;
-  return {pill: ok?'pass':'fail', scoreTxt:`${v}/8${ok?' (100% accuracy)':''}`,
-    txt: ok? `No issues with the application of road rules, planning/problem-solving or visuospatial skills.` : `Errors were made in the application of road rules and/or visuospatial planning; this should be addressed through education and monitored on road.`};
+  const txt = ok
+    ? `All items were answered correctly, indicating that {name} can apply give-way and right-of-way rules to a visually presented intersection and reason about the position of other vehicles.`
+    : `${8-v} of 8 items ${8-v===1?'was':'were'} answered incorrectly. Errors here reflect either gaps in road law knowledge, which education can address directly, or difficulty with the visuospatial reasoning needed to work out who goes first — the two have different remedies, so the pattern of errors should be reviewed and the distinction confirmed on road.`;
+  return {pill: ok?'pass':'fail', domain:'roadlaw', scoreTxt:`${v}/8${ok?' (100% accuracy)':''}`, txt:txt+normSentence('intersection')};
 }
 function interpBells(){
   const t=S.tests.bells, o=parseInt(t.omissions), time=t.time;
+  const L=parseInt(t.left), R=parseInt(t.right);
   if(isNaN(o)) return {pill:'na', txt:'Enter number of omissions.'};
-  const ok=o<3;
-  let txt=`Three or more omissions indicate an attentional deficit, and six or more to either side may indicate visual neglect. `;
-  txt += ok? `No inattention or neglect was evident.` : `The number of omissions indicates a possible attentional deficit; the pattern of omissions should be reviewed for lateralised neglect.`;
-  txt += ` The time taken gives an indication of visual search speed when scanning a field of competing information.`;
-  return {pill: ok?'pass':'fail', scoreTxt:`${o===0?'All targets identified; 0 omissions':o+' omissions'}${time? ' (completed in '+time+')':''}.`, txt};
+  const haveSides=!isNaN(L)&&!isNaN(R);
+  const lateral = haveSides && (L>=6||R>=6) ? (L>R?'left':'right') : null;
+  const asym = haveSides && Math.abs(L-R)>=3 ? (L>R?'left':'right') : null;
+  const ok=o<3 && !lateral;
+  let txt=`Three or more omissions indicate an attentional deficit; six or more to one side raises the question of visual neglect.`;
+  if(ok){
+    txt+=` {name} identified the targets with ${o===0?'no omissions':'only '+o+' omission'+(o>1?'s':'')}${haveSides&&(L||R)? ' and no lateral asymmetry':''}, indicating no visual inattention or neglect on this screen.`;
+  } else if(lateral){
+    txt+=` ${lateral==='left'?'Left':'Right'}-sided omissions (${lateral==='left'?L:R} of ${o}) are consistent with ${lateral}-sided visual neglect. This is directly relevant to driving, since it affects detection of vehicles, pedestrians and signage on the ${lateral} — including at intersections and when merging — and it warrants specific attention on road and, where indicated, further assessment.`;
+  } else if(asym){
+    txt+=` The ${o} omissions were distributed unevenly (${L} left, ${R} right). While below the threshold for neglect, the asymmetry suggests a bias in visual search toward the ${asym==='left'?'right':'left'} that should be watched for on road.`;
+  } else {
+    txt+=` ${o} omissions indicate a deficit in sustained visual attention across a field of competing information, without a lateralised pattern. On road this corresponds to missing peripheral detail when the visual scene is busy.`;
+  }
+  if(txt.indexOf('search speed')<0) txt+=` The time taken indicates the speed of visual search when scanning a field of competing information.`;
+  txt+=normSentence('bells');
+  const parts=[o===0?'All targets identified; 0 omissions':o+' omissions'];
+  if(haveSides&&o>0) parts.push(`${L} left, ${R} right`);
+  return {pill: ok?'pass':'fail', domain: lateral?'neglect':'scanning',
+    scoreTxt:`${parts.join(' — ')}${time? ' (completed in '+time+')':''}.`, txt};
 }
 const DSDA_CATS = {
   likely:'Likely to pass an on-road assessment',
@@ -1353,11 +1434,106 @@ function dsdaCombined(){
     return `A combined DriveSafe DriveAware outcome category has not been reported, because the administration of ${[testInvalid('driveSafe')?'DriveSafe':'',testInvalid('driveAware')?'DriveAware':''].filter(Boolean).join(' and ')} departed from the standard protocol. The combined category depends on both scores being validly obtained.`;
   const cat=S.tests.dsdaCat.cat;
   let base = `{name}'s combined DriveSafe (${ds.score||'—'}/84) and DriveAware (${da.score||'—'}/17) results place {him} in the "${DSDA_CATS[cat]}" category`;
-  if(cat==='likely') base += `, indicating {he} {is} likely able to manage the cognitive aspects of driving.`;
-  else if(cat==='further') base += `. Cognitive readiness for driving could not be determined from off-road testing alone and is informed by the on-road assessment reported below.`;
-  else base += `, indicating significant cognitive barriers to safe driving.`;
+  if(cat==='likely') base += `. This indicates that the cognitive and perceptual abilities the DSDA measures are adequate for driving. It is a statement about those abilities, not a prediction that {he} will drive safely — that is what the on-road assessment tests.`;
+  else if(cat==='further') base += `. Cognitive readiness for driving could not be determined from off-road testing alone, which is why the on-road assessment carries the weight in this report.`;
+  else base += `, indicating cognitive and perceptual barriers of a degree that is difficult to overcome through practice alone.`;
   if(S.tests.dsdaCat.note) base += ' '+S.tests.dsdaCat.note;
   return base;
+}
+/* Transcription sanity check — the DSDA report produces the category, so a
+   category that is hard to reconcile with the entered scores usually means a
+   typo. Advisory only; the software's own output is authoritative. */
+function dsdaMismatch(){
+  const ds=parseFloat(S.tests.driveSafe.score), da=parseFloat(S.tests.driveAware.score);
+  if(!S.tests.dsdaCat.on||isNaN(ds)||isNaN(da)) return '';
+  if(testInvalid('driveSafe')||testInvalid('driveAware')) return '';
+  const cat=S.tests.dsdaCat.cat, band=driveSafeBand(ds);
+  if(band==='upper'&&da>=13&&cat!=='likely')
+    return `DriveSafe ${ds}/84 and DriveAware ${da}/17 both sit in the upper range, but the category selected is “${DSDA_CATS[cat]}”.`;
+  if(band==='lower'&&cat==='likely')
+    return `DriveSafe ${ds}/84 is in the lower band, but the category selected is “${DSDA_CATS[cat]}”.`;
+  if(da<13&&cat==='likely')
+    return `DriveAware ${da}/17 is below the 13 cut-off, but the category selected is “${DSDA_CATS[cat]}”.`;
+  return '';
+}
+
+/* ================================================================
+   CONVERGENCE
+   The clinical value of a driver assessment is not the list of
+   findings but the relationship between them: which off-road findings
+   showed up on road, which did not, and which on-road behaviours had
+   no off-road correlate. This drives the summary.
+================================================================ */
+const DOMAIN_MAP = {
+  divided:{
+    label:'speed of divided attention and mental flexibility',
+    items:['ob1','ob3','ob5','pj3','pj2','pc7','pc8'],
+    onroad:'attention be divided and switched quickly — scanning while tracking traffic, monitoring the mirrors while steering, judging a gap that is still moving',
+  },
+  planning:{
+    label:'visuoconstructional skill, planning and foresight',
+    items:['pj5','pj2','vp7','vp1','pj4'],
+    onroad:'the road ahead be read and set up for in advance — positioning early for a turn, sequencing a manoeuvre, reading a roundabout before entering it',
+  },
+  insight:{
+    label:'insight into {his} own driving-related abilities',
+    items:['pj1','pj4','sc2','sc5'],
+    onroad:'accurate self-monitoring — recognising when a situation exceeds {his} current skill and adjusting speed or seeking clarification, rather than pressing on',
+  },
+  awareness:{
+    label:'awareness of the driving environment',
+    items:['ob1','ob2','ob6','vp5','pj4'],
+    onroad:'the whole scene be taken in — signage, road markings, and pedestrians and vehicles at the periphery',
+  },
+  roadlaw:{
+    label:'application of road law',
+    items:['pj6','ob6','pj2','pj3'],
+    onroad:'give-way rules be applied under time pressure — right of way at intersections, and compliance with signs and signals',
+  },
+  scanning:{
+    label:'sustained visual attention and search',
+    items:['ob1','ob2','ob3','ob5'],
+    onroad:'the visual scene be searched systematically, rather than attention settling on the vehicle directly ahead',
+  },
+  neglect:{
+    label:'lateralised visual inattention',
+    items:['ob1','ob3','ob5','vp3','vp5'],
+    onroad:'detection of vehicles, pedestrians and signage on the affected side, particularly at intersections and when merging',
+  },
+};
+function itemById(id){
+  for(const g of CHECKLIST){ const it=g.items.find(x=>x.id===id); if(it) return {...it, group:g.g}; }
+  return null;
+}
+function failedDomains(){
+  const out=[];
+  Object.keys(TEST_META).forEach(id=>{
+    if(id==='dsdaCat'||!S.tests[id].on||testInvalid(id)) return;
+    const r=TEST_META[id].interp();
+    if(r.pill==='fail'&&r.domain) out.push({test:TEST_META[id].name, domain:r.domain, testId:id});
+  });
+  return out;
+}
+function convergence(){
+  const flagged=new Set(issueList().map(i=>i.id));
+  const fails=failedDomains();
+  const corroborated=[], notEvident=[];
+  const explained=new Set();
+  fails.forEach(f=>{
+    const d=DOMAIN_MAP[f.domain]; if(!d) return;
+    const hits=d.items.filter(id=>flagged.has(id));
+    hits.forEach(id=>explained.add(id));
+    (hits.length? corroborated : notEvident).push({...f, d, hits});
+  });
+  const unexplained=[...flagged].filter(id=>!explained.has(id));
+  return {fails, corroborated, notEvented:notEvident, notEvident, unexplained,
+          explained:[...explained], anyOffRoad:fails.length>0};
+}
+function shortsFor(ids){ return ids.map(id=>(itemById(id)||{}).short).filter(Boolean); }
+function joinList(a){
+  if(!a.length) return '';
+  if(a.length===1) return a[0];
+  return a.slice(0,-1).join(', ')+' and '+a[a.length-1];
 }
 /* ---------- recommendations library ---------- */
 const REC_DEFS = [
@@ -1369,10 +1545,23 @@ const REC_DEFS = [
   def:()=>`On the basis of this assessment, {name} is considered fit to continue driving subject to the licence conditions outlined below. It is recommended that the licensing authority be advised of these conditions.`},
  {id:'lessons', label:'Specialised driving lessons (MDI)', when:()=>['learner-continue','lessons-reassess'].includes(S.outcome), params:true,
   def:()=>{
-    const issues = flaggedShorts();
-    const focus = issues.length? ` Instruction should target the specific areas identified in this assessment: ${issues.join(', ')}.` : '';
-    const extra = S.outcome==='learner-continue' ? ' It should also cover vehicle manoeuvres that were not assessed on road and provide a graded introduction to night and higher-density driving.' : '';
-    return `Approximately ${S.recParams.hours} hours of specialised driving instruction with a Motor Driving Instructor is recommended, funded through ${S.recParams.funder}.${focus}${extra}`;
+    const l=issueList();
+    const crit=l.filter(i=>i.sev==='crit').map(i=>i.short), sig=l.filter(i=>i.sev==='sig').map(i=>i.short), dev=l.filter(i=>i.sev==='dev').map(i=>i.short);
+    let t=`Approximately ${S.recParams.hours} hours of specialised driving instruction with a Motor Driving Instructor is recommended, funded through ${S.recParams.funder}.`;
+    if(crit.length||sig.length||dev.length){
+      t+=` Instruction should be structured around the findings of this assessment rather than general practice, in the following order of priority:`;
+      if(crit.length) t+=` first, ${joinList(crit)}, which must be established before {name} drives unsupervised;`;
+      if(sig.length) t+=`${crit.length?' then':' first,'} ${joinList(sig)};`;
+      if(dev.length) t+=`${(crit.length||sig.length)?' and then':' and'} ${joinList(dev)}.`;
+      else t=t.replace(/;$/,'.');
+    }
+    const cv=convergence();
+    if(cv.corroborated.length) t+=` Because these difficulties relate to ${joinList(cv.corroborated.map(c=>c.d.label))}, each skill should be taught in isolation and only then combined with competing demands, with enough repetition to become automatic.`;
+    if(S.outcome==='learner-continue'){
+      const na=CHECKLIST.flatMap(g=>g.items).filter(it=>S.checklist[it.id].st==='na').map(it=>it.short);
+      t+=` Instruction should also cover ${na.length? joinList(na)+', which '+(na.length===1?'was':'were')+' not assessed on road, and provide':'vehicle manoeuvres not assessed on road, and provide'} a graded introduction to night driving and higher-density traffic.`;
+    }
+    return t;
   }},
  {id:'reassess', label:'On-road reassessment after lessons', when:()=>S.outcome==='lessons-reassess',
   def:()=>`Following completion of the recommended driving instruction, an occupational therapy on-road reassessment is recommended to review {his} progress and determine {his} readiness to drive.`},
@@ -1406,31 +1595,95 @@ function autoSummary(){
     mods:`{name} was assessed to determine {his} requirements for vehicle modifications${dx}.`,
   }[S.purpose];
 
-  const cogFlags=[];
-  const live=(id)=>S.tests[id].on && !testInvalid(id);
-  if(live('trailsB')){ const r=interpTrailsB(); if(r.pill==='fail') cogFlags.push('reduced speed of divided attention and mental flexibility under load (Trail Making Test Part B above the driving threshold)'); }
-  if(live('maze')){ const r=interpMaze(); if(r.pill==='fail') cogFlags.push('difficulty with planning and visuoconstructional skills (OT Drive Home Maze outside the driving threshold)'); }
-  if(live('driveAware')){ const r=interpDriveAware(); if(r.pill==='fail') cogFlags.push('reduced insight into driving-related abilities (DriveAware below cut-off)'); }
-  if(live('bells')){ const r=interpBells(); if(r.pill==='fail') cogFlags.push('visual inattention on the Bells Test'); }
+  const NORM_PHRASE={wnl:'within normal limits for {his} age',low:'in the low average range for {his} age',
+    b1:'one to two standard deviations below the age-matched mean',b2:'more than two standard deviations below the age-matched mean',above:'above the age-matched mean'};
+  const cogFlags=failedDomains().map(f=>{
+    const d=DOMAIN_MAP[f.domain];
+    const n=S.tests[f.testId].norm;
+    return `reduced ${d? d.label : 'performance'} (${f.test} outside the driving threshold${n&&NORM_PHRASE[n]? ', and '+NORM_PHRASE[n]:''})`;
+  });
   const voided=Object.keys(TEST_META).filter(id=>id!=='dsdaCat'&&S.tests[id].on&&testInvalid(id)).map(id=>TEST_META[id].name);
   const visOK = S.austroadsVision==='Yes';
   let p1 = purposeTxt + ` On the pre-drive screen {his} vision ${S.lenses==='Yes'?'(with correction) ':''}${visOK?'met the Austroads vision standard':'did not clearly meet the Austroads vision standard'}, and {his} physical abilities and cognition were ${cogFlags.length?'broadly ':''}within functional limits for driving.`;
   if(cogFlags.length) p1 += ` The screen did, however, identify ${cogFlags.join('; ')}. ${cogFlags.length===1?'This is {his} main cognitive consideration and is':'These are directly'} relevant to the demands of ${S.purpose==='learner'?'learning to drive':'safe driving'}.`;
   if(voided.length) p1 += ` The ${voided.join(' and ')} ${voided.length>1?'were':'was'} attempted but not validly administered, and ${voided.length>1?'those results have':'that result has'} not been relied upon; the conclusions below rest on the remaining screen findings and the on-road assessment.`;
 
-  const issues = flaggedShorts();
+  /* ---- paragraph 2: what happened on road, weighted by severity ---- */
+  const all=issueList(), crit=issuesBySeverity('crit'), sig=issuesBySeverity('sig'), dev=issuesBySeverity('dev');
+  const strengths=strengthList().map(s=>s.short);
+  const learner=S.purpose==='learner';
   let p2;
   if(S.outcome==='cease'){
-    p2 = `On road, significant concerns were identified${issues.length? ' with '+issues.join(', '):''}. These are described in the assessment results above and underpin the recommendation that {name} cease driving at this time.`;
+    p2 = `On road, ${crit.length? 'concerns of a degree that affected the safety of the drive were identified — '+joinList(crit.map(i=>i.short))+'. ' : ''}${sig.length? (crit.length?'A further ':'Concerns were identified that reduced the safety margin: ')+joinList(sig.map(i=>i.short))+'. ':''}These are set out in the assessment results above and underpin the recommendation that {name} cease driving at this time.`;
   } else {
-    p2 = `On road, {name} drove safely for the majority of the assessment and demonstrated ${S.purpose==='learner'?'promising foundational skills for a learner at {his} stage':'sound vehicle control and road craft'}.`;
-    if(issues.length){
-      p2 += ` ${S.purpose==='learner'? '{He} {is} not yet an independent driver, and several':'Several'} skills require development: ${issues.join('; ')}. These areas are ${S.purpose==='learner'?'common in novice drivers and ':''}best addressed through the targeted instruction and practice recommended below.`;
-    } else {
-      p2 += ` No areas of concern were identified during the on-road assessment.`;
-    }
+    const opener = strengths.length
+      ? `On road, {name} drove safely for the assessment as a whole. ${cap(joinList(strengths.slice(0,4)))} ${strengths.slice(0,4).length===1?'was':'were'} managed well and ${strengths.slice(0,4).length===1?'is':'are'} a foundation to build on.`
+      : `On road, {name} drove safely for the assessment as a whole and demonstrated ${learner?'foundational skills appropriate to {his} stage of learning':'sound vehicle control and road craft'}.`;
+    p2 = opener;
+    if(crit.length) p2 += ` ${cap(joinList(crit.map(i=>i.short)))} required intervention or would have done so without it, and ${crit.length===1?'is':'are'} the priority for remediation before {name} drives unsupervised.`;
+    if(sig.length) p2 += ` ${cap(joinList(sig.map(i=>i.short)))} reduced the safety margin rather than breaching it, and ${sig.length===1?'needs':'need'} deliberate work.`;
+    if(dev.length) p2 += ` ${cap(joinList(dev.map(i=>i.short)))} ${dev.length===1?'is':'are'} not yet established${learner?', which is expected at this stage':''} and will develop with targeted practice.`;
+    if(!all.length) p2 += ` No areas of concern were identified during the on-road assessment.`;
+    const na=CHECKLIST.flatMap(g=>g.items).filter(it=>S.checklist[it.id].st==='na');
+    if(na.length) p2 += ` ${cap(joinList(na.map(it=>it.short)))} ${na.length===1?'was':'were'} not assessed on this occasion, so no conclusion is drawn about ${na.length===1?'it':'them'}.`;
   }
-  return p1+'\n\n'+p2;
+
+  /* ---- paragraph 3: the reasoning that ties the two together ---- */
+  const cv=convergence();
+  let p3='';
+  if(cv.corroborated.length){
+    const c=cv.corroborated[0];
+    const others=cv.corroborated.slice(1);
+    p3 = `The two halves of the assessment agree. The reduction in ${c.d.label} identified on the ${c.test} was visible on road as ${joinList(shortsFor(c.hits))}. These are precisely the situations that demand ${c.d.onroad}. `;
+    if(others.length) p3 += `The same pattern held for ${joinList(others.map(o=>o.d.label))}, ${others.length===1?'which showed up as ':'showing up as '}${joinList(others.flatMap(o=>shortsFor(o.hits)))}. `;
+    p3 += `That correspondence matters: it means ${cv.corroborated.length===1?'this is not an artefact of the testing environment but a difficulty that carries into real driving':'these are not artefacts of the testing environment but difficulties that carry into real driving'}, and it tells the instructor what to work on and why.`;
+  } else if(cv.fails.length){
+    p3 = `The off-road screen identified ${joinList(cv.fails.map(f=>DOMAIN_MAP[f.domain]? DOMAIN_MAP[f.domain].label : f.test))}, but ${cv.fails.length===1?'this was':'these were'} not evident in {name}'s on-road performance. `;
+    p3 += all.length
+      ? `The difficulties seen on road lay elsewhere. Where a screening finding does not appear on road, the most likely explanations are that {he} compensates effectively in a real vehicle, or that the demand was not sufficiently sampled by this route — so it is worth watching rather than discounting.`
+      : `Where a screening finding does not appear on road, the most likely explanations are that {he} compensates effectively in a real vehicle, or that the route did not sufficiently sample that demand. On the evidence of this assessment the on-road performance carries more weight, but the finding is worth monitoring.`;
+  } else if(all.length){
+    p3 = `The off-road screen did not identify a cognitive, visual or physical explanation for the difficulties seen on road. ${cap(joinList(all.map(i=>i.short)))} ${all.length===1?'appears':'appear'} to reflect skill and habit that are not yet established rather than an underlying capacity limitation — which is a favourable picture, because skills of that kind respond directly to instruction and repetition.`;
+  } else {
+    p3 = `The off-road screen and the on-road assessment agree: no barrier to safe driving was identified in either.`;
+  }
+  if(cv.unexplained.length && cv.corroborated.length){
+    p3 += ` ${cap(joinList(shortsFor(cv.unexplained)))} ${cv.unexplained.length===1?'was':'were'} not predicted by the off-road findings and ${cv.unexplained.length===1?'is':'are'} best understood as ${learner?'inexperience':'habit'} rather than capacity.`;
+  }
+
+  /* ---- paragraph 4: what follows from it ---- */
+  let p4='';
+  if(S.outcome!=='cease'&&all.length){
+    const hrs=S.recs.lessons&&S.recs.lessons.on? `${S.recParams.hours} hours of `:'';
+    p4 = `What follows from this is that ${hrs?'the ':''}${hrs}instruction recommended below should be built around ${joinList(all.slice(0,3).map(i=>i.short))} specifically, rather than general driving practice. `;
+    p4 += cv.corroborated.length
+      ? `Because ${cv.corroborated.length===1?'the underlying difficulty is':'the underlying difficulties are'} in ${joinList(cv.corroborated.map(c=>c.d.label))}, these skills are likely to take {name} more repetition to automate than they would a driver without that profile. They should be taught deliberately and in graded steps rather than left to accumulate with hours.`
+      : `These are skill-level targets and should respond to focused practice within the recommended hours.`;
+    if(learner) p4 += ` Progress should be reviewed against {his} readiness for a practical driving test rather than against hours logged.`;
+  }
+
+  return [p1,p2,p3,p4].filter(x=>txt(x)).join('\n\n');
+}
+
+function scaffoldNote(id){
+  const it=itemById(id); if(!it) return;
+  S.checklist[id].note =
+    `What I saw: \n`+
+    `How often: \n`+
+    `Context and contributing factors: \n`+
+    `What it will take to develop: `;
+  buildChecklist(); update();
+  const el=document.querySelector('#checklist textarea'); if(el) el.focus();
+}
+/* Suggested instruction hours, from the number and severity of findings and
+   whether an underlying capacity difficulty was corroborated on road. */
+function suggestedHours(){
+  const l=issueList(); if(!l.length) return 0;
+  let h=0;
+  l.forEach(i=>{ h += i.sev==='crit'? 4 : i.sev==='sig'? 2 : 1.5; });
+  if(convergence().corroborated.length) h*=1.3;   // capacity-linked skills need more repetition
+  if(S.purpose==='learner') h+=2;                // manoeuvres and graded exposure not yet covered
+  return Math.max(2, Math.min(40, Math.round(h/2)*2));
 }
 
 /* ================================================================
@@ -1492,7 +1745,7 @@ const TEST_META = {
   intersection:{name:'Intersection Diagram Test', purpose:'Measures knowledge of road rules', interp:interpIntersection,
     fields:[{k:'score',label:'Score / 8',type:'number',w:'100px'}]},
   bells:{name:'Bells Test', purpose:'Tests for visual inattention', interp:interpBells,
-    fields:[{k:'omissions',label:'Omissions',type:'number',w:'100px'},{k:'time',label:'Time (optional)',type:'text',w:'130px'}]},
+    fields:[{k:'omissions',label:'Total omissions',type:'number',w:'110px'},{k:'left',label:'…of which left',type:'number',w:'110px'},{k:'right',label:'…of which right',type:'number',w:'110px'},{k:'time',label:'Time (optional)',type:'text',w:'120px'}]},
 };
 function buildTests(){
   document.getElementById('testCards').innerHTML = Object.keys(TEST_META).map(id=>{
@@ -1507,6 +1760,8 @@ function buildTests(){
       <h4><label class="chk" style="padding:0"><input type="checkbox" ${t.on?'checked':''} onchange="S.tests.${id}.on=this.checked;buildTests();update()"></label>${m.name} <span id="pill_${id}">${bad?'<span class="invalidflag">not scoreable</span>':pill}</span></h4>
       <div style="font-size:11.5px;color:var(--faint);margin:2px 0 0 23px">${m.purpose}</div>
       ${t.on? `<div class="trow">${fields}<div class="f" style="flex:1;min-width:160px"><label>Clinical comment (optional — appended to interpretation)</label><input type="text" value="${esc(t.note)}" oninput="S.tests.${id}.note=this.value;update()"></div></div>
+      ${id==='dsdaCat'? '' : `<div class="trow"><div class="f" style="flex:1;min-width:260px"><label>Normative comparison ${clientAge()!==null? '(age '+clientAge()+' at assessment)':'(enter date of birth for age)'}</label>
+        <select onchange="S.tests.${id}.norm=this.value;buildTests();update()">${Object.keys(NORM_OPTS).map(k=>`<option value="${k}" ${t.norm===k?'selected':''}>${esc(NORM_OPTS[k])}</option>`).join('')}</select></div></div>`}
       ${id==='dsdaCat'? '' : buildAdminBox(id)}
       <div class="autonote" id="auto_${id}">${autoNoteHTML(id)}</div>`:''}
     </div>`;
@@ -1564,9 +1819,13 @@ function buildChecklist(){
           <option value="na" ${c.st==='na'?'selected':''}>— Not assessed</option>
         </select>
         <div class="cltxt">${it.text}</div></div>
+        ${c.st==='issue'? `<div class="trow" style="margin-top:8px"><div class="f" style="flex:1;min-width:230px"><label>Severity</label>
+            <select class="sev-${c.sev||'dev'}" onchange="S.checklist['${it.id}'].sev=this.value;buildChecklist();update()">
+              ${Object.keys(SEVERITY).map(k=>`<option value="${k}" ${(c.sev||'dev')===k?'selected':''}>${esc(SEVERITY[k].label)}</option>`).join('')}</select></div></div>`:''}
         ${c.st==='na' ? `<textarea placeholder="Why this was not assessed" oninput="S.checklist['${it.id}'].note=this.value;update()">${esc(c.note)}</textarea>`
           : c.st==='unrated' ? ''
-          : `<textarea placeholder="${c.st==='issue'?'Describe the issue, contributing factors and what it will take to develop…':'Optional observation note'}" oninput="S.checklist['${it.id}'].note=this.value;update()">${esc(c.note)}</textarea>`}
+          : `<textarea placeholder="${c.st==='issue'?'What you saw · how often · the context and contributing factors · what it will take to develop':'Optional observation note'}" oninput="S.checklist['${it.id}'].note=this.value;update()">${esc(c.note)}</textarea>
+             ${c.st==='issue'&&!txt(c.note)? `<div style="margin-top:4px"><span class="noteslink" onclick="scaffoldNote('${it.id}')">insert a structure for this note</span></div>`:''}`}
         ${chips}
       </div>`;
     }).join('')).join('');
@@ -1576,7 +1835,9 @@ function buildRecs(){
   document.getElementById('recCards').innerHTML = REC_DEFS.map(r=>{
     const st=S.recs[r.id]||(S.recs[r.id]={on:false,text:''});
     const suggested = r.when();
+    const sug=suggestedHours();
     const params = r.params? `<div class="params">Hours: <input type="number" style="width:64px" value="${esc(S.recParams.hours)}" oninput="S.recParams.hours=this.value;if(S.recs.lessons)S.recs.lessons.text=REC_DEFS.find(x=>x.id==='lessons').def();buildRecs();update()">
+      ${sug? `<span style="color:var(--faint)">suggested ${sug} from ${issueList().length} finding${issueList().length!==1?'s':''}${convergence().corroborated.length?' with a corroborated underlying difficulty':''}${String(S.recParams.hours)!==String(sug)? ` · <span class="resetlink" onclick="S.recParams.hours=${sug};if(S.recs.lessons)S.recs.lessons.text=REC_DEFS.find(x=>x.id==='lessons').def();buildRecs();update()">use ${sug}</span>`:''}</span>`:''}
       Funding: <select onchange="S.recParams.funder=this.value;if(S.recs.lessons)S.recs.lessons.text=REC_DEFS.find(x=>x.id==='lessons').def();buildRecs();update()">
         ${['NDIS plan (capacity building)','private funding','compensable funding scheme','other funding'].map(f=>`<option ${S.recParams.funder===f?'selected':''}>${f}</option>`).join('')}</select></div>`:'';
     return `<div class="reccard" style="${suggested&&!st.on?'border-left:3px solid var(--teal)':''}">
@@ -2017,12 +2278,23 @@ function licenceConds(){
   const parts=[S.licType, ...(S.licCond||[]), S.licCondOther].filter(Boolean).map(sentenceCase);
   return parts.length? parts.join('. ')+'.' : '';
 }
+const SEVERITY = {
+  dev:{label:'Developmental — expected at this stage of learning', rank:1, word:'developmental'},
+  sig:{label:'Significant — reduces the safety margin', rank:2, word:'significant'},
+  crit:{label:'Critical — required instructor intervention, or would have', rank:3, word:'critical'},
+};
 function issueList(){
   const out=[];
   CHECKLIST.forEach(g=>g.items.forEach(it=>{
-    if(S.checklist[it.id].st==='issue') out.push({g:g.g, short:it.short, note:S.checklist[it.id].note});
+    const c=S.checklist[it.id];
+    if(c.st==='issue') out.push({id:it.id, g:g.g, short:it.short, note:c.note, sev:c.sev||'dev'});
   }));
-  return out;
+  return out.sort((a,b)=>(SEVERITY[b.sev]||{rank:0}).rank-(SEVERITY[a.sev]||{rank:0}).rank);
+}
+function issuesBySeverity(k){ return issueList().filter(i=>i.sev===k); }
+function worstSeverity(){
+  const l=issueList(); if(!l.length) return null;
+  return l[0].sev;
 }
 function strengthList(){
   const out=[];
@@ -2302,8 +2574,11 @@ function gpLetter(){
     ? `Reduced power in ${red.map(m=>m.n.toLowerCase()+' (grade '+S.muscles[m.id].grade+')').join(', ')}. ${txt(S.physSummary)}`
     : (musclesTested()? `Manual muscle testing graded 5/5 across the ${musclesTested()} groups tested. Range of movement, coordination and sensation as documented in the report.` : 'See report.'));
   const iss=issueList();
+  const critN=iss.filter(i=>i.sev==='crit').length, sigN=iss.filter(i=>i.sev==='sig').length;
   h+=TR('On-road assessment', `${S.duration||'[?]'} minutes in a ${String(S.vehicle).toLowerCase()}. `+
-    (iss.length? `${iss.length} area${iss.length>1?'s':''} requiring development: ${iss.map(i=>i.short).join(', ')}.` : 'No areas of concern identified.'));
+    (iss.length
+      ? `${iss.length} area${iss.length>1?'s':''} requiring development${critN? `, of which ${critN} required or would have required instructor intervention`:(sigN? `, of which ${sigN} reduced the safety margin`:'')}: ${iss.map(i=>i.short).join(', ')}.`
+      : 'No areas of concern identified.'));
   h+=`</table>`;
 
   const meds=S.meds.filter(m=>txt(m.name));
@@ -2420,9 +2695,16 @@ function mdiHandover(){
   h+=`<h2 style="${ST.h2}">Priority focus areas</h2>`;
   const iss=issueList();
   if(iss.length){
-    h+=P('These are the skills that were not yet established on road. They are listed in the order I would work on them.');
-    h+=`<table style="${ST.tbl}"><tr><th style="${ST.th};width:22%">Area</th><th style="${ST.th};width:26%">Skill</th><th style="${ST.th}">What I saw, and what it will take</th></tr>`+
-      iss.map(i=>`<tr><td style="${ST.lbl}">${esc(i.g)}</td><td style="${ST.td}"><b>${esc(i.short)}</b></td><td style="${ST.td}">${paraSplit(i.note)}</td></tr>`).join('')+`</table>`;
+    h+=P('These are the skills that were not yet established on road, in the order I would work on them. Priority reflects how much each one affected the safety margin on the day, not how hard it will be to teach.');
+    h+=`<table style="${ST.tbl}"><tr><th style="${ST.th};width:15%">Priority</th><th style="${ST.th};width:24%">Skill</th><th style="${ST.th}">What I saw, and what it will take</th></tr>`+
+      iss.map(i=>{
+        const sv=SEVERITY[i.sev]||SEVERITY.dev;
+        const col=i.sev==='crit'? ';color:#8c2f2f;font-weight:700' : (i.sev==='sig'? ';color:#7a5c14;font-weight:600':'');
+        return `<tr><td style="${ST.lbl}${col}">${esc(cap(sv.word))}<div style="font-weight:400;font-size:8.5pt;color:#55534e">${esc(i.g)}</div></td>`+
+          `<td style="${ST.td}"><b>${esc(i.short)}</b></td><td style="${ST.td}">${paraSplit(i.note)}</td></tr>`;
+      }).join('')+`</table>`;
+    const cvm=convergence();
+    if(cvm.corroborated.length) h+=P(`One thing worth knowing before you start: the off-road screening identified reduced ${joinList(cvm.corroborated.map(c=>c.d.label))}, and the difficulties above are the on-road expression of that. Practically, it means these skills will take more repetition than usual to become automatic. Teaching each one on its own first, and only then combining it with other demands, will work better than practising them all together in traffic.`);
   } else h+=P('No specific skill deficits were identified on road.');
 
   const str=strengthList();
@@ -2492,8 +2774,16 @@ function familySummary(){
   const iss=issueList();
   h+=`<h2 style="${ST.h2}">What needs more practice</h2>`;
   if(iss.length){
-    h+=P('These are the things to work on. None of them are unusual — they are the skills that take the most repetition to become automatic.');
-    h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">`+iss.map(i=>`<li style="margin-bottom:2mm">${esc(i.short.charAt(0).toUpperCase()+i.short.slice(1))}.</li>`).join('')+`</ul>`;
+    const big=iss.filter(i=>i.sev!=='dev'), small=iss.filter(i=>i.sev==='dev');
+    h+=P('These are the things to work on. None of them are unusual — they are the skills that take the most repetition before they become automatic.');
+    if(big.length){
+      h+=P(big.length===iss.length? 'The main ones:' : 'The ones to focus on first:');
+      h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">`+big.map(i=>`<li style="margin-bottom:2mm">${esc(cap(i.short))}.</li>`).join('')+`</ul>`;
+    }
+    if(small.length){
+      h+=P(big.length? 'And these, which should come along with practice:' : 'These should come along with practice:');
+      h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">`+small.map(i=>`<li style="margin-bottom:2mm">${esc(cap(i.short))}.</li>`).join('')+`</ul>`;
+    }
   } else h+=P('No specific areas were identified as needing further practice.');
 
   h+=`<h2 style="${ST.h2}">What will help</h2>`;
@@ -2680,7 +2970,7 @@ function normalise(raw){
   PROFILE_DOMAINS.forEach(d=> s.profile[d.id]=Object.assign({text:'',na:false,naWhy:''}, s.profile[d.id]||{}));
   Object.keys(TEST_ADMIN_DEF).forEach(k=> s.admin[k]=Object.assign({perManual:'',sample:'',cueing:'',quiet:'',why:''}, s.admin[k]||{}));
   CHECKLIST.forEach(g=>g.items.forEach(it=>{
-    s.checklist[it.id]=Object.assign({st:'unrated',note:'',refs:[]}, s.checklist[it.id]||{});
+    s.checklist[it.id]=Object.assign({st:'unrated',note:'',refs:[],sev:'dev'}, s.checklist[it.id]||{});
     if(!Array.isArray(s.checklist[it.id].refs)) s.checklist[it.id].refs=[];
   }));
   if(!Array.isArray(s.notes)) s.notes=[];
@@ -2779,7 +3069,7 @@ function loadExample(){
     weather:'Overcast with no rain; dry road surfaces.',
     route:'Commenced in a quiet car park for vehicle familiarisation, progressing to two-way and multi-lane roads, traffic lights and roundabouts across 25, 50 and 60 km/h zones in low-to-moderate traffic.',
     outcome:'learner-continue',
-    recParams:{hours:10, funder:'NDIS plan (capacity building)'},
+    recParams:{hours:14, funder:'NDIS plan (capacity building)'},
   });
   S.reviewed={referral:true,licence:true,background:true,gp:false,prevOT:false};
   S.needs.night={val:'Future need (no night-driving experience to date)',note:''};
@@ -2787,13 +3077,13 @@ function loadExample(){
   S.needs.country={val:'On occasions',note:''};
   S.needs.traffic={val:'Low to medium density, building with experience',note:''};
   Object.assign(S.tests,{
-    trailsB:{on:true,secs:'227',errors:'0',note:'This is likely to affect {his} management of high-density traffic and complex intersections, where attention must be shifted quickly between multiple vehicles, signs and signals. It is consistent with the cognitive-load difficulties {he} reports and is a key focus for supervised practice.'},
-    maze:{on:true,secs:'23',errors:'0',note:''},
-    driveSafe:{on:true,score:'83',detail:'0 objects missed; 1 location/direction detail missed',note:''},
-    driveAware:{on:true,score:'14',note:''},
+    trailsB:{on:true,secs:'227',errors:'0',norm:'b1',note:'This is likely to affect {his} management of high-density traffic and complex intersections, where attention must be shifted quickly between multiple vehicles, signs and signals. It is consistent with the cognitive-load difficulties {he} reports and is a key focus for supervised practice.'},
+    maze:{on:true,secs:'23',errors:'0',norm:'wnl',note:''},
+    driveSafe:{on:true,score:'83',detail:'0 objects missed; 1 location/direction detail missed',norm:'wnl',note:''},
+    driveAware:{on:true,score:'14',norm:'wnl',note:''},
     dsdaCat:{on:true,cat:'likely',note:'This reflects cognitive and perceptual readiness only. As a learner driver {he} still requires substantial supervised on-road practice and specialised instruction to develop the physical and procedural skills needed to drive independently and to pass a practical driving test.'},
-    intersection:{on:true,score:'8',note:''},
-    bells:{on:true,omissions:'0',time:'',note:''},
+    intersection:{on:true,score:'8',norm:'wnl',note:''},
+    bells:{on:true,omissions:'0',left:'0',right:'0',time:'2 min 10 sec',norm:'wnl',note:''},
   });
   /* --- set-up complete before the client arrived --- */
   EQUIP.forEach(g=>g.items.forEach(it=> S.equip[it.id]='yes'));
@@ -2883,19 +3173,19 @@ function loadExample(){
   S.admin.driveAware.sample='na'; S.admin.bells.sample='na'; S.admin.intersection.sample='na';
 
   /* --- on-road ratings, each traceable to the record --- */
-  const CL=(id,st,note,tags)=>{ S.checklist[id]={st, note, refs:[].concat(...(tags||[id]).map(noteFor))}; };
+  const CL=(id,st,note,tags,sev)=>{ S.checklist[id]={st, note, refs:[].concat(...(tags||[id]).map(noteFor)), sev:sev||'dev'}; };
   CL('pc1','safe','Adjusted the seat, mirrors and steering column independently at the start of the assessment, without prompting.');
   CL('pc3','safe','Physically demonstrated the cervical range of motion to look over {his} shoulder, and manual muscle testing confirmed full cervical rotation and power. On road, however, {he} initiated the movement spontaneously on only two occasions across the assessment. The capacity is present; the habit is not yet established. This is common in novice drivers who have not yet automated the movement, and is likely compounded by the higher cognitive load {he} manages when several driving tasks occur at once. It will require specific instruction and repeated supervised practice.');
   CL('pc4','safe','Pedal control was smooth throughout, with no jerky braking and controlled acceleration from a standing start at traffic lights.');
-  CL('pc6','issue',"Because the assessment vehicle's indicator stalk was on the left, contrasting with {his} familiar family vehicle, {he} triggered the wipers instead of the indicators on three occasions. {He} managed this calmly and self-corrected within a second each time. Separately, {he} required verbal prompting from the driving instructor to use indicators at approximately half of all turns, and omitted the left indicator when exiting four of the five roundabouts negotiated. Indicator errors of this kind are common in novice drivers, particularly in an unfamiliar vehicle, but the omission at roundabout exits is a consistent pattern rather than an unfamiliarity effect, and will require targeted instruction and repeated supervised practice.");
+  CL('pc6','issue',"Because the assessment vehicle's indicator stalk was on the left, contrasting with {his} familiar family vehicle, {he} triggered the wipers instead of the indicators on three occasions. {He} managed this calmly and self-corrected within a second each time. Separately, {he} required verbal prompting from the driving instructor to use indicators at approximately half of all turns, and omitted the left indicator when exiting four of the five roundabouts negotiated. Indicator errors of this kind are common in novice drivers, particularly in an unfamiliar vehicle, but the omission at roundabout exits is a consistent pattern rather than an unfamiliarity effect, and will require targeted instruction and repeated supervised practice.",null,'dev');
   CL('vp3','safe','Lane position was consistently central with no observed drift on the dual-lane section of the route.');
   CL('vp7','na','Reverse parking and three-point turns were not assessed. The 40-minute assessment was fully occupied by open-road driving and there was insufficient time remaining. {name} had identified these as {his} own practice priorities, and they are included in the recommended instruction.');
   CL('sc1','safe','Speed control was consistent and appropriate for conditions throughout, including a 25 km/h school zone, where {he} slowed in good time and maintained the limit, and 50 and 60 km/h zones with no observed drift.');
-  CL('ob1','issue','{name} did not consistently maintain continuous scanning to near, middle and far distances. As traffic density increased on the 60 km/h section approaching a shopping strip, {his} scanning narrowed to the vehicle directly ahead, with no far scanning and no scanning to either side observed. This is common in novice drivers and is consistent with the reduced speed of divided attention identified on the Trail Making Test Part B. It will require targeted instruction and graded practice in progressively busier environments.');
-  CL('ob3','issue','Mirror checking was present but sparse and less frequent than required for a learner preparing for a practical test. {He} used the mirrors reliably when cornering and changing lanes, but there were extended stretches of the route with no mirror check observed. Building a consistent mirror routine demands sustained divided attention, which is {his} identified area of difficulty, and will require specific instruction and repeated practice.');
-  CL('ob5','issue','Physical blind-spot head checks were essentially absent. {name} relied on the mirrors alone when changing lanes and when leaving the kerb. When prompted once by the driving instructor, {he} performed the check correctly and in good time, indicating the skill is available but not yet integrated. For a learner preparing for a practical driving test, frequent and consistent head checks are required, and this is the highest-priority item for instruction arising from this assessment.');
+  CL('ob1','issue','{name} did not consistently maintain continuous scanning to near, middle and far distances. As traffic density increased on the 60 km/h section approaching a shopping strip, {his} scanning narrowed to the vehicle directly ahead, with no far scanning and no scanning to either side observed. This is common in novice drivers and is consistent with the reduced speed of divided attention identified on the Trail Making Test Part B. It will require targeted instruction and graded practice in progressively busier environments.',null,'sig');
+  CL('ob3','issue','Mirror checking was present but sparse and less frequent than required for a learner preparing for a practical test. {He} used the mirrors reliably when cornering and changing lanes, but there were extended stretches of the route with no mirror check observed. Building a consistent mirror routine demands sustained divided attention, which is {his} identified area of difficulty, and will require specific instruction and repeated practice.',null,'sig');
+  CL('ob5','issue','Physical blind-spot head checks were essentially absent. {name} relied on the mirrors alone when changing lanes and when leaving the kerb. When prompted once by the driving instructor, {he} performed the check correctly and in good time, indicating the skill is available but not yet integrated. For a learner preparing for a practical driving test, frequent and consistent head checks are required, and this is the highest-priority item for instruction arising from this assessment.',null,'sig');
   CL('pj1','safe','{name} followed all instructions from the driving instructor, and appropriately requested clarification on the two occasions an instruction was given late.');
-  CL('pj3','issue','While {his} gap selection was consistently safe, {name} demonstrated marked over-caution at roundabouts. {He} waited for completely clear traffic on three occasions, missing viable gaps, and on one occasion a queue formed behind the assessment vehicle. This indicates difficulty judging dynamic gaps and managing the cognitive load of tracking several moving vehicles at once, and links directly to the reduced speed of divided attention identified on the pre-drive screen. It will require graded practice to build fluent and efficient decision-making without compromising the safety margin {he} currently maintains.');
+  CL('pj3','issue','While {his} gap selection was consistently safe, {name} demonstrated marked over-caution at roundabouts. {He} waited for completely clear traffic on three occasions, missing viable gaps, and on one occasion a queue formed behind the assessment vehicle. This indicates difficulty judging dynamic gaps and managing the cognitive load of tracking several moving vehicles at once, and links directly to the reduced speed of divided attention identified on the pre-drive screen. It will require graded practice to build fluent and efficient decision-making without compromising the safety margin {he} currently maintains.',null,'dev');
   CL('pj5','safe','{name} covered the brake on approach to a parked delivery van with its driver-side door open, without being instructed to do so. This indicates developing hazard anticipation and defensive driving skill appropriate to {his} stage.');
   CHECKLIST.forEach(g=>g.items.forEach(it=>{ if(S.checklist[it.id].st==='unrated') S.checklist[it.id]={st:'safe',note:'',refs:[]}; }));
 
@@ -2923,7 +3213,7 @@ function loadExample(){
   ['consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]());
   S.reasonReferral=AUTOTEXT.reasonReferral();
   S.physSummary=AUTOTEXT.physSummary();
-  S.summaryText=autoSummary()+'\n\nTaken together, the pre-drive screen and the on-road assessment point in the same direction. {name} has the physical capacity, the road law knowledge and the insight required for supervised learning, and {his} speed control, lane positioning and hazard anticipation are already sound for {his} stage. The skills that are not yet established — blind-spot head checks, consistent mirror routines, continuous distance scanning and efficient gap selection at roundabouts — all share a common demand: they require attention to be divided and shifted quickly between competing sources of information. That is precisely the area identified as reduced on the Trail Making Test Part B. This is not a barrier to progressing, but it does mean these skills will take {him} more repetition to automate than they would a learner without that profile, and that instruction should build them deliberately rather than assume they will develop with hours alone.';
+  S.summaryText=autoSummary();
   ['continueLearner','lessons','lenses','optom','medReview','reviewChange'].forEach(id=>{
     S.recs[id]={on:true,text:REC_DEFS.find(r=>r.id===id).def()};
   });
@@ -3076,6 +3366,27 @@ function validate(){
   /* ---- 10. internal consistency ---- */
   const issues=flaggedShorts();
   if(issues.length && ['fit'].includes(S.outcome)) B('Outcome contradicts the findings','The outcome is “fit to drive, no restrictions” while '+issues.length+' on-road issue'+(issues.length>1?'s are':' is')+' flagged. Resolve one or the other.','6','[data-bind=outcome]');
+
+  /* ---- clinical reasoning consistency ---- */
+  const critIssues=issuesBySeverity('crit');
+  if(critIssues.length && ['fit','fit-cond','learner-continue'].includes(S.outcome))
+    B('Critical finding sits under a supportive outcome',
+      `${joinList(critIssues.map(i=>i.short))} ${critIssues.length===1?'is':'are'} rated critical — required intervention, or would have. That is difficult to reconcile with “${document.querySelector('[data-bind=outcome]')?document.querySelector('[data-bind=outcome]').selectedOptions[0].text:S.outcome}”. Either the severity or the outcome needs to change.`,'6','[data-bind=outcome]');
+  const dsdaBad=dsdaMismatch();
+  if(dsdaBad) A('dsda_mismatch','DSDA category may not match the entered scores',dsdaBad+' The DSDA report itself is authoritative — check for a transcription error.','4','#card_dsdaCat');
+  const sug=suggestedHours();
+  if(S.recs.lessons&&S.recs.lessons.on&&sug&&Math.abs(parseFloat(S.recParams.hours)-sug)>=Math.max(4,sug*0.5))
+    A('hours_gap',`Recommended hours (${S.recParams.hours}) differ markedly from the ${sug} suggested by the findings`,'The suggestion is derived from the number and severity of findings and whether an underlying difficulty was corroborated on road. Departing from it is fine — just make sure the report justifies the figure you have used.','6','#recCards');
+  const cvv=convergence();
+  if(cvv.fails.length && !cvv.corroborated.length && issues.length)
+    A('cv_diverge','Off-road findings were not corroborated on road','The screen flagged '+joinList(cvv.fails.map(f=>f.test))+' but none of the on-road issues correspond to '+(cvv.fails.length===1?'it':'them')+'. That divergence is worth stating explicitly in the summary rather than leaving the reader to notice it.','6','[data-bind=summaryText]');
+  Object.keys(TEST_META).forEach(id=>{
+    if(id==='dsdaCat'||!S.tests[id].on||testInvalid(id)) return;
+    if(!txt(S.tests[id].norm))
+      A('norm_'+id, TEST_META[id].name+' has no normative comparison recorded','Recording how the raw score compares with the manual’s age-stratified norms distinguishes a result that is abnormal for this person from one that is normal for their age but still below the driving threshold.','4','#card_'+id);
+  });
+  if(S.tests.bells.on && !testInvalid('bells') && parseInt(S.tests.bells.omissions)>0 && (!txt(S.tests.bells.left)&&!txt(S.tests.bells.right)))
+    A('bells_side','Bells Test omissions are not split by side','Six or more omissions on one side raises the question of visual neglect, which cannot be assessed from the total alone.','4','#card_bells');
   if(S.austroadsVision==='No' && ['fit','fit-cond','learner-continue'].includes(S.outcome)) B('Vision standard not met, but outcome supports driving','Austroads vision standard is recorded as not met. That has to be resolved before a supportive outcome.','6','[data-bind=outcome]');
   const sumLow=(S.summaryText||'').toLowerCase();
   issues.forEach(s=>{ const key=s.split(' ').filter(w=>w.length>4)[0]; if(key && !sumLow.includes(key.toLowerCase())) A('sum_'+key,'Flagged issue may not be reflected in the summary: '+s,'Every issue you raised on road should be visible in the summary and picked up by a recommendation.','6','[data-bind=summaryText]'); });

@@ -25,6 +25,17 @@ Most of what follows exists to make that structurally true rather than merely in
 - **Locking.** The record can be locked only once it meets minimum coverage: 6 pre-drive notes, 10 on-road notes, and at least one note against every one of the five on-road performance areas. After locking, notes cannot be edited or deleted — only timestamped addenda can be added, and anything added post-lock is marked as such in the report.
 - **Provenance.** Who recorded the on-road notes and when, plus a declared AI-use position (none / language editing after drafting from notes / dictation of your own spoken notes). This prints in the report as a **Basis of Record** section stating note counts, lock time and the AI position.
 
+### Clinical reasoning
+
+The value of a driver assessment is not the list of findings but the relationship between them. The builder models that relationship rather than leaving it to prose.
+
+- **Convergence analysis.** Each cognitive domain is mapped to the on-road behaviours it typically shows up in — divided attention to scanning, mirror routines, blind-spot checks and gap selection; planning to route and manoeuvre set-up; insight to self-monitoring; lateralised inattention to detection on the affected side. The summary is then built from the *relationship* between the two halves: which off-road findings were corroborated on road, which were not evident (and what that implies), and which on-road behaviours had no off-road correlate and are therefore skill rather than capacity.
+- **Severity.** Flagged issues are rated developmental, significant or critical. Severity orders the summary and the instructor handover, drives the suggested instruction hours, and blocks a supportive outcome sitting under a critical finding.
+- **Suggested hours** are derived from the number and severity of findings and whether an underlying capacity difficulty was corroborated, not typed from habit. Departing from the suggestion is fine; a large gap raises an advisory asking the report to justify the figure.
+- **Score interpretation reports the pattern, not just pass/fail.** Trail Making B distinguishes accurate-but-slow from fast-but-inaccurate, since these mean different things and have different remedies. The Bells Test takes omissions by side and distinguishes lateralised neglect from a general search deficit. DriveSafe is banded rather than binary.
+- **Normative comparison.** Driving thresholds are cut-offs, not age norms. Each test carries a field for how the raw score compared with the manual's age-stratified data, which is reported alongside the threshold — distinguishing a result that is abnormal for this person from one that is normal for their age but still below the driving cut-off. The client's age at assessment is computed and shown.
+- **Cross-checks.** A DSDA category that is hard to reconcile with the entered scores raises an advisory, on the assumption it is a transcription error — the DSDA report itself remains authoritative.
+
 ### Traceability
 
 - On-road checklist items start as **not yet rated**. Nothing is pre-ticked as safe.
