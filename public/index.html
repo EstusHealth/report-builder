@@ -205,6 +205,13 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 .plreq .cnt{font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;flex:0 0 44px}
 .plreq .cnt.ok{color:#1e6b3a} .plreq .cnt.no{color:#8c2f2f}
 
+/* document tabs */
+#docTabs{display:none;gap:5px;flex-wrap:wrap;padding:9px 12px 0;position:sticky;top:0;z-index:4;background:#dcdad5}
+.doctab{border:1px solid #c3c1bc;border-bottom:none;background:#cfcdc8;color:#3a3934;font-family:'Barlow Semi Condensed',sans-serif;
+  font-weight:600;font-size:11.5px;letter-spacing:.04em;padding:7px 13px;border-radius:5px 5px 0 0;cursor:pointer}
+.doctab:hover{background:#dedcd7}
+.doctab.on{background:#fff;color:var(--navy);border-color:#fff}
+
 /* branding */
 .logobox{border:1px dashed #c8c6c1;border-radius:5px;background:#fff;padding:12px;text-align:center;margin-bottom:8px}
 .logobox img{max-height:70px;max-width:100%;display:block;margin:0 auto 8px}
@@ -307,6 +314,8 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   .vitem{padding:12px 10px;font-size:14.5px}
   .vitem .ack{width:22px;height:22px}
   .swatch input[type=color]{width:56px;height:42px}
+  .doctab{font-size:13px;padding:11px 16px;min-height:42px}
+  #docTabs{padding:9px 10px 0}
   .refcard,.hint{font-size:13px}
   .resetlink,.noteslink{font-size:12px;padding:3px 0;display:inline-block}
 
@@ -338,7 +347,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
 
 @media print{
   body{background:#fff}
-  #formPane,#toolbar,#gradbar,#noteDock,#noteFab,#previewClose{display:none!important}
+  #formPane,#toolbar,#gradbar,#noteDock,#noteFab,#previewClose,#docTabs{display:none!important}
   body.preview-hidden #previewPane{display:block!important}
   #app{display:block;height:auto;overflow:visible}
   #previewPane{position:static!important;inset:auto!important;z-index:auto!important;overflow:visible;padding:0;background:#fff}
@@ -411,6 +420,10 @@ body.preview-hidden #formPane{width:100%;border-right:none}
       <option value="transcribe">Dictation/transcription of my own spoken notes recorded at the time</option>
     </select></div></div>
   <div class="hint">AI may refine wording you have already written from your own notes. It cannot supply observations, behaviours or clinical reasoning that were not recorded at the time — so this builder will not let a report be exported that has more auto-drafted text than field record behind it.</div>
+
+  <div class="subhead">Additional documents</div>
+  <div class="hint">Tick the documents you need alongside the main report. Each is generated from the same assessment data, pitched at a different reader — so they cannot contradict the report or each other. They appear as tabs above the preview, and export to Word individually.</div>
+  <div id="docsPanel"></div>
 </div>
 </details>
 
@@ -729,7 +742,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
 <div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. OT Driving Assessment Report Builder v2.0 · open source, MIT licensed</div>
 </div>
 
-<div id="previewPane"><button id="previewClose" onclick="togglePreview()">✕ Close report</button><div id="reportRoot"></div></div>
+<div id="previewPane"><button id="previewClose" onclick="togglePreview()">✕ Close report</button><div id="docTabs"></div><div id="reportRoot"></div></div>
 </div>
 <button id="noteFab" onclick="toggleDock()">✎ Field notes</button>
 <div id="noteDock">
@@ -1167,6 +1180,7 @@ function freshState(){
     fbOffRoad:'', fbOnRoad:'', legalInfo:'', condConsidered:'', onroadSuitable:'',
     turnaround:'ok', turnaroundWhy:'', recordsRetained:'Field notes, raw test forms and report retained securely in the client file',
     compManual:{}, selfReview:false,
+    docs:{gp:false,ndis:false,mdi:false,family:false}, docMeta:{}, activeDoc:'report',
   };
   PHYS_ROWS.forEach(r=> s.phys[r.id]='');
   MUSCLES.forEach(m=> s.muscles[m.id]={tested:'no', grade:'', note:''});
@@ -1966,9 +1980,8 @@ function P(t){ return t? `<p style="${ST.p}">${paraSplit(t)}</p>`.replace(/<p st
 function paraSplit(t){ return esc(fill(t)).replace(/\n{2,}/g,`</p><p style="${ST.p}">`).replace(/\n/g,'<br>'); }
 function TR(label,val){ return `<tr><td style="${ST.lbl}">${label}</td><td style="${ST.td}">${paraSplit(val||'')}</td></tr>`; }
 
-function buildReport(){
-  let h='';
-  /* letterhead */
+/* shared letterhead — used by the report and every additional document */
+function letterhead(){
   const mark = BRAND.logo
     ? `<img src="${BRAND.logo}" alt="${esc(brandName())}" style="max-height:20mm;max-width:75mm">`
     : `<div style="font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:700;font-size:26px;line-height:.95;color:#171410">${esc(BRAND.name1||'')} <span style="font-weight:500;letter-spacing:.12em">${esc(BRAND.name2||'')}</span></div>`;
@@ -1979,15 +1992,63 @@ function buildReport(){
     txt(BRAND.phone)? esc(BRAND.phone):'',
     txt(BRAND.web)? `<span style="color:${BRAND.c3};font-weight:600">${esc(BRAND.web)}</span>`:'',
   ].filter(Boolean).join('<br>');
-  h+=`<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5mm">
+  return `<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5mm">
     <div>${mark}${tagline}</div>
     <div style="text-align:right;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:8.5pt;color:#55534e;line-height:1.6">${contact}</div></div>
     <div style="height:3px;background:linear-gradient(90deg,${BRAND.c1} 0%,${BRAND.c2} 34%,${BRAND.c3} 66%,${BRAND.c4} 100%);margin:0 0 8mm;border-radius:2px;font-size:0">&nbsp;</div>`;
+}
+function docSignoff(closing){
+  return `<p style="${ST.p};margin-top:7mm">${esc(closing||'Kind regards,')}</p>
+  <p style="${ST.p};margin-top:5mm"><b>${esc(S.assessor)}</b><br>${esc(S.assessorRole)}${S.ahpra? '<br>AHPRA No. '+esc(S.ahpra):''}${brandName()? '<br>'+esc(brandName()):''}${txt(BRAND.email)? '<br>'+esc(BRAND.email):''}${txt(BRAND.phone)? '<br>'+esc(BRAND.phone):''}</p>`;
+}
+function docFooter(label){
+  return `<div style="border-top:1px solid #e6e4df;margin-top:8mm;padding-top:2mm;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:7.5pt;letter-spacing:.08em;color:#8a8880">${esc(label.toUpperCase())}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(footerID())}&nbsp;&nbsp;·&nbsp;&nbsp;CONFIDENTIAL</div>`;
+}
+function addressBlock(lines){
+  const l=lines.filter(x=>txt(x)).map(x=>esc(x)).join('<br>');
+  return l? `<p style="${ST.p};margin-bottom:5mm">${l}</p>` : '';
+}
+function dateLine(){ return `<p style="${ST.p};margin-bottom:5mm">${esc(fmtDate(S.dateReport)||fmtDate(new Date().toISOString().slice(0,10)))}</p>`; }
+function reLine(showNdis){
+  return `<p style="${ST.p};margin-bottom:4mm"><b>Re: ${esc(fullNm())}${S.dob? ', date of birth '+esc(fmtDate(S.dob)):''}</b>${showNdis&&S.ndis? '<br><b>NDIS participant number:</b> '+esc(S.ndis):''}</p>`;
+}
+function sentenceCase(x){ x=txt(x); return x? x.charAt(0).toUpperCase()+x.slice(1):''; }
+function licenceConds(){
+  const parts=[S.licType, ...(S.licCond||[]), S.licCondOther].filter(Boolean).map(sentenceCase);
+  return parts.length? parts.join('. ')+'.' : '';
+}
+function issueList(){
+  const out=[];
+  CHECKLIST.forEach(g=>g.items.forEach(it=>{
+    if(S.checklist[it.id].st==='issue') out.push({g:g.g, short:it.short, note:S.checklist[it.id].note});
+  }));
+  return out;
+}
+function strengthList(){
+  const out=[];
+  CHECKLIST.forEach(g=>g.items.forEach(it=>{
+    const c=S.checklist[it.id];
+    if(c.st==='safe' && txt(c.note)) out.push({g:g.g, short:it.short, note:c.note});
+  }));
+  return out;
+}
+function recList(){ return REC_DEFS.filter(r=>S.recs[r.id]&&S.recs[r.id].on&&txt(S.recs[r.id].text)); }
+const OUTCOME_PLAIN = {
+  'learner-continue':'supported to keep learning to drive, with some specialised lessons',
+  'fit':'safe to keep driving, with no restrictions',
+  'fit-cond':'safe to keep driving, with some conditions on the licence',
+  'lessons-reassess':'recommended to complete driving lessons and then be reassessed on road',
+  'mods':'safe to drive with some changes made to the vehicle',
+  'cease':'not safe to drive at this time',
+};
+
+function buildReport(){
+  let h='';
+  h+=letterhead();
   h+=`<h1 style="${ST.h1}">Occupational Therapy Driver Assessment Report</h1>`;
 
   /* client details */
-  const sentence=x=>{ x=txt(x); return x? x.charAt(0).toUpperCase()+x.slice(1):''; };
-  const conds=[S.licType, ...S.licCond, S.licCondOther].filter(Boolean).map(sentence).join('. ')+(S.licType||S.licCond.length||S.licCondOther?'.':'');
+  const conds=licenceConds();
   h+=`<table style="${ST.tbl}">`+
     TR('Report Reference / Version', [S.reportRef, S.reportVersion].filter(Boolean).join(' · '))+
     TR('Name', fullNm())+TR('DOB', fmtDate(S.dob))+
@@ -2183,6 +2244,331 @@ function recordStatement(){
   }[S.aiUse]||'';
   return t+ai;
 }
+/* ================================================================
+   ADDITIONAL DOCUMENTS
+   Each is generated from the same assessment data as the main report,
+   pitched at a different reader. Enable them in Section 0.
+================================================================ */
+const DOCS = [
+ {id:'gp', label:'Letter to GP / treating practitioner', file:'GP Letter',
+  hint:'A one-page clinical summary for the treating doctor, focused on medical fitness to drive and what you are asking them to do.',
+  fields:[['gpName','Addressed to','e.g. Dr Jane Smith'],['gpPractice','Practice',''],['gpAddress','Address','optional']],
+  needs:()=>txt(S.docMeta.gpName)? '' : 'the GP or practitioner name',
+  build:gpLetter},
+ {id:'ndis', label:'NDIS support recommendations', file:'NDIS Summary',
+  hint:'Links the assessment findings to the participant’s goals and sets out the recommended supports with a reasonable-and-necessary rationale.',
+  fields:[['ndisCoord','Support coordinator / plan manager','optional'],['ndisPlanEnd','Plan review date','optional']],
+  needs:()=>txt(S.ndis)? '' : 'the NDIS participant number (Section 1)',
+  build:ndisDoc},
+ {id:'mdi', label:'Handover to driving instructor', file:'MDI Handover',
+  hint:'What the Motor Driving Instructor needs in order to teach this client well — focus areas, strengths, learning style and safety notes.',
+  fields:[['mdiContact','Instructor contact','optional']],
+  needs:()=>txt(S.mdi)? '' : 'the Motor Driving Instructor name (Section 1)',
+  build:mdiHandover},
+ {id:'family', label:'Summary for client, family or support person', file:'Client and Family Summary',
+  hint:'A plain-language version of the outcome and next steps, written to be read by the client and the people supporting their practice.',
+  fields:[['familyTo','Addressed to','e.g. John and his father']],
+  needs:()=>'',
+  build:familySummary},
+];
+function docOn(id){ return !!(S.docs&&S.docs[id]); }
+function docNote(id){ return txt((S.docMeta||{})[id+'Note']); }
+
+/* ---------- letter to the GP ---------- */
+function gpLetter(){
+  let h=letterhead()+dateLine();
+  h+=addressBlock([S.docMeta.gpName, S.docMeta.gpPractice, S.docMeta.gpAddress]);
+  h+=`<p style="${ST.p}">Dear ${esc(txt(S.docMeta.gpName)||'Doctor')},</p>`;
+  h+=reLine();
+  h+=P(`I completed an occupational therapy driver assessment with {name} on ${fmtDate(S.dateAssess)||'[date]'}${S.refName? ', following referral from '+S.refName:''}. This letter summarises the outcome and the matters relevant to your management. The full report is attached.`);
+
+  h+=`<h3 style="${ST.h3}">Outcome</h3>`;
+  const rec1=recList()[0];
+  h+=P(rec1? S.recs[rec1.id].text : 'See recommendations below.');
+
+  h+=`<h3 style="${ST.h3}">Findings relevant to medical fitness to drive</h3>`;
+  h+=`<table style="${ST.tbl}">`;
+  h+=TR('Vision', `${S.lenses==='Yes'?'Corrective lenses worn for driving. ':''}Best corrected binocular acuity ${txt(S.vaCB)||txt(S.vaUB)||'[not recorded]'}. Confrontation fields ${S.vFields==='full'?'full to all quadrants':S.vFields==='deficit'?'deficit identified':'not tested'}. Austroads vision standard: ${S.austroadsVision}.`);
+  const cogBits=[];
+  Object.keys(TEST_META).forEach(id=>{
+    if(id==='dsdaCat'||!S.tests[id].on) return;
+    if(testInvalid(id)){ cogBits.push(`${TEST_META[id].name}: not scoreable`); return; }
+    const r=TEST_META[id].interp();
+    cogBits.push(`${TEST_META[id].name}: ${txt(r.scoreTxt).replace(/\.$/,'')||'—'}${r.pill==='fail'?' (outside driving threshold)':''}`);
+  });
+  h+=TR('Cognition and perception', cogBits.join('. ')+'.');
+  const red=MUSCLES.filter(m=>S.muscles[m.id].tested==='yes'&&S.muscles[m.id].grade&&S.muscles[m.id].grade!=='5');
+  h+=TR('Physical', red.length
+    ? `Reduced power in ${red.map(m=>m.n.toLowerCase()+' (grade '+S.muscles[m.id].grade+')').join(', ')}. ${txt(S.physSummary)}`
+    : (musclesTested()? `Manual muscle testing graded 5/5 across the ${musclesTested()} groups tested. Range of movement, coordination and sensation as documented in the report.` : 'See report.'));
+  const iss=issueList();
+  h+=TR('On-road assessment', `${S.duration||'[?]'} minutes in a ${String(S.vehicle).toLowerCase()}. `+
+    (iss.length? `${iss.length} area${iss.length>1?'s':''} requiring development: ${iss.map(i=>i.short).join(', ')}.` : 'No areas of concern identified.'));
+  h+=`</table>`;
+
+  const meds=S.meds.filter(m=>txt(m.name));
+  if(meds.length){
+    h+=`<h3 style="${ST.h3}">Medication</h3>`;
+    h+=P(`Current: ${meds.map(m=>m.name+(m.dose? ' ('+m.dose+')':'')).join('; ')}. ${txt(S.medSideEffects)}`);
+  }
+
+  h+=`<h3 style="${ST.h3}">What I am asking of you</h3>`;
+  const asks=[];
+  if(S.recs.medReview&&S.recs.medReview.on) asks.push(fill(S.recs.medReview.text));
+  if(S.austroadsVision!=='Yes') asks.push('Review against the Austroads vision standard, as this was not clearly met at assessment.');
+  if(S.eyeReview==='Yes') asks.push('Referral for optometry or ophthalmology review as indicated.');
+  if(S.outcome==='cease') asks.push('Please confirm your view on {his} medical fitness to drive and advise the licensing authority as required.');
+  asks.push('Please advise if there is any change in {his} medical condition, medication or symptoms that would affect fitness to drive, so that this assessment can be reviewed.');
+  h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">`+asks.map(a=>`<li style="margin-bottom:2mm">${paraSplit(a)}</li>`).join('')+`</ul>`;
+
+  if(recList().length>1){
+    h+=`<h3 style="${ST.h3}">Full recommendations</h3><ul style="margin:1mm 0 4mm;padding-left:6mm">`+
+      recList().map(r=>`<li style="margin-bottom:2mm">${paraSplit(S.recs[r.id].text)}</li>`).join('')+`</ul>`;
+  }
+  if(docNote('gp')) h+=P(docNote('gp'));
+  h+=P(`Please contact me if you would like to discuss any aspect of this assessment.`);
+  h+=docSignoff();
+  h+=docFooter(brandName()+' · GP letter');
+  return h;
+}
+
+/* ---------- NDIS support recommendations ---------- */
+function ndisDoc(){
+  let h=letterhead();
+  h+=`<h1 style="${ST.h1}">Driver Assessment — NDIS Support Recommendations</h1>`;
+  h+=`<table style="${ST.tbl}">`+
+    TR('Participant', fullNm())+TR('Date of birth', fmtDate(S.dob))+
+    TR('NDIS participant number', S.ndis)+
+    (txt(S.docMeta.ndisCoord)? TR('Support coordinator / plan manager', S.docMeta.ndisCoord):'')+
+    (txt(S.docMeta.ndisPlanEnd)? TR('Plan review date', S.docMeta.ndisPlanEnd):'')+
+    TR('Date of assessment', fmtDate(S.dateAssess))+
+    TR('Assessed by', S.assessor+'\n'+S.assessorRole+(S.ahpra? '\nAHPRA No. '+S.ahpra:''))+
+    `</table>`;
+
+  h+=`<h2 style="${ST.h2}">1. Why this assessment was requested</h2>`;
+  h+=P(S.reasonReferral);
+
+  h+=`<h2 style="${ST.h2}">2. Participant goals this relates to</h2>`;
+  const goalDomains=['goals','transport','community','workstudy','supports'];
+  const goalsOn=PROFILE_DOMAINS.filter(d=>goalDomains.includes(d.id)&&S.profile[d.id]&&!S.profile[d.id].na&&txt(S.profile[d.id].text));
+  if(goalsOn.length){ h+=`<table style="${ST.tbl}">`+goalsOn.map(d=>TR(d.label,S.profile[d.id].text)).join('')+`</table>`; }
+  else h+=P('See the occupational profile in the attached assessment report.');
+
+  h+=`<h2 style="${ST.h2}">3. Current functional impact</h2>`;
+  const impact=[];
+  if(S.profile.transport&&txt(S.profile.transport.text)) impact.push(S.profile.transport.text);
+  if(S.profile.community&&txt(S.profile.community.text)) impact.push(S.profile.community.text);
+  h+=impact.length? impact.map(x=>P(x)).join('') : P('See the attached report.');
+
+  h+=`<h2 style="${ST.h2}">4. Assessment completed</h2>`;
+  const done=['Clinical interview and occupational profile','Vision screen (acuity and confrontation fields)','Hearing and communication screen',
+    musclesTested()? 'Physical screen including manual muscle testing':'Physical screen'];
+  Object.keys(TEST_META).forEach(id=>{ if(id!=='dsdaCat'&&S.tests[id].on) done.push(TEST_META[id].name+(testInvalid(id)?' (attempted, not scoreable)':'')); });
+  done.push(`On-road assessment, ${S.duration||'[?]'} minutes with a Motor Driving Instructor in a ${String(S.vehicle).toLowerCase()}`);
+  h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">`+done.map(x=>`<li style="margin-bottom:1.5mm">${esc(x)}</li>`).join('')+`</ul>`;
+
+  h+=`<h2 style="${ST.h2}">5. Findings</h2>`+P(S.summaryText);
+
+  h+=`<h2 style="${ST.h2}">6. Recommended supports</h2>`;
+  const recs=recList();
+  if(recs.length){
+    h+=`<table style="${ST.tbl}"><tr><th style="${ST.th};width:30%">Support</th><th style="${ST.th}">Detail</th><th style="${ST.th};width:30%">Why it is reasonable and necessary</th></tr>`;
+    const why={
+      lessons:'Directly targets the specific driving skills identified as not yet established at assessment, which are the barrier to the participant achieving independent transport for work, study and community access. Specialised instruction is required because these skills relate to the participant’s disability rather than to inexperience alone.',
+      continueLearner:'Supports progression toward independent transport, which underpins the participant’s employment, education and community participation goals.',
+      reassess:'Confirms whether the funded instruction has achieved its purpose before further supports are considered, so funding is not continued without evidence of benefit.',
+      mods:'Enables the participant to operate a vehicle safely and independently, reducing reliance on funded and informal transport supports.',
+      medReview:'Ensures ongoing safety and that recommendations remain appropriate as the participant’s health status changes.',
+      optom:'Confirms that vision continues to meet the standard required for safe driving.',
+      reviewChange:'Ensures supports remain appropriate if the participant’s circumstances change.',
+      lenses:'A licence condition arising from the assessment; no funding implication.',
+      fit:'No further supports required in relation to driving.',
+      fitCond:'No further supports required in relation to driving beyond the licence conditions noted.',
+      cease:'Alternative transport supports will be required to maintain community access and participation.',
+    };
+    recs.forEach(r=>{
+      h+=`<tr><td style="${ST.lbl}">${esc(r.label)}</td><td style="${ST.td}">${paraSplit(S.recs[r.id].text)}</td><td style="${ST.td}">${esc(why[r.id]||'Arises directly from the assessment findings above.')}</td></tr>`;
+    });
+    h+=`</table>`;
+    if(S.recs.lessons&&S.recs.lessons.on){
+      h+=P(`The recommended driving instruction is ${S.recParams.hours} hours, to be funded through ${S.recParams.funder}. This figure reflects the number and nature of the skills identified for development at this assessment${issueList().length? ' ('+issueList().map(i=>i.short).join(', ')+')':''}, and the participant’s identified need for repeated, graded practice to establish them.`);
+    }
+  } else h+=P('No supports are recommended in relation to driving at this time.');
+
+  h+=`<h2 style="${ST.h2}">7. Expected outcome and review</h2>`;
+  h+=P(`If the recommended supports are implemented, the expected outcome is that {name} progresses toward ${OUTCOME_PLAIN[S.outcome]||'the outcome described above'}, reducing reliance on funded and informal transport and increasing independent participation in work, study and community activities.`);
+  h+=P(`A review of progress is recommended following completion of the recommended supports${S.outcome==='lessons-reassess'? ', including an on-road reassessment':''}.`);
+  if(docNote('ndis')) h+=P(docNote('ndis'));
+  h+=docSignoff('Prepared by:');
+  h+=docFooter(brandName()+' · NDIS summary');
+  return h;
+}
+
+/* ---------- handover to the driving instructor ---------- */
+function mdiHandover(){
+  let h=letterhead();
+  h+=`<h1 style="${ST.h1}">Driver Assessment Handover — Driving Instructor</h1>`;
+  h+=P(`Prepared for ${txt(S.mdi)||'the Motor Driving Instructor'}${txt(S.docMeta.mdiContact)? ' ('+txt(S.docMeta.mdiContact)+')':''} following the occupational therapy driver assessment on ${fmtDate(S.dateAssess)||'[date]'}. ${fullNm()} has consented to this information being shared with you for the purpose of driver training.`);
+
+  h+=`<table style="${ST.tbl}">`+
+    TR('Client', fullNm())+
+    TR('Licence status', licenceConds())+
+    TR('Vehicle used at assessment', S.vehicle)+
+    TR('Recommended instruction', S.recs.lessons&&S.recs.lessons.on? `${S.recParams.hours} hours, funded through ${S.recParams.funder}` : 'See recommendations')+
+    `</table>`;
+
+  h+=`<h2 style="${ST.h2}">Priority focus areas</h2>`;
+  const iss=issueList();
+  if(iss.length){
+    h+=P('These are the skills that were not yet established on road. They are listed in the order I would work on them.');
+    h+=`<table style="${ST.tbl}"><tr><th style="${ST.th};width:22%">Area</th><th style="${ST.th};width:26%">Skill</th><th style="${ST.th}">What I saw, and what it will take</th></tr>`+
+      iss.map(i=>`<tr><td style="${ST.lbl}">${esc(i.g)}</td><td style="${ST.td}"><b>${esc(i.short)}</b></td><td style="${ST.td}">${paraSplit(i.note)}</td></tr>`).join('')+`</table>`;
+  } else h+=P('No specific skill deficits were identified on road.');
+
+  const str=strengthList();
+  if(str.length){
+    h+=`<h2 style="${ST.h2}">Strengths to build on</h2>`;
+    h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">`+str.map(s=>`<li style="margin-bottom:2mm"><b>${esc(s.short)}</b> — ${paraSplit(s.note)}</li>`).join('')+`</ul>`;
+  }
+
+  h+=`<h2 style="${ST.h2}">How this client learns best</h2>`;
+  const learn=[];
+  ['learning','sensory','culture','insight'].forEach(id=>{
+    const p=S.profile[id]; if(p&&!p.na&&txt(p.text)) learn.push([PROFILE_DOMAINS.find(d=>d.id===id).label, p.text]);
+  });
+  if(txt(S.commScreen)) learn.push(['Communication', S.commScreen]);
+  if(learn.length) h+=`<table style="${ST.tbl}">`+learn.map(([a,b])=>TR(a,b)).join('')+`</table>`;
+
+  h+=`<h2 style="${ST.h2}">Things to be aware of</h2>`;
+  const aware=[];
+  const cogFail=[];
+  Object.keys(TEST_META).forEach(id=>{
+    if(id==='dsdaCat'||!S.tests[id].on||testInvalid(id)) return;
+    const r=TEST_META[id].interp(); if(r.pill==='fail') cogFail.push(TEST_META[id].name);
+  });
+  if(cogFail.length) aware.push(`Screening indicated reduced capacity in areas relevant to driving (${cogFail.join(', ')}). In practice this usually shows up as difficulty when several things happen at once — build complexity gradually rather than all at once.`);
+  const fat=S.profile.fatigue; if(fat&&!fat.na&&txt(fat.text)) aware.push(`Fatigue and timing: ${fat.text}`);
+  if(S.lenses==='Yes') aware.push('Corrective lenses must be worn for driving.');
+  if(txt(S.safetyMgmt)) aware.push(`At assessment: ${fill(S.safetyMgmt)}`);
+  aware.push('If anything arises that makes you question safety, stop the lesson and let me know — I would rather reassess than have it continue.');
+  h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">`+aware.map(a=>`<li style="margin-bottom:2mm">${paraSplit(a)}</li>`).join('')+`</ul>`;
+
+  h+=`<h2 style="${ST.h2}">What I would like back from you</h2>`;
+  h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">
+    <li style="margin-bottom:2mm">A short progress update after roughly half the recommended hours, covering which focus areas are improving and which are not.</li>
+    <li style="margin-bottom:2mm">Notice as soon as practicable if a focus area is not shifting with practice, or if a new concern emerges.</li>
+    <li style="margin-bottom:2mm">Confirmation when the recommended hours are complete${S.outcome==='lessons-reassess'? ', so that the on-road reassessment can be arranged':''}.</li></ul>`;
+  if(docNote('mdi')) h+=P(docNote('mdi'));
+  h+=P('This information is confidential and is provided solely to support driver training for this client. Please do not share it further without the client’s consent.');
+  h+=docSignoff();
+  h+=docFooter(brandName()+' · instructor handover');
+  return h;
+}
+
+/* ---------- plain-language summary for client and family ---------- */
+function familySummary(){
+  const first=S.prefName||S.firstName||'you';
+  let h=letterhead();
+  h+=`<h1 style="${ST.h1}">Your Driving Assessment — Summary</h1>`;
+  h+=addressBlock([txt(S.docMeta.familyTo)]);
+  h+=P(`This is a plain-language summary of the driving assessment ${first} completed on ${fmtDate(S.dateAssess)||'[date]'}. The full report has been provided to: ${txt(S.distribution)||'the people listed in the report'}. It is a summary, not the whole report — if anything here is unclear, please ask.`);
+
+  h+=`<h2 style="${ST.h2}">What we did</h2>`;
+  h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">
+    <li style="margin-bottom:2mm">Talked about ${first}'s health, daily routine, and what ${first} wants to use driving for.</li>
+    <li style="margin-bottom:2mm">Checked vision, hearing, movement and strength.</li>
+    <li style="margin-bottom:2mm">Completed some pen-and-paper and computer tasks that look at attention, planning and road rules.</li>
+    <li style="margin-bottom:2mm">Went for a ${S.duration||'[?]'}-minute drive with a qualified driving instructor in a car with dual controls.</li></ul>`;
+
+  h+=`<h2 style="${ST.h2}">The outcome</h2>`;
+  h+=`<p style="${ST.p}">Based on everything above, ${esc(first)} is <b>${esc(OUTCOME_PLAIN[S.outcome]||'described in the full report')}</b>.</p>`;
+
+  const str=strengthList();
+  h+=`<h2 style="${ST.h2}">What went well</h2>`;
+  if(str.length){
+    h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">`+str.map(s=>`<li style="margin-bottom:2mm">${esc(s.short.charAt(0).toUpperCase()+s.short.slice(1))}.</li>`).join('')+`</ul>`;
+  } else h+=P('The full report sets out the areas that were done safely and well.');
+
+  const iss=issueList();
+  h+=`<h2 style="${ST.h2}">What needs more practice</h2>`;
+  if(iss.length){
+    h+=P('These are the things to work on. None of them are unusual — they are the skills that take the most repetition to become automatic.');
+    h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">`+iss.map(i=>`<li style="margin-bottom:2mm">${esc(i.short.charAt(0).toUpperCase()+i.short.slice(1))}.</li>`).join('')+`</ul>`;
+  } else h+=P('No specific areas were identified as needing further practice.');
+
+  h+=`<h2 style="${ST.h2}">What will help</h2>`;
+  const help=[];
+  if(S.recs.lessons&&S.recs.lessons.on) help.push(`About ${S.recParams.hours} hours of lessons with a driving instructor who has been given the list of things to work on.`);
+  help.push('Regular, shorter practice sessions are better than occasional long ones.');
+  help.push('Practise in quieter areas first, then build up to busier roads as each skill becomes comfortable.');
+  help.push('If you are supervising, try to give feedback after a manoeuvre rather than during it, and agree beforehand who is giving instructions so there is only one voice.');
+  if(S.needs.night && /future|no/i.test(S.needs.night.val)) help.push('Night driving has not been practised yet — introduce it gradually once daytime driving is comfortable.');
+  h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">`+help.map(x=>`<li style="margin-bottom:2mm">${esc(x)}</li>`).join('')+`</ul>`;
+
+  h+=`<h2 style="${ST.h2}">What happens next</h2>`;
+  const next=[];
+  if(S.outcome==='lessons-reassess') next.push('After the lessons are finished, we will arrange another on-road assessment to see how things have progressed.');
+  if(S.outcome==='learner-continue') next.push('Keep building supervised logbook hours alongside the lessons.');
+  if(S.outcome==='cease') next.push('We talked about other ways to get around. I can help you look into these.');
+  if(S.recs.medReview&&S.recs.medReview.on) next.push('Keep up regular check-ins with your doctor about your health and driving.');
+  next.push('Let me know if anything changes with health, medication or how driving is going.');
+  h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">`+next.map(x=>`<li style="margin-bottom:2mm">${esc(x)}</li>`).join('')+`</ul>`;
+
+  if(docNote('family')) h+=P(docNote('family'));
+  h+=P(`If you have any questions about this summary or the assessment, please get in touch.`);
+  h+=docSignoff();
+  h+=docFooter(brandName()+' · client summary');
+  return h;
+}
+
+function buildActiveDoc(){
+  const d=DOCS.find(x=>x.id===S.activeDoc);
+  if(!d || !docOn(d.id)) { S.activeDoc='report'; return buildReport(); }
+  return d.build();
+}
+function activeDocLabel(){
+  const d=DOCS.find(x=>x.id===S.activeDoc);
+  return d? d.file : 'Driving Assessment Report';
+}
+function buildDocTabs(){
+  const el=document.getElementById('docTabs'); if(!el) return;
+  const on=DOCS.filter(d=>docOn(d.id));
+  if(!on.length){ el.innerHTML=''; el.style.display='none'; return; }
+  el.style.display='flex';
+  const tab=(id,label)=>`<button class="doctab ${S.activeDoc===id?'on':''}" onclick="setActiveDoc('${id}')">${esc(label)}</button>`;
+  el.innerHTML = tab('report','Assessment report') + on.map(d=>tab(d.id,d.file)).join('');
+}
+function setActiveDoc(id){ S.activeDoc=id; reportStale=true; ensureReport(); buildDocTabs(); const pp=document.getElementById('previewPane'); if(pp) pp.scrollTop=0; }
+
+function buildDocsPanel(){
+  const el=document.getElementById('docsPanel'); if(!el) return;
+  el.innerHTML = DOCS.map(d=>{
+    const on=docOn(d.id), miss=on? d.needs():'';
+    return `<div class="reccard" style="border-left:3px solid ${on?(miss?'#8c2f2f':'#1e6b3a'):'#c8c6c1'}">
+      <div class="rectop">
+        <input type="checkbox" style="accent-color:var(--teal);width:15px;height:15px" ${on?'checked':''}
+          onchange="S.docs['${d.id}']=this.checked; if(!this.checked&&S.activeDoc==='${d.id}')S.activeDoc='report'; buildDocsPanel(); buildDocTabs(); reportStale=true; update()">
+        <label onclick="this.previousElementSibling.click()">${esc(d.label)}</label>
+      </div>
+      <div class="hint" style="margin:4px 0 0">${esc(d.hint)}</div>
+      ${on? (miss? `<div class="gate stop" style="margin-top:8px"><b>Needs ${esc(miss)}</b> before this document can be exported.</div>`:'')
+        + (d.fields.length? `<div class="row" style="margin-top:8px">`+d.fields.map(([k,label,ph])=>
+            `<div class="f"><label>${esc(label)}</label><input type="text" value="${esc(S.docMeta[k]||'')}" placeholder="${esc(ph)}" oninput="S.docMeta['${k}']=this.value;reportStale=true;update()"></div>`).join('')+`</div>`:'')
+        + `<div class="row"><div class="f w100"><label>Extra paragraph for this document (optional)</label>
+            <textarea rows="2" placeholder="Anything specific to add for this reader — inserted near the end." oninput="S.docMeta['${d.id}Note']=this.value;reportStale=true;update()">${esc(S.docMeta[d.id+'Note']||'')}</textarea></div></div>`
+        + `<div class="row"><div class="f"><button class="btn" onclick="setActiveDoc('${d.id}');if(!previewOn())togglePreview()">Preview</button></div>
+            <div class="f"><button class="btn plum" onclick="guard(()=>exportDoc('${d.id}'))">Export Word</button></div></div>`
+      : ''}
+    </div>`;
+  }).join('');
+}
+function exportDoc(id){
+  const prev=S.activeDoc;
+  S.activeDoc=id; reportStale=true;
+  exportWord();
+  S.activeDoc=prev; reportStale=true; render();
+}
+
 function footerID(){
   return [ (S.surname? S.surname.toUpperCase()+', '+(S.firstName||''):'').trim(), S.dob? 'DOB '+fmtDate(S.dob):'', S.reportRef? 'Ref '+S.reportRef:'', S.dateReport? fmtDate(S.dateReport):'' ].filter(Boolean).join(' · ');
 }
@@ -2197,7 +2583,8 @@ const PV_KEY='otdrb-preview';
 let reportStale=true;
 function previewOn(){ return !document.body.classList.contains('preview-hidden'); }
 function paintReport(){
-  document.getElementById('reportRoot').innerHTML = `<div class="page">${buildReport()}</div>`;
+  document.getElementById('reportRoot').innerHTML = `<div class="page">${buildActiveDoc()}</div>`;
+  buildDocTabs();
   reportStale=false;
 }
 /* When the pane is hidden the report is not rebuilt on every keystroke — it is
@@ -2271,7 +2658,7 @@ function syncForm(){
   document.querySelectorAll('[data-bindchk]').forEach(el=>{ el.checked = (S[el.dataset.bindchk]||[]).includes(el.value); });
   document.querySelectorAll('[data-bindbool]').forEach(el=>{ el.checked = !!S[el.dataset.bindbool]; });
   buildMedRows(); buildReviewed(); buildNeeds(); buildPhys(); buildTests(); buildChecklist(); buildRecs();
-  buildEquip(); buildProfile(); buildMuscles(); buildComp(); buildSignoff();
+  buildEquip(); buildProfile(); buildMuscles(); buildComp(); buildSignoff(); buildDocsPanel(); buildDocTabs();
   refreshPanels(); renderDock();
 }
 function refreshPanels(){
@@ -2286,7 +2673,7 @@ function refreshPanels(){
 function normalise(raw){
   const s=Object.assign(freshState(), raw||{});
   const base=freshState();
-  ['equip','equipWhy','verify','ackAdvisories','compManual','muscles','profile','admin','phys','needs','checklist','tests'].forEach(k=>{
+  ['equip','equipWhy','verify','ackAdvisories','compManual','muscles','profile','admin','phys','needs','checklist','tests','docs','docMeta'].forEach(k=>{
     s[k]=Object.assign({}, base[k], raw&&raw[k]? raw[k]:{});
   });
   MUSCLES.forEach(m=> s.muscles[m.id]=Object.assign({tested:'no',grade:'',note:''}, s.muscles[m.id]||{}));
@@ -2339,7 +2726,7 @@ function exportWord(){
   ensureReport();
   const foot=esc(footerID());
   const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-<head><meta charset="utf-8"><title>OT Driver Assessment Report</title>
+<head><meta charset="utf-8"><title>${esc(activeDocLabel())}</title>
 <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
 <style>
 @page Section1{size:A4;margin:20mm 18mm 24mm 18mm;mso-footer:f1;}
@@ -2347,13 +2734,13 @@ div.Section1{page:Section1}
 p.MsoFooter{margin:0;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:7.5pt;color:#8a8880;letter-spacing:.04em;border-top:1pt solid #e6e4df;padding-top:4pt}
 body{${ST.body}} table{border-collapse:collapse} li{margin-bottom:6pt}
 </style>
-</head><body><div class="Section1">${buildReport()}
+</head><body><div class="Section1">${buildActiveDoc()}
 <div style="mso-element:footer" id="f1"><p class="MsoFooter">${foot} · CONFIDENTIAL<span style="mso-tab-count:2"></span>Page <span style='mso-field-code:" PAGE "'>1</span> of <span style='mso-field-code:" NUMPAGES "'>1</span></p></div>
 </div></body></html>`;
   const blob=new Blob(['﻿'+html],{type:'application/msword'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   const d=(S.dateReport||'').replaceAll('-','');
-  a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} Driving Assessment Report${d? ' '+d:''}.doc`;
+  a.download=`${(S.firstName+' '+S.surname).trim()||'Client'} ${activeDocLabel()}${d? ' '+d:''}.doc`;
   a.click();
 }
 
@@ -2368,7 +2755,7 @@ function loadExample(){
   if(!txt(S.ahpra)) S.ahpra='OCC0000000000';
   Object.assign(S,{
     title:'Mr', firstName:'John', prefName:'Johnny', surname:'Citizen', pronouns:'he', dob:'2000-01-01',
-    address:'123 Sample Street, Adelaide SA 5000', licNo:'AB1234', licSighted:'Yes', licExpiry:'14/03/2028',
+    address:'123 Sample Street, Adelaide SA 5000', ndis:'430000000', licNo:'AB1234', licSighted:'Yes', licExpiry:'14/03/2028',
     licType:"Learner's permit (Class C)",
     licCond:['L-plates to be displayed','must be accompanied by a fully licensed supervising driver','zero BAC','automatic vehicles only','corrective lenses to be worn'],
     diagnoses:'Autism Spectrum Disorder (Level 2); Schizophrenia',
@@ -2527,6 +2914,10 @@ function loadExample(){
   });
   COMPETENCIES.forEach(c=>{ if(!c.ev && !(c.na&&c.na())) S.compManual[c.id]=true; });
 
+  S.docs={gp:true,ndis:true,mdi:true,family:true};
+  S.docMeta={gpName:'Dr Sample GP', gpPractice:'Example Family Practice', gpAddress:'45 Example Road, Adelaide SA 5000',
+    ndisCoord:'Example Support Coordination', ndisPlanEnd:'30/09/2026',
+    mdiContact:'david@exampledriving.com.au', familyTo:'Johnny and his father'};
   S.consentObtained=true; S.selfReview=true;
   S.reportRef=AUTOTEXT.reportRef();
   ['consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]());
@@ -2696,6 +3087,12 @@ function validate(){
   COMPETENCIES.filter(c=>c.hard).forEach(c=>{ if(compStatus(c)==='miss') B('Competency '+c.id+' not evidenced','“'+c.t+'” — this is a documentation standard the report itself has to satisfy.','9','#compRows'); });
   COMPETENCIES.forEach(c=>{ if(compStatus(c)==='man') A('cp_'+c.id,'Competency '+c.id+' awaiting confirmation','“'+c.t+'” — confirm in Section 9 that you did this.','9','#compRows'); });
   if(!S.selfReview) B('Confirm you have read the report against your notes','The final check in Section 8.','8','#signoffPanel');
+  DOCS.forEach(d=>{
+    if(!docOn(d.id)) return;
+    const miss=d.needs();
+    if(miss) B(d.label+' needs '+miss,'This document is enabled but cannot be completed without it. Fill it in, or untick the document.','0','#docsPanel');
+    if(!txt(d.build().replace(/<[^>]+>/g,''))) B(d.label+' is empty','Something went wrong generating this document.','0','#docsPanel');
+  });
 
   return {blockers, advisories};
 }

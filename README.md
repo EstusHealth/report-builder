@@ -62,6 +62,19 @@ Two tiers, both enforced before export:
 
 **Advisories** — each must be individually ticked as considered. Contractions, unsupported phrasing ("seemed fine", "no issues", "I think", "obviously"), sentences over 45 words, missing terminal punctuation, thin sections by word count, short on-road duration, flagged issues that do not appear in the summary, and unedited template blocks.
 
+### Additional documents
+
+Tick any of these in **Section 0** and they appear as tabs above the preview, each exporting to Word separately. All four are generated from the same assessment data as the main report, so they cannot drift from it or contradict each other — and each carries an optional free-text paragraph for anything specific to that reader.
+
+| Document | Written for | Contains |
+| --- | --- | --- |
+| **Letter to GP / treating practitioner** | The treating doctor | One-page clinical summary: outcome, findings bearing on medical fitness to drive, medication, and an explicit list of what you are asking them to do |
+| **NDIS support recommendations** | Planner, support coordinator, plan manager | Participant goals the assessment relates to, current functional impact, what was assessed, and each recommended support with a reasonable-and-necessary rationale and expected outcome |
+| **Handover to driving instructor** | The MDI | Licence status, priority focus areas drawn from the flagged on-road issues, strengths to build on, how the client learns, safety notes, and what to report back and when |
+| **Summary for client, family or support person** | The client and whoever supervises their practice | Plain-language account of what was done, the outcome, what went well, what needs practice, how to help, and next steps |
+
+Only what belongs in each document goes into it — the NDIS participant number, for instance, appears on the NDIS document and nowhere else. Enabling a document that is missing something essential (a GP name, an NDIS number) blocks export until it is supplied.
+
 ### Sign-off
 
 A single confirmation in Section 8: that you have read the report end to end against your field notes and every finding, interpretation and recommendation is traceable to something you recorded at the time. It is a hard blocker.
