@@ -65,7 +65,9 @@ Stage 2 is built to be worked from at the bench, not just recorded into afterwar
 - **Visual fields by confrontation** — seating, testing each eye against your own field, the four quadrants, finger counting, the binocular pass, and double simultaneous stimulation for extinction. States plainly what confrontation cannot do, when to refer for formal perimetry, and what each pattern of field loss looks like on road.
 - **Ocular motility** — the H pattern for pursuit, two-target saccades, convergence and diplopia, with the reasoning for why saccadic accuracy predicts the mirror and blind-spot checks you will be rating in Stage 3.
 
-**Physical.** Each of the twelve muscle groups has a **how to test this one** card: client position, what to stabilise, the words to say, where the resistance goes and in which direction, the substitution to watch for, and a link to the technique reference. Each carries a schematic showing the stabilised segment, the moving segment at its test position, the direction of the movement asked for, and the point of resistance.
+**Physical.** Sixteen screens in the order you would run them — set the seat first, because fit determines what every later measurement means, then upper limb, lower limb, trunk and mobility. Each carries a **how to screen this one** card with the procedure, what to record, and the error that most often makes the result meaningless. See [Physical screens](#physical-screens) below.
+
+Then each of the twelve muscle groups has a **how to test this one** card: client position, what to stabilise, the words to say, where the resistance goes and in which direction, the substitution to watch for, and a link to the technique reference. Each carries a schematic showing the stabilised segment, the moving segment at its test position, the direction of the movement asked for, and the point of resistance.
 
 **Hearing and communication** has its own card, since it comes first and everything after it depends on instructions landing.
 
@@ -82,11 +84,30 @@ If answers, targets or route guidance were provided, or standard administration 
 - excluded from the auto-drafted summary, which states plainly that the result was not relied upon;
 - blocked from export until you record what happened and what you are doing about it.
 
-### Physical assessment
+### Physical screens
 
-Manual muscle testing on the MRC (Oxford) 0–5 scale across twelve groups relevant to vehicle control, each annotated with why it matters for driving and each with its own how-to card and diagram (above). Every group starts as **not tested**; a group left untested needs a documented reason, and the report states explicitly which groups were not tested and that no conclusion is drawn about them. An in-app reference card covers the grading scale, break-test technique and the grade-4-vs-5 error.
+Sixteen screens covering what the driving task actually demands of the body, grouped and ordered the way you would run them:
 
-The other physical screens start blank. Standard "within normal limits" wording is available on demand per row, rather than being the default.
+| Group | Screens |
+| --- | --- |
+| **Vehicle fit & access** | Seating position and fit to the vehicle; entry, exit and seatbelt |
+| **Upper limb** | Active range of movement; functional grasp, release and sustained grip; coordination and dexterity; sensation and proprioception |
+| **Lower limb** | Active range of movement; pedal transfer speed and accuracy; coordination and pedal modulation; sensation and proprioception |
+| **Trunk, neck & mobility** | Cervical and trunk rotation for observation checks; sitting balance, posture and seated tolerance; functional mobility and Rapid Pace Walk; pain and its effect on the driving task |
+| **Other factors** | Tone, tremor and involuntary movement; aids, orthoses, prostheses and existing modifications |
+
+Every screen behaves like the rest of the builder rather than like a free-text box:
+
+- **A status you have to set** — within functional limits / limitation identified / not tested / N/A. Nothing defaults to normal. A limitation must be described, and **not tested needs a reason**, which prints in the report. A blank is a blocker, because a reader cannot tell a clear screen from a skipped one.
+- **Measurements where the screen produces one**, entered as figures: sternum-to-wheel clearance, accelerator-to-brake transfer time, cervical rotation in degrees each side, sitting tolerance in minutes, Rapid Pace Walk in seconds.
+- **The figures are interpreted, not just stored.** Under 25 cm of wheel clearance raises the airbag problem and points at pedal extensions; under about 30° of cervical rotation raises wide-angle mirrors as a modification recommendation; a Rapid Pace Walk over 9 seconds is reported as the risk marker it is and explicitly not as a licensing test; a sitting tolerance shorter than the on-road drive is cross-checked against the duration you entered in Section 5 and flagged.
+- **A how-to-screen card per row**: numbered procedure, what to record, and the error that most often makes that particular result meaningless — testing fit anywhere but the vehicle, prompting the seatbelt, accepting a head turn the trunk produced, timing a stroll, recording a pain score with no function attached.
+
+The report prints a grouped table of what was screened with the measurements first, then states explicitly which screens were not performed and that nothing is concluded from their absence. Standard "within functional limits" wording is available on demand per row, rather than being the default.
+
+### Manual muscle testing
+
+On the MRC (Oxford) 0–5 scale across twelve groups relevant to vehicle control, each annotated with why it matters for driving and each with its own how-to card and diagram (above). Every group starts as **not tested**; a group left untested needs a documented reason, and the report states explicitly which groups were not tested and that no conclusion is drawn about them. An in-app reference card covers the grading scale, break-test technique and the grade-4-vs-5 error.
 
 ### Clinical interview
 
@@ -96,7 +117,7 @@ Sixteen occupational profile domains (thirteen core), each with prompt questions
 
 Two tiers, both enforced before export:
 
-**Blockers** — must be fixed. Set-up and record gates, required fields, core profile domains, untested muscle groups without reasons, incomplete administration records, unrated on-road items, unlinked issues, unconfirmed summaries, unresolved `{tokens}` and `[placeholders]`, `[TBC]` in the licence expiry, outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; a vision standard recorded as not met alongside a supportive outcome), missing recommendations, missing consent, and the documentation competency standards.
+**Blockers** — must be fixed. Set-up and record gates, required fields, core profile domains, unrecorded physical screens, undescribed limitations, untested screens and muscle groups without reasons, incomplete administration records, unrated on-road items, unlinked issues, unconfirmed summaries, unresolved `{tokens}` and `[placeholders]`, `[TBC]` in the licence expiry, outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; a vision standard recorded as not met alongside a supportive outcome), missing recommendations, missing consent, and the documentation competency standards.
 
 **Advisories** — each must be individually ticked as considered. Contractions, unsupported phrasing ("seemed fine", "no issues", "I think", "obviously"), sentences over 45 words, missing terminal punctuation, thin sections by word count, short on-road duration, flagged issues that do not appear in the summary, and unedited template blocks.
 
@@ -166,7 +187,7 @@ The data that drives the assessment lives in plain arrays at the top of the scri
 | `EQUIP` | Pre-assessment equipment and set-up checklist |
 | `PROFILE_DOMAINS` | Occupational profile domains and their prompt questions |
 | `MUSCLES` / `MRC` | Muscle groups tested, their how-to-test text and diagram geometry, and the grading scale |
-| `PHYS_ROWS` | Other physical screens and their standard wording |
+| `PHYS_ROWS` / `PHYS_ST` | Physical screens — how-to-screen text, measurement fields, threshold interpretation and standard wording; and the status vocabulary |
 | `CHECKLIST` | On-road performance areas and items |
 | `TEST_META` / `ADMIN_SCRIPTS` | Standardised tests, and the procedure and administration rules shown for each |
 | `STAGES` | The four assessment stages and which sections belong to each |

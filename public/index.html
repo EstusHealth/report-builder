@@ -193,6 +193,10 @@ ul.rep li{margin-bottom:2mm}
 .mgrid select{border:1px solid #d6d4cf;border-radius:4px;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11.5px;padding:4px 6px}
 .mgrid select.g-untested{background:#fbf1f1;color:#8c2f2f} .mgrid select.g-full{background:#eef7f1;color:#1e6b3a} .mgrid select.g-red{background:#fdf3e0;color:#7a5c14}
 .mgrid input.mnote{width:100%;margin-top:6px;border:1px solid #d6d4cf;border-radius:4px;padding:5px 7px;font-size:12.5px;font-family:'Barlow',sans-serif}
+.mgrid .trow{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:flex-end}
+.mgrid .trow .f{max-width:100%}
+.mgrid textarea.pnote{width:100%;margin-top:8px;border:1px solid #e4d6df;background:#fdf9fc;border-radius:4px;padding:6px 8px;font-family:'Barlow',sans-serif;font-size:12.5px;min-height:38px;resize:vertical;line-height:1.45}
+.mgrid select.st-safe{color:#1e6b3a;background:#eef7f1} .mgrid select.st-issue{color:#8c2f2f;background:#fbf0f0} .mgrid select.st-na{color:var(--muted)}
 .refcard{border:1px solid #d9e8ec;background:#f4f8f9;border-radius:5px;padding:9px 11px;margin:8px 0 12px;font-size:12px;line-height:1.5;color:#274b53}
 .refcard h5{margin:0 0 5px;font-family:'Oswald',sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--navy)}
 .refcard ul{margin:4px 0 0;padding-left:16px} .refcard li{margin-bottom:3px}
@@ -333,7 +337,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   .f label{font-size:11.5px}
   .f input[type=text],.f input[type=date],.f input[type=number],.f select,.f textarea,
   .clrow textarea,.clrow select,.reccard textarea,.reccard .params input,.reccard .params select,
-  .medrow input,.mgrid select,.mgrid input.mnote,.eqrow select,.eqrow input.eqwhy,
+  .medrow input,.mgrid select,.mgrid input.mnote,.mgrid textarea.pnote,.eqrow select,.eqrow input.eqwhy,
   .adminbox select,.adminbox input,#noteDock .ndcap textarea,#noteDock .ndcap select{
     font-size:16px;padding:11px 12px;min-height:46px}          /* 16px stops iOS zoom-on-focus */
   .f textarea,.clrow textarea,.reccard textarea{min-height:84px;line-height:1.5}
@@ -858,8 +862,12 @@ body.preview-hidden #formPane{width:100%;border-right:none}
     <div class="f w50"><label>Recommend Orthoptist / Ophthal / Optometrist review</label><select data-bind="eyeReview"><option>Yes</option><option>No</option></select></div>
   </div>
 
+  <div class="subhead">Physical screens for the driving task</div>
+  <div class="hint">Sixteen screens, in the order you would run them: <b>set the seat first</b>, because fit determines what every later measurement means, then upper limb, lower limb, trunk and mobility. Nothing is pre-filled and nothing starts as normal — each screen carries a status you have to set, and <b>Not tested</b> with a reason is a valid answer where a blank is not. Where a screen produces a number, enter it: the builder interprets it against the driving thresholds and the client's own assessment. Each carries a <b>how to screen this one</b> card with the procedure, what to record, and the error that most often makes the result meaningless.</div>
+  <div id="physRows"></div>
+
   <div class="subhead">Manual muscle testing (MRC grades)</div>
-  <div class="hint">Nothing here is pre-filled as normal. Each muscle group starts as <b>not yet tested</b> and you record the grade you actually elicited — the report prints only what you tested, and says plainly what you did not. Every group carries a <b>how to test this one</b> card: position, what to stabilise, the words to say, where the resistance goes, and the error that most often produces a wrong grade.</div>
+  <div class="hint">The screens above establish what the client can do; this grid measures the power behind it. Nothing here is pre-filled as normal. Each muscle group starts as <b>not yet tested</b> and you record the grade you actually elicited — the report prints only what you tested, and says plainly what you did not. Every group carries a <b>how to test this one</b> card: position, what to stabilise, the words to say, where the resistance goes, and the error that most often produces a wrong grade.</div>
   <details class="ref"><summary>▸ Muscle testing reference — MRC grading &amp; technique</summary>
     <div class="refcard">
       <h5>MRC / Oxford scale</h5>
@@ -890,9 +898,6 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   </details>
   <div id="muscleRows"></div>
 
-  <div class="subhead">Other physical abilities &amp; restrictions</div>
-  <div class="hint">Each row starts blank. Use <b>standard wording</b> only when you have actually performed that screen and it was unremarkable.</div>
-  <div id="physRows"></div>
   <div class="row"><div class="f w100"><label>Summary of physical skills for driving <span class="resetlink" onclick="resetField('physSummary')">draft from what I recorded</span></label><textarea data-bind="physSummary" rows="2"></textarea></div></div>
   <div id="physVerify"></div>
 
@@ -1218,19 +1223,263 @@ const NEEDS_ROWS = [
   {id:'commercial', label:'Commercial use', opts:['No','Yes']},
 ];
 
+/* ---------- physical screens ----------
+   Each screen is a card: a status, the measurements that screen actually
+   produces, a note, and a how-to card covering position, procedure, what to
+   record and the error that most often makes the result meaningless. Nothing
+   is pre-filled — `def` is offered on demand once a screen is marked within
+   functional limits, never as a default. `core:false` rows raise an advisory
+   rather than a blocker when left unrecorded. */
+const PHYS_ST = {
+  '':   {label:'? Not yet recorded',                      cls:'na'},
+  wfl:  {label:'✓ Within functional limits for driving',  cls:'safe'},
+  lim:  {label:'⚠ Limitation identified',                 cls:'issue'},
+  nt:   {label:'— Not tested',                            cls:'na'},
+  na:   {label:'N/A for this client',                     cls:'na'},
+};
 const PHYS_ROWS = [
-  {id:'hand', label:'Hand dominance', group:'', def:'Right'},
-  {id:'ulRom', label:'Active ROM', group:'UPPER LIMB', def:'Full active range of movement (shoulders, elbows, wrists and digits).'},
-  {id:'ulStr', label:'Strength', group:'UPPER LIMB', def:'Normal strength against resistance, including grip, elbow, triceps and wrist strength.'},
-  {id:'ulCoord', label:'Coordination', group:'UPPER LIMB', def:'Normal finger-to-nose and finger-to-finger coordination; pronation/supination fast and controlled.'},
-  {id:'ulSens', label:'Sensation / proprioception', group:'UPPER LIMB', def:'No issues detected. Replicated arm positions with eyes closed (steering, mirrors, seatbelt, window).'},
-  {id:'llRom', label:'Active ROM', group:'LOWER LIMB', def:'Full active range of movement (hips, knees and ankles).'},
-  {id:'llStr', label:'Strength', group:'LOWER LIMB', def:'Normal strength against resistance.'},
-  {id:'llCoord', label:'Coordination', group:'LOWER LIMB', def:'No issues observed. Foot-pivot simulation (transferring the foot between the accelerator and brake) was performed accurately with controlled placement.'},
-  {id:'llSens', label:'Sensation / proprioception', group:'LOWER LIMB', def:'No issues detected on testing.'},
-  {id:'tnRom', label:'Range of movement', group:'TRUNK / NECK', def:'Full rotational range of movement in neck and trunk.'},
-  {id:'balance', label:'Balance / mobility / transfers', group:'TRUNK / NECK', def:'No issues with sitting balance, mobility or transfers.'},
-  {id:'pain', label:'Pain', group:'TRUNK / NECK', def:'No pain or discomfort reported.'},
+ {id:'hand', g:'GENERAL', label:'Hand dominance', simple:true, ph:'e.g. Right'},
+
+ {id:'fit', g:'VEHICLE FIT & ACCESS', label:'Seating position & fit to the vehicle',
+  why:'Reach to the pedals and wheel, sightline over the bonnet, and clearance from the airbag',
+  m:[{k:'v1', num:true, label:'Sternum to wheel centre (cm)', w:'110px', rep:'Sternum to steering wheel centre {} cm.'}],
+  interp:p=>{ const v=parseFloat(p.v1); if(isNaN(v)) return null;
+    return v<25 ? {pill:'fail', txt:`At ${v} cm the driver sits inside the usual 25 cm (10 inch) clearance recommended between the breastbone and the centre of the steering wheel. Where the seat cannot be moved back without losing the pedals, pedal extensions are the answer rather than sitting closer — record that as a modification recommendation in Section 6.`}
+                : {pill:'pass', txt:`${v} cm clearance from the steering wheel centre, at or above the usual 25 cm (10 inch) recommendation.`}; },
+  how:[
+    'Do this <b>in the assessment vehicle</b>, seated as they will drive, before the drive. Fit is a property of this person in that car; it cannot be inferred from a clinic chair.',
+    'Set the seat so the ball of the foot reaches the brake with the heel on the floor and the knee still slightly bent at <b>full</b> brake travel. A knee that locks straight at full braking is a finding — emergency braking force comes from the hip and knee, not the ankle alone.',
+    'Measure from the breastbone to the centre of the steering wheel. The usual recommendation is at least 25 cm (10 inches), to keep the driver clear of the airbag deployment zone.',
+    'Check the sightline — roughly three inches of clear vision over the top of the wheel. A driver looking <i>through</i> the wheel rather than over it needs a cushion or seat-height change, and that changes the airbag clearance you just measured.',
+    'Check they can reach and operate the handbrake, gear selector, indicator and wiper stalks and the ignition <b>without leaving the driving position</b>.',
+    'Head restraint: top level with the top of the head, and as close to the back of the head as is comfortable.',
+  ],
+  record:'Seat position, the sternum-to-wheel measurement, whether the standard set-up was achievable, and what had to change to achieve it. Name any cushion, riser or pedal extension used — it becomes a recommendation or a licence condition.',
+  watch:'Assessing fit anywhere other than the vehicle they will drive.',
+  def:'Achieved and maintained a safe driving position, with adequate clearance from the steering wheel, full reach to the pedals and primary controls, and a clear sightline over the steering wheel.'},
+
+ {id:'access', g:'VEHICLE FIT & ACCESS', label:'Entry, exit and seatbelt',
+  why:'Getting into the driving position independently, and securing the belt every time',
+  how:[
+    'Watch the whole sequence — standing beside the car, into the driving position, belt on — then the reverse. <b>Do not help.</b> The question is whether it is independent, safe and repeatable, not whether it is elegant.',
+    'Note what they hold on to: door frame, roof, seat back, or the door itself taking their weight.',
+    'Seatbelt: watch the reach across and behind the shoulder, the grasp on the tongue, the insertion, and the release. It is a shoulder-rotation and grasp task, and it is the one people quietly stop doing when it becomes hard.',
+    'Time it if it is laboured. A driver who needs forty seconds and both hands to secure a belt will not always secure it.',
+    'Ask whether today is a good day, and what it is like first thing in the morning or at the end of a long drive.',
+  ],
+  record:'Independent or assisted; what was used for support; whether the belt was fastened without prompting and released without difficulty; any aid used (belt reacher, handybar, swivel cushion).',
+  watch:'Prompting the belt. If you remind them, you have lost the observation — sit still and let it happen.',
+  def:'Entered and exited the vehicle independently and safely, and fastened and released the seatbelt without difficulty or prompting.'},
+
+ {id:'ulRom', g:'UPPER LIMB', label:'Active range of movement — shoulder, elbow, wrist, hand',
+  why:'Steering through range, reaching the controls, hand-over-hand recovery',
+  how:[
+    'Screen <b>actively</b> first — driving is an active task. Measure passively only what is actively limited.',
+    'Shoulder: flexion and abduction to about 90° covers a normal steering arc; more is needed for the seatbelt and a full hand-over-hand turn. Ask them to mime turning a wheel through a full revolution, both directions.',
+    'Elbow: full flexion and extension. A fixed flexion deformity dictates where the seat has to be, which changes airbag clearance — so it feeds straight back into the fit row above.',
+    'Forearm: pronation and supination through full range. That is what a wheel rotation actually demands.',
+    'Wrist and digits: extension, and a full composite fist. Check the thumb opposes far enough to grip the rim rather than hook it.',
+    'Goniometer anything that looks limited and record the degrees. "Reduced" is not a measurement.',
+  ],
+  record:'Which movement, which side, degrees where measured, whether the limit is pain, stiffness or structural, and whether it was reproducible.',
+  watch:'Trunk substitution. A client who leans and rotates can produce an apparently normal steering arc from a shoulder that will not do it — watch the trunk, not the hand.',
+  def:'Full active range of movement in shoulders, elbows, forearms, wrists and digits, sufficient for steering through range and for reaching all primary controls.'},
+
+ {id:'ulGrip', g:'UPPER LIMB', label:'Functional grasp, release and sustained grip',
+  why:'Holding the wheel for a whole drive, and operating the handbrake, selector and stalks',
+  how:[
+    'This is not the dynamometer reading in the muscle grid that follows. That is <b>peak</b> force; this is whether the hand does the job for as long as the job lasts.',
+    'Wheel grip: hold the wheel (or a comparable rim) at nine-and-three for 60 seconds. Watch for the grip degrading, the wrist dropping, or the hand repositioning to keep hold.',
+    'Release: ask for a quick release and re-grip, repeatedly. A hand that grips well but releases slowly is a problem for hand-over-hand steering and for the handbrake button.',
+    'Test the <b>actual shapes</b>, not a generic pinch: the ignition key, the indicator stalk, the seatbelt tongue, the handbrake button, the gear selector.',
+    'Both hands, and compare. Ask which hand does most of the steering.',
+  ],
+  record:'Sustained grip time before degradation, quality of release, any specific control that was difficult, and side difference.',
+  watch:'Testing a three-second squeeze and calling it grip. The drive is forty-five minutes.',
+  url:'https://www.physio-pedia.com/Grip_Strength',
+  def:'Grasp, sustained grip and release were sufficient for steering and for operating the handbrake, gear selector and stalk controls without difficulty.'},
+
+ {id:'ulCoord', g:'UPPER LIMB', label:'Coordination & dexterity',
+  why:'Smooth steering corrections, and operating controls without looking at them',
+  how:[
+    'Finger-to-nose, eyes open then <b>closed</b>, both sides. Look for dysmetria — over- or under-shooting — and for an intention tremor that grows as the finger nears the target.',
+    'Rapid alternating movements: pronation and supination on the thigh, as fast as they can, both sides. Dysdiadochokinesia here shows up on road as jerky, over-corrected steering.',
+    'Finger-to-finger between your moving finger and their nose, which adds a tracking demand closer to the real task.',
+    'A dexterity task with a real object — fastening the belt, turning a key, working an indicator stalk. Time it if it looks slow.',
+    'Do at least one item with the eyes closed. Steering corrections are made without looking at the hands.',
+  ],
+  record:'Which test, which side, what you saw (dysmetria, tremor, slowing), and whether it worsened with speed or with the eyes closed.',
+  watch:'Testing with eyes open only. Vision compensates for a proprioceptive problem; driving does not give it the chance.',
+  def:'Coordination was within functional limits, with accurate finger-to-nose bilaterally and fast, controlled pronation and supination.'},
+
+ {id:'ulSens', g:'UPPER LIMB', label:'Sensation & proprioception — upper limb',
+  why:'Feeling the wheel, and knowing where the hands are without looking',
+  how:[
+    'Light touch with a cotton wisp or fingertip, eyes closed, comparing side to side and proximal to distal. Map any deficit to a dermatome or peripheral nerve distribution and <b>name it</b>.',
+    'Proprioception: hold the <b>sides</b> of the thumb or index finger — not the top and bottom, which gives a pressure cue — move it, and ask which way with the eyes closed.',
+    'Then position matching: place one arm, ask them to match it with the other, eyes closed. That is the steering task in miniature.',
+    'Where sensation is reduced, test stereognosis against a real control: can they find and identify the indicator stalk by feel alone?',
+    'Ask about altered sensation as well as absent — burning, pins and needles, hypersensitivity. A hand that hurts to grip is as much a problem as one that cannot feel.',
+  ],
+  record:'Modality, distribution, side, and the functional consequence you observed — not just "reduced".',
+  watch:'Testing over clothing, and glancing at the limb you are about to touch, which cues the answer.',
+  def:'Light touch and proprioception were intact throughout the upper limbs, with accurate position matching with the eyes closed.'},
+
+ {id:'llRom', g:'LOWER LIMB', label:'Active range of movement — hip, knee, ankle',
+  why:'Lifting the foot between pedals, and the ankle range full brake travel needs',
+  how:[
+    'Seated, in the position they will drive in. Hip flexion sufficient to clear the foot between pedals without lifting the whole leg.',
+    'Knee flexion and extension through the arc the pedal travel demands.',
+    'Ankle dorsiflexion and plantarflexion are the critical ones. Full brake travel needs ankle range <b>with the heel planted</b>; a stiff ankle forces the driver to lift the whole leg, which is slower and less accurate.',
+    'Check hip abduction and external rotation too — that is what getting the leg out of the footwell needs.',
+    'Goniometer anything limited and record the degrees.',
+  ],
+  record:'Movement, side, degrees, the cause of the limit, and specifically whether full brake travel was achievable with the heel on the floor.',
+  watch:'Testing the ankle unloaded only. The range that exists without resistance is not always the range that exists under braking force.',
+  def:'Full active range of movement at hips, knees and ankles, sufficient for pedal transfer and for full brake travel with the heel maintained on the floor.'},
+
+ {id:'llTransfer', g:'LOWER LIMB', label:'Pedal transfer speed & accuracy',
+  why:'The physical half of emergency braking',
+  m:[{k:'v1', num:true, label:'Accelerator → brake (sec)', w:'110px', rep:'Accelerator-to-brake transfer averaged {} seconds over repeated trials.'}],
+  interp:p=>{ const v=parseFloat(p.v1); if(isNaN(v)) return null;
+    const ref='A driver expecting the signal transfers the foot in about 0.70–0.75 seconds; a surprise event takes roughly twice that. A clinic simulation is not an instrumented reaction-time test and should not be reported as one.';
+    return v>1.0 ? {pill:'fail', txt:`${v} seconds is visibly slow against that reference. ${ref} At 60 km/h each additional tenth of a second is another 1.7 metres of travel — say what that means for this driver rather than reporting the number alone.`}
+                 : {pill:'pass', txt:`${v} seconds. ${ref} Report the quality of the movement — heel down, clean clearance, accurate placement — alongside the time.`}; },
+  how:[
+    'Best done <b>in the vehicle with the engine off</b>. Failing that, mark two targets on the floor at the pedal spacing of the assessment vehicle.',
+    'Heel on the floor, foot on the accelerator. On your signal, move to the brake and press.',
+    'Repeat at least five times at <b>irregular intervals</b>, so they cannot anticipate. If they can count you in, you are measuring anticipation rather than transfer.',
+    'Time it, and watch the path: does the foot clear the accelerator or catch on it, does it land centrally on the brake or on the edge, does the whole leg lift instead of pivoting at the heel?',
+    'Test the left foot as well if left-foot accelerator use or a modification is in question.',
+  ],
+  record:'Method used, pedal spacing, number of trials, typical time, accuracy of placement, and whether the heel stayed down.',
+  watch:'A predictable rhythm, and reporting a clinic figure as though it were an instrumented reaction time.',
+  def:'Transferred the foot between accelerator and brake quickly and accurately, with the heel maintained on the floor and consistent placement on the pedal.'},
+
+ {id:'llCoord', g:'LOWER LIMB', label:'Lower limb coordination & pedal modulation',
+  why:'Smooth, graded braking rather than on-off pedal use',
+  how:[
+    'Heel-to-shin, eyes open then closed, both sides. Look for ataxia and for the heel wandering off the shin.',
+    'Foot tapping: count taps in ten seconds, each side, and compare. Watch for <b>slowing across the ten seconds</b> as well as the raw count.',
+    'Graded pressure: ask them to press your hand with the ball of the foot at light, then medium, then hard, and back down again. That is progressive braking, and it is precisely what an on-off foot cannot do.',
+    'Watch whether the foot needs to be looked at. A driver who glances down to find the brake is taking their eyes off the road to stop.',
+  ],
+  record:'Test used, side, taps per ten seconds, whether graded pressure was controllable, and whether visual guidance was needed.',
+  watch:'Assuming normal strength means normal control. A strong leg with poor modulation produces harsh braking — the passenger notices before the assessor does.',
+  def:'Lower limb coordination was within functional limits, with accurate heel-to-shin bilaterally and graded, controlled pedal pressure.'},
+
+ {id:'llSens', g:'LOWER LIMB', label:'Sensation & proprioception — lower limb',
+  why:'Knowing where the foot is, and how hard it is pressing, without looking',
+  how:[
+    'Light touch over the dorsum <b>and the sole</b>, eyes closed, both sides, and map any deficit.',
+    'Plantar sensation matters specifically — pedal feedback comes through the ball of the foot. Where neuropathy is suspected, a 10 g monofilament at the standard sites is the screen, and loss of protective sensation is a referral, not a footnote.',
+    'Proprioception at the great toe and the ankle, eyes closed: hold the sides, move up or down, ask which way.',
+    'Position matching: place one foot on a target with the eyes closed and ask them to match it with the other.',
+    'Ask about numbness that comes and goes, and whether the foot ever feels like it is not there. That is how a driver describes a foot that slips off a pedal.',
+  ],
+  record:'Modality, distribution, side, whether protective sensation was present, and the functional consequence.',
+  watch:'Recording "sensation intact" from a light touch to the shin. The sole of the foot is the surface that does the driving.',
+  def:'Light touch and proprioception were intact throughout the lower limbs, including plantar sensation, with accurate position matching with the eyes closed.'},
+
+ {id:'tnRom', g:'TRUNK, NECK & MOBILITY', label:'Cervical & trunk rotation for observation checks',
+  why:'Blind-spot and shoulder checks, and reversing — the movements mirrors do not replace',
+  m:[{k:'v1', num:true, label:'Cervical rotation — left (°)', w:'104px', rep:'Cervical rotation {}° to the left'},
+     {k:'v2', num:true, label:'right (°)', w:'104px', rep:'and {}° to the right.'}],
+  interp:p=>{ const L=parseFloat(p.v1), R=parseFloat(p.v2); if(isNaN(L)&&isNaN(R)) return null;
+    const low=[!isNaN(L)&&L<30?'left':'', !isNaN(R)&&R<30?'right':''].filter(Boolean);
+    const asym=(!isNaN(L)&&!isNaN(R)&&Math.abs(L-R)>=20)? ` The ${Math.abs(L-R)}° difference between sides is itself worth reporting — say which check it compromises.`:'';
+    return low.length
+      ? {pill:'fail', txt:`Rotation to the ${joinList(low)} is below about 30°, the level at which driver-screening guidance treats range as inadequate for an over-shoulder check. The options are therapy to improve range, or wide-angle and blind-spot mirrors — which is a vehicle modification recommendation and belongs in Section 6, not just in this note.${asym}`}
+      : {pill:'pass', txt:`Rotation is at or above the ~30° screening threshold on both sides (normal is roughly 80–90°). Record whether a real over-shoulder check was achieved <b>with the seatbelt on</b>, which is the movement that has to happen.${asym}`}; },
+  how:[
+    'Seated upright, <b>shoulders squared and held</b>, so the trunk cannot do the work.',
+    '"Turn your head and look over your shoulder as if you were checking your blind spot." Both directions. Measure the degrees rather than describing them.',
+    'Normal cervical rotation is roughly 80–90° each way. Widely used driver-screening guidance treats at least about 30° of lateral rotation to each side as the minimum; below that, refer for therapy to improve range, or recommend wide-angle and blind-spot mirrors.',
+    'Then trunk rotation with the pelvis held, and then the two combined.',
+    '<b>Repeat it in the vehicle with the seatbelt fastened.</b> A belt restricts rotation, and the belted figure is the one that matters.',
+    'Ask about dizziness and pain, and whether the position can be <b>held</b> rather than just reached — reversing is a sustained rotation, not a snapshot.',
+  ],
+  record:'Degrees to each side, whether the movement was painful, hesitant or provoked dizziness, whether it was symmetrical, and whether a real over-shoulder check was achieved with the belt on.',
+  watch:'Accepting a head turn the trunk produced. Hold the shoulders.',
+  url:'https://www.merckmanuals.com/professional/geriatrics/the-older-driver/functional-assessment-of-the-older-driver',
+  def:'Cervical and trunk rotation were sufficient for effective shoulder and blind-spot checks bilaterally, achieved without pain, hesitation or dizziness.'},
+
+ {id:'sitting', g:'TRUNK, NECK & MOBILITY', label:'Sitting balance, posture & seated tolerance',
+  why:'Holding a stable driving posture for the length of a real trip',
+  m:[{k:'v1', num:true, label:'Sitting tolerated (min)', w:'110px', rep:'Sustained sitting tolerated for approximately {} minutes.'}],
+  interp:p=>{ const v=parseFloat(p.v1); if(isNaN(v)) return null;
+    const d=parseFloat(S.duration);
+    if(!isNaN(d)&&v<d) return {pill:'fail', txt:`Reported sitting tolerance (${v} min) is shorter than the on-road assessment itself (${d} min). Either the drive has to be broken up and that recorded in Section 5, or the tolerance figure needs re-checking — and either way the trips this client actually wants to make need testing against this number.`};
+    return {pill:'pass', txt:`${v} minutes. Check that against the journeys they described in the occupational profile, not just against the assessment drive — the trip that matters may be the two-hour one.`}; },
+  how:[
+    'Static sitting balance first: feet supported, arms unsupported, hold 30 seconds. Then dynamic — reaching outside the base of support to the glovebox, the far door, over the shoulder.',
+    'Watch what happens when <b>both hands are occupied</b>. A driver who needs a hand for postural support has one hand for the wheel.',
+    'Seated tolerance is the item that gets missed. Ask how long they can sit before pain, numbness or fatigue forces a position change — then test that against the trips they said they wanted to make.',
+    'Observe posture drift across the assessment itself. You have them for over an hour; compare where they are at the end with where they started.',
+    'Test trunk control against a light, expected displacement at the shoulder. Braking and cornering do exactly that, repeatedly.',
+  ],
+  record:'Static and dynamic sitting balance, whether a hand was needed for support, minutes tolerated before a position change, and end-of-session posture compared with the start.',
+  watch:'Testing at minute two and generalising to minute fifty.',
+  def:'Maintained a stable, symmetrical seated posture with both hands free, with dynamic sitting balance sufficient for reaching the vehicle controls, and tolerated sustained sitting without difficulty.'},
+
+ {id:'walk', g:'TRUNK, NECK & MOBILITY', label:'Functional mobility & Rapid Pace Walk',
+  why:'Balance, stamina and lower limb function — a well-evidenced physical risk marker',
+  m:[{k:'v1', num:true, label:'Rapid Pace Walk (sec)', w:'110px', rep:'Rapid Pace Walk completed in {} seconds.'},
+     {k:'v2', label:'Walking aid', w:'150px', rep:'Walking aid used: {}.'}],
+  interp:p=>{ const v=parseFloat(p.v1); if(isNaN(v)) return null;
+    return v>=9 ? {pill:'fail', txt:`A Rapid Pace Walk over 9 seconds has been associated with roughly a three-fold increase in the risk of an at-fault crash. It is a <b>risk marker that tells you to look harder</b> — at balance, lower limb strength, endurance and pedal control — not a licensing test, and it must not be reported as one.`}
+                : {pill:'pass', txt:`Under the 9-second mark used in the Assessment of Driving-Related Skills battery. Record the quality of the turn as well as the time — a fast walk with a wide, hesitant turn is still a finding.`}; },
+  how:[
+    'Mark a <b>10-foot (3 m)</b> path with a clear turning point at the far end.',
+    'Instruct: "Walk the length of this path, turn around, and walk back — at the fastest pace you feel safe and comfortable doing."',
+    'Time from the first step to the last. The usual walking aid is permitted; <b>record which one</b>, because the time means something different with a frame.',
+    'This is the Rapid Pace Walk from the Assessment of Driving-Related Skills battery. Over 9 seconds has been associated with roughly a three-fold increase in at-fault crash risk. It is a screening risk marker, not a licensing test.',
+    'Watch the <b>turn</b>, not just the clock. Hesitancy, a wide multi-step turn, or reaching for support says more about balance and vestibular function than the total time does.',
+    'Compare it with how they walked from the waiting room. People perform for a stopwatch.',
+  ],
+  record:'Time in seconds, aid used, quality of the turn, any unsteadiness, and how it compared with their unobserved walking.',
+  watch:'Timing a stroll. If they are ambling, repeat the instruction — the pace asked for is the fastest they feel safe at.',
+  url:'https://www.nhtsa.gov/files/process-and-outcomes-evaluation-screening-programs-assessment-driving-related-skills-adres',
+  def:'Mobilised independently without a walking aid, completing the Rapid Pace Walk within the expected range with a controlled turn.'},
+
+ {id:'pain', g:'TRUNK, NECK & MOBILITY', label:'Pain, and its effect on the driving task',
+  why:'Pain limits range, breaks concentration, and changes across the length of a drive',
+  how:[
+    'Ask for a current rating and a typical-day range — then immediately ask what it does to the <b>specific movements driving needs</b>: the shoulder check, the pedal, sitting still.',
+    'Establish the pattern across the day. A reliable window in which they are better is a licence-condition candidate, not a footnote.',
+    'Ask what they take, <b>when</b> they take it, and whether it makes them drowsy. Cross-check against the medication list in Section 1 — a driver whose pain is only controlled by something sedating has a problem in both directions.',
+    'Watch for pain behaviour during the physical screen and note where it appeared, rather than relying on the reported score.',
+    'Ask directly whether pain has ever stopped them mid-drive, made them pull over, or made them avoid a trip.',
+  ],
+  record:'Current and typical rating, location, provoking factors, the pattern across the day, its interaction with medication timing, and the specific driving movements it limits.',
+  watch:'Recording a number with no function attached. "6/10" tells the reader nothing; "6/10 right shoulder, reducing the over-shoulder check to a glance after twenty minutes of driving" is a finding.',
+  def:'No pain or discomfort was reported at rest or on testing, and none was observed to limit the movements required for the driving task.'},
+
+ {id:'tone', g:'OTHER FACTORS', label:'Tone, tremor & involuntary movement', core:false,
+  why:'Spasticity, tremor and dyskinesia affect fine control of the wheel and pedals',
+  how:[
+    'Passive range at elbow, wrist, knee and ankle at <b>slow then fast</b> speed — spasticity is velocity-dependent and a slow-only test misses it. Note catch and clonus.',
+    'Tremor in all three states: at rest, on posture (arms outstretched), and on action (finger-to-nose). Which one it is matters — a rest tremor that vanishes on action is a different driving problem from an intention tremor that worsens at the target.',
+    'Note dyskinesia and its relationship to <b>medication timing</b>, cross-referenced to Section 1. Peak-dose dyskinesia is a driving problem with a schedule attached, and a schedule can become a licence condition.',
+    'Test in the position that matters. Ankle clonus in a driver whose foot rests on a brake pedal is a specific and serious finding.',
+    'Fatigue the limb and re-test. Tone and tremor often only declare themselves after sustained effort — which is what a drive is.',
+  ],
+  record:'Type, distribution, severity, provoking factors, relationship to medication timing, and the specific control it interferes with.',
+  watch:'Testing tone slowly only, and testing tremor at rest only.',
+  def:'Tone was within normal limits throughout, with no tremor, clonus or involuntary movement observed at rest, on posture or on action.'},
+
+ {id:'aids', g:'OTHER FACTORS', label:'Aids, orthoses, prostheses & existing modifications', core:false,
+  why:'What they already use has to be tested with them, and named in the licence conditions',
+  how:[
+    'Record everything actually in use: walking aid, AFO, splint, prosthesis, cushion, transfer aid, and any modification already fitted to a vehicle.',
+    '<b>Test the driving task with the aid in place</b>, exactly as they will drive. An AFO changes ankle range and pedal feel; a splint changes grip; a cushion changes airbag clearance and sightline — so re-check the fit row after adding one.',
+    'Check the condition and fit of what they have. A worn AFO or an ill-fitting splint is a finding in its own right.',
+    'Where a modification is already fitted, check that it works, that they can use it, and that it <b>matches what is recorded on the licence</b>. A modification in the car but not on the licence is a problem to raise now.',
+    'Anything you recommend has to appear in Section 6 as a recommendation, and where it is required for safe driving, as a licence condition.',
+  ],
+  record:'Each item, whether it was used during the assessment, its condition, and whether it is already recorded as a licence condition.',
+  watch:'Assessing without the aid because it is quicker. You are assessing the driver plus their equipment, because that is what will be on the road.',
+  def:'No aids, orthoses, prostheses or vehicle modifications are currently used, and none were required during the assessment.'},
 ];
 
 const CHECKLIST = [
@@ -1290,6 +1539,9 @@ const EQUIP = [
   {id:'e8', n:'Plinth / chair positioned for muscle testing and ROM'},
   {id:'e9', n:'Goniometer available (if ROM limitation anticipated)'},
   {id:'e10', n:'Dynamometer available (if grip strength indicated)'},
+  {id:'e10a', n:'Ten-foot (3 m) path marked out with a clear turning point', s:'For the Rapid Pace Walk — pace it once and mark it, not on the day'},
+  {id:'e10b', n:'Tape measure for the seating position check'},
+  {id:'e10c', n:'10 g monofilament available (if neuropathy is anticipated)'},
  ]},
  {g:'Cognitive / perceptual battery', items:[
   {id:'e11', n:'Trail Making Test A &amp; B — sample and test forms, both parts'},
@@ -1520,7 +1772,7 @@ const COMPETENCIES = [
  {id:'2.10', t:'Screens visual function; meets AFTD visual requirements (acuity and confrontation fields)', ev:()=>!!txt(S.vaUR)&&!!txt(S.vaCB)&&S.vFields!=='nt'},
  {id:'2.11', t:'Screens communication skills as required for the driving task', ev:()=>!!txt(S.commScreen)},
  {id:'2.12', t:'Screens hearing as required for the driving task', ev:()=>!!S.hearing},
- {id:'2.13', t:'Screens sensory-motor function as required for the driving task', ev:()=>musclesTested()>0 && PHYS_ROWS.every(r=>txt(S.phys[r.id]))},
+ {id:'2.13', t:'Screens sensory-motor function as required for the driving task', ev:()=>musclesTested()>0 && PHYS_ROWS.every(physDone)},
  {id:'2.14', t:'Screens cognitive-behavioural and perceptual function as required for the driving task', ev:()=>validTests()>=3 && wc(S.genCog)>=40},
  {id:'2.15', t:'Screens road law knowledge as required for the driving task', ev:()=>S.tests.intersection.on&&!!txt(S.tests.intersection.score)},
  {id:'2.16', t:'Considers the impact of the off-road assessment results on the driving task', ev:()=>wc(S.cogSummary)>=50},
@@ -1616,7 +1868,7 @@ function freshState(){
     compManual:{}, selfReview:false,
     docs:{gp:false,ndis:false,mdi:false,family:false}, docMeta:{}, activeDoc:'report',
   };
-  PHYS_ROWS.forEach(r=> s.phys[r.id]='');
+  PHYS_ROWS.forEach(r=> s.phys[r.id]={st:'', v1:'', v2:'', note:''});
   MUSCLES.forEach(m=> s.muscles[m.id]={tested:'no', grade:'', note:''});
   NEEDS_ROWS.forEach(r=> s.needs[r.id]={val:r.opts[0], note:''});
   CHECKLIST.forEach(g=>g.items.forEach(it=> s.checklist[it.id]={st:'unrated', note:'', refs:[], sev:'dev'}));
@@ -1692,13 +1944,32 @@ const AUTOTEXT = {
     const tested=MUSCLES.filter(m=>S.muscles[m.id].tested==='yes'&&S.muscles[m.id].grade);
     const untested=MUSCLES.filter(m=>S.muscles[m.id].tested==='no');
     const reduced=tested.filter(m=>S.muscles[m.id].grade!=='5');
-    if(!tested.length) return `No manual muscle testing has been recorded, so no summary of physical skills can be drafted. Record what you tested first.`;
-    let t=`Manual muscle testing was completed for ${tested.length} muscle group${tested.length!==1?'s':''} relevant to vehicle control. `;
-    t+= reduced.length
-      ? `Reduced power was identified in ${reduced.map(m=>m.n.toLowerCase()+' (grade '+S.muscles[m.id].grade+')').join(', ')}; the functional implications for ${reduced.some(m=>m.g==='LOWER LIMB')?'pedal control and emergency braking':'steering and vehicle control'} are considered below. `
-      : `Power was graded 5/5 throughout the groups tested, with full range against full resistance. `;
-    if(untested.length) t+=`${untested.length} group${untested.length!==1?'s were':' was'} not formally tested and no conclusion is drawn about ${untested.length!==1?'them':'it'}. `;
-    t+= reduced.length? `` : `On the basis of what was tested, {name}'s physical abilities are within functional limits for driving a light automatic vehicle and no vehicle modifications are indicated.`;
+    const screens=PHYS_ROWS.filter(r=>!r.simple);
+    const done=screens.filter(r=>['wfl','lim'].includes(S.phys[r.id].st));
+    const lim=screens.filter(r=>S.phys[r.id].st==='lim');
+    const notDone=screens.filter(r=>S.phys[r.id].st==='nt');
+    if(!tested.length && !done.length) return `No physical screening has been recorded, so no summary of physical skills can be drafted. Record what you screened first.`;
+    let t='';
+    if(done.length) t+=`${done.length} of ${screens.length} physical screens relevant to the driving task ${done.length===1?'was':'were'} completed. `;
+    if(lim.length){
+      t+=`${lim.length===1?'A limitation was':'Limitations were'} identified in ${joinList(lim.map(r=>r.label.toLowerCase()))}. `;
+      /* the measurements are the part most often left out of the prose */
+      const figs=lim.map(r=>physText(r)).filter(Boolean);
+      if(figs.length) t+=figs.join(' ')+' ';
+      t+=`The bearing of ${lim.length===1?'this':'these'} on vehicle control is set out below — state what {he} could and could not do, not only the measurement. `;
+    } else if(done.length){
+      t+=`Each was within functional limits for the driving task. `;
+    }
+    if(tested.length){
+      t+=`Manual muscle testing was completed for ${tested.length} muscle group${tested.length!==1?'s':''} relevant to vehicle control. `;
+      t+= reduced.length
+        ? `Reduced power was identified in ${reduced.map(m=>m.n.toLowerCase()+' (grade '+S.muscles[m.id].grade+')').join(', ')}; the functional implications for ${reduced.some(m=>m.g==='LOWER LIMB')?'pedal control and emergency braking':'steering and vehicle control'} are considered below. `
+        : `Power was graded 5/5 throughout the groups tested, with full range against full resistance. `;
+    }
+    if(untested.length) t+=`${untested.length} muscle group${untested.length!==1?'s were':' was'} not formally tested and no conclusion is drawn about ${untested.length!==1?'them':'it'}. `;
+    if(notDone.length) t+=`The following screens were not performed and nothing is concluded from their absence: ${joinList(notDone.map(r=>r.label.toLowerCase()))}. `;
+    if(!reduced.length && !lim.length && done.length)
+      t+=`On the basis of what was screened, {name}'s physical abilities are within functional limits for driving a light automatic vehicle and no vehicle modifications are indicated.`;
     return t.trim();
   },
   summaryText(){ return autoSummary(); },
@@ -2148,21 +2419,60 @@ function buildNeeds(){
   }).join('');
 }
 
+const PHYS_PLACEHOLDER = {
+  wfl:'What you actually did and saw. The standard wording is a fallback, not a substitute for it.',
+  lim:'What the limitation is, how far it goes, and what it means for the driving task — required',
+  nt:'Why this screen was not performed — required',
+  na:'Why this does not apply to this client — required',
+};
+function physDone(r){ const p=S.phys[r.id]; return !!(p && (r.simple? txt(p.note) : p.st)); }
 function buildPhys(){
-  let html='', lastGroup=null;
+  let html='', lastG=null;
   PHYS_ROWS.forEach(r=>{
-    if(r.group && r.group!==lastGroup){ html+=`<div class="grouphead">${r.group}</div>`; lastGroup=r.group; }
-    const filled=!!txt(S.phys[r.id]);
-    html+=`<div class="row" style="margin-bottom:5px"><div class="f w100"><label>${r.label}
-      <span class="resetlink" onclick="S.phys['${r.id}']=PHYS_ROWS.find(x=>x.id==='${r.id}').def;syncPhys();update()">use standard wording</span>
-      ${filled?'':'<span style="color:#8c2f2f;text-transform:none;letter-spacing:0"> · not yet recorded</span>'}</label>
-      <textarea rows="1" style="min-height:34px${filled?'':';border-color:#e5c4c4;background:#fdfafa'}" placeholder="What you actually observed on testing" oninput="S.phys['${r.id}']=this.value;buildPhys();update()" id="phys_${r.id}">${esc(S.phys[r.id])}</textarea></div></div>`;
+    if(r.g && r.g!==lastG){ html+=`<div class="grouphead">${esc(r.g)}</div>`; lastG=r.g; }
+    const p=S.phys[r.id];
+    if(r.simple){
+      html+=`<div class="row" style="margin-bottom:7px"><div class="f w100"><label>${esc(r.label)}</label>
+        <input type="text" placeholder="${esc(r.ph||'')}" value="${esc(p.note)}" oninput="S.phys['${r.id}'].note=this.value;update()"></div></div>`;
+      return;
+    }
+    const st=p.st||'', ip=r.interp? r.interp(p):null;
+    html+=`<div class="mgrid" style="${st===''?'border-left:3px solid #8c2f2f':st==='lim'?'border-left:3px solid var(--plum)':''}">
+      <div class="mtop">
+        <div class="mname">${esc(r.label)}<div style="font-size:11px;color:var(--faint);font-weight:400">${r.why}</div></div>
+        <select class="st-${PHYS_ST[st].cls}" onchange="S.phys['${r.id}'].st=this.value;buildPhys();update()">
+          ${Object.keys(PHYS_ST).map(k=>`<option value="${k}" ${st===k?'selected':''}>${PHYS_ST[k].label}</option>`).join('')}
+        </select>
+      </div>
+      ${r.m && st!=='nt' && st!=='na' ? `<div class="trow" style="margin-top:8px">${r.m.map(f=>
+        `<div class="f" style="flex:0 0 auto;min-width:0"><label>${f.label}</label>
+         <input type="text" style="width:${f.w||'110px'}" value="${esc(p[f.k])}" oninput="S.phys['${r.id}'].${f.k}=this.value;buildPhys();update()"></div>`).join('')}</div>`:''}
+      ${ip && st!=='nt' && st!=='na' ? `<div class="autonote"><b>${ip.pill==='fail'?'⚠ ':''}Auto-interpretation:</b> ${ip.txt}</div>`:''}
+      ${st? `<textarea class="pnote" rows="1" placeholder="${esc(PHYS_PLACEHOLDER[st])}" oninput="S.phys['${r.id}'].note=this.value;update()">${esc(p.note)}</textarea>
+        ${st==='wfl'&&!txt(p.note)? `<div style="margin-top:5px"><span class="resetlink" onclick="S.phys['${r.id}'].note=PHYS_ROWS.find(x=>x.id==='${r.id}').def;buildPhys();update()">insert the standard wording</span></div>`:''}`:''}
+      ${physHowTo(r)}
+    </div>`;
   });
   document.getElementById('physRows').innerHTML=html;
   const pv=document.getElementById('physVerify');
   if(pv) pv.innerHTML = txt(S.physSummary)? verifyBar('physSummary','This physical summary reflects what I actually tested — I have not described screens I did not perform.') : '';
 }
-function syncPhys(){ PHYS_ROWS.forEach(r=>{ const el=document.getElementById('phys_'+r.id); if(el) el.value=S.phys[r.id]; }); }
+function physHowTo(r){
+  if(!r.how) return '';
+  return `<details class="ref"><summary>▸ how to screen this one</summary><div class="refcard">
+    <h5>Procedure</h5><ul>${r.how.map((x,i)=>`<li><span class="stepnum">${i+1}.</span> ${x}</li>`).join('')}</ul>
+    <h5>Record</h5><p style="margin:0 0 6px">${r.record}</p>
+    <h5><span class="dont">Watch for</span></h5><p style="margin:0">${r.watch}</p>
+    ${r.url? `<div class="src"><a href="${r.url}" target="_blank" rel="noopener">Reference</a></div>`:''}
+  </div></details>`;
+}
+/* what this screen contributes to the report — measurements first, then words */
+function physText(r){
+  const p=S.phys[r.id]; if(!p) return '';
+  const meas=(r.m||[]).map(f=> txt(p[f.k])? f.rep.replace('{}', txt(p[f.k])) : '').filter(Boolean).join(' ');
+  const body=txt(p.note) || (p.st==='wfl'? r.def : '');
+  return [meas, body].filter(Boolean).join(' ');
+}
 
 const TEST_META = {
   trailsB:{name:'Trail Making Test — Part B', purpose:'Measures cognitive flexibility and multi-tasking', interp:interpTrailsB,
@@ -2913,13 +3223,24 @@ function buildReport(){
       <tr><td style="${ST.lbl};width:70%">Recommend assessment by Orthoptist, Ophthalmologist or Optometrist</td><td style="${ST.td}">${S.eyeReview}</td></tr></table>`;
 
   /* physical */
-  h+=`<h3 style="${ST.h3}">Physical Abilities &amp; Restrictions</h3><table style="${ST.tbl}"><tr><th style="${ST.th};width:34%"></th><th style="${ST.th}">Observed physical abilities and restrictions</th></tr>`;
-  let lastG=null;
-  PHYS_ROWS.forEach(r=>{
-    if(r.group && r.group!==lastG){ h+=`<tr><td colspan="2" style="${ST.grouprow}">${r.group}</td></tr>`; lastG=r.group; }
-    h+=TR(r.label, S.phys[r.id]);
-  });
-  h+=`</table>`;
+  h+=`<h3 style="${ST.h3}">Physical Abilities &amp; Restrictions</h3>`;
+  const pScreens=PHYS_ROWS.filter(r=>!r.simple);
+  const pRec=pScreens.filter(r=>['wfl','lim'].includes(S.phys[r.id].st));
+  const pNt=pScreens.filter(r=>S.phys[r.id].st==='nt');
+  const pNa=pScreens.filter(r=>S.phys[r.id].st==='na');
+  if(txt(S.phys.hand.note)) h+=`<table style="${ST.tbl}">${TR('Hand dominance', S.phys.hand.note)}</table>`;
+  if(pRec.length){
+    h+=`<table style="${ST.tbl}"><tr><th style="${ST.th};width:34%">Screen</th><th style="${ST.th}">What was found</th></tr>`;
+    let lastG=null;
+    pRec.forEach(r=>{
+      if(r.g!==lastG){ h+=`<tr><td colspan="2" style="${ST.grouprow}">${esc(r.g)}</td></tr>`; lastG=r.g; }
+      const lim=S.phys[r.id].st==='lim';
+      h+=`<tr><td style="${ST.lbl}">${esc(r.label)}</td><td style="${ST.td}${lim?';color:#8c2f2f':''}">${lim?'<b>Limitation identified.</b> ':''}${paraSplit(physText(r))}</td></tr>`;
+    });
+    h+=`</table>`;
+  }
+  if(pNt.length) h+=P(`The following physical screens were not performed: ${pNt.map(r=>r.label.toLowerCase()+(txt(S.phys[r.id].note)? ' ('+txt(S.phys[r.id].note)+')':'')).join('; ')}. No conclusion about ${pNt.length>1?'these areas is':'this area is'} drawn in this report.`);
+  if(pNa.length) h+=P(`Not applicable for this client: ${pNa.map(r=>r.label.toLowerCase()).join('; ')}.`);
 
   /* manual muscle testing */
   const mTested=MUSCLES.filter(m=>S.muscles[m.id].tested==='yes'&&S.muscles[m.id].grade);
@@ -3488,6 +3809,14 @@ function normalise(raw){
     s[k]=Object.assign({}, base[k], raw&&raw[k]? raw[k]:{});
   });
   MUSCLES.forEach(m=> s.muscles[m.id]=Object.assign({tested:'no',grade:'',note:''}, s.muscles[m.id]||{}));
+  /* physical screens were a bare string before they carried a status and
+     measurements; keep the words and let the assessor supply the status,
+     rather than inferring a clinical finding from old free text */
+  PHYS_ROWS.forEach(r=>{
+    const old=s.phys[r.id];
+    s.phys[r.id] = typeof old==='string' ? {st:'', v1:'', v2:'', note:old}
+                                         : Object.assign({st:'', v1:'', v2:'', note:''}, old||{});
+  });
   PROFILE_DOMAINS.forEach(d=> s.profile[d.id]=Object.assign({text:'',na:false,naWhy:''}, s.profile[d.id]||{}));
   Object.keys(TEST_ADMIN_DEF).forEach(k=> s.admin[k]=Object.assign({perManual:'',sample:'',cueing:'',quiet:'',why:''}, s.admin[k]||{}));
   CHECKLIST.forEach(g=>g.items.forEach(it=>{
@@ -3667,7 +3996,23 @@ function loadExample(){
   S.muscles.m11.note='Full range and power both directions — the limitation on road was habit, not capacity.';
 
   /* --- other physical screens --- */
-  PHYS_ROWS.forEach(r=> S.phys[r.id]=r.def);
+  PHYS_ROWS.forEach(r=>{ if(!r.simple) S.phys[r.id]={st:'wfl', v1:'', v2:'', note:r.def}; });
+  S.phys.hand.note='Right';
+  S.phys.fit.v1='31';
+  S.phys.fit.note='Seat set with the ball of the foot on the brake, heel on the floor and the knee still flexed at full brake travel. Clear sightline over the wheel; reached the handbrake, selector and stalks without leaving the driving position.';
+  S.phys.access.note='Entered and exited unaided using the door frame for balance, and fastened and released the seatbelt without prompting or difficulty.';
+  S.phys.ulGrip.note='Held the wheel at nine-and-three for the full minute without the grip degrading or the hand repositioning, and released and re-gripped quickly. Operated the key, indicator stalk and handbrake button without difficulty.';
+  S.phys.llTransfer.v1='0.7';
+  S.phys.llTransfer.note='Six trials at irregular intervals in the assessment vehicle, engine off. Heel stayed on the floor throughout, the foot cleared the accelerator cleanly and landed centrally on the brake each time.';
+  S.phys.llCoord.note='Accurate heel-to-shin bilaterally with eyes closed; 26 taps in ten seconds on the right and 25 on the left with no slowing across the trial; graded pedal pressure controllable through light, medium and hard without looking down.';
+  S.phys.tnRom.v1='72'; S.phys.tnRom.v2='70';
+  S.phys.tnRom.note='Measured with the shoulders held square, then repeated in the vehicle with the seatbelt fastened, where a full over-shoulder check was still achieved. No pain, hesitation or dizziness on repeated rotation.';
+  S.phys.sitting.v1='90';
+  S.phys.sitting.note='Stable symmetrical posture with both hands free; reached the glovebox and over the shoulder without loss of balance. Posture at the end of the session was unchanged from the start.';
+  S.phys.walk.v1='6.2';
+  S.phys.walk.note='Walked unaided. Controlled turn at the mark with no hesitancy or reach for support, consistent with his unobserved walking from the waiting room.';
+  S.phys.tone.note='Tone was within normal limits at slow and fast passive speed with no catch or clonus, and no tremor at rest, on posture or on action.';
+  S.phys.aids.note='No aids, orthoses or vehicle modifications currently used, and none were required during the assessment.';
 
   /* --- occupational profile --- */
   Object.assign(S.profile,{
@@ -3780,6 +4125,7 @@ function allProse(){
   const out=[];
   NARR_FIELDS.forEach(([k,l,s])=>{ if(txt(S[k])) out.push({k,label:l,sec:s,text:S[k],sel:`[data-bind=${k}]`}); });
   PROFILE_DOMAINS.forEach(d=>{ const p=S.profile[d.id]; if(p&&!p.na&&txt(p.text)) out.push({k:'profile_'+d.id,label:'Profile — '+d.label,sec:'3',text:p.text,sel:'#profileRows'}); });
+  PHYS_ROWS.forEach(r=>{ const p=S.phys[r.id]; if(p&&!r.simple&&txt(p.note)) out.push({k:'phys_'+r.id,label:'Physical screen — '+r.label,sec:'4',text:p.note,sel:'#physRows'}); });
   CHECKLIST.forEach(g=>g.items.forEach(it=>{ const c=S.checklist[it.id]; if(txt(c.note)) out.push({k:'cl_'+it.id,label:'On-road — '+it.short,sec:'5',text:c.note,sel:'#checklist'}); }));
   REC_DEFS.forEach(r=>{ const st=S.recs[r.id]; if(st&&st.on&&txt(st.text)) out.push({k:'rec_'+r.id,label:'Recommendation — '+r.label,sec:'6',text:st.text,sel:'#recCards'}); });
   return out;
@@ -3826,7 +4172,21 @@ function validate(){
   });
 
   /* ---- 4. physical & muscle testing ---- */
-  PHYS_ROWS.forEach(r=>{ if(!txt(S.phys[r.id])) B('Physical screen not recorded — '+r.label,'Record what you observed, or say it was not tested and why.','4','#physRows'); });
+  PHYS_ROWS.forEach(r=>{
+    const p=S.phys[r.id];
+    if(r.simple){ if(!txt(p.note)) B('Not recorded — '+r.label,'Required.','4','#physRows'); return; }
+    if(!p.st){
+      const why='Give it a status. "Not tested" with a reason is a valid answer — a blank is not, because the report cannot say whether the screen was clear or skipped.';
+      if(r.core===false) A('phys_'+r.id,'Physical screen not recorded — '+r.label,why,'4','#physRows');
+      else B('Physical screen not recorded — '+r.label,why,'4','#physRows');
+      return;
+    }
+    if(p.st==='lim' && !txt(p.note)) B('Limitation needs describing — '+r.label,'Say what the limitation is, how far it goes, and what it means for the driving task.','4','#physRows');
+    if(p.st==='nt' && !txt(p.note)) B('Untested screen needs a reason — '+r.label,'Leaving a screen out is a clinical decision; record it as one. It prints in the report.','4','#physRows');
+    if(p.st==='na' && !txt(p.note)) B('N/A screen needs a reason — '+r.label,'Say why it does not apply to this client.','4','#physRows');
+    (r.m||[]).forEach(f=>{ if(f.num && txt(p[f.k]) && isNaN(parseFloat(p[f.k])))
+      A('physnum_'+r.id+f.k, r.label+' — "'+txt(p[f.k])+'" is not a number','The measurement is reported and interpreted numerically. Enter the figure alone, and put any qualification in the note.','4','#physRows'); });
+  });
   MUSCLES.forEach(m=>{
     const v=S.muscles[m.id];
     if(v.tested==='yes' && !v.grade) B('Muscle grade missing — '+m.n,'Testing was recorded but no MRC grade entered.','4','#muscleRows');
