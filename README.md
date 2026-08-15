@@ -16,6 +16,19 @@ It was rebuilt around a set of supervisor feedback on a driver assessment course
 
 Most of what follows exists to make that structurally true rather than merely intended. The general design rule is that **the builder never pre-fills a clinical finding**. Anything that looks like a finding has to be entered by the person who observed it.
 
+## The four stages
+
+The form follows the four phases of the assessment itself rather than presenting one long document. Only the stage you are in is on screen, and each tab carries its own outstanding-item count, so you can see what a phase still owes you before you leave it.
+
+| Stage | Sections | What it covers |
+| --- | --- | --- |
+| **1 · Initial Interview** | ⚙, 0–3 | Practice profile, room set-up and opening the contemporaneous record, client and referral details, reports reviewed, and the clinical interview and occupational profile |
+| **2 · Off-Road Assessment** | 4 | Hearing and communication, vision, physical, and the standardised cognitive battery — each with a how-to-conduct card |
+| **3 · On-Road Assessment** | 5 | Vehicle, conditions, route, MDI briefing, safety management and the performance checklist |
+| **4 · Feedback & Finalising** | 6–9 | Summary and clinical reasoning, recommendations, feedback given to the client, declarations, sign-off and competency coverage |
+
+Section numbers are unchanged, so the validation panel's `§` references still point where they always did — and clicking an outstanding item switches to the right stage before jumping to the field. The stage you were last on is remembered.
+
 ### The governance layer
 
 **Section 0 — Set-up & contemporaneous record**
@@ -42,11 +55,25 @@ The value of a driver assessment is not the list of findings but the relationshi
 - Any item rated as an **issue** must be linked to at least one field note logged at the time. The linked notes appear as timestamped chips under the item, and export is blocked while a flagged issue has nothing behind it.
 - Items marked **not assessed** require a reason, which prints in the report rather than being silently dropped.
 
+### How to conduct each assessment
+
+Stage 2 is built to be worked from at the bench, not just recorded into afterwards. Every screen carries an expandable card covering technique, and each is written around the error that most often invalidates that particular screen.
+
+**Vision.** A lead card on what the three vision screens each measure — and what none of them measure (contrast sensitivity, glare recovery, useful field of view), so the limits of the screen are explicit. Then one card per test, each with a diagram:
+
+- **Visual acuity** — chart set-up and the measured test distance, the R / L / binocular order, reading down to the smallest line with no more than one error, and what 6/12 means. Carries the Austroads private-vehicle threshold and the common errors (pacing the distance, testing in reading glasses, recording "within normal limits" with no figure).
+- **Visual fields by confrontation** — seating, testing each eye against your own field, the four quadrants, finger counting, the binocular pass, and double simultaneous stimulation for extinction. States plainly what confrontation cannot do, when to refer for formal perimetry, and what each pattern of field loss looks like on road.
+- **Ocular motility** — the H pattern for pursuit, two-target saccades, convergence and diplopia, with the reasoning for why saccadic accuracy predicts the mirror and blind-spot checks you will be rating in Stage 3.
+
+**Physical.** Each of the twelve muscle groups has a **how to test this one** card: client position, what to stabilise, the words to say, where the resistance goes and in which direction, the substitution to watch for, and a link to the technique reference. Each carries a schematic showing the stabilised segment, the moving segment at its test position, the direction of the movement asked for, and the point of resistance.
+
+**Hearing and communication** has its own card, since it comes first and everything after it depends on instructions landing.
+
 ### Test administration integrity
 
 Every standardised test carries an **administration record**: administered per manual, sample item completed, prompting/cueing given, environment free of distraction.
 
-Each test also carries an expandable **administration script** setting out what you must do, what you may say, and what you must never say — written for the tests that go wrong most easily (Trail Making Test B, Drive Home Maze, Bells, DriveSafe, DriveAware, Intersection Diagram).
+Each test also carries two expandable cards. **How to conduct this test** covers what the test measures, what you need, roughly how long it takes, and the procedure step by step — including the process observations that are only capturable while the client is doing it. **What you may and may not say** sets out what you must do, what you may say, and what you must never say. Both are written for the tests that go wrong most easily (Trail Making Test B, Drive Home Maze, Bells, DriveSafe, DriveAware, Intersection Diagram), and both defer to the manual where they differ from it.
 
 If answers, targets or route guidance were provided, or standard administration was departed from, the test is marked **not scoreable**. The score is then:
 
@@ -57,7 +84,7 @@ If answers, targets or route guidance were provided, or standard administration 
 
 ### Physical assessment
 
-Manual muscle testing on the MRC (Oxford) 0–5 scale across twelve groups relevant to vehicle control, each annotated with why it matters for driving. Every group starts as **not tested**; a group left untested needs a documented reason, and the report states explicitly which groups were not tested and that no conclusion is drawn about them. An in-app reference card covers the grading scale, break-test technique and the grade-4-vs-5 error.
+Manual muscle testing on the MRC (Oxford) 0–5 scale across twelve groups relevant to vehicle control, each annotated with why it matters for driving and each with its own how-to card and diagram (above). Every group starts as **not tested**; a group left untested needs a documented reason, and the report states explicitly which groups were not tested and that no conclusion is drawn about them. An in-app reference card covers the grading scale, break-test technique and the grade-4-vs-5 error.
 
 The other physical screens start blank. Standard "within normal limits" wording is available on demand per row, rather than being the default.
 
@@ -104,6 +131,7 @@ Fields exist for the competencies that previously had nowhere to be recorded: su
 
 The same page adapts — there is no separate mobile build to keep in sync. On any touch device up to desktop width (an iPad in either orientation, but not a 1280px laptop), the layout switches to **data entry first**:
 
+- The four stage tabs stay pinned to the top of the form, sized for a thumb. On a phone they collapse to short labels so all four still fit across.
 - The draft report is **hidden by default** and the form takes the full width. Tap **Report** in the toolbar to read it full-screen, and **✕ Close report** to get back. The choice is remembered, so it also works as a focus mode on desktop.
 - While the report is hidden it is not re-rendered on every keystroke — it is marked stale and rebuilt when you open it, print or export, which keeps typing responsive.
 - Controls are sized for fingers: 46px inputs, 42px buttons, 22px checkboxes, full-width rating selects on the on-road checklist. Inputs use 16px text so iOS does not zoom on focus.
@@ -137,10 +165,11 @@ The data that drives the assessment lives in plain arrays at the top of the scri
 | --- | --- |
 | `EQUIP` | Pre-assessment equipment and set-up checklist |
 | `PROFILE_DOMAINS` | Occupational profile domains and their prompt questions |
-| `MUSCLES` / `MRC` | Muscle groups tested and the grading scale |
+| `MUSCLES` / `MRC` | Muscle groups tested, their how-to-test text and diagram geometry, and the grading scale |
 | `PHYS_ROWS` | Other physical screens and their standard wording |
 | `CHECKLIST` | On-road performance areas and items |
-| `TEST_META` / `ADMIN_SCRIPTS` | Standardised tests, and the administration rules shown for each |
+| `TEST_META` / `ADMIN_SCRIPTS` | Standardised tests, and the procedure and administration rules shown for each |
+| `STAGES` | The four assessment stages and which sections belong to each |
 | `interp*()` | Score thresholds and interpretation wording |
 | `REC_DEFS` | Recommendation library |
 | `COMPETENCIES` | Competency standards and how each is evidenced |

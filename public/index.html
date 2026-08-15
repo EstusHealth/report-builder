@@ -39,6 +39,30 @@ body{margin:0;font-family:'Barlow',sans-serif;background:var(--bg);color:var(--i
 .btn.plum:hover{background:#8f4a7c}
 #gradbar{height:3px;background:var(--grad)}
 
+/* ============ ASSESSMENT STAGES ============
+   The form is split into the four phases of the assessment itself, so the
+   screen shows the stage you are actually in rather than the whole file. */
+#stageNav{position:sticky;top:0;z-index:40;display:flex;background:#25231e;border-bottom:1px solid #3a3934}
+.stagebtn{flex:1;min-width:0;border:none;background:none;cursor:pointer;text-align:left;padding:9px 12px 8px;
+  border-bottom:3px solid transparent;color:#b6b3ac;font-family:'Barlow Semi Condensed',sans-serif}
+.stagebtn:hover{background:#2f2d27;color:#e6e4df}
+.stagebtn .sn{font-family:'Oswald',sans-serif;font-weight:600;font-size:9.5px;letter-spacing:.16em;color:#7fd0dd;display:block}
+.stagebtn .st,.stagebtn .ss{font-weight:600;font-size:12.5px;letter-spacing:.03em;line-height:1.25;margin-top:1px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stagebtn .st{display:block} .stagebtn .ss{display:none}
+.stagebtn .sq{display:block;font-size:10.5px;letter-spacing:.02em;line-height:1.3;margin-top:2px;color:#8a8880;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stagebtn .sq.blk{color:#e79191} .stagebtn .sq.ok{color:#8fd0a4}
+.stagebtn.on{background:var(--bg);border-bottom-color:var(--plum)}
+.stagebtn.on .sn{color:var(--plum)} .stagebtn.on .st,.stagebtn.on .ss{color:var(--ink)} .stagebtn.on .sq{color:var(--muted)}
+.stagebtn.on .sq.blk{color:#8c2f2f} .stagebtn.on .sq.ok{color:#1e6b3a}
+.stage{display:none} .stage.on{display:block}
+.stagelead{padding:14px 18px 0;font-size:12.5px;line-height:1.5;color:var(--muted)}
+.stagelead b{color:var(--ink)}
+.stagefoot{display:flex;gap:10px;align-items:center;padding:16px 18px 4px;border-top:1px solid var(--line);margin-top:6px}
+.stagefoot .sfnext{margin-left:auto}
+.stagefoot .sfnext.done{background:#1e6b3a}
+
 /* form sections */
 details.sec{border-bottom:1px solid var(--line);background:var(--bg)}
 details.sec>summary{cursor:pointer;list-style:none;padding:13px 18px;font-family:'Oswald',sans-serif;font-weight:600;font-size:13.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);display:flex;align-items:center;gap:10px;user-select:none}
@@ -80,12 +104,13 @@ details.sec>summary .n{font-size:10px;color:var(--faint);letter-spacing:.05em;ma
 .testcard h4{margin:0;font-family:'Oswald',sans-serif;font-weight:500;font-size:13px;letter-spacing:.05em;display:flex;align-items:center;gap:8px}
 .testcard h4 .pill{margin-left:auto}
 .testcard .trow{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:flex-end}
+.testcard .f,.testcard .f input{max-width:100%}   /* long field labels must wrap, not widen the pane */
 .autonote{font-size:12px;line-height:1.45;background:#f4f8f9;border:1px solid #d9e8ec;border-radius:4px;padding:7px 9px;margin-top:8px;color:#274b53}
 .autonote b{color:var(--navy)}
 
 /* medication rows */
-.medrow{display:flex;gap:8px;margin-bottom:6px;align-items:center}
-.medrow input{flex:1;border:1px solid #d6d4cf;border-radius:4px;padding:6px 8px;font-size:13px;font-family:'Barlow',sans-serif}
+.medrow{display:flex;gap:8px;margin-bottom:6px;align-items:center;flex-wrap:wrap}
+.medrow input{flex:1;min-width:0;border:1px solid #d6d4cf;border-radius:4px;padding:6px 8px;font-size:13px;font-family:'Barlow',sans-serif}
 .xbtn{border:none;background:#e9e7e4;color:#8c2f2f;border-radius:4px;width:26px;height:26px;cursor:pointer;font-weight:700;flex-shrink:0}
 .addbtn{border:1px dashed var(--teal);background:none;color:var(--teal);font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:12px;border-radius:4px;padding:5px 12px;cursor:pointer}
 
@@ -172,7 +197,19 @@ ul.rep li{margin-bottom:2mm}
 .refcard h5{margin:0 0 5px;font-family:'Oswald',sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--navy)}
 .refcard ul{margin:4px 0 0;padding-left:16px} .refcard li{margin-bottom:3px}
 .refcard .say{color:#1e6b3a;font-weight:600} .refcard .dont{color:#8c2f2f;font-weight:600}
+.refcard .stepnum{font-family:'Oswald',sans-serif;font-weight:600;color:var(--plum)}
+.refcard .thresh{border-left:3px solid var(--navy);background:#fff;border-radius:0 4px 4px 0;padding:7px 10px;margin:8px 0}
+.refcard a{color:var(--blue);font-weight:600}
+.refcard .src{font-size:11px;color:var(--faint);margin-top:8px;line-height:1.5}
 details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);padding:3px 0;user-select:none}
+
+/* how-to diagrams */
+.dgm{background:#fff;border:1px solid #d9e8ec;border-radius:4px;padding:8px;margin:8px 0}
+.dgm svg{display:block;width:100%;height:auto;max-width:460px;margin:0 auto}
+.dgm .cap{font-family:'Barlow Semi Condensed',sans-serif;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);text-align:center;margin-top:5px}
+.dgm text{font-family:'Barlow Semi Condensed',sans-serif;font-size:10px;fill:var(--muted)}
+.dgm text.k{fill:var(--navy);font-weight:600}
+.dgm text.r{fill:#8c2f2f;font-weight:600}
 
 /* admin fidelity */
 .adminbox{border:1px solid #e4d6df;background:#fdf9fc;border-radius:4px;padding:8px 10px;margin-top:8px}
@@ -286,6 +323,9 @@ body.preview-hidden #formPane{width:100%;border-right:none}
    Any coarse pointer, at any width, plus narrow windows. */
 @media (max-width:1100px), (pointer:coarse){
   body{font-size:15px}
+  .stagebtn{padding:11px 10px 10px}
+  .stagebtn .st{font-size:13px} .stagebtn .sq{font-size:11px}
+  .stagefoot{padding:18px 16px 6px}
   #noteBadge,#checkBadge{padding:8px 11px;font-size:12px}
   .btn{padding:11px 14px;font-size:13px;min-height:42px}
   details.sec>summary{padding:17px 16px;font-size:14px}
@@ -339,6 +379,12 @@ body.preview-hidden #formPane{width:100%;border-right:none}
 /* ============ PHONE ============ */
 @media (max-width:640px){
   #toolbar .brand small{display:none}
+  /* the full stage titles will not fit four across a phone — short labels */
+  .stagebtn{padding:9px 5px 8px;text-align:center}
+  .stagebtn .st{display:none} .stagebtn .ss{display:block}
+  .stagebtn .sn{font-size:10.5px;letter-spacing:.1em}
+  .stagebtn .sq{font-size:10px}
+  .stagefoot{padding:16px 12px 4px}
   .secbody{padding:6px 12px 22px}
   details.sec>summary{padding:16px 12px}
   .f.w25,.f.w33,.f.w50{flex:1 1 100%}
@@ -377,6 +423,13 @@ body.preview-hidden #formPane{width:100%;border-right:none}
 <div id="gradbar"></div>
 <div id="app">
 <div id="formPane">
+<nav id="stageNav"></nav>
+
+<!-- ================================================================
+     STAGE 1 — INITIAL INTERVIEW (background and set-up)
+================================================================= -->
+<div class="stage" data-stage="1">
+<div class="stagelead">Everything that happens <b>before</b> you assess anything: the room set up and the record opened, who the client is, what you have read, and the interview that tells you what driving is actually for in this person's life. Get this stage right and the rest of the assessment has something to be measured against.</div>
 
 <!-- ================= PRACTICE PROFILE & BRANDING ================= -->
 <details class="sec" id="brandSec">
@@ -550,12 +603,40 @@ body.preview-hidden #formPane{width:100%;border-right:none}
 </div>
 </details>
 
-<!-- ================= 4. PRE ON-ROAD ================= -->
-<details class="sec">
-<summary>4 · Pre On-Road Screens</summary>
+<div class="stagefoot" id="foot1"></div>
+</div><!-- /stage 1 -->
+
+<!-- ================================================================
+     STAGE 2 — OFF-ROAD ASSESSMENT
+================================================================= -->
+<div class="stage" data-stage="2">
+<div class="stagelead">The off-road screens, in the order they are normally run: <b>hearing and communication</b> (you need to know instructions will land before anything else means much), <b>vision</b>, <b>physical</b>, then <b>cognition and perception</b>. Each screen below carries a <b>how to conduct it</b> card — technique, what to say, the thresholds, and the error that most often invalidates it.</div>
+
+<!-- ================= 4. OFF-ROAD ================= -->
+<details class="sec" open>
+<summary>4 · Off-Road Assessment <span class="n" id="n4"></span></summary>
 <div class="secbody">
 
   <div class="subhead">Hearing &amp; communication</div>
+  <div class="hint">First, because everything after it depends on instructions being understood. A cognitive score depressed by a missed instruction is not a cognitive finding.</div>
+  <details class="ref"><summary>▸ How to screen hearing and communication for the driving task</summary>
+    <div class="refcard">
+      <h5>Hearing</h5>
+      <ul>
+        <li>You are not doing audiometry. You are establishing whether an instruction given from the passenger seat, over road noise, with the speaker's face turned away, will land.</li>
+        <li>Give a short instruction at conversational volume with your face turned away from them, from roughly the distance and angle the MDI will be at. Then repeat it with your face visible. A large difference between the two means they are lip-reading, which they will not be able to do while watching the road.</li>
+        <li>Check hearing aids are in, switched on and charged — this is one of the items on the set-up checklist for exactly this reason.</li>
+        <li>Note whether emergency sirens, indicator clicks or reversing sensors have been reported as inaudible.</li>
+      </ul>
+      <h5>Communication</h5>
+      <ul>
+        <li>Give a two-step then a three-step instruction and watch how it is executed — "turn left at the second street, then pull over past the crossing" is the form the on-road instruction actually takes.</li>
+        <li>Watch for whether they <b>ask</b> when they have not understood. A client who guesses rather than clarifies will guess at an intersection, and that is a safety finding rather than a language one.</li>
+        <li>Record processing delay: how long between the instruction and the action. On road that delay is metres.</li>
+        <li>Note interpreter need, English as an additional language, expressive difficulty (aphasia, dysarthria), and anything that changes how the MDI should phrase directions. That goes into the MDI briefing in Stage 3.</li>
+      </ul>
+    </div>
+  </details>
   <div class="row">
     <div class="f w50"><label>Hearing result</label>
       <select data-bind="hearing"><option value="wnl">No difficulties observed or reported</option><option value="aids">Hearing aids worn — adequate with aids</option><option value="issue">Difficulties observed / reported</option></select>
@@ -565,6 +646,195 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   <div class="row"><div class="f w100"><label>Communication screen — expressive, receptive and comprehension for the driving task</label><textarea data-bind="commScreen" rows="2" placeholder="How instructions were understood and followed; ability to ask for clarification; any language, speech or processing factors relevant to taking direction from an instructor…"></textarea></div></div>
 
   <div class="subhead">Visual screen</div>
+  <div class="hint">Three separate things are being screened here and they fail independently: <b>acuity</b> (can the detail be resolved at distance), <b>fields</b> (is anything missing from the periphery), and <b>ocular motility</b> (can the eyes be moved to where the information is). A client can read the bottom line of the chart and still be unsafe. Open the cards below for how to conduct each one.</div>
+
+  <details class="ref"><summary>▸ What the vision screen is testing — and what it does not test</summary>
+    <div class="refcard">
+      <h5>The three screens</h5>
+      <ul>
+        <li><b>Visual acuity</b> — the smallest high-contrast detail resolvable at distance. In driving terms: reading a sign or a number plate. It is the one measure with a hard licensing number attached to it, which is why it gets more attention than its predictive power deserves.</li>
+        <li><b>Visual fields</b> — how much of the world is available without moving the eyes. In driving terms: the pedestrian at the kerb, the car in the adjacent lane, the cyclist coming into the intersection. Field loss is a far better predictor of crash risk than acuity, and the client is frequently unaware of it.</li>
+        <li><b>Ocular motility</b> — whether the eyes can be moved accurately and comfortably to where the information is. In driving terms: the mirror check, the head-and-eye blind-spot check, and the scan across an intersection, which are sequences of large saccades under time pressure.</li>
+      </ul>
+      <h5>What this screen does <span class="dont">not</span> measure</h5>
+      <ul>
+        <li><b>Contrast sensitivity</b> — dusk, rain, a grey car against wet road. Normal acuity with poor contrast sensitivity is common in cataract and in some neurological conditions, and it is a driving problem you will not see on a chart.</li>
+        <li><b>Glare recovery</b> — headlights at night, low sun. Ask about it; you cannot test it here.</li>
+        <li><b>Useful field of view</b> — the field a person can actually extract information from while doing something else. That is a divided-attention measure, and it is why the cognitive battery follows this screen rather than replacing it.</li>
+        <li><b>Eye disease.</b> Nothing here diagnoses anything. This is a screen that decides whether the client goes on road today and whether they need an eye examination — the optometrist or ophthalmologist makes the finding, and the driver licensing authority decides the licence.</li>
+      </ul>
+      <p style="margin:6px 0 0">Ask, as well as test: night driving, glare, dusk, whether they have bumped anything on one side, when they last had their eyes examined, and whether the glasses they arrived in are the ones they drive in.</p>
+    </div>
+  </details>
+
+  <details class="ref"><summary>▸ Visual acuity — how to test it, and what 6/12 means</summary>
+    <div class="refcard">
+      <div class="dgm">
+        <svg viewBox="0 0 460 162" role="img" aria-label="Chart on a wall at a measured distance from a seated client with one eye occluded">
+          <text x="58" y="15" text-anchor="middle" class="k">chart, evenly lit</text>
+          <text x="58" y="26" text-anchor="middle">no glare on its face</text>
+          <line x1="22" y1="30" x2="22" y2="148" stroke="#c8c6c1" stroke-width="3"/>
+          <rect x="26" y="34" width="64" height="86" fill="#fff" stroke="var(--navy)" stroke-width="1.5"/>
+          <text x="58" y="50" text-anchor="middle" style="font-size:13px;font-weight:700;fill:var(--ink)">E</text>
+          <text x="58" y="66" text-anchor="middle" style="font-size:10px;font-weight:700;fill:var(--ink)">F P</text>
+          <text x="58" y="80" text-anchor="middle" style="font-size:8px;font-weight:700;fill:var(--ink)">T O Z</text>
+          <text x="58" y="92" text-anchor="middle" style="font-size:6.5px;font-weight:700;fill:var(--ink)">L P E D</text>
+          <text x="58" y="103" text-anchor="middle" style="font-size:5.5px;font-weight:700;fill:var(--ink)">P E C F D</text>
+          <text x="58" y="113" text-anchor="middle" style="font-size:4.5px;font-weight:700;fill:var(--ink)">E D F C Z P</text>
+          <circle cx="384" cy="58" r="15" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+          <path d="M384 73 L384 110 M384 82 L364 96 M384 82 L404 96" stroke="var(--ink)" stroke-width="1.5" fill="none"/>
+          <rect x="369" y="51" width="12" height="12" rx="2" fill="#e6e4df" stroke="#8c2f2f" stroke-width="1.4"/>
+          <text x="348" y="46" text-anchor="end" class="r">occluder —</text>
+          <text x="348" y="57" text-anchor="end" class="r">not fingers</text>
+          <path d="M368 110 L408 110 L408 132 M408 118 L428 118" stroke="#c8c6c1" stroke-width="2.5" fill="none"/>
+          <text x="384" y="156" text-anchor="middle">upright, chin level, no leaning in</text>
+          <line x1="94" y1="138" x2="348" y2="138" stroke="var(--plum)" stroke-width="1.2" stroke-dasharray="4 3"/>
+          <path d="M94 138 l7 -4 v8 z M348 138 l-7 -4 v8 z" fill="var(--plum)"/>
+          <text x="221" y="131" text-anchor="middle" class="k" style="fill:var(--plum)">measure it with a tape — do not pace it</text>
+        </svg>
+        <div class="cap">Acuity set-up · the distance the chart is calibrated for</div>
+      </div>
+      <h5>Set-up</h5>
+      <ul>
+        <li>Chart at exactly the distance it is calibrated for, <b>measured with a tape</b>. A 6 m chart read at 5 m turns a 6/12 into an apparent 6/9 — this is the single most common way an OT vision screen goes wrong.</li>
+        <li>If you use a 3 m chart or a mirrored room, record the notation printed on that chart. Do not convert distances in your head.</li>
+        <li>Even lighting on the chart, no reflected glare, client's back to the window. Client seated upright, feet flat, chin level, not leaning forward.</li>
+      </ul>
+      <h5>Procedure</h5>
+      <ul>
+        <li><span class="stepnum">1.</span> Test them in the state they <i>drive</i> in. If they wear glasses to drive, test uncorrected and corrected. If they left their glasses at home, record the corrected figures as not obtained — do not estimate them.</li>
+        <li><span class="stepnum">2.</span> Occlude with an occluder or a cupped palm, never splayed fingers.</li>
+        <li><span class="stepnum">3.</span> <b>Right eye, then left eye, then both eyes together.</b> Testing binocularly only will hide a monocular loss; testing monocularly only will not give you the figure the private standard is written against.</li>
+        <li><span class="stepnum">4.</span> Read down until they make more than one error on a line. Record the smallest line read with no more than one letter missed, in the chart's own notation (6/12, 6/9<sup>−2</sup>).</li>
+        <li><span class="stepnum">5.</span> <span class="say">Encourage guessing</span> — "have a go at the next line anyway". A cautious client who will not guess will test a line or two worse than they see.</li>
+        <li><span class="stepnum">6.</span> Record the figures, not a verdict. "6/9 binocular corrected" is a result; "vision normal" is not.</li>
+      </ul>
+      <div class="thresh"><b>Austroads private vehicle standard.</b> For an unconditional licence, binocular visual acuity of at least <b>6/12</b> — measured with corrective lenses if they are worn for driving. Commercial vehicle standards are higher and are set out in the vision chapter linked below; check them rather than working from memory. Where the standard is not met, the referral is to an optometrist or ophthalmologist and the decision is the driver licensing authority's, not yours.</div>
+      <h5><span class="dont">Common errors</span></h5>
+      <ul>
+        <li>Pacing the distance instead of measuring it.</li>
+        <li>Testing with reading glasses rather than distance correction.</li>
+        <li>Letting the client lean forward, tilt the head, or peek between fingers.</li>
+        <li>Recording "within normal limits" with no figure — there is nothing for the licensing authority or the next assessor to compare against.</li>
+      </ul>
+      <div class="src">Further reading: <a href="https://www.ncbi.nlm.nih.gov/books/NBK558961/" target="_blank" rel="noopener">Snellen chart — StatPearls</a> · <a href="https://austroads.gov.au/drivers-and-vehicles/assessing-fitness-to-drive" target="_blank" rel="noopener">Austroads <i>Assessing Fitness to Drive</i></a></div>
+    </div>
+  </details>
+
+  <details class="ref"><summary>▸ Visual fields by confrontation — technique, recording, and its limits</summary>
+    <div class="refcard">
+      <div class="dgm">
+        <svg viewBox="0 0 460 178" role="img" aria-label="Plan view of examiner and client seated a metre apart, and the four quadrants in which the target is presented">
+          <text x="108" y="17" text-anchor="middle" class="k">how you sit</text>
+          <circle cx="62" cy="62" r="16" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+          <circle cx="75" cy="56" r="2.6" fill="var(--ink)"/>
+          <rect x="69" y="62" width="12" height="11" rx="2" fill="#e6e4df" stroke="#8c2f2f" stroke-width="1.3"/>
+          <text x="62" y="94" text-anchor="middle" class="k">you</text>
+          <circle cx="156" cy="62" r="16" fill="#fff" stroke="var(--ink)" stroke-width="1.5"/>
+          <circle cx="143" cy="56" r="2.6" fill="var(--ink)"/>
+          <rect x="137" y="62" width="12" height="11" rx="2" fill="#e6e4df" stroke="#8c2f2f" stroke-width="1.3"/>
+          <text x="156" y="94" text-anchor="middle" class="k">client</text>
+          <line x1="80" y1="57" x2="138" y2="57" stroke="var(--plum)" stroke-width="1.2" stroke-dasharray="4 3"/>
+          <text x="109" y="36" text-anchor="middle" style="fill:var(--plum)">fixate, eye to eye</text>
+          <text x="109" y="110" text-anchor="middle">each covers the mirror-image eye</text>
+          <line x1="62" y1="130" x2="156" y2="130" stroke="var(--muted)" stroke-width="1"/>
+          <path d="M62 130 l7 -4 v8 z M156 130 l-7 -4 v8 z" fill="var(--muted)"/>
+          <text x="109" y="146" text-anchor="middle" class="k">≈ 1 m, eyes level</text>
+          <text x="109" y="160" text-anchor="middle">target presented halfway between</text>
+          <line x1="212" y1="14" x2="212" y2="164" stroke="var(--line)" stroke-width="1"/>
+          <text x="342" y="18" text-anchor="middle" class="k">where you present it</text>
+          <line x1="248" y1="88" x2="436" y2="88" stroke="#c8c6c1" stroke-width="1" stroke-dasharray="3 3"/>
+          <line x1="342" y1="36" x2="342" y2="140" stroke="#c8c6c1" stroke-width="1" stroke-dasharray="3 3"/>
+          <path d="M336 88 h12 M342 82 v12" stroke="var(--plum)" stroke-width="2"/>
+          <circle cx="300" cy="62" r="5" fill="var(--teal)"/><circle cx="384" cy="62" r="5" fill="var(--teal)"/>
+          <circle cx="300" cy="114" r="5" fill="var(--teal)"/><circle cx="384" cy="114" r="5" fill="var(--teal)"/>
+          <path d="M256 40 l36 16" stroke="var(--navy)" stroke-width="1.3"/><path d="M292 56 l-9 -1 l4 -5 z" fill="var(--navy)"/>
+          <path d="M428 40 l-36 16" stroke="var(--navy)" stroke-width="1.3"/><path d="M392 56 l9 -1 l-4 -5 z" fill="var(--navy)"/>
+          <path d="M256 136 l36 -16" stroke="var(--navy)" stroke-width="1.3"/><path d="M292 120 l-9 1 l4 5 z" fill="var(--navy)"/>
+          <path d="M428 136 l-36 -16" stroke="var(--navy)" stroke-width="1.3"/><path d="M392 120 l9 1 l-4 5 z" fill="var(--navy)"/>
+          <text x="342" y="160" text-anchor="middle">in from outside the field, into all four quadrants</text>
+        </svg>
+        <div class="cap">Confrontation · seating, and the four quadrants</div>
+      </div>
+      <h5>Procedure</h5>
+      <ul>
+        <li><span class="stepnum">1.</span> Sit facing the client about a metre apart with your eyes at their eye level, plain background behind you, room well lit.</li>
+        <li><span class="stepnum">2.</span> <b>Each eye separately first.</b> Client covers their left eye; you cover your right, mirroring them. Both fixate on the other's open eye — you are comparing their field against your own.</li>
+        <li><span class="stepnum">3.</span> Bring a target — a wiggling finger, or a small white or red pin — in from beyond the periphery, <b>halfway between the two of you</b>, into each of the four quadrants in turn. The client says "now" the moment it appears.</li>
+        <li><span class="stepnum">4.</span> Then finger counting: present one, two or five fingers statically in each quadrant. A static target picks up defects a moving one does not.</li>
+        <li><span class="stepnum">5.</span> <b>Then both eyes open.</b> This is the binocular field the driving standard is written against, and the one that answers "will they see the pedestrian stepping off the kerb".</li>
+        <li><span class="stepnum">6.</span> Present a target on <b>both sides simultaneously</b>. A client who sees each side alone but only one when both appear has visual extinction — inattention rather than a field cut. It is a different finding with a different meaning on road, and it is what the Bells Test later in this section is looking for.</li>
+        <li><span class="stepnum">7.</span> Watch fixation the whole time. A client who searches with their eyes will pass a field test they should fail — and that searching is itself worth logging as a field note.</li>
+      </ul>
+      <h5>Record</h5>
+      <ul>
+        <li>Which quadrant or quadrants, and in which eye or both.</li>
+        <li>Whether the defect respects the <b>vertical midline</b> (points to a lesion behind the chiasm — a homonymous defect) or the horizontal (more often ocular).</li>
+        <li>Whether it was the same shape in each eye (congruous), and whether extinction was present on double simultaneous stimulation.</li>
+      </ul>
+      <div class="thresh"><b>Austroads private vehicle standard.</b> For an unconditional licence the <b>binocular</b> visual field must have a horizontal extent of at least <b>110°</b>, within 10° above and below the horizontal midline, without significant field loss close to fixation. Formal perimetry — not confrontation — is what establishes this. Commercial standards are stricter; check the current chapter.</div>
+      <h5><span class="dont">What confrontation will not do</span></h5>
+      <ul>
+        <li>It reliably picks up <b>large</b> defects — hemianopia, quadrantanopia, dense altitudinal loss. It misses arcuate scotoma in glaucoma, gradual constriction, and small paracentral loss.</li>
+        <li>It does not measure degrees, so it cannot tell you whether the 110° standard is met. <b>A normal confrontation clears nobody.</b></li>
+        <li>Refer for formal perimetry (Esterman binocular field or equivalent) where there is stroke, brain injury, tumour, MS, glaucoma, retinitis pigmentosa, significant diabetic retinopathy, any previously documented defect — or where the client reports clipping kerbs, wing mirrors or door frames on one side.</li>
+      </ul>
+      <h5>What field loss looks like on road</h5>
+      <ul>
+        <li><b>Left homonymous</b> — gap selection turning across oncoming traffic, and detection of vehicles approaching from the left at intersections.</li>
+        <li><b>Right homonymous</b> — kerb-side pedestrians, signs, and merging to the left.</li>
+        <li><b>Inferior</b> — kerbs, close obstacles, lane markings. <b>Superior</b> — traffic signals and overhead signage.</li>
+        <li>Expect to see the client compensating with head movement. Whether that compensation is consistent and automatic, or effortful and intermittent, is the on-road question — and it is what you will be watching for in Stage 3.</li>
+      </ul>
+      <div class="src">Further reading: <a href="https://en.wikipedia.org/wiki/Confrontation_visual_field_testing" target="_blank" rel="noopener">Confrontation visual field testing</a> · <a href="https://austroads.gov.au/publications/assessing-fitness-to-drive/ap-g56/vision-and-eye-disorders/general-assessment-and-management-guidelines" target="_blank" rel="noopener">AFTD — vision and eye disorders</a></div>
+    </div>
+  </details>
+
+  <details class="ref"><summary>▸ Eye movements — pursuits, saccades, convergence and diplopia</summary>
+    <div class="refcard">
+      <div class="dgm">
+        <svg viewBox="0 0 460 168" role="img" aria-label="The H pattern used to test the six cardinal positions of gaze">
+          <path d="M120 34 L120 132 M120 83 L340 83 M340 34 L340 132" stroke="var(--teal)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <circle cx="120" cy="34" r="6" fill="var(--navy)"/><circle cx="120" cy="83" r="6" fill="var(--navy)"/><circle cx="120" cy="132" r="6" fill="var(--navy)"/>
+          <circle cx="340" cy="34" r="6" fill="var(--navy)"/><circle cx="340" cy="83" r="6" fill="var(--navy)"/><circle cx="340" cy="132" r="6" fill="var(--navy)"/>
+          <circle cx="230" cy="83" r="7" fill="#fff" stroke="var(--plum)" stroke-width="2.5"/>
+          <text x="230" y="70" text-anchor="middle" class="k" style="fill:var(--plum)">start in primary gaze</text>
+          <text x="108" y="26" text-anchor="end">up &amp; left</text>
+          <text x="108" y="87" text-anchor="end">left</text>
+          <text x="108" y="146" text-anchor="end">down &amp; left</text>
+          <text x="352" y="26">up &amp; right</text>
+          <text x="352" y="87">right</text>
+          <text x="352" y="146">down &amp; right</text>
+          <text x="230" y="105" text-anchor="middle">hold 2–3 s at each end point</text>
+          <text x="230" y="118" text-anchor="middle">watch for catch-up jerks and nystagmus</text>
+          <path d="M230 132 q0 18 -34 22" stroke="var(--plum)" stroke-width="1.4" fill="none" stroke-dasharray="4 3"/>
+          <path d="M196 154 l9 -3 l-1 6 z" fill="var(--plum)"/>
+          <text x="230" y="162" style="fill:var(--plum)">then in to the nose — convergence</text>
+          <text x="230" y="16" text-anchor="middle" class="k">head still · target ≈ 40 cm</text>
+        </svg>
+        <div class="cap">The H pattern · six cardinal positions of gaze</div>
+      </div>
+      <h5>Procedure</h5>
+      <ul>
+        <li><span class="stepnum">1.</span> Target about 40 cm from the client's face, their <b>head still</b> — steady their chin lightly if they keep turning it. Whether they move the head instead of the eyes is itself a finding, not a nuisance.</li>
+        <li><span class="stepnum">2.</span> <b>Smooth pursuit.</b> Move the target slowly through an H, pausing two or three seconds at each of the six end points. You are looking for smooth tracking versus jerky catch-up saccades ("cog-wheeling"), inability to hold end gaze, and nystagmus — note which gaze position provokes it.</li>
+        <li><span class="stepnum">3.</span> <b>Saccades.</b> Hold two targets roughly 30 cm apart and ask the client to look from one to the other on command, several times. Look for slowness to initiate, overshoot or undershoot needing a correction, and blinking or head movement used to launch the movement.</li>
+        <li><span class="stepnum">4.</span> <b>Convergence.</b> Bring the target slowly toward the bridge of the nose. Record the near point in centimetres at which they report doubling or one eye drifts out.</li>
+        <li><span class="stepnum">5.</span> <b>Diplopia — ask directly</b>, in each direction of gaze and at distance as well as near. Double vision in any position of gaze used for driving is a fitness-to-drive matter, not a comment in the notes.</li>
+        <li><span class="stepnum">6.</span> Ask whether any of it made them dizzy or nauseated. The sustained head-and-eye turn of a blind-spot check is the movement that provokes it, and you would rather find that out here than on a merge.</li>
+      </ul>
+      <h5>Why this matters more than it looks</h5>
+      <p style="margin:4px 0 0">Driving is a saccade task. A mirror check, a blind-spot check and a scan across an intersection are all sequences of large eye movements with a head turn on top, executed under time pressure while the vehicle keeps moving. Slow, inaccurate or effortful saccades produce exactly the on-road picture you will be rating in Stage 3 — late detection, "looked but did not see", head turns that are not real checks. Recording that link here is what lets the summary say the two halves of the assessment converged.</p>
+      <h5>Record</h5>
+      <ul>
+        <li>Which movement, which direction, and what you saw — not "eye movements WNL".</li>
+        <li>Nystagmus: present or not, and in which gaze position. Near point of convergence in cm. Diplopia: yes or no, and where in the visual field.</li>
+        <li>Refer on for new diplopia, nystagmus that is not already known and explained, markedly saccadic pursuit, or any defect found on confrontation.</li>
+      </ul>
+      <div class="src">Further reading: <a href="https://www.ncbi.nlm.nih.gov/books/NBK557589/" target="_blank" rel="noopener">Neurologic examination — StatPearls</a> (cranial nerves III, IV and VI)</div>
+    </div>
+  </details>
+
   <div class="row">
     <div class="f w33"><label>Corrective lenses for driving</label><select data-bind="lenses"><option>Yes</option><option>No</option></select></div>
     <div class="f w33"><label>Endorsed on licence</label><select data-bind="lensesEndorsed"><option>Yes</option><option>No</option><option>To be confirmed</option><option>N/A</option></select></div>
@@ -589,7 +859,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   </div>
 
   <div class="subhead">Manual muscle testing (MRC grades)</div>
-  <div class="hint">Nothing here is pre-filled as normal. Each muscle group starts as <b>not yet tested</b> and you record the grade you actually elicited — the report prints only what you tested, and says plainly what you did not.</div>
+  <div class="hint">Nothing here is pre-filled as normal. Each muscle group starts as <b>not yet tested</b> and you record the grade you actually elicited — the report prints only what you tested, and says plainly what you did not. Every group carries a <b>how to test this one</b> card: position, what to stabilise, the words to say, where the resistance goes, and the error that most often produces a wrong grade.</div>
   <details class="ref"><summary>▸ Muscle testing reference — MRC grading &amp; technique</summary>
     <div class="refcard">
       <h5>MRC / Oxford scale</h5>
@@ -642,9 +912,18 @@ body.preview-hidden #formPane{width:100%;border-right:none}
 </div>
 </details>
 
+<div class="stagefoot" id="foot2"></div>
+</div><!-- /stage 2 -->
+
+<!-- ================================================================
+     STAGE 3 — ON-ROAD ASSESSMENT
+================================================================= -->
+<div class="stage" data-stage="3">
+<div class="stagelead">The drive itself. This is the stage you are in <b>while you are in the car</b> — set the conditions and the briefing before you leave, then rate what you see. Log through the <b>Field notes</b> button as you go; every issue you flag here has to point back to one.</div>
+
 <!-- ================= 5. ON-ROAD ================= -->
-<details class="sec">
-<summary>5 · On-Road Assessment</summary>
+<details class="sec" open>
+<summary>5 · On-Road Assessment <span class="n" id="n5"></span></summary>
 <div class="secbody">
   <div class="row">
     <div class="f w50"><label>Vehicle</label><select data-bind="vehicle"><option>Dual-control automatic vehicle (dual brakes)</option><option>Dual-control manual vehicle</option><option>Client's own vehicle</option><option>Client's own vehicle with modifications</option></select></div>
@@ -662,8 +941,17 @@ body.preview-hidden #formPane{width:100%;border-right:none}
 </div>
 </details>
 
+<div class="stagefoot" id="foot3"></div>
+</div><!-- /stage 3 -->
+
+<!-- ================================================================
+     STAGE 4 — FEEDBACK & FINALISATION
+================================================================= -->
+<div class="stage" data-stage="4">
+<div class="stagelead">Out of the car and back at the desk: what you told the client, what the two halves of the assessment mean together, what you are recommending, and the declarations that make the report defensible. Lock the field record before you write, and sign off against it before you export.</div>
+
 <!-- ================= 6. SUMMARY & RECOMMENDATIONS ================= -->
-<details class="sec">
+<details class="sec" open>
 <summary>6 · Summary &amp; Recommendations</summary>
 <div class="secbody">
   <div class="row">
@@ -739,6 +1027,9 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   <div id="compRows"></div>
 </div>
 </details>
+
+<div class="stagefoot" id="foot4"></div>
+</div><!-- /stage 4 -->
 
 <div style="padding:14px 18px 40px;font-size:11px;color:var(--faint)">Draft autosaves to this browser. Use <b>Save draft</b> to keep a file copy per client. OT Driving Assessment Report Builder v2.0 · open source, MIT licensed</div>
 </div>
@@ -1055,20 +1346,162 @@ const PROFILE_DOMAINS = [
 ];
 
 /* ---------- manual muscle testing ---------- */
+/* Each group carries how to test it: position, what to stabilise, the words to
+   say, where resistance goes, and the error that most often produces a wrong
+   grade. `d` drives the schematic — see mmtSVG(). `url` is a link out for the
+   groups people test least often. */
 const MUSCLES = [
- {id:'m1', g:'UPPER LIMB', n:'Shoulder flexion / abduction', why:'Steering through range, seatbelt reach'},
- {id:'m2', g:'UPPER LIMB', n:'Elbow flexion', why:'Pulling the wheel through a turn'},
- {id:'m3', g:'UPPER LIMB', n:'Elbow extension', why:'Pushing the wheel, bracing'},
- {id:'m4', g:'UPPER LIMB', n:'Wrist extension', why:'Wheel control, indicator and wiper stalks'},
- {id:'m5', g:'UPPER LIMB', n:'Grip strength', why:'Sustained wheel grip, handbrake, gear selector'},
- {id:'m6', g:'LOWER LIMB', n:'Hip flexion', why:'Lifting the foot between pedals'},
- {id:'m7', g:'LOWER LIMB', n:'Knee extension', why:'Sustained pedal pressure'},
- {id:'m8', g:'LOWER LIMB', n:'Knee flexion', why:'Withdrawing the foot from the accelerator'},
- {id:'m9', g:'LOWER LIMB', n:'Ankle dorsiflexion', why:'Clearing the pedal on transfer — key for emergency braking'},
- {id:'m10', g:'LOWER LIMB', n:'Ankle plantarflexion', why:'Braking force'},
- {id:'m11', g:'NECK / TRUNK', n:'Cervical rotation (both directions)', why:'Shoulder and blind-spot checks'},
- {id:'m12', g:'NECK / TRUNK', n:'Trunk rotation / stability', why:'Reversing, sustained seated posture'},
+ {id:'m1', g:'UPPER LIMB', n:'Shoulder flexion / abduction', why:'Steering through range, seatbelt reach',
+  pos:'Seated, arm at the side, elbow slightly bent.',
+  stab:'Over the top of the shoulder girdle, so they cannot substitute by hitching the shoulder or leaning the trunk away.',
+  say:'"Lift your arm straight out in front of you to shoulder height and hold it there. Do not let me push it down."',
+  res:'Just above the elbow, straight down, at 90° of flexion. Repeat with the arm out to the side for abduction.',
+  err:'Trunk lean. If they tip away from the arm they are using the trunk, not the deltoid — reset them and re-test.',
+  url:'https://www.physio-pedia.com/Manual_Muscle_Testing:_Shoulder_Flexion',
+  d:{pv:[130,45], pa:90, pl:72, da:0, dl:66, dir:-1, dt:0.74, view:'side view, seated', pn:'trunk', dn:'arm at 90°'}},
+ {id:'m2', g:'UPPER LIMB', n:'Elbow flexion', why:'Pulling the wheel through a turn',
+  pos:'Seated, elbow at about 90°, forearm supinated (palm up).',
+  stab:'Cup under the elbow, holding the upper arm against the trunk.',
+  say:'"Bend your elbow and hold it. Do not let me straighten it."',
+  res:'At the wrist, pulling the forearm down into extension.',
+  err:'Letting the shoulder extend to help. Watch the upper arm — if it drifts backwards, the grade is inflated.',
+  url:'https://www.physio-pedia.com/Manual_Muscle_Testing:_Elbow_Flexion',
+  d:{pv:[105,105], pa:-90, pl:62, da:-15, dl:80, dir:-1, view:'side view, seated', pn:'upper arm held', dn:'forearm'}},
+ {id:'m3', g:'UPPER LIMB', n:'Elbow extension', why:'Pushing the wheel, bracing',
+  pos:'Seated, elbow flexed to about 45° short of full extension — never locked out.',
+  stab:'Support the upper arm; keep the shoulder from swinging forward.',
+  say:'"Straighten your elbow against my hand and hold it."',
+  res:'At the wrist, pushing the forearm back toward flexion.',
+  err:'Testing at full lock. In terminal extension the joint takes the load, not the triceps, and everyone grades 5.',
+  url:'https://www.physio-pedia.com/Manual_Muscle_Testing:_Elbow_Extension',
+  d:{pv:[105,68], pa:-90, pl:52, da:28, dl:80, dir:-1, view:'side view, seated', pn:'upper arm held', dn:'forearm'}},
+ {id:'m4', g:'UPPER LIMB', n:'Wrist extension', why:'Wheel control, indicator and wiper stalks',
+  pos:'Forearm supported and pronated on a surface, hand over the edge, fingers relaxed.',
+  stab:'Firmly around the distal forearm — the forearm must not lift.',
+  say:'"Bend your wrist back and hold it. Do not let me push it down."',
+  res:'Across the back of the hand, over the knuckles, pushing into flexion.',
+  err:'Letting them make a fist. Finger extensors join in and mask a weak wrist — keep the fingers loose.',
+  url:'https://www.physio-pedia.com/Manual_Muscle_Testing:_Wrist_Extension',
+  d:{pv:[150,88], pa:180, pl:88, da:-12, dl:52, dir:-1, view:'side view, forearm supported', pn:'forearm fixed', dn:'hand'}},
+ {id:'m5', g:'UPPER LIMB', n:'Grip strength', why:'Sustained wheel grip, handbrake, gear selector',
+  pos:'Seated, shoulder adducted, elbow at 90°, forearm and wrist neutral, arm unsupported — the standard dynamometer position.',
+  stab:'None needed, but stop them bracing the elbow against the trunk or the chair.',
+  say:'"Squeeze as hard as you can... keep going, keep going... and relax."',
+  res:'Dynamometer, second handle position, three trials each side with a rest between; record the mean and compare sides. Without a dynamometer, record gross grip against two of your fingers and say so — it is not a measurement.',
+  err:'Reporting a single squeeze as a grip strength. Also: the dominant hand runs roughly 10% stronger, so a "weaker" dominant hand is the finding, not a rounding error. Sustained grip matters more than peak here — a wheel is held for the whole drive.',
+  url:'https://www.physio-pedia.com/Grip_Strength'},
+ {id:'m6', g:'LOWER LIMB', n:'Hip flexion', why:'Lifting the foot between pedals',
+  pos:'Seated, knee bent over the edge of the plinth or chair.',
+  stab:'On the same-side pelvis, so they cannot hitch the hip or lean back.',
+  say:'"Lift your knee up towards the ceiling and hold it. Do not let me push it down."',
+  res:'On the distal thigh, just above the knee, straight down.',
+  err:'Trunk extension. If they lean back into the chair as they lift, they are recruiting the trunk and the grade is not the hip flexors.',
+  url:'https://www.physio-pedia.com/Manual_Muscle_Testing:_Hip_Flexion',
+  d:{pv:[105,80], pa:-90, pl:64, da:2, dl:86, dir:-1, view:'side view, seated', pn:'trunk upright', dn:'thigh'}},
+ {id:'m7', g:'LOWER LIMB', n:'Knee extension', why:'Sustained pedal pressure',
+  pos:'Seated, knee at about 90°, hands on the plinth edge, thigh fully supported.',
+  stab:'Over the distal thigh, holding it down against the seat.',
+  say:'"Straighten your knee and hold it there. Do not let me bend it."',
+  res:'Just above the ankle, pushing the shin back down into flexion. Test short of full lock.',
+  err:'Testing in terminal extension, where the knee locks and the quadriceps get credit for the joint. Stop a few degrees short.',
+  url:'https://www.physio-pedia.com/Manual_Muscle_Testing:_Knee_Extension',
+  d:{pv:[128,58], pa:180, pl:78, da:72, dl:74, dir:-1, view:'side view, seated', pn:'thigh held down', dn:'shin'}},
+ {id:'m8', g:'LOWER LIMB', n:'Knee flexion', why:'Withdrawing the foot from the accelerator',
+  pos:'Prone is the standard position. Seated, with the knee bent past 90°, is acceptable for a screen of grades 3–5 — record which you used.',
+  stab:'Over the posterior thigh (prone) or the distal thigh (seated).',
+  say:'"Bend your knee and pull your heel back towards you. Hold it."',
+  res:'Above the ankle, pulling the shin forward into extension.',
+  err:'Cramping in the hamstrings, which reads as a give-way. Rest and re-test rather than recording it as weakness — and note the cramp.',
+  url:'https://www.physio-pedia.com/Manual_Muscle_Testing:_Knee_Flexion',
+  d:{pv:[128,58], pa:180, pl:78, da:72, dl:74, dir:1, view:'side view, seated', pn:'thigh held down', dn:'shin'}},
+ {id:'m9', g:'LOWER LIMB', n:'Ankle dorsiflexion', why:'Clearing the pedal on transfer — key for emergency braking',
+  pos:'Seated or supine, knee slightly flexed, ankle in neutral.',
+  stab:'Around the distal shin, just above the ankle.',
+  say:'"Pull your foot up towards your head and hold it. Do not let me push it down."',
+  res:'Across the top of the foot, pushing down into plantarflexion. Tibialis anterior pulls up and slightly inward.',
+  err:'Toe extension doing the work. If the toes claw upward, the long toe extensors are substituting for a weak tibialis anterior — the foot may still clip the brake pedal.',
+  url:'https://www.physio-pedia.com/Manual_Muscle_Testing:_Dorsiflexion',
+  d:{pv:[152,100], pa:-90, pl:68, da:0, dl:58, dir:-1, view:'side view', pn:'shin held', dn:'foot'}},
+ {id:'m10', g:'LOWER LIMB', n:'Ankle plantarflexion', why:'Braking force',
+  pos:'Standing single-leg heel raises is the gold standard — the calf is far too strong for a hand to break in sitting. Use seated resistance only where standing is unsafe, and say which you did.',
+  stab:'Standing: fingertip support only, for balance, not for lift. Seated: around the distal shin.',
+  say:'"Come up onto the ball of that foot, as high as you can, and lower slowly. Again." Count the repetitions.',
+  res:'Standing: body weight. Seated: under the ball of the foot, pushing up into dorsiflexion — expect this to over-grade.',
+  err:'Grading a seated calf test as 5. If you did not test it against body weight you have not tested braking force; record the method with the grade.',
+  url:'https://www.physio-pedia.com/Manual_Muscle_Testing:_Plantarflexion',
+  d:{pv:[152,100], pa:-90, pl:68, da:0, dl:58, dir:1, dt:0.95, view:'side view', pn:'shin held', dn:'foot'}},
+ {id:'m11', g:'NECK / TRUNK', n:'Cervical rotation (both directions)', why:'Shoulder and blind-spot checks',
+  pos:'Seated upright, shoulders square, facing forward.',
+  stab:'On the far shoulder, so the trunk cannot rotate with the head. This is the whole point of the test.',
+  say:'"Turn your head and look over your shoulder as far as you can — as if you were checking your blind spot. Now hold it there."',
+  res:'Flat hand on the side of the jaw or temple, pushing the head back toward neutral. Light resistance only.',
+  err:'Testing strength and forgetting range. For driving, available <b>range</b> matters at least as much as power — measure how far they get, both ways, and whether it provokes dizziness or pain. Test both directions: asymmetry is the finding.',
+  url:'https://www.physio-pedia.com/Considerations_in_Cervical_Spine_and_Upper_Limb_Manual_Muscle_Testing',
+  d:{pv:[150,100], pa:90, pl:44, da:-50, dl:62, dir:1, dq:33, view:'viewed from above', pn:'shoulders held square', dn:'head turns'}},
+ {id:'m12', g:'NECK / TRUNK', n:'Trunk rotation / stability', why:'Reversing, sustained seated posture',
+  pos:'Seated, feet flat, arms folded across the chest.',
+  stab:'Hold the pelvis square — hands on the iliac crests, or seat them so the pelvis cannot swivel.',
+  say:'"Keeping your hips still, turn your shoulders around to look behind you. Hold it there."',
+  res:'On the front of the leading shoulder, pushing back toward neutral.',
+  err:'Letting the pelvis rotate. Half the apparent range comes from the hips if you do not hold them. Also record whether they can <b>hold</b> the position, not just reach it — reversing is a sustained rotation, not a snapshot.',
+  url:'https://www.physio-pedia.com/Considerations_When_Performing_Muscle_Testing_of_the_Trunk_and_Lower_Limbs',
+  d:{pv:[150,108], pa:90, pl:38, da:-52, dl:64, dir:1, dq:33, view:'viewed from above', pn:'pelvis square', dn:'shoulders turn'}},
 ];
+/* Schematic for a manual muscle test: the stabilised segment, the moving
+   segment at its test position, the direction of the movement asked for, and
+   where the resistance goes. Geometry comes from `d` on each muscle group. */
+function mmtSVG(m){
+  const d=m.d; if(!d) return '';
+  const W=300, H=156, PAD=16, FOOT=16;          /* FOOT reserves the caption line */
+  const rad=a=>a*Math.PI/180, f=n=>Math.round(n*10)/10;
+  /* laid out around a pivot at the origin, then fitted to the viewBox */
+  const at=(a,l)=>[l*Math.cos(rad(a)), l*Math.sin(rad(a))];
+  const from=(p,a,l)=>[p[0]+l*Math.cos(rad(a)), p[1]+l*Math.sin(rad(a))];
+  const O=[0,0], P=at(d.pa,d.pl), D=at(d.da,d.dl), St=at(d.pa,d.pl*0.55);
+  /* movement: an arc swept beyond the tip of the moving segment */
+  const ar=d.dl*1.16, a0=d.da-6*d.dir, a1=d.da+40*d.dir;
+  const A0=at(a0,ar), A1=at(a1,ar), Atip=at(a1+9*d.dir,ar);
+  /* resistance: perpendicular to the moving segment, mid-shaft, opposing it */
+  const Rat=at(d.da,d.dl*0.70), Rfrom=from(Rat,d.da+90*d.dir,34);
+  /* the moving segment is labelled off to one side, clear of the arc; the
+     stabilised one just past its far end, clear of the stabilise marker.
+     The anchors are placed here so they count toward the bounding box; the
+     offset itself is applied after scaling, so text never rides the line. */
+  const dAnchor=at(d.da,d.dl*(d.dt||0.46)), dOff=d.da-90*d.dir*(d.ds||1), dq=d.dq||21;
+  const dLab=from(dAnchor,dOff,dq), pLab=at(d.pa,d.pl+16);
+  const pts=[O,P,D,St,A0,A1,Atip,Rat,Rfrom,dLab,pLab,[dLab[0]-30,dLab[1]],[dLab[0]+30,dLab[1]],[pLab[0]-34,pLab[1]],[pLab[0]+34,pLab[1]]];
+  const xs=pts.map(p=>p[0]), ys=pts.map(p=>p[1]);
+  const x0=Math.min(...xs), x1=Math.max(...xs), y0=Math.min(...ys), y1=Math.max(...ys);
+  const s=Math.min(1.15,(W-2*PAD)/Math.max(1,x1-x0),(H-2*PAD-FOOT)/Math.max(1,y1-y0));
+  const tx=PAD+((W-2*PAD)-(x1-x0)*s)/2-x0*s, ty=PAD+((H-2*PAD-FOOT)-(y1-y0)*s)/2-y0*s;
+  const T=p=>[f(p[0]*s+tx), f(p[1]*s+ty)];
+  const arrow=(p1,p2,col)=>{
+    const [x1,y1]=T(p1), [x2,y2]=T(p2), a=Math.atan2(y2-y1,x2-x1), h=7.5;
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${col}" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M${x2} ${y2} L${f(x2-h*Math.cos(a-.42))} ${f(y2-h*Math.sin(a-.42))} L${f(x2-h*Math.cos(a+.42))} ${f(y2-h*Math.sin(a+.42))} Z" fill="${col}"/>`;
+  };
+  const [ox,oy]=T(O), [px,py]=T(P), [dx,dy]=T(D), [sx,sy]=T(St);
+  const [ax0,ay0]=T(A0), [ax1,ay1]=T(A1), [rx,ry]=T(Rat);
+  const [dax,day]=T(dAnchor);
+  const lx=f(Math.max(34,Math.min(W-34, dax+dq*Math.cos(rad(dOff))))), ly=f(day+dq*Math.sin(rad(dOff)));
+  /* a label sitting past a sideways segment is anchored at its inner end so it
+     runs away from the limb rather than back across it */
+  const pAn=Math.abs(Math.cos(rad(d.pa)))>0.7 ? (Math.cos(rad(d.pa))>0?'start':'end') : 'middle';
+  const [pax,pay]=T(P), qx=f(pax+13*Math.cos(rad(d.pa))), qy=f(pay+13*Math.sin(rad(d.pa)));
+  return `<div class="dgm"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(m.n)} — test position, the direction of the movement asked for, and where resistance is applied">
+    <line x1="${ox}" y1="${oy}" x2="${px}" y2="${py}" stroke="#b9b7b1" stroke-width="7" stroke-linecap="round"/>
+    <line x1="${ox}" y1="${oy}" x2="${dx}" y2="${dy}" stroke="var(--ink)" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="${ox}" cy="${oy}" r="6" fill="#fff" stroke="var(--ink)" stroke-width="2"/>
+    <rect x="${f(sx-8)}" y="${f(sy-8)}" width="16" height="16" rx="3" fill="#e6e4df" stroke="var(--muted)" stroke-width="1.8"/>
+    <path d="M${ax0} ${ay0} A ${f(ar*s)} ${f(ar*s)} 0 0 ${d.dir>0?1:0} ${ax1} ${ay1}" stroke="var(--teal)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    ${arrow(A1,Atip,'var(--teal)')}
+    ${arrow(Rfrom,Rat,'#8c2f2f')}
+    <circle cx="${rx}" cy="${ry}" r="2.6" fill="#8c2f2f"/>
+    <text x="${qx}" y="${f(qy+3)}" text-anchor="${pAn}">${esc(d.pn)}</text>
+    <text x="${lx}" y="${f(ly+3)}" text-anchor="middle" class="k">${esc(d.dn)}</text>
+    <text x="8" y="${H-5}">${esc(d.view)}</text>
+  </svg><div class="cap">Grey = stabilise · teal = movement asked for · red = your resistance</div></div>`;
+}
 const MRC = ['0','1','2','3','4-','4','4+','5'];
 
 /* ---------- competency standards (Fields, Unsworth & Harreveld 2018) ---------- */
@@ -2108,12 +2541,42 @@ function buildMuscles(){
           <option value="">grade…</option>${MRC.map(g=>`<option ${v.grade===g?'selected':''}>${g}</option>`).join('')}</select>`:''}
       </div>
       ${v.tested!=='na'? `<input class="mnote" placeholder="${v.tested==='yes'?'Side difference, pain, effort, fatigue — anything the grade alone does not say':'Why this group was not tested'}" value="${esc(v.note)}" oninput="S.muscles['${m.id}'].note=this.value;update()">`:''}
+      ${mmtHowTo(m)}
     </div>`;
   }).join('');
 }
+function mmtHowTo(m){
+  if(!m.pos) return '';
+  return `<details class="ref"><summary>▸ how to test this one</summary><div class="refcard">
+    ${mmtSVG(m)}
+    <ul>
+      <li><b>Position.</b> ${m.pos}</li>
+      <li><b>Stabilise.</b> ${m.stab}</li>
+      <li><b>Say.</b> <span class="say">${esc(m.say)}</span></li>
+      <li><b>Resistance.</b> ${m.res}</li>
+      <li><span class="dont">Watch for.</span> ${m.err}</li>
+      <li><b>Why it is on this list.</b> ${esc(m.why)}.</li>
+    </ul>
+    ${m.url? `<div class="src"><a href="${m.url}" target="_blank" rel="noopener">Technique reference — Physiopedia</a></div>`:''}
+  </div></details>`;
+}
 
+/* Two cards per test: how to conduct it, and what you may and may not say
+   while you do. `how` is a prompt for the bench, not a substitute for the
+   manual — where the two differ, the manual wins and you record that. */
 const ADMIN_SCRIPTS = {
   trailsB:{
+    kit:'Part A and Part B sample and test sheets · pen · stopwatch · a clear desk with nothing else on it',
+    mins:'5–10 minutes including Part A',
+    measures:'Set-shifting under time pressure — holding two sequences in mind and alternating between them while a clock runs. This is the closest desk analogue to what fails at a busy intersection, which is why a poor Part B so often shows up on road as late decisions and missed information while attention is elsewhere.',
+    how:[
+      'Sit the client square to the desk in good light, with nothing else on the surface. Confirm they have their reading glasses on.',
+      '<b>Run Part A first, always.</b> It establishes that they can hold the pen, see the circles and follow the sequence — so that if Part B is slow you know it is the alternation and not the mechanics. Record the Part A time even though this builder only reports B; the A-to-B ratio is what tells you whether you are looking at general slowing or a specific executive cost.',
+      'Give the Part B sample sheet and let them complete it. Correct freely here — the sample is the teaching, the test is the measurement.',
+      'Start the stopwatch as the pen touches the page and stop it when they reach the final circle. The clock does not stop for errors, and it does not stop for talking.',
+      'Watch the process as well as the clock: does the pen hover and search, do they lose the alternation and recover, do they catch their own errors or need telling, do they trace the page with a finger. Log it as a field note now — it will not be recoverable later, and it is what distinguishes slow-but-accurate from fast-and-wrong.',
+      'Record time in seconds and the number of errors separately. Both go in the fields below, and the interpretation distinguishes between them.',
+    ],
     title:'Trail Making Test — Part B administration',
     must:[
       'Give the sample (practice) sheet first and let the client complete it. Correct errors on the sample freely — that is what it is for.',
@@ -2133,6 +2596,16 @@ const ADMIN_SCRIPTS = {
     fail:'If any answer or cue was given, the timed score no longer measures divided attention — it measures your prompting. It must be reported as invalid, not as a slow score.',
   },
   maze:{
+    kit:'Maze form and scoring sheet · pen · stopwatch',
+    mins:'5 minutes',
+    measures:'Planning and foresight — looking ahead far enough to commit to a route before entering it. On road this is the difference between a driver who is in the correct lane before the intersection and one who discovers the problem at the line.',
+    how:[
+      'Seat the client square to the sheet, reading glasses on, and orient the maze the same way every time.',
+      'Give the standard instruction and confirm they have understood it before you start. Give the practice maze if the version you hold includes one.',
+      'Start timing at pen-down. Time and errors are both recorded — a fast run with several dead ends is a different finding from a slow, careful, clean one.',
+      'Score errors as the manual defines them — typically line crossings and dead-end entries. Count them as they happen; reconstructing from the sheet afterwards is unreliable.',
+      'Watch for planning behaviour: do they scan the whole maze before starting, or set off and correct? Do they pause at junctions? That observation is often more useful in the report than the time, so log it as a field note while you can still see it.',
+    ],
     title:'OT Drive Home Maze administration',
     must:[
       'Present the maze with the standard instruction: find the way from the start to the home, without crossing any lines and without entering dead ends.',
@@ -2149,10 +2622,53 @@ const ADMIN_SCRIPTS = {
     ],
     fail:'Guidance on route choice invalidates the planning and foresight measure entirely — that is the construct being tested.',
   },
-  driveSafe:{title:'DriveSafe administration', must:['Screen positioned per manual, client seated at the specified distance.','Practice items completed and understood before the scored run.','Run without interruption; do not pause the scored sequence.'], may:['Repeat the standard instruction before the scored items begin.'], never:['Never name objects, directions or locations during the scored items.','Never replay a scored clip.'], fail:'Cueing during scored items inflates the awareness score.'},
-  driveAware:{title:'DriveAware administration', must:['Ask the questions as written, in order.','Record the client\'s own words where the manual calls for it.'], may:['Repeat a question verbatim.'], never:['Never rephrase a question to lead toward the "insightful" answer.','Never react in a way that signals whether an answer was right.'], fail:'Leading the client produces a measure of your prompts, not their insight.'},
-  intersection:{title:'Intersection Diagram Test administration', must:['Present each diagram in the standard order.','Allow the client to answer without time pressure unless the version is timed.'], may:['Confirm the client can see the diagram clearly.'], never:['Never confirm or deny correctness during the test.','Never explain the road rule until the whole test is finished.'], fail:'Teaching during the test converts a road-law measure into a road-law lesson.'},
-  bells:{title:'Bells Test administration', must:['Present the sheet at midline, in the standard orientation.','Standard instruction: circle every bell, as quickly as you can.','Time the search and record omissions by side.'], may:['Repeat the standard instruction.','Confirm when the client says they have finished.'], never:['Never point out a missed bell.','Never reposition the sheet mid-test.','Never say "keep looking, there are more" — that is the deficit you are measuring.'], fail:'Prompting the client to keep searching masks inattention and neglect.'},
+  driveSafe:{
+    kit:'iPad charged and updated, licence current · quiet room · the manual',
+    mins:'15–20 minutes for DriveSafe and DriveAware together',
+    measures:'Awareness of the driving environment — what is present in a traffic scene, where, and moving which way. It is the desk proxy for scanning and situational awareness, and it is the half of DSDA that tends to track on-road observation.',
+    how:[
+      'Set the screen up as the manual specifies — position, distance, brightness. Do it before the client sits down, not while they wait.',
+      'Confirm the practice items are understood before starting the scored run. A client who has not grasped the response format will score as unaware when they are simply lost.',
+      'Run the scored sequence without interruption. Take the phone out of the room; a pause mid-sequence is a departure from standard administration.',
+      'Record the score together with what was missed — objects, direction, or detail — because that is what the report needs. Missing moving objects means something different on road from missing static ones.',
+    ],
+    title:'DriveSafe administration', must:['Screen positioned per manual, client seated at the specified distance.','Practice items completed and understood before the scored run.','Run without interruption; do not pause the scored sequence.'], may:['Repeat the standard instruction before the scored items begin.'], never:['Never name objects, directions or locations during the scored items.','Never replay a scored clip.'], fail:'Cueing during scored items inflates the awareness score.'},
+  driveAware:{
+    kit:'iPad · the manual · somewhere to write the client\'s own words verbatim',
+    mins:'administered with DriveSafe',
+    measures:'Insight — the match between how the client rates their own driving and how they actually performed. Low insight changes what any other finding means: a client who knows they are struggling can compensate and self-restrict; a client who does not, cannot.',
+    how:[
+      'Ask the questions as written and in order. The wording is doing work — it is calibrated against the performance the client has just produced.',
+      'Write the client\'s own words down where the manual asks for them, not your paraphrase. Their phrasing is frequently the most quotable evidence of insight in the entire assessment.',
+      'Keep your face and voice neutral. A nod at the "right" answer is a prompt.',
+      'Note the gap between their self-rating and their DriveSafe performance — that gap is the finding, and it is what the combined DSDA category is built from.',
+    ],
+    title:'DriveAware administration', must:['Ask the questions as written, in order.','Record the client\'s own words where the manual calls for it.'], may:['Repeat a question verbatim.'], never:['Never rephrase a question to lead toward the "insightful" answer.','Never react in a way that signals whether an answer was right.'], fail:'Leading the client produces a measure of your prompts, not their insight.'},
+  intersection:{
+    kit:'Intersection diagrams in the standard order · recording sheet',
+    mins:'5–10 minutes',
+    measures:'Current knowledge of give-way rules and intersection priority. This is knowledge, not capacity — a poor score is usually taught out rather than a reason to stop driving, and the report should say which of the two it is.',
+    how:[
+      'Present each diagram in the standard order, one at a time, and check the client can see it clearly.',
+      'Ask for the answer in the form the recording sheet expects — who goes first, or which vehicle has right of way.',
+      'Allow thinking time unless the version you hold is timed. Note hesitation separately from error; a slow correct answer at a desk becomes a hesitant one at a live intersection.',
+      'Record which rules were missed, not just the total. Roundabouts, unmarked T-intersections and give-way-to-the-right are different gaps with different remedies.',
+      'Save the teaching until the whole test is finished — then do it, because it is useful and it is the point of finding out.',
+    ],
+    title:'Intersection Diagram Test administration', must:['Present each diagram in the standard order.','Allow the client to answer without time pressure unless the version is timed.'], may:['Confirm the client can see the diagram clearly.'], never:['Never confirm or deny correctness during the test.','Never explain the road rule until the whole test is finished.'], fail:'Teaching during the test converts a road-law measure into a road-law lesson.'},
+  bells:{
+    kit:'Bells sheet and scoring template · pen · stopwatch',
+    mins:'5 minutes',
+    measures:'Visual search across a field of competing information, and whether that search is even across the page. Three or more omissions indicate an attentional deficit; six or more to one side raises the question of lateralised neglect — which is why the omissions are recorded by side below, not just totalled.',
+    how:[
+      'Place the sheet <b>at the client\'s midline</b> and keep it there. A sheet that drifts across the desk turns a lateralised finding into noise.',
+      'Give the standard instruction — circle every bell, as quickly as you can — and start timing.',
+      'Watch which side they start on and how they search: systematic column-by-column, or scattered. That pattern is worth a field note.',
+      'When they say they have finished, stop the clock and take the sheet. Do not ask "are you sure?" — that is a prompt.',
+      'Score against the template and <b>split the omissions by side of the page</b>, then enter left and right separately below. A total alone cannot distinguish neglect from a general search deficit, and those two findings mean very different things on road.',
+      'Cross-read this against the confrontation fields you did earlier: a field cut and visual inattention can look similar here and are managed differently.',
+    ],
+    title:'Bells Test administration', must:['Present the sheet at midline, in the standard orientation.','Standard instruction: circle every bell, as quickly as you can.','Time the search and record omissions by side.'], may:['Repeat the standard instruction.','Confirm when the client says they have finished.'], never:['Never point out a missed bell.','Never reposition the sheet mid-test.','Never say "keep looking, there are more" — that is the deficit you are measuring.'], fail:'Prompting the client to keep searching masks inattention and neglect.'},
 };
 function buildAdminBox(id){
   const a=S.admin[id]; if(!a) return '';
@@ -2163,6 +2679,11 @@ function buildAdminBox(id){
     ${opts.map(([v,l])=>`<option value="${v}" ${a[k]===v?'selected':''}>${l}</option>`).join('')}</select>`;
   return `<div class="adminbox">
     <div class="ahead">Administration record ${bad?'<span class="invalidflag">score invalid</span>':''}</div>
+    ${sc&&sc.how? `<details class="ref"><summary>▸ How to conduct this test</summary><div class="refcard">
+      <p style="margin:0 0 6px"><b>What it measures.</b> ${sc.measures}</p>
+      <h5>You will need</h5><p style="margin:0 0 4px">${sc.kit} — about ${sc.mins}.</p>
+      <h5>Procedure</h5><ul>${sc.how.map((x,i)=>`<li><span class="stepnum">${i+1}.</span> ${x}</li>`).join('')}</ul>
+      <p class="src">A prompt for the bench, not a substitute for the manual. Where the two differ, follow the manual and record the departure in the administration record below.</p></div></details>`:''}
     ${sc? `<details class="ref"><summary>▸ ${esc(sc.title)} — what you may and may not say</summary><div class="refcard">
       <h5>Must do</h5><ul>${sc.must.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
       <h5><span class="say">You may say</span></h5><ul>${sc.may.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
@@ -3008,7 +3529,7 @@ function newReport(){
   if(!confirm('Start a new blank report? The current draft will be cleared (save it first if needed).')) return;
   S=freshState();
   ['reasonReferral','consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]());
-  syncForm(); render(); autosave();
+  syncForm(); setStage(1); render(); autosave();
 }
 
 /* Word export */
@@ -3420,7 +3941,16 @@ function updateBadge(){
   if(nbg) nbg.textContent=S.notes.length+' note'+(S.notes.length!==1?'s':'')+(S.notesLocked?' · locked':'');
   const n0=document.getElementById('n0'); if(n0) n0.textContent=(S.equipAt?'set-up ✓':'set-up pending')+' · '+(S.notesLocked?'record locked':'record open');
   const n3=document.getElementById('n3'); if(n3){ const done=PROFILE_DOMAINS.filter(d=>d.core&&profileDone(d.id)).length, tot=PROFILE_DOMAINS.filter(d=>d.core).length; n3.textContent=`profile ${done}/${tot}`; }
+  const n4=document.getElementById('n4'); if(n4){
+    const on=Object.keys(TEST_META).filter(k=>k!=='dsdaCat'&&S.tests[k].on).length;
+    n4.textContent=`${musclesTested()}/${MUSCLES.length} muscle groups · ${on} test${on!==1?'s':''}`;
+  }
+  const n5=document.getElementById('n5'); if(n5){
+    const all=CHECKLIST.flatMap(g=>g.items);
+    n5.textContent=`${all.filter(it=>S.checklist[it.id].st!=='unrated').length}/${all.length} items rated`;
+  }
   const n9=document.getElementById('n9'); if(n9){ const st=COMPETENCIES.map(compStatus); n9.textContent=`competencies ${st.filter(x=>x==='met'||x==='manok').length}/${st.filter(x=>x!=='nap').length}`; }
+  syncStageNav(v);
 }
 function showValidation(){
   const {blockers, advisories}=validate();
@@ -3440,9 +3970,69 @@ function showValidation(){
   document.getElementById('valList').innerHTML=html;
   document.getElementById('valModal').classList.add('open');
 }
+/* ================================================================
+   ASSESSMENT STAGES
+   The form follows the four phases of the assessment itself. Only one
+   stage is in the DOM flow at a time, so the screen shows the phase you
+   are in rather than the whole file — and each stage carries its own
+   outstanding-item count, so you know what a phase still owes you before
+   you move on from it.
+================================================================ */
+const STAGES = [
+  {n:1, label:'Initial Interview', short:'Interview', sub:'Background & set-up',        secs:['⚙','0','1','2','3']},
+  {n:2, label:'Off-Road Assessment', short:'Off-road', sub:'Screens & standardised tests', secs:['4']},
+  {n:3, label:'On-Road Assessment',  short:'On-road',  sub:'The drive',                 secs:['5']},
+  {n:4, label:'Feedback & Finalising', short:'Finalise', sub:'Summary, sign-off, export', secs:['6','7','8','9']},
+];
+const STAGE_OF={}; STAGES.forEach(s=>s.secs.forEach(x=>STAGE_OF[x]=s.n));
+const STAGE_KEY='otdrb-stage';
+let curStage=1;
+function stageOfSec(sec){ return STAGE_OF[sec]||1; }
+function buildStageNav(){
+  const el=document.getElementById('stageNav'); if(!el) return;
+  el.innerHTML = STAGES.map(s=>`<button class="stagebtn" id="stagebtn${s.n}" onclick="setStage(${s.n})">
+    <span class="sn">Stage ${s.n}</span><span class="st">${esc(s.label)}</span><span class="ss">${esc(s.short)}</span>
+    <span class="sq" id="stageq${s.n}">${esc(s.sub)}</span></button>`).join('');
+  STAGES.forEach(s=>{
+    const f=document.getElementById('foot'+s.n); if(!f) return;
+    const prev=STAGES[s.n-2], next=STAGES[s.n];
+    f.innerHTML = (prev? `<button class="btn" onclick="setStage(${prev.n})">← ${esc(prev.label)}</button>`:'')
+      + (next? `<button class="btn primary sfnext" onclick="setStage(${next.n})">${esc(next.label)} →</button>`
+             : `<button class="btn sfnext" onclick="showValidation()">Review outstanding items</button>
+                <button class="btn plum" onclick="guard(exportWord)">Export Word</button>`);
+  });
+}
+/* `v` is the validation result the caller has already computed — this runs
+   on every render and validate() is not cheap enough to repeat. */
+function syncStageNav(v){
+  v = v || validate();
+  STAGES.forEach(s=>{
+    const b=document.getElementById('stagebtn'+s.n); if(!b) return;
+    b.classList.toggle('on', s.n===curStage);
+    const q=document.getElementById('stageq'+s.n); if(!q) return;
+    const nb=v.blockers.filter(m=>stageOfSec(m.sec)===s.n).length;
+    const na=v.advisories.filter(m=>!S.ackAdvisories[m.id] && stageOfSec(m.sec)===s.n).length;
+    q.className = 'sq'+(nb?' blk':na?'':' ok');
+    q.textContent = nb? nb+' blocker'+(nb>1?'s':'') : na? na+' to review' : '✓ '+s.sub;
+  });
+}
+function setStage(n){
+  curStage=n;
+  document.querySelectorAll('.stage').forEach(el=>el.classList.toggle('on', +el.dataset.stage===n));
+  try{ localStorage.setItem(STAGE_KEY,String(n)); }catch(e){}
+  syncStageNav();
+  const fp=document.getElementById('formPane'); if(fp) fp.scrollTop=0;
+}
+function initStages(){
+  buildStageNav();
+  let n=1; try{ n=parseInt(localStorage.getItem(STAGE_KEY),10)||1; }catch(e){}
+  setStage(STAGES.some(s=>s.n===n)? n : 1);
+}
+
 function jumpTo(i){
   const m=window._valList[i]; if(!m) return;
   document.getElementById('valModal').classList.remove('open');
+  if(stageOfSec(m.sec)!==curStage) setStage(stageOfSec(m.sec));
   const el=document.querySelector(m.sel); if(!el) return;
   const det=el.closest('details'); if(det) det.open=true;
   el.scrollIntoView({behavior:'smooth',block:'center'});
@@ -3461,7 +4051,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   loadBrand(); applyBrand(); buildBrand();
   const had=loadAutosave();
   if(!had){ ['reasonReferral','consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]()); }
-  bindInputs(); syncForm(); render();
+  bindInputs(); syncForm(); initStages(); render();
   const ph=document.getElementById('ndPhase');
   if(ph){ ph.addEventListener('change',refreshTagSelect); refreshTagSelect(); }
   document.addEventListener('click',e=>{
