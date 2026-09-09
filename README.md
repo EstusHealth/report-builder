@@ -14,7 +14,7 @@ It was rebuilt around a set of supervisor feedback on a driver assessment course
 
 > **The report is written from the record. Not the other way round.**
 
-Most of what follows exists to make that structurally true rather than merely intended. The general design rule is that **the builder never pre-fills a clinical finding**. Anything that looks like a finding has to be entered by the person who observed it.
+Most of what follows exists to make that structurally true rather than merely intended. The general design rule is that **the builder never sets a clinical judgement for you**. Nothing starts as normal, nothing is pre-ticked as safe, and every status is one the assessor sets. Where a status *has* been set, the builder will write the standard wording for it in one click so you are editing a sentence rather than typing one — but the judgement behind it is always yours, and a quick fill never touches a row you have already rated.
 
 ## The four stages
 
@@ -27,15 +27,15 @@ The form follows the four phases of the assessment itself rather than presenting
 | **3 · On-Road Assessment** | 5 | Vehicle, conditions, route, MDI briefing, safety management and the performance checklist |
 | **4 · Feedback & Finalising** | 6–9 | Summary and clinical reasoning, recommendations, feedback given to the client, declarations, sign-off and competency coverage |
 
-Section numbers are unchanged, so the validation panel's `§` references still point where they always did — and clicking an outstanding item switches to the right stage before jumping to the field. The stage you were last on is remembered.
+Within a stage, **one section is open at a time** — opening a section closes its siblings, so a stage is one form rather than a long scroll. Section numbers are unchanged, so the validation panel's `§` references still point where they always did — and clicking an outstanding item switches to the right stage, opens the section it lives in, and jumps to the field. The stage you were last on is remembered.
 
 ### The governance layer
 
 **Section 0 — Set-up & contemporaneous record**
 
-- **Equipment check.** A grouped pre-assessment checklist covering the client file, vision screen, physical screen, the full cognitive battery and the on-road set-up. Every item is marked Ready or N/A-with-a-reason, then timestamped. Export is blocked until set-up is confirmed.
+- **Equipment check.** A grouped pre-assessment checklist covering the client file, vision screen, physical screen, the full cognitive battery and the on-road set-up. Every item is marked Ready or N/A-with-a-reason, then timestamped. It is strongly recommended rather than enforced — an unconfirmed set-up is raised for review, not treated as a blocker.
 - **Field notes dock.** A capture panel available from any section (bottom-right button, or `⌘/Ctrl + ↵` to log). Each note is timestamped and tagged to a phase (pre-drive / on-road / debrief) and to a specific screen or on-road performance item.
-- **Locking.** The record can be locked only once it meets minimum coverage: 6 pre-drive notes, 10 on-road notes, and at least one note against every one of the five on-road performance areas. After locking, notes cannot be edited or deleted — only timestamped addenda can be added, and anything added post-lock is marked as such in the report.
+- **Locking.** The suggested coverage before locking is 6 pre-drive notes, 10 on-road notes, and at least one note against every one of the five on-road performance areas. Locking below that warns and asks you to confirm rather than refusing, and short coverage is raised for review rather than blocking export. After locking, notes cannot be edited or deleted — only timestamped addenda can be added, and anything added post-lock is marked as such in the report.
 - **Provenance.** Who recorded the on-road notes and when, plus a declared AI-use position (none / language editing after drafting from notes / dictation of your own spoken notes). This prints in the report as a **Basis of Record** section stating note counts, lock time and the AI position.
 
 ### Clinical reasoning
@@ -51,7 +51,7 @@ The value of a driver assessment is not the list of findings but the relationshi
 
 ### Traceability
 
-- On-road checklist items start as **not yet rated**. Nothing is pre-ticked as safe.
+- On-road checklist items start as **not yet rated**. Nothing is pre-ticked as safe. Once you *have* rated one safe, a click writes the standard description of that item so a clean drive reads as a positive finding rather than an empty cell — per item, or for every safe item at once. The report falls back to the same wording for any safe item you leave blank, and prints a short paragraph per performance area naming what was safe. Items rated as an issue or not assessed are never auto-worded.
 - Any item rated as an **issue** must be linked to at least one field note logged at the time. The linked notes appear as timestamped chips under the item, and export is blocked while a flagged issue has nothing behind it.
 - Items marked **not assessed** require a reason, which prints in the report rather than being silently dropped.
 
@@ -59,9 +59,9 @@ The value of a driver assessment is not the list of findings but the relationshi
 
 Stage 2 is built to be worked from at the bench, not just recorded into afterwards. Every screen carries an expandable card covering technique, and each is written around the error that most often invalidates that particular screen.
 
-**Vision.** A lead card on what the three vision screens each measure — and what none of them measure (contrast sensitivity, glare recovery, useful field of view), so the limits of the screen are explicit. Then one card per test, each with a diagram:
+**Vision.** A **record an unremarkable vision screen** button sets fields, ocular motility and the Austroads standard to their normal findings and inserts the standard wording, leaving the acuity figures to you. Then a lead card on what the three vision screens each measure — and what none of them measure (contrast sensitivity, glare recovery, useful field of view), so the limits of the screen are explicit. Then one card per test, each with a diagram:
 
-- **Visual acuity** — chart set-up and the measured test distance, the R / L / binocular order, reading down to the smallest line with no more than one error, and what 6/12 means. Carries the Austroads private-vehicle threshold and the common errors (pacing the distance, testing in reading glasses, recording "within normal limits" with no figure).
+- **Visual acuity** — chart set-up and the measured test distance, the R / L / binocular order, reading down to the smallest line with no more than one error, and what 6/12 means. The binocular figures are required, since they carry the Austroads comparison; the monocular ones are raised for review rather than blocking, so a screen you took binocularly does not hold up the report. No acuity figure is ever filled in for you — it has to be read off the chart. Carries the Austroads private-vehicle threshold and the common errors (pacing the distance, testing in reading glasses, recording "within normal limits" with no figure).
 - **Visual fields by confrontation** — seating, testing each eye against your own field, the four quadrants, finger counting, the binocular pass, and double simultaneous stimulation for extinction. States plainly what confrontation cannot do, when to refer for formal perimetry, and what each pattern of field loss looks like on road.
 - **Ocular motility** — the H pattern for pursuit, two-target saccades, convergence and diplopia, with the reasoning for why saccadic accuracy predicts the mirror and blind-spot checks you will be rating in Stage 3.
 
@@ -98,12 +98,12 @@ Sixteen screens covering what the driving task actually demands of the body, gro
 
 Every screen behaves like the rest of the builder rather than like a free-text box:
 
-- **A status you have to set** — within functional limits / limitation identified / not tested / N/A. Nothing defaults to normal. A limitation must be described, and **not tested needs a reason**, which prints in the report. A blank is a blocker, because a reader cannot tell a clear screen from a skipped one.
+- **A status you have to set** — within functional limits / limitation identified / not tested / N/A. Nothing defaults to normal. A limitation must be described, and **not tested needs a reason**, which prints in the report. A blank is a blocker, because a reader cannot tell a clear screen from a skipped one. Where a run of screens was unremarkable, a **mark remaining WFL** button on each group heading (and one for the whole section) sets every screen you have not yet rated and inserts its standard wording for you to edit. It is scoped to blank rows only and never overwrites a status you have set.
 - **Measurements where the screen produces one**, entered as figures: sternum-to-wheel clearance, accelerator-to-brake transfer time, cervical rotation in degrees each side, sitting tolerance in minutes, Rapid Pace Walk in seconds.
 - **The figures are interpreted, not just stored.** Under 25 cm of wheel clearance raises the airbag problem and points at pedal extensions; under about 30° of cervical rotation raises wide-angle mirrors as a modification recommendation; a Rapid Pace Walk over 9 seconds is reported as the risk marker it is and explicitly not as a licensing test; a sitting tolerance shorter than the on-road drive is cross-checked against the duration you entered in Section 5 and flagged.
 - **A how-to-screen card per row**: numbered procedure, what to record, and the error that most often makes that particular result meaningless — testing fit anywhere but the vehicle, prompting the seatbelt, accepting a head turn the trunk produced, timing a stroll, recording a pain score with no function attached.
 
-The report prints a grouped table of what was screened with the measurements first, then states explicitly which screens were not performed and that nothing is concluded from their absence. Standard "within functional limits" wording is available on demand per row, rather than being the default.
+The report prints a grouped table of what was screened with the measurements first, then states explicitly which screens were not performed and that nothing is concluded from their absence. Standard "within functional limits" wording is inserted on demand — per row or per group — rather than being the default.
 
 ### Manual muscle testing
 
@@ -117,9 +117,11 @@ Sixteen occupational profile domains (thirteen core), each with prompt questions
 
 Two tiers, both enforced before export:
 
-**Blockers** — must be fixed. Set-up and record gates, required fields, core profile domains, unrecorded physical screens, undescribed limitations, untested screens and muscle groups without reasons, incomplete administration records, unrated on-road items, unlinked issues, unconfirmed summaries, unresolved `{tokens}` and `[placeholders]`, `[TBC]` in the licence expiry, outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; a vision standard recorded as not met alongside a supportive outcome), missing recommendations, missing consent, and the documentation competency standards.
+**Blockers** — must be fixed. Required client, referral and assessor fields, core profile domains, unrecorded physical screens, undescribed limitations, untested screens and muscle groups without reasons, incomplete administration records, unrated on-road items, unlinked issues, unconfirmed summaries, unresolved `{tokens}` and `[placeholders]`, `[TBC]` in the licence expiry, outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; a vision standard recorded as not met alongside a supportive outcome), missing recommendations, missing consent, an enabled additional document missing something essential, and the documentation competency standards.
 
-**Advisories** — each must be individually ticked as considered. Contractions, unsupported phrasing ("seemed fine", "no issues", "I think", "obviously"), sentences over 45 words, missing terminal punctuation, thin sections by word count, short on-road duration, flagged issues that do not appear in the summary, and unedited template blocks.
+**Advisories** — each must be individually ticked as considered. The whole of the set-up layer (unconfirmed set-up, an unlocked record, note coverage below the suggested minimum, an empty practice name), monocular visual acuity, contractions, unsupported phrasing ("seemed fine", "no issues", "I think", "obviously"), sentences over 45 words, missing terminal punctuation, thin sections by word count, short on-road duration, flagged issues that do not appear in the summary, and unedited template blocks.
+
+The set-up gates sit in the second tier deliberately: they are good discipline and the panel keeps asking about them, but not being able to issue a finished report is the wrong price for having skipped one.
 
 ### Additional documents
 
