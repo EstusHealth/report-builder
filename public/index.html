@@ -152,7 +152,7 @@ table.rep td.iss{color:#8c2f2f}
 ul.rep{margin:1mm 0 4mm;padding-left:6mm}
 ul.rep li{margin-bottom:2mm}
 
-/* ============ GOVERNANCE / FIELD NOTES ============ */
+/* ============ GOVERNANCE ============ */
 .gate{border:1px solid #e0cfa8;background:#fdf8ec;border-radius:5px;padding:10px 12px;margin:0 0 12px;font-size:12.5px;line-height:1.5;color:#5c4a20}
 .gate b{color:#6b5416}
 .gate.locked{border-color:#c9dfc9;background:#f1f8f1;color:#2c5233}
@@ -162,30 +162,7 @@ ul.rep li{margin-bottom:2mm}
 .gate.soft b{color:#3d3a33}
 .gate .gbtn{margin-top:8px}
 
-#noteDock{position:fixed;right:0;bottom:0;top:46px;width:390px;background:#fff;border-left:1px solid var(--line);box-shadow:-8px 0 24px -14px rgba(0,0,0,.35);z-index:120;display:none;flex-direction:column}
-#noteDock.open{display:flex}
-#noteDock header{background:var(--navy);color:#fff;padding:10px 14px;font-family:'Oswald',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
-#noteDock header .x{margin-left:auto;cursor:pointer;background:none;border:none;color:#fff;font-size:17px;line-height:1}
-#noteDock .ndcap{padding:10px 12px;border-bottom:1px solid var(--line);background:var(--cream)}
-#noteDock .ndcap textarea{width:100%;border:1px solid #d6d4cf;border-radius:4px;padding:6px 8px;font-family:'Barlow',sans-serif;font-size:13px;min-height:56px;resize:vertical}
-#noteDock .ndcap .ndrow{display:flex;gap:6px;margin-top:6px;align-items:center}
-#noteDock .ndcap select{border:1px solid #d6d4cf;border-radius:4px;padding:5px 6px;font-size:11.5px;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;flex:1;min-width:0}
-#noteDock .ndlist{flex:1;overflow-y:auto;padding:8px 12px 40px}
-.nitem{border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:4px;padding:6px 8px;margin-bottom:6px;font-size:12.5px;line-height:1.45;background:#fff}
-.nitem.pre{border-left-color:var(--blue)} .nitem.onroad{border-left-color:var(--plum)} .nitem.debrief{border-left-color:#8a8880}
-.nitem .nmeta{font-family:'Barlow Semi Condensed',sans-serif;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);display:flex;gap:6px;align-items:center;margin-bottom:3px}
-.nitem .nmeta .tm{font-weight:700;color:var(--navy)}
-.nitem .nmeta .del{margin-left:auto;cursor:pointer;color:#8c2f2f;font-weight:700}
-.nitem .amend{font-size:11px;color:var(--plum);margin-top:3px;font-style:italic}
-.nitem textarea{width:100%;border:1px dashed #d6d4cf;border-radius:3px;font-family:'Barlow',sans-serif;font-size:12.5px;padding:4px 6px;min-height:38px;resize:vertical;background:#fcfcfb}
-#noteFab{position:fixed;right:18px;bottom:18px;z-index:110;background:var(--plum);color:#fff;border:none;border-radius:26px;padding:11px 18px;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:13px;letter-spacing:.05em;cursor:pointer;box-shadow:0 6px 20px -6px rgba(0,0,0,.5)}
-#noteFab:hover{background:#8f4a7c}
 .noteslink{font-size:10.5px;color:var(--plum);cursor:pointer;text-decoration:underline;font-weight:600;letter-spacing:0;text-transform:none}
-.notechips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
-.notechip{font-family:'Barlow Semi Condensed',sans-serif;font-size:10.5px;font-weight:600;background:#eef4f6;border:1px solid #cfe1e6;color:#27505a;border-radius:9px;padding:2px 7px;display:flex;gap:5px;align-items:center}
-.notechip .rm{cursor:pointer;color:#8c2f2f}
-.notechip.none{background:#fbf1f1;border-color:#e5c4c4;color:#8c2f2f}
-.linkbtn{border:1px dashed var(--plum);background:none;color:var(--plum);font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11px;border-radius:9px;padding:2px 9px;cursor:pointer}
 
 /* verification bars */
 .vbar{display:flex;align-items:center;gap:7px;margin:4px 0 10px;padding:5px 9px;border-radius:4px;font-size:11.5px;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;letter-spacing:.03em}
@@ -251,9 +228,6 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 .cpbar div{height:100%;background:linear-gradient(90deg,#2ca5b8,#344982)}
 
 /* practice log */
-.plreq{display:flex;gap:8px;align-items:center;font-size:12.5px;padding:5px 0}
-.plreq .cnt{font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;flex:0 0 44px}
-.plreq .cnt.ok{color:#1e6b3a} .plreq .cnt.no{color:#8c2f2f}
 
 /* document tabs */
 #docTabs{display:none;gap:5px;flex-wrap:wrap;padding:9px 12px 0;position:sticky;top:0;z-index:4;background:#dcdad5}
@@ -275,7 +249,6 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 /* validation */
 #checkBadge{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11.5px;padding:5px 10px;border-radius:12px;cursor:pointer;letter-spacing:.04em}
 #checkBadge.ok{background:#1e6b3a;color:#fff} #checkBadge.bad{background:#8c2f2f;color:#fff} #checkBadge.warn{background:#8a6d1f;color:#fff}
-#noteBadge{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10.5px;padding:4px 9px;border-radius:12px;letter-spacing:.05em;background:#3a3934;color:#fff;cursor:pointer}
 .vgroup{font-family:'Oswald',sans-serif;font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin:12px 0 4px;padding-bottom:3px;border-bottom:1px solid var(--line)}
 .vgroup.blk{color:#8c2f2f} .vgroup.adv{color:#8a6d1f}
 .vitem.advisory{align-items:flex-start}
@@ -325,9 +298,6 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   .secbody{max-width:900px}
   details.sec>summary .n{max-width:40%;text-align:right}
 
-  /* field notes become a full-height sheet */
-  #noteDock{width:min(100%,620px);top:0;z-index:200;border-left:none}
-  /* clear the floating notes button */
   #formPane>div:last-child{padding-bottom:110px}
 }
 
@@ -338,7 +308,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   .stagebtn{padding:11px 10px 10px}
   .stagebtn .st{font-size:13px} .stagebtn .sq{font-size:11px}
   .stagefoot{padding:18px 16px 6px}
-  #noteBadge,#checkBadge{padding:8px 11px;font-size:12px}
+  #checkBadge{padding:8px 11px;font-size:12px}
   .btn{padding:11px 14px;font-size:13px;min-height:42px}
   details.sec>summary{padding:17px 16px;font-size:14px}
   .secbody{padding:6px 16px 24px}
@@ -346,17 +316,16 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   .f input[type=text],.f input[type=date],.f input[type=number],.f select,.f textarea,
   .clrow textarea,.clrow select,.reccard textarea,.reccard .params input,.reccard .params select,
   .medrow input,.mgrid select,.mgrid input.mnote,.mgrid textarea.pnote,.eqrow select,.eqrow input.eqwhy,
-  .adminbox select,.adminbox input,#noteDock .ndcap textarea,#noteDock .ndcap select{
+  .adminbox select,.adminbox input{
     font-size:16px;padding:11px 12px;min-height:46px}          /* 16px stops iOS zoom-on-focus */
   .f textarea,.clrow textarea,.reccard textarea{min-height:84px;line-height:1.5}
   .chk{padding:9px 0;font-size:15px;min-height:44px}
   .chk input{width:22px;height:22px}
   .xbtn{width:40px;height:40px;font-size:17px}
-  .addbtn,.linkbtn{padding:10px 16px;font-size:13px;min-height:42px}
+  .addbtn{padding:10px 16px;font-size:13px;min-height:42px}
   .clrow,.testcard,.reccard,.mgrid{padding:12px 13px;margin-bottom:11px}
   .clrow .cltop{flex-direction:column;align-items:stretch;gap:9px}
   .clrow .cltxt{font-size:14px}
-  .notechip{font-size:12px;padding:6px 10px}
   .eqrow{padding:11px 2px;gap:10px;flex-wrap:wrap}
   .eqrow .eqname{font-size:14px;min-width:190px}
   .eqrow input.eqwhy{flex:1 0 100%}
@@ -372,15 +341,6 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   .refcard,.hint{font-size:13px}
   .resetlink,.noteslink{font-size:12px;padding:3px 0;display:inline-block}
 
-  #noteDock header{padding:15px 16px;font-size:14px;padding-top:max(15px,env(safe-area-inset-top))}
-  #noteDock header .x{font-size:24px;padding:0 6px}
-  #noteDock .ndcap{padding:12px 14px}
-  #noteDock .ndcap textarea{min-height:96px}
-  #noteDock .ndlist{padding:10px 14px calc(48px + env(safe-area-inset-bottom))}
-  .nitem{padding:11px 12px;font-size:14px}
-  .nitem .nmeta{font-size:11px}
-  .nitem .nmeta .del{padding:0 8px;font-size:17px}
-  #noteFab{right:16px;bottom:calc(16px + env(safe-area-inset-bottom));padding:15px 22px;font-size:14.5px;border-radius:30px}
 
   /* modals fill more of the screen */
   #valBox{width:96%;max-height:88vh}
@@ -406,7 +366,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
 
 @media print{
   body{background:#fff}
-  #formPane,#toolbar,#gradbar,#noteDock,#noteFab,#previewClose,#docTabs{display:none!important}
+  #formPane,#toolbar,#gradbar,#previewClose,#docTabs{display:none!important}
   body.preview-hidden #previewPane{display:block!important}
   #app{display:block;height:auto;overflow:visible}
   #previewPane{position:static!important;inset:auto!important;z-index:auto!important;overflow:visible;padding:0;background:#fff}
@@ -427,7 +387,6 @@ body.preview-hidden #formPane{width:100%;border-right:none}
     <button class="btn primary" onclick="tbGo(()=>guard(doPrint))">Print / PDF</button>
   </div>
   <input type="file" id="openFile" accept=".json" style="display:none" onchange="openJSON(event)">
-  <span id="noteBadge" onclick="toggleDock()">0 notes</span>
   <span id="checkBadge" class="bad" onclick="showValidation()">checking…</span>
   <button class="btn" id="tbPreview" onclick="togglePreview()">Report</button>
   <button class="btn" id="tbMoreBtn" onclick="toggleMore()" aria-label="More actions">⋯</button>
@@ -441,7 +400,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
      STAGE 1 — INITIAL INTERVIEW (background and set-up)
 ================================================================= -->
 <div class="stage" data-stage="1">
-<div class="stagelead">Everything that happens <b>before</b> you assess anything: the room set up and the record opened, who the client is, what you have read, and the interview that tells you what driving is actually for in this person's life. Get this stage right and the rest of the assessment has something to be measured against.</div>
+<div class="stagelead">Everything that happens <b>before</b> you assess anything: the room set up, who the client is, what you have read, and the interview that tells you what driving is actually for in this person's life. Get this stage right and the rest of the assessment has something to be measured against.</div>
 
 <!-- ================= PRACTICE PROFILE & BRANDING ================= -->
 <details class="sec" id="brandSec">
@@ -452,11 +411,11 @@ body.preview-hidden #formPane{width:100%;border-right:none}
 </div>
 </details>
 
-<!-- ================= 0. SET-UP & FIELD RECORD ================= -->
+<!-- ================= 0. SET-UP ================= -->
 <details class="sec" open>
-<summary>0 · Set-Up &amp; Contemporaneous Record <span class="n" id="n0"></span></summary>
+<summary>0 · Set-Up <span class="n" id="n0"></span></summary>
 <div class="secbody">
-  <div class="hint">This section exists because a report can only be as good as the record it is written from. Equipment is confirmed <b>before</b> the client arrives; observations are logged <b>during</b> the assessment; the record is then locked, and the report is written from it. Locking is recommended before you draft, but it does not hold up the report.</div>
+  <div class="hint">Everything laid out before the client arrives, so you are not leaving the room mid-assessment to fetch a form. Tick off what you need, then pick any additional documents you want alongside the main report.</div>
 
   <div id="setupGate"></div>
 
@@ -467,25 +426,6 @@ body.preview-hidden #formPane{width:100%;border-right:none}
     <div class="f w50"><label>Set-up completed at</label><input type="text" data-bind="equipAt" readonly placeholder="not yet confirmed"></div>
     <div class="f w50"><label>&nbsp;</label><button class="btn primary" onclick="confirmEquip()" id="equipBtn">Confirm set-up complete</button></div>
   </div>
-
-  <div class="subhead">Contemporaneous field record</div>
-  <div class="hint">Log observations <b>as they happen</b>, in the room and in the car. Every on-road issue you flag later must point back to a note logged here. Use the <b>Field notes</b> button (bottom right) at any time — it stays available while you work through every section.</div>
-  <div id="noteStats"></div>
-  <div class="row" style="margin-top:8px">
-    <div class="f w100"><label>Who recorded the on-road notes</label>
-      <select data-bind="notesRecordedBy">
-        <option value="ot">Recorded by me (OT) during the drive</option>
-        <option value="otpost">Recorded by me immediately after the drive (before leaving the vehicle)</option>
-        <option value="shared">Recorded by me with the MDI's observations noted at the time</option>
-      </select></div>
-  </div>
-  <div class="row"><div class="f w100"><label>Use of AI or dictation tools in preparing this report</label>
-    <select data-bind="aiUse">
-      <option value="none">None — written directly from my contemporaneous notes</option>
-      <option value="language">Language editing only, applied after drafting from my contemporaneous notes</option>
-      <option value="transcribe">Dictation/transcription of my own spoken notes recorded at the time</option>
-    </select></div></div>
-  <div class="hint">AI may refine wording you have already written from your own notes. It cannot supply observations, behaviours or clinical reasoning that were not recorded at the time — so this builder will not let a report be exported that has more auto-drafted text than field record behind it.</div>
 
   <div class="subhead">Additional documents</div>
   <div class="hint">Tick the documents you need alongside the main report. Each is generated from the same assessment data, pitched at a different reader — so they cannot contradict the report or each other. They appear as tabs above the preview, and export to Word individually.</div>
@@ -776,7 +716,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
         <li><span class="stepnum">4.</span> Then finger counting: present one, two or five fingers statically in each quadrant. A static target picks up defects a moving one does not.</li>
         <li><span class="stepnum">5.</span> <b>Then both eyes open.</b> This is the binocular field the driving standard is written against, and the one that answers "will they see the pedestrian stepping off the kerb".</li>
         <li><span class="stepnum">6.</span> Present a target on <b>both sides simultaneously</b>. A client who sees each side alone but only one when both appear has visual extinction — inattention rather than a field cut. It is a different finding with a different meaning on road, and it is what the Bells Test later in this section is looking for.</li>
-        <li><span class="stepnum">7.</span> Watch fixation the whole time. A client who searches with their eyes will pass a field test they should fail — and that searching is itself worth logging as a field note.</li>
+        <li><span class="stepnum">7.</span> Watch fixation the whole time. A client who searches with their eyes will pass a field test they should fail — and that searching is itself worth recording.</li>
       </ul>
       <h5>Record</h5>
       <ul>
@@ -934,7 +874,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
      STAGE 3 — ON-ROAD ASSESSMENT
 ================================================================= -->
 <div class="stage" data-stage="3">
-<div class="stagelead">The drive itself. This is the stage you are in <b>while you are in the car</b> — set the conditions and the briefing before you leave, then rate what you see. Log through the <b>Field notes</b> button as you go; every issue you flag here has to point back to one.</div>
+<div class="stagelead">The drive itself. This is the stage you are in <b>while you are in the car</b> — set the conditions and the briefing before you leave, then rate what you see.</div>
 
 <!-- ================= 5. ON-ROAD ================= -->
 <details class="sec" open>
@@ -950,7 +890,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   <div class="row"><div class="f w100"><label>Safety management during the drive <span style="color:var(--faint);text-transform:none;letter-spacing:0">(competency 3.8)</span></label><textarea data-bind="safetyMgmt" rows="2" placeholder="Any instructor intervention (verbal or dual controls), how it was managed, grading of route difficulty, decision points about continuing…"></textarea></div></div>
 
   <div class="subhead">Assessment results checklist</div>
-  <div class="hint">Nothing is pre-rated. Every item starts as <b>not yet rated</b> and you rate what you observed — a blank checklist cannot become a report full of ticks. Anything you rate as an <b>issue</b> must be linked to a note you logged at the time; the <b>link note</b> button lets you attach one (or capture the note now if you are still in the car).</div>
+  <div class="hint">Nothing is pre-rated. Every item starts as <b>not yet rated</b> and you rate what you observed — a blank checklist cannot become a report full of ticks. Anything you rate as an <b>issue</b> needs a comment describing what you saw.</div>
   <div id="onroadGate"></div>
   <div id="checklist"></div>
 </div>
@@ -963,7 +903,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
      STAGE 4 — FEEDBACK & FINALISATION
 ================================================================= -->
 <div class="stage" data-stage="4">
-<div class="stagelead">Out of the car and back at the desk: what you told the client, what the two halves of the assessment mean together, what you are recommending, and the declarations that make the report defensible. Lock the field record before you write, and sign off against it before you export.</div>
+<div class="stagelead">Out of the car and back at the desk: what you told the client, what the two halves of the assessment mean together, what you are recommending, and the declarations that make the report defensible. Sign off before you export.</div>
 
 <!-- ================= 6. SUMMARY & RECOMMENDATIONS ================= -->
 <details class="sec" open>
@@ -982,7 +922,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
     </div>
   </div>
   <div class="row"><div class="f w100"><label>Summary paragraph(s) <span class="resetlink" onclick="resetField('summaryText')">reset to auto-draft</span></label><textarea data-bind="summaryText" rows="8"></textarea></div></div>
-  <div class="hint">The auto-draft is a <b>skeleton, not a report</b>. It assembles the outcome, screen results and the issues you flagged, in your standard structure — you then write the clinical reasoning into it from your notes. It is deliberately blocked from export while it is still untouched auto-text.</div>
+  <div class="hint">The auto-draft is a <b>skeleton, not a report</b>. It assembles the outcome, screen results and the issues you flagged, in your standard structure — you then write the clinical reasoning into it. It is deliberately blocked from export while it is still untouched auto-text.</div>
   <div id="summaryVerify"></div>
 
   <div class="subhead">Recommendations</div>
@@ -1024,7 +964,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   <div class="subhead">Record-keeping &amp; timeliness</div>
   <div class="row">
     <div class="f w50"><label>Report issued within</label><select data-bind="turnaround"><option value="ok">Agreed timeframe (report issued within 10 working days of assessment)</option><option value="late">Outside agreed timeframe — reason recorded below</option></select></div>
-    <div class="f w50"><label>Records retained</label><select data-bind="recordsRetained"><option>Field notes, raw test forms and report retained securely in the client file</option><option>Not yet filed</option></select></div>
+    <div class="f w50"><label>Records retained</label><select data-bind="recordsRetained"><option>Assessment notes, raw test forms and report retained securely in the client file</option><option>Not yet filed</option></select></div>
   </div>
   <div class="row"><div class="f w100"><label>Reason if outside timeframe</label><input type="text" data-bind="turnaroundWhy" placeholder="only needed if late"></div></div>
 
@@ -1051,38 +991,11 @@ body.preview-hidden #formPane{width:100%;border-right:none}
 
 <div id="previewPane"><button id="previewClose" onclick="togglePreview()">✕ Close report</button><div id="docTabs"></div><div id="reportRoot"></div></div>
 </div>
-<button id="noteFab" onclick="toggleDock()">✎ Field notes</button>
-<div id="noteDock">
-  <header>Contemporaneous field record <button class="x" onclick="toggleDock()">×</button></header>
-  <div class="ndcap">
-    <textarea id="ndText" placeholder="What did you just observe? Write it as you saw it — behaviour, context, what you did." onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey))addNote()"></textarea>
-    <div class="ndrow">
-      <select id="ndPhase">
-        <option value="pre">Pre-drive</option>
-        <option value="onroad">On-road</option>
-        <option value="debrief">Debrief / feedback</option>
-      </select>
-      <select id="ndTag"></select>
-    </div>
-    <div class="ndrow">
-      <button class="btn primary" style="flex:1" onclick="addNote()">Log note (⌘/Ctrl + ↵)</button>
-    </div>
-    <div class="hint" style="margin:6px 0 0" id="ndLockMsg"></div>
-  </div>
-  <div class="ndlist" id="ndList"></div>
-</div>
 <div id="valModal" onclick="if(event.target===this)this.classList.remove('open')">
   <div id="valBox">
     <header id="valHead">Outstanding items</header>
     <div class="vbody" id="valList"></div>
     <div class="vfoot"><button class="btn" onclick="document.getElementById('valModal').classList.remove('open')">Close</button></div>
-  </div>
-</div>
-<div id="linkModal" class="" onclick="if(event.target===this)closeLink()" style="display:none;position:fixed;inset:0;background:rgba(23,20,16,.55);z-index:200;align-items:center;justify-content:center">
-  <div id="valBox">
-    <header id="linkHead">Link a field note</header>
-    <div class="vbody" id="linkList"></div>
-    <div class="vfoot"><button class="btn" onclick="closeLink()">Close</button></div>
   </div>
 </div>
 <script>
@@ -1540,7 +1453,7 @@ const EQUIP = [
  {g:'Client file', items:[
   {id:'e1', n:'Referral correspondence and client file reviewed', s:'Read before the client arrives, not in front of them'},
   {id:'e2', n:'Consent form printed and ready'},
-  {id:'e3', n:'Blank field-note paper / device charged for contemporaneous notes', s:'The single item most often missing'},
+  {id:'e3', n:'Paper or a charged device for recording observations during the assessment', s:'The single item most often missing'},
   {id:'e4', n:'Client advised to bring licence, glasses and hearing aids'},
  ]},
  {g:'Vision screen', items:[
@@ -1801,7 +1714,7 @@ const COMPETENCIES = [
  {id:'3.6', t:'Conducts the assessment with pre-determined instructions where possible', ev:()=>!!txt(S.route)},
  {id:'3.7', t:'Ensures the on-road assessment is of adequate duration', ev:()=>parseFloat(S.duration)>=30},
  {id:'3.8', t:'Maintains a safe assessment environment for all road users', ev:()=>!!txt(S.safetyMgmt)},
- {id:'3.9', t:'Observes and records driver behaviour and skills during the on-road assessment', ev:()=>notesIn('onroad').length>=NOTE_MIN.onroad && groupsCovered()===CHECKLIST.length},
+ {id:'3.9', t:'Observes and records driver behaviour and skills during the on-road assessment', ev:()=>allRated()},
  {id:'3.10', t:'Identifies factors affecting on-road performance', ev:()=>allRated() && wc(S.summaryText)>=120},
  {id:'3.11', t:'Determines fitness to drive safely', ev:()=>!!S.outcome},
  {id:'3.12', t:'Considers the need for driver rehabilitation', ev:()=>REC_DEFS.some(r=>S.recs[r.id]&&S.recs[r.id].on)},
@@ -1822,8 +1735,6 @@ const COMPETENCIES = [
  {id:'5.6', t:'Ensures the client is able to use the recommended modifications or assistive technologies', na:()=>S.outcome!=='mods'},
 ];
 
-/* ---------- thresholds that govern the record ---------- */
-const NOTE_MIN = {pre:6, onroad:10, perGroup:1};
 
 const REFS = {
   austroads:"Austroads, 2022, 'Assessing Fitness to Drive', Austroads Inc, Sydney",
@@ -1872,19 +1783,18 @@ function freshState(){
 
     /* ---- governance layer ---- */
     equip:{}, equipAt:'', equipWhy:{},
-    notes:[], notesLocked:false, notesLockedAt:'', notesRecordedBy:'ot', aiUse:'none',
     profile:{},
     verify:{}, ackAdvisories:{},
     suitability:'', prevAssess:'', commScreen:'', mdiBrief:'', safetyMgmt:'', furtherInfo:'',
     fbOffRoad:'', fbOnRoad:'', legalInfo:'', condConsidered:'', onroadSuitable:'',
-    turnaround:'ok', turnaroundWhy:'', recordsRetained:'Field notes, raw test forms and report retained securely in the client file',
+    turnaround:'ok', turnaroundWhy:'', recordsRetained:'Assessment notes, raw test forms and report retained securely in the client file',
     compManual:{}, selfReview:false,
     docs:{gp:false,ndis:false,mdi:false,family:false}, docMeta:{}, activeDoc:'report',
   };
   PHYS_ROWS.forEach(r=> s.phys[r.id]={st:'', v1:'', v2:'', note:''});
   MUSCLES.forEach(m=> s.muscles[m.id]={tested:'no', grade:'', note:''});
   NEEDS_ROWS.forEach(r=> s.needs[r.id]={val:r.opts[0], note:''});
-  CHECKLIST.forEach(g=>g.items.forEach(it=> s.checklist[it.id]={st:'unrated', note:'', refs:[], sev:'dev'}));
+  CHECKLIST.forEach(g=>g.items.forEach(it=> s.checklist[it.id]={st:'unrated', note:'', sev:'dev'}));
   EQUIP.forEach(g=>g.items.forEach(it=> s.equip[it.id]=''));
   PROFILE_DOMAINS.forEach(d=> s.profile[d.id]={text:'', na:false, naWhy:''});
   Object.keys(TEST_ADMIN_DEF).forEach(k=> s.admin[k]=Object.assign({},TEST_ADMIN_DEF[k]));
@@ -1900,8 +1810,6 @@ function txt(x){ return String(x??'').trim(); }
 function wc(x){ const t=txt(x); return t? t.split(/\s+/).length : 0; }
 function profileDone(id){ const p=S.profile[id]; return !!p && (p.na? !!txt(p.naWhy) : wc(p.text)>=15); }
 function musclesTested(){ return MUSCLES.filter(m=>S.muscles[m.id].tested==='yes'&&S.muscles[m.id].grade).length; }
-function notesIn(phase){ return S.notes.filter(n=>n.phase===phase); }
-function groupsCovered(){ return CHECKLIST.filter(g=> S.notes.some(n=>n.phase==='onroad'&&n.group===g.g)).length; }
 function allRated(){ return CHECKLIST.every(g=>g.items.every(it=>S.checklist[it.id].st!=='unrated')); }
 function testInvalid(id){ const a=S.admin[id]; if(!a) return false; return a.cueing==='answers'||a.perManual==='no'; }
 function validTests(){ return Object.keys(TEST_META).filter(id=>id!=='dsdaCat'&&S.tests[id].on&&!testInvalid(id)).length; }
@@ -2001,7 +1909,7 @@ const AUTOTEXT = {
     return `This report reflects {name}'s presentation and performance at the time of the assessment and is based on the information available to me, including the documents listed under "Reports Reviewed" and the history provided by {name}{support}, which is assumed to be accurate. Driving performance may vary with medical status, fatigue, medication changes and environmental conditions, and this assessment represents performance on the day under the conditions described. Should new or conflicting information become available, or should {his} condition change, the opinions in this report may need to be reviewed.`;
   },
   declarationText(){
-    return `I declare that the contents of this report are true and correct to the best of my knowledge and belief, and that the opinions expressed are my own, formed with reference to Austroads 'Assessing Fitness to Drive' (2022), the Australian Competency Standards for Occupational Therapy Driver Assessors (2018), and the assessment findings described in this report. Each finding in this report is drawn from notes I recorded at the time of the assessment.`;
+    return `I declare that the contents of this report are true and correct to the best of my knowledge and belief, and that the opinions expressed are my own, formed with reference to Austroads 'Assessing Fitness to Drive' (2022), the Australian Competency Standards for Occupational Therapy Driver Assessors (2018), and the assessment findings described in this report. Each finding in this report is drawn from my own observations during the assessment.`;
   },
 };
 function resetField(key){ S[key] = AUTOTEXT[key](); syncForm(); update(); }
@@ -2576,7 +2484,7 @@ function buildTests(){
     </div>`;
   }).join('');
   const cv=document.getElementById('cogVerify');
-  if(cv) cv.innerHTML = txt(S.cogSummary)? verifyBar('cogSummary','This cognitive summary is drawn from my own notes and the valid test results only — no invalidated score is relied on here.') : '';
+  if(cv) cv.innerHTML = txt(S.cogSummary)? verifyBar('cogSummary','This cognitive summary is drawn from my own observations and the valid test results only — no invalidated score is relied on here.') : '';
 }
 function autoNoteHTML(id){
   if(id==='dsdaCat') return '<b>Auto-text:</b> '+esc(fill(dsdaCombined())||'Enable DriveSafe + DriveAware (both validly administered) to compose the combined outcome.');
@@ -2619,10 +2527,9 @@ function buildChecklist(){
   const gate=document.getElementById('onroadGate');
   if(gate){
     const unrated=CHECKLIST.flatMap(g=>g.items).filter(it=>S.checklist[it.id].st==='unrated').length;
-    const unlinked=CHECKLIST.flatMap(g=>g.items).filter(it=>S.checklist[it.id].st==='issue'&&!(S.checklist[it.id].refs||[]).length).length;
-    gate.innerHTML = (unrated||unlinked)
-      ? `<div class="gate stop"><b>${unrated} item${unrated!==1?'s':''} not yet rated</b>${unlinked?` · <b>${unlinked} flagged issue${unlinked!==1?'s':''} with no field note linked</b>`:''}. Both block export.</div>`
-      : `<div class="gate locked"><b>All ${CHECKLIST.flatMap(g=>g.items).length} items rated</b>, and every flagged issue points back to a note logged at the time.</div>`;
+    gate.innerHTML = unrated
+      ? `<div class="gate stop"><b>${unrated} item${unrated!==1?'s':''} not yet rated</b>. Every item needs a rating before export.</div>`
+      : `<div class="gate locked"><b>All ${CHECKLIST.flatMap(g=>g.items).length} items rated.</b></div>`;
     const blankSafe=clBlankSafe().length;
     if(blankSafe) gate.innerHTML += `<div class="bulkbar"><button class="btn" onclick="clFillSafe()">✓ Describe the ${blankSafe} item${blankSafe!==1?'s':''} you rated safe</button>
       <span>Inserts the standard wording for each item you have marked safe and left blank, so a clean drive reads as a positive finding rather than an empty cell. Flagged issues and not-assessed items are untouched, and anything you have already written stays.</span></div>`;
@@ -2630,13 +2537,6 @@ function buildChecklist(){
   document.getElementById('checklist').innerHTML = CHECKLIST.map(g=>
     `<div class="grouphead">${g.g}</div>` + g.items.map(it=>{
       const c=S.checklist[it.id];
-      const refs=(c.refs||[]).map(id=>noteById(id)).filter(Boolean);
-      const chips = c.st==='issue'
-        ? `<div class="notechips">${refs.length? refs.map(n=>`<span class="notechip"><b>${esc(clock(n.t))}</b> ${esc(n.text.slice(0,44))}${n.text.length>44?'…':''}<span class="rm" onclick="unlinkNote('${it.id}','${n.id}')">×</span></span>`).join('')
-            : `<span class="notechip none">no field note linked — required</span>`}
-          <button class="linkbtn" onclick="openLink('${it.id}')">＋ link note</button></div>`
-        : (refs.length? `<div class="notechips">${refs.map(n=>`<span class="notechip"><b>${esc(clock(n.t))}</b> ${esc(n.text.slice(0,44))}${n.text.length>44?'…':''}<span class="rm" onclick="unlinkNote('${it.id}','${n.id}')">×</span></span>`).join('')}<button class="linkbtn" onclick="openLink('${it.id}')">＋ link note</button></div>`
-           : (c.st==='safe'? `<div class="notechips"><button class="linkbtn" onclick="openLink('${it.id}')">＋ link note</button></div>`:''));
       return `<div class="clrow" style="${c.st==='unrated'?'border-left:3px solid #8c2f2f':''}"><div class="cltop">
         <select class="st-${c.st==='issue'?'issue':c.st==='safe'?'safe':'na'}" onchange="S.checklist['${it.id}'].st=this.value;buildChecklist();update()">
           <option value="unrated" ${c.st==='unrated'?'selected':''}>? Not yet rated</option>
@@ -2653,7 +2553,6 @@ function buildChecklist(){
           : `<textarea placeholder="${c.st==='issue'?'What you saw · how often · the context and contributing factors · what it will take to develop':'Optional observation note'}" oninput="S.checklist['${it.id}'].note=this.value;update()">${esc(c.note)}</textarea>
              ${c.st==='issue'&&!txt(c.note)? `<div style="margin-top:4px"><span class="noteslink" onclick="scaffoldNote('${it.id}')">insert a structure for this note</span></div>`:''}
              ${c.st==='safe'&&!txt(c.note)? `<div style="margin-top:4px"><span class="resetlink" style="margin-left:0" onclick="S.checklist['${it.id}'].note=CHECKLIST.flatMap(g=>g.items).find(x=>x.id==='${it.id}').def;buildChecklist();update()">insert the standard wording</span></div>`:''}`}
-        ${chips}
       </div>`;
     }).join('')).join('');
 }
@@ -2676,172 +2575,10 @@ function buildRecs(){
     </div>`;
   }).join('');
 }
-/* ================================================================
-   CONTEMPORANEOUS FIELD RECORD
-   The report is written from this. Not the other way round.
-================================================================ */
+/* ---------------- timestamps ---------------- */
 function nowStamp(){ const d=new Date(); return d.toISOString(); }
 function clock(iso){ try{ const d=new Date(iso); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }catch(e){ return ''; } }
 function dayStamp(iso){ try{ const d=new Date(iso); return fmtDate(d.toISOString().slice(0,10))+' '+clock(iso); }catch(e){ return ''; } }
-
-const PRE_TAGS = [
-  {id:'interview', label:'Clinical interview'},
-  {id:'vision', label:'Vision screen'},
-  {id:'hearing', label:'Hearing / communication'},
-  {id:'physical', label:'Physical / muscle testing'},
-  {id:'test-trailsB', label:'Trail Making Test B'},
-  {id:'test-maze', label:'Drive Home Maze'},
-  {id:'test-driveSafe', label:'DriveSafe'},
-  {id:'test-driveAware', label:'DriveAware'},
-  {id:'test-intersection', label:'Intersection Diagram'},
-  {id:'test-bells', label:'Bells Test'},
-  {id:'gencog', label:'General cognitive observation'},
-  {id:'other-pre', label:'Other pre-drive observation'},
-];
-const DEBRIEF_TAGS = [
-  {id:'fb-offroad', label:'Off-road feedback to client'},
-  {id:'fb-onroad', label:'On-road feedback to client'},
-  {id:'fb-mdi', label:'Discussion with MDI'},
-  {id:'other-debrief', label:'Other'},
-];
-function tagsFor(phase){
-  if(phase==='pre') return PRE_TAGS.map(t=>({id:t.id,label:t.label,group:t.label}));
-  if(phase==='debrief') return DEBRIEF_TAGS.map(t=>({id:t.id,label:t.label,group:t.label}));
-  const out=[];
-  CHECKLIST.forEach(g=>{
-    out.push({id:'grp-'+g.g, label:'— '+g.g+' (general) —', group:g.g});
-    g.items.forEach(it=> out.push({id:it.id, label:'   '+g.g+': '+it.short, group:g.g}));
-  });
-  out.push({id:'other-onroad', label:'Other on-road observation', group:'General'});
-  return out;
-}
-function tagLabel(n){
-  const t=tagsFor(n.phase).find(x=>x.id===n.tag);
-  return t? t.label.trim().replace(/^—\s*|\s*—$/g,'') : (n.tag||'general');
-}
-function refreshTagSelect(){
-  const ph=document.getElementById('ndPhase').value;
-  const sel=document.getElementById('ndTag');
-  sel.innerHTML = tagsFor(ph).map(t=>`<option value="${t.id}">${esc(t.label)}</option>`).join('');
-}
-function toggleDock(){
-  const d=document.getElementById('noteDock');
-  d.classList.toggle('open');
-  if(d.classList.contains('open')){ refreshTagSelect(); renderDock(); document.getElementById('ndText').focus(); }
-}
-function addNote(){
-  const el=document.getElementById('ndText'), t=txt(el.value);
-  if(!t){ el.focus(); return; }
-  const phase=document.getElementById('ndPhase').value;
-  const tag=document.getElementById('ndTag').value;
-  const grp=(tagsFor(phase).find(x=>x.id===tag)||{}).group||'';
-  S.notes.push({id:'n'+Date.now()+Math.floor(Math.random()*999), t:nowStamp(), phase, tag, group:grp, text:t, amended:[], post:S.notesLocked});
-  el.value='';
-  renderDock(); update();
-}
-function delNote(id){
-  const n=S.notes.find(x=>x.id===id); if(!n) return;
-  if(S.notesLocked){ alert('The field record is locked. Notes recorded at the time cannot be deleted — add an addendum instead.'); return; }
-  if(!confirm('Delete this note?')) return;
-  S.notes=S.notes.filter(x=>x.id!==id);
-  renderDock(); update();
-}
-function editNote(id,v){
-  const n=S.notes.find(x=>x.id===id); if(!n) return;
-  n.text=v; update();
-}
-function amendNote(id){
-  const n=S.notes.find(x=>x.id===id); if(!n) return;
-  const a=prompt('Addendum (the original note is kept unchanged and this is timestamped separately):');
-  if(!txt(a||'')) return;
-  n.amended.push({t:nowStamp(), text:txt(a)});
-  renderDock(); update();
-}
-function lockNotes(){
-  const pre=notesIn('pre').length, on=notesIn('onroad').length;
-  let warn='';
-  if(pre<NOTE_MIN.pre) warn+=`\n· Pre-drive notes: ${pre} of ${NOTE_MIN.pre} minimum`;
-  if(on<NOTE_MIN.onroad) warn+=`\n· On-road notes: ${on} of ${NOTE_MIN.onroad} minimum`;
-  const missing=CHECKLIST.filter(g=>!S.notes.some(n=>n.phase==='onroad'&&n.group===g.g)).map(g=>g.g);
-  if(missing.length) warn+='\n· No on-road note logged for: '+missing.join(', ');
-  if(warn && !confirm('The field record is below the suggested coverage for a report:\n'+warn+'\n\nAdd the observations you made before locking if you can. If you genuinely did not observe an area, log a note saying so and why.\n\nLock anyway?')) return;
-  if(!confirm('Lock the field record?\n\nAfter locking, existing notes cannot be edited or deleted — you can only add timestamped addenda. This is what makes them a contemporaneous record.')) return;
-  S.notesLocked=true; S.notesLockedAt=nowStamp();
-  S.notes.forEach(n=>n.locked=true);
-  renderDock(); syncForm(); update();
-}
-function renderDock(){
-  const list=document.getElementById('ndList'); if(!list) return;
-  const lm=document.getElementById('ndLockMsg');
-  if(lm) lm.innerHTML = S.notesLocked
-    ? `<b style="color:#1e6b3a">Record locked ${esc(dayStamp(S.notesLockedAt))}.</b> New notes are logged as post-assessment addenda and marked as such.`
-    : `Record open. Lock it before you write the report — <b>Section 0</b>.`;
-  const sorted=[...S.notes].sort((a,b)=> a.t<b.t? -1:1);
-  list.innerHTML = sorted.length? sorted.map(n=>`
-    <div class="nitem ${n.phase}">
-      <div class="nmeta"><span class="tm">${esc(clock(n.t))}</span><span>${esc(n.phase==='onroad'?'on-road':n.phase)}</span><span>· ${esc(tagLabel(n))}</span>
-      ${n.post?'<span style="color:#8c2f2f">· post-lock</span>':''}
-      ${!S.notesLocked? `<span class="del" onclick="delNote('${n.id}')">×</span>`:''}</div>
-      ${S.notesLocked
-        ? `<div>${esc(n.text)}</div>`
-        : `<textarea oninput="editNote('${n.id}',this.value)">${esc(n.text)}</textarea>`}
-      ${n.amended.map(a=>`<div class="amend">Addendum ${esc(clock(a.t))}: ${esc(a.text)}</div>`).join('')}
-      ${S.notesLocked? `<div style="margin-top:4px"><span class="noteslink" onclick="amendNote('${n.id}')">+ addendum</span></div>`:''}
-    </div>`).join('')
-    : `<div class="hint" style="padding:10px 2px">No notes yet. Log what you observe as it happens — this is the record the whole report has to be traceable to.</div>`;
-}
-function noteStats(){
-  const pre=notesIn('pre').length, on=notesIn('onroad').length, db=notesIn('debrief').length;
-  const covered=groupsCovered(), needG=CHECKLIST.length;
-  const okPre=pre>=NOTE_MIN.pre, okOn=on>=NOTE_MIN.onroad, okG=covered>=needG;
-  const ready=okPre&&okOn&&okG;
-  const row=(ok,label,val)=>`<div class="plreq"><span class="cnt ${ok?'ok':'no'}">${ok?'✓':'✗'}</span><span>${label}: <b>${val}</b></span></div>`;
-  let h=`<div class="gate ${S.notesLocked?'locked':(ready?'':'soft')}">`;
-  h+= S.notesLocked
-    ? `<b>Field record locked ${esc(dayStamp(S.notesLockedAt))}.</b> ${S.notes.length} note${S.notes.length!==1?'s':''} recorded. Anything added now is marked as a post-assessment addendum.`
-    : `<b>Field record is open.</b> Locking it is recommended before you draft — the counts below are the coverage a detailed report usually needs, not a requirement.`;
-  h+=`</div>`;
-  h+= row(okPre,'Pre-drive notes',`${pre} / ${NOTE_MIN.pre} minimum`);
-  h+= row(okOn,'On-road notes',`${on} / ${NOTE_MIN.onroad} minimum`);
-  h+= row(okG,'On-road performance areas with at least one note',`${covered} / ${needG}`);
-  h+= `<div class="plreq"><span class="cnt ok">·</span><span>Debrief / feedback notes: <b>${db}</b></span></div>`;
-  if(!S.notesLocked) h+=`<button class="btn primary gbtn" onclick="lockNotes()">Lock field record &amp; begin the report</button>`;
-  return h;
-}
-
-/* ---------- linking on-road findings back to the record ---------- */
-let _linkTarget=null;
-function openLink(itemId){
-  _linkTarget=itemId;
-  const item=CHECKLIST.flatMap(g=>g.items).find(i=>i.id===itemId);
-  const grp=CHECKLIST.find(g=>g.items.some(i=>i.id===itemId));
-  document.getElementById('linkHead').textContent='Link a field note — '+item.short;
-  const cand=S.notes.filter(n=>n.phase==='onroad').sort((a,b)=>a.t<b.t?-1:1);
-  const rel=cand.filter(n=>n.tag===itemId||n.group===grp.g);
-  const rest=cand.filter(n=>!rel.includes(n));
-  const rowFor=n=>{
-    const on=(S.checklist[itemId].refs||[]).includes(n.id);
-    return `<div class="vitem" onclick="linkNote('${n.id}')"><input type="checkbox" class="ack" ${on?'checked':''} onclick="event.preventDefault()">
-      <span><b>${esc(clock(n.t))}</b> · ${esc(tagLabel(n))}<span class="vwhy">${esc(n.text)}</span></span></div>`;
-  };
-  document.getElementById('linkList').innerHTML =
-    (rel.length? `<div class="vgroup">Notes logged against this area</div>`+rel.map(rowFor).join('') : '')+
-    (rest.length? `<div class="vgroup">Other on-road notes</div>`+rest.map(rowFor).join('') : '')+
-    (cand.length? '' : `<div class="hint" style="padding:12px 2px">No on-road notes logged yet. Open the field notes panel and record what you saw — a finding with nothing behind it is exactly what this is here to prevent.</div>`);
-  document.getElementById('linkModal').style.display='flex';
-}
-function linkNote(nid){
-  const c=S.checklist[_linkTarget]; if(!c) return;
-  c.refs=c.refs||[];
-  c.refs = c.refs.includes(nid)? c.refs.filter(x=>x!==nid) : c.refs.concat([nid]);
-  openLink(_linkTarget); buildChecklist(); update();
-}
-function closeLink(){ document.getElementById('linkModal').style.display='none'; _linkTarget=null; }
-function unlinkNote(itemId,nid){
-  S.checklist[itemId].refs=(S.checklist[itemId].refs||[]).filter(x=>x!==nid);
-  buildChecklist(); update();
-}
-function noteById(id){ return S.notes.find(n=>n.id===id); }
 
 /* ================================================================
    VERIFICATION — auto-draft text must be checked against the record
@@ -2968,7 +2705,7 @@ const ADMIN_SCRIPTS = {
       '<b>Run Part A first, always.</b> It establishes that they can hold the pen, see the circles and follow the sequence — so that if Part B is slow you know it is the alternation and not the mechanics. Record the Part A time even though this builder only reports B; the A-to-B ratio is what tells you whether you are looking at general slowing or a specific executive cost.',
       'Give the Part B sample sheet and let them complete it. Correct freely here — the sample is the teaching, the test is the measurement.',
       'Start the stopwatch as the pen touches the page and stop it when they reach the final circle. The clock does not stop for errors, and it does not stop for talking.',
-      'Watch the process as well as the clock: does the pen hover and search, do they lose the alternation and recover, do they catch their own errors or need telling, do they trace the page with a finger. Log it as a field note now — it will not be recoverable later, and it is what distinguishes slow-but-accurate from fast-and-wrong.',
+      'Watch the process as well as the clock: does the pen hover and search, do they lose the alternation and recover, do they catch their own errors or need telling, do they trace the page with a finger. Write it down now — it will not be recoverable later, and it is what distinguishes slow-but-accurate from fast-and-wrong.',
       'Record time in seconds and the number of errors separately. Both go in the fields below, and the interpretation distinguishes between them.',
     ],
     title:'Trail Making Test — Part B administration',
@@ -2998,7 +2735,7 @@ const ADMIN_SCRIPTS = {
       'Give the standard instruction and confirm they have understood it before you start. Give the practice maze if the version you hold includes one.',
       'Start timing at pen-down. Time and errors are both recorded — a fast run with several dead ends is a different finding from a slow, careful, clean one.',
       'Score errors as the manual defines them — typically line crossings and dead-end entries. Count them as they happen; reconstructing from the sheet afterwards is unreliable.',
-      'Watch for planning behaviour: do they scan the whole maze before starting, or set off and correct? Do they pause at junctions? That observation is often more useful in the report than the time, so log it as a field note while you can still see it.',
+      'Watch for planning behaviour: do they scan the whole maze before starting, or set off and correct? Do they pause at junctions? That observation is often more useful in the report than the time, so write it down while you can still see it.',
     ],
     title:'OT Drive Home Maze administration',
     must:[
@@ -3057,7 +2794,7 @@ const ADMIN_SCRIPTS = {
     how:[
       'Place the sheet <b>at the client\'s midline</b> and keep it there. A sheet that drifts across the desk turns a lateralised finding into noise.',
       'Give the standard instruction — circle every bell, as quickly as you can — and start timing.',
-      'Watch which side they start on and how they search: systematic column-by-column, or scattered. That pattern is worth a field note.',
+      'Watch which side they start on and how they search: systematic column-by-column, or scattered. That pattern is worth writing down.',
       'When they say they have finished, stop the clock and take the sheet. Do not ask "are you sure?" — that is a prompt.',
       'Score against the template and <b>split the omissions by side of the page</b>, then enter left and right separately below. A total alone cannot distinguish neglect from a general search deficit, and those two findings mean very different things on road.',
       'Cross-read this against the confrontation fields you did earlier: a field cut and visual inattention can look similar here and are managed differently.',
@@ -3129,7 +2866,7 @@ function buildComp(){
 function buildSignoff(){
   const el=document.getElementById('signoffPanel'); if(!el) return;
   el.innerHTML=`
-    <label class="chk"><input type="checkbox" ${S.selfReview?'checked':''} onchange="S.selfReview=this.checked;update()"><b>I have read this report end to end against my field notes</b>, and every finding, interpretation and recommendation in it is traceable to something I recorded at the time.</label>`;
+    <label class="chk"><input type="checkbox" ${S.selfReview?'checked':''} onchange="S.selfReview=this.checked;update()"><b>I have read this report end to end</b>, and every finding, interpretation and recommendation in it is supported by what I observed and recorded during the assessment.</label>`;
 }
 
 /* ================================================================
@@ -3407,7 +3144,6 @@ function buildReport(){
   /* basis of opinion, limitations, declaration */
   h+=`<h2 style="${ST.h2}">Basis of Opinion, Limitations and Declaration</h2>`;
   if(S.qualifications) h+=`<h3 style="${ST.h3}">Assessor Qualifications</h3>`+P(S.qualifications);
-  h+=`<h3 style="${ST.h3}">Basis of Record</h3>`+P(recordStatement());
   if(S.limitations) h+=`<h3 style="${ST.h3}">Basis of Opinion and Limitations</h3>`+P(S.limitations);
   if(S.declarationText) h+=`<h3 style="${ST.h3}">Declaration</h3>`+P(S.declarationText);
   if(S.distribution) h+=`<p style="${ST.p}"><b>This report has been prepared for:</b> ${esc(S.distribution)}. It is confidential and should not be released to other parties without appropriate consent.</p>`;
@@ -3429,19 +3165,6 @@ function buildReport(){
   h+=`<p style="text-align:center;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;font-size:9pt;letter-spacing:.3em;color:#8a8880;margin:10mm 0 4mm">— END OF REPORT —</p>`;
   h+=`<div style="border-top:1px solid #e6e4df;padding-top:2mm;font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-size:7.5pt;letter-spacing:.08em;color:#8a8880">${esc([brandName(),BRAND.tagline].filter(x=>String(x||'').trim()).join(' · ').toUpperCase())}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(footerID())}&nbsp;&nbsp;·&nbsp;&nbsp;CONFIDENTIAL</div>`;
   return h;
-}
-function recordStatement(){
-  const pre=notesIn('pre').length, on=notesIn('onroad').length, post=S.notes.filter(n=>n.post).length;
-  const when={ot:'during the drive',otpost:'immediately following the drive, before leaving the vehicle',shared:"during the drive, incorporating the driving instructor's observations as they were made"}[S.notesRecordedBy]||'during the assessment';
-  let t=`This report was written from contemporaneous notes recorded by the assessing occupational therapist at the time of the assessment — ${pre} note${pre!==1?'s':''} during the off-road assessment and ${on} recorded ${when}. `;
-  t+=`Those notes were closed${S.notesLockedAt? ' at '+dayStamp(S.notesLockedAt):''} before this report was drafted, and the findings, interpretations and recommendations set out above are traceable to them. `;
-  if(post) t+=`${post} entr${post!==1?'ies were':'y was'} added after the record was closed and ${post!==1?'are':'is'} identified in the file as a post-assessment addendum. `;
-  const ai={
-    none:'No generative artificial intelligence tool was used in the preparation of this report.',
-    language:'A generative artificial intelligence tool was used to refine the wording of text already drafted by the assessing occupational therapist from those contemporaneous notes. It was not used to generate observations, clinical findings or clinical reasoning.',
-    transcribe:'Transcription software was used to convert the assessing occupational therapist\'s own spoken notes, recorded at the time of the assessment, into written form. It was not used to generate observations, clinical findings or clinical reasoning.',
-  }[S.aiUse]||'';
-  return t+ai;
 }
 /* ================================================================
    ADDITIONAL DOCUMENTS
@@ -3876,13 +3599,12 @@ function syncForm(){
   document.querySelectorAll('[data-bindbool]').forEach(el=>{ el.checked = !!S[el.dataset.bindbool]; });
   buildMedRows(); buildReviewed(); buildNeeds(); buildPhys(); buildTests(); buildChecklist(); buildRecs();
   buildEquip(); buildProfile(); buildMuscles(); buildComp(); buildSignoff(); buildDocsPanel(); buildDocTabs();
-  refreshPanels(); renderDock();
+  refreshPanels();
 }
 function refreshPanels(){
   const sg=document.getElementById('setupGate'); if(sg) sg.innerHTML=setupGate();
-  const ns=document.getElementById('noteStats'); if(ns) ns.innerHTML=noteStats();
   const sv=document.getElementById('summaryVerify');
-  if(sv) sv.innerHTML = txt(S.summaryText)? verifyBar('summaryText','I have written this summary from my field notes and test results, and every statement in it is something I recorded or observed.') : '';
+  if(sv) sv.innerHTML = txt(S.summaryText)? verifyBar('summaryText','I have written this summary from my own observations and the test results, and every statement in it is something I recorded or observed.') : '';
   buildSignoff(); buildComp();
 }
 
@@ -3890,6 +3612,10 @@ function refreshPanels(){
 function normalise(raw){
   const s=Object.assign(freshState(), raw||{});
   const base=freshState();
+  /* drafts saved before field notes were removed carry the old record and its
+     client detail; drop it rather than keep re-saving data nothing reads */
+  ['notes','notesLocked','notesLockedAt','notesRecordedBy','aiUse'].forEach(k=>delete s[k]);
+  Object.keys(s.checklist||{}).forEach(k=>{ if(s.checklist[k]) delete s.checklist[k].refs; });
   ['equip','equipWhy','verify','ackAdvisories','compManual','muscles','profile','admin','phys','needs','checklist','tests','docs','docMeta'].forEach(k=>{
     s[k]=Object.assign({}, base[k], raw&&raw[k]? raw[k]:{});
   });
@@ -3905,11 +3631,8 @@ function normalise(raw){
   PROFILE_DOMAINS.forEach(d=> s.profile[d.id]=Object.assign({text:'',na:false,naWhy:''}, s.profile[d.id]||{}));
   Object.keys(TEST_ADMIN_DEF).forEach(k=> s.admin[k]=Object.assign({perManual:'',sample:'',cueing:'',quiet:'',why:''}, s.admin[k]||{}));
   CHECKLIST.forEach(g=>g.items.forEach(it=>{
-    s.checklist[it.id]=Object.assign({st:'unrated',note:'',refs:[],sev:'dev'}, s.checklist[it.id]||{});
-    if(!Array.isArray(s.checklist[it.id].refs)) s.checklist[it.id].refs=[];
+    s.checklist[it.id]=Object.assign({st:'unrated',note:'',sev:'dev'}, s.checklist[it.id]||{});
   }));
-  if(!Array.isArray(s.notes)) s.notes=[];
-  s.notes.forEach(n=>{ if(!Array.isArray(n.amended)) n.amended=[]; });
   return s;
 }
 /* autosave */
@@ -4026,54 +3749,6 @@ function loadExample(){
   S.equip.e10='na'; S.equipWhy.e10='no grip concern reported; grip assessed clinically';
   S.equipAt=fmtDate('2026-06-01')+' 08:42';
 
-  /* --- contemporaneous field record --- */
-  const base=new Date('2026-06-01T09:00:00');
-  let mins=0;
-  const N=(phase,tag,text,step)=>{ mins+=(step||3); const t=new Date(base.getTime()+mins*60000).toISOString();
-    const grp=(tagsFor(phase).find(x=>x.id===tag)||{}).group||'';
-    const id='n'+mins+'_'+tag; S.notes.push({id,t,phase,tag,group:grp,text,amended:[],post:false}); return id; };
-
-  N('pre','interview','Arrived with father. Settled quickly, no prompting needed to engage. Consent process explained, both nodded along, JC repeated back the purpose of the assessment in his own words.');
-  N('pre','interview','Reports main difficulty is "when lots happens at once" — gave example of a car pulling out while he was watching a pedestrian. Father agreed, said he goes quiet rather than panicking.');
-  N('pre','interview','Just under 20 logbook hours, all daytime, all in family auto Corolla. Held permit ~5 years. Previous instructor "frustrating" — said he was told off for hesitating.');
-  N('pre','interview','Wants licence to get to TAFE and to a Saturday job. Currently father drives him, ~6 trips/week. Father works shifts, says this is the hardest part.');
-  N('pre','vision','Wears glasses, brought them. Snellen at 6m. Uncorrected R 6/24, L 6/21, binoc 6/24. Corrected R 6/12, L 6/6, binoc 6/6-2. Confrontation full all quadrants both eyes.');
-  N('pre','vision','Reports floaters both eyes, longstanding, "doesn\'t bother me". No diplopia, no glare sensitivity reported. Pursuits and saccades smooth, no nystagmus, no dizziness on testing.');
-  N('pre','hearing','Responded to all questions at conversational volume, no repeats needed. Followed 3-stage instruction without difficulty. No hearing aids, none reported.');
-  N('pre','physical','MMT completed seated. All UL groups 5/5 bilaterally, break test at end range. Grip strong and symmetrical. LL 5/5 throughout, ankle DF/PF tested individually. Cervical rotation full and 5/5 both directions.');
-  N('pre','physical','Foot-pivot simulation accel-to-brake: accurate, controlled, no heel drag. Repeated x5 with no deterioration.');
-  N('pre','test-trailsB','Sample sheet completed correctly first attempt. Understood alternating rule when read back. Scored sheet: 227 sec, 0 errors. No prompting given — he paused twice at the 8/H transition, I said nothing.', 12);
-  N('pre','test-maze','23 sec, 0 errors. Fast and decisive, planned the route with his eyes before the pen moved.');
-  N('pre','test-driveSafe','83/84. Missed one location/direction detail. All objects identified.');
-  N('pre','test-driveAware','14/17. Answers realistic — identified his own difficulty with multiple demands unprompted.');
-  N('pre','test-intersection','8/8. Talked through the give-way reasoning on two of them without being asked.');
-  N('pre','test-bells','0 omissions, no lateral bias. Systematic left-to-right search pattern.');
-  N('pre','gencog','Alert and engaged for the full 90 minutes despite reporting fatigue and injection-site pain this week. Asked a genuinely complex question about how conditions get recorded on a licence.');
-  N('pre','other-pre','Off-road feedback given at the desk with father present before we went out. Explained TMT-B result in plain terms. He said "that\'s the thing I already knew about myself".');
-
-  N('onroad','pc1','Car park start. Adjusted seat, mirrors, steering column without prompting. Checked seatbelt.', 20);
-  N('onroad','pc6','Indicator stalk on left in assessment car, opposite to family Corolla. Triggered wipers instead of indicator — 3 separate occasions. Stayed calm each time, self-corrected within a second.');
-  N('onroad','pc6','Missed left indicator on exit from roundabout, 4 of 5 roundabouts. Needed verbal prompt from MDI for indicators generally at maybe half of turns.');
-  N('onroad','pc3','Has the neck range — demonstrated it fine off-road. On road, over-shoulder check happened maybe twice unprompted across the whole drive.');
-  N('onroad','ob1','Scanning narrowed as traffic built. On the 60 zone approaching the shopping strip he was locked on the car directly ahead — no far scanning, no scanning to the sides.');
-  N('onroad','ob3','Mirror checks present but sparse. Used them for lane changes and cornering. Long stretches with no mirror check at all.');
-  N('onroad','ob5','Blind-spot head checks: essentially absent. Relied on mirrors for both lane changes and for leaving the kerb. Prompted once by MDI, did it correctly when prompted.');
-  N('onroad','pj3','Roundabouts: safe but over-cautious. Waited for completely clear traffic on 3 occasions, missed viable gaps. Queue built behind us once.');
-  N('onroad','sc1','Speed accurate throughout. School zone 25 — slowed early and held it. 50 and 60 zones both held within limit, no drift.');
-  N('onroad','pj5','Covered the brake approaching a parked delivery van with a driver-side door open. Not instructed to. Good anticipation.');
-  N('onroad','vp3','Lane position consistently central, no drift on the dual-lane section.');
-  N('onroad','pc4','Pedal control smooth, no jerky braking, no over-acceleration from lights.');
-  N('onroad','pj1','Followed all MDI instructions, asked for clarification twice when an instruction came late. Appropriate.');
-  N('onroad','vp7','Reverse park not attempted — ran out of time in the 40 minutes. Flagged to revisit.');
-
-  N('debrief','fb-onroad','Feedback given in the car before we went back in, father joined at the desk. Led with what went well (speed, planning, staying calm with the wipers). Then head checks and mirrors as the two priorities. He accepted it, said he had "never really been taught the head check thing properly".', 45);
-  N('debrief','fb-mdi','MDI agreed with the head-check and roundabout hesitancy picture. His view: 10 hours would cover it, needs a consistent instructor.');
-  N('debrief','fb-onroad','Explained the licensing pathway, that this report goes to the referrer and GP, and that nothing about his permit changes as a result of today.');
-
-  S.notesLocked=true; S.notesLockedAt=new Date(base.getTime()+(mins+10)*60000).toISOString();
-  S.notes.forEach(n=>n.locked=true);
-  const noteFor=(tag)=> S.notes.filter(n=>n.tag===tag).map(n=>n.id);
-
   /* --- muscle testing actually performed --- */
   MUSCLES.forEach(m=>{ S.muscles[m.id]={tested:'yes', grade:'5', note:''}; });
   S.muscles.m5.note='Symmetrical, no fatigue on repeated grip.';
@@ -4124,21 +3799,21 @@ function loadExample(){
   S.admin.driveAware.sample='na'; S.admin.bells.sample='na'; S.admin.intersection.sample='na';
 
   /* --- on-road ratings, each traceable to the record --- */
-  const CL=(id,st,note,tags,sev)=>{ S.checklist[id]={st, note, refs:[].concat(...(tags||[id]).map(noteFor)), sev:sev||'dev'}; };
+  const CL=(id,st,note,sev)=>{ S.checklist[id]={st, note, sev:sev||'dev'}; };
   CL('pc1','safe','Adjusted the seat, mirrors and steering column independently at the start of the assessment, without prompting.');
   CL('pc3','safe','Physically demonstrated the cervical range of motion to look over {his} shoulder, and manual muscle testing confirmed full cervical rotation and power. On road, however, {he} initiated the movement spontaneously on only two occasions across the assessment. The capacity is present; the habit is not yet established. This is common in novice drivers who have not yet automated the movement, and is likely compounded by the higher cognitive load {he} manages when several driving tasks occur at once. It will require specific instruction and repeated supervised practice.');
   CL('pc4','safe','Pedal control was smooth throughout, with no jerky braking and controlled acceleration from a standing start at traffic lights.');
-  CL('pc6','issue',"Because the assessment vehicle's indicator stalk was on the left, contrasting with {his} familiar family vehicle, {he} triggered the wipers instead of the indicators on three occasions. {He} managed this calmly and self-corrected within a second each time. Separately, {he} required verbal prompting from the driving instructor to use indicators at approximately half of all turns, and omitted the left indicator when exiting four of the five roundabouts negotiated. Indicator errors of this kind are common in novice drivers, particularly in an unfamiliar vehicle, but the omission at roundabout exits is a consistent pattern rather than an unfamiliarity effect, and will require targeted instruction and repeated supervised practice.",null,'dev');
+  CL('pc6','issue',"Because the assessment vehicle's indicator stalk was on the left, contrasting with {his} familiar family vehicle, {he} triggered the wipers instead of the indicators on three occasions. {He} managed this calmly and self-corrected within a second each time. Separately, {he} required verbal prompting from the driving instructor to use indicators at approximately half of all turns, and omitted the left indicator when exiting four of the five roundabouts negotiated. Indicator errors of this kind are common in novice drivers, particularly in an unfamiliar vehicle, but the omission at roundabout exits is a consistent pattern rather than an unfamiliarity effect, and will require targeted instruction and repeated supervised practice.",'dev');
   CL('vp3','safe','Lane position was consistently central with no observed drift on the dual-lane section of the route.');
   CL('vp7','na','Reverse parking and three-point turns were not assessed. The 40-minute assessment was fully occupied by open-road driving and there was insufficient time remaining. {name} had identified these as {his} own practice priorities, and they are included in the recommended instruction.');
   CL('sc1','safe','Speed control was consistent and appropriate for conditions throughout, including a 25 km/h school zone, where {he} slowed in good time and maintained the limit, and 50 and 60 km/h zones with no observed drift.');
-  CL('ob1','issue','{name} did not consistently maintain continuous scanning to near, middle and far distances. As traffic density increased on the 60 km/h section approaching a shopping strip, {his} scanning narrowed to the vehicle directly ahead, with no far scanning and no scanning to either side observed. This is common in novice drivers and is consistent with the reduced speed of divided attention identified on the Trail Making Test Part B. It will require targeted instruction and graded practice in progressively busier environments.',null,'sig');
-  CL('ob3','issue','Mirror checking was present but sparse and less frequent than required for a learner preparing for a practical test. {He} used the mirrors reliably when cornering and changing lanes, but there were extended stretches of the route with no mirror check observed. Building a consistent mirror routine demands sustained divided attention, which is {his} identified area of difficulty, and will require specific instruction and repeated practice.',null,'sig');
-  CL('ob5','issue','Physical blind-spot head checks were essentially absent. {name} relied on the mirrors alone when changing lanes and when leaving the kerb. When prompted once by the driving instructor, {he} performed the check correctly and in good time, indicating the skill is available but not yet integrated. For a learner preparing for a practical driving test, frequent and consistent head checks are required, and this is the highest-priority item for instruction arising from this assessment.',null,'sig');
+  CL('ob1','issue','{name} did not consistently maintain continuous scanning to near, middle and far distances. As traffic density increased on the 60 km/h section approaching a shopping strip, {his} scanning narrowed to the vehicle directly ahead, with no far scanning and no scanning to either side observed. This is common in novice drivers and is consistent with the reduced speed of divided attention identified on the Trail Making Test Part B. It will require targeted instruction and graded practice in progressively busier environments.','sig');
+  CL('ob3','issue','Mirror checking was present but sparse and less frequent than required for a learner preparing for a practical test. {He} used the mirrors reliably when cornering and changing lanes, but there were extended stretches of the route with no mirror check observed. Building a consistent mirror routine demands sustained divided attention, which is {his} identified area of difficulty, and will require specific instruction and repeated practice.','sig');
+  CL('ob5','issue','Physical blind-spot head checks were essentially absent. {name} relied on the mirrors alone when changing lanes and when leaving the kerb. When prompted once by the driving instructor, {he} performed the check correctly and in good time, indicating the skill is available but not yet integrated. For a learner preparing for a practical driving test, frequent and consistent head checks are required, and this is the highest-priority item for instruction arising from this assessment.','sig');
   CL('pj1','safe','{name} followed all instructions from the driving instructor, and appropriately requested clarification on the two occasions an instruction was given late.');
-  CL('pj3','issue','While {his} gap selection was consistently safe, {name} demonstrated marked over-caution at roundabouts. {He} waited for completely clear traffic on three occasions, missing viable gaps, and on one occasion a queue formed behind the assessment vehicle. This indicates difficulty judging dynamic gaps and managing the cognitive load of tracking several moving vehicles at once, and links directly to the reduced speed of divided attention identified on the pre-drive screen. It will require graded practice to build fluent and efficient decision-making without compromising the safety margin {he} currently maintains.',null,'dev');
+  CL('pj3','issue','While {his} gap selection was consistently safe, {name} demonstrated marked over-caution at roundabouts. {He} waited for completely clear traffic on three occasions, missing viable gaps, and on one occasion a queue formed behind the assessment vehicle. This indicates difficulty judging dynamic gaps and managing the cognitive load of tracking several moving vehicles at once, and links directly to the reduced speed of divided attention identified on the pre-drive screen. It will require graded practice to build fluent and efficient decision-making without compromising the safety margin {he} currently maintains.','dev');
   CL('pj5','safe','{name} covered the brake on approach to a parked delivery van with its driver-side door open, without being instructed to do so. This indicates developing hazard anticipation and defensive driving skill appropriate to {his} stage.');
-  CHECKLIST.forEach(g=>g.items.forEach(it=>{ if(S.checklist[it.id].st==='unrated') S.checklist[it.id]={st:'safe',note:'',refs:[]}; }));
+  CHECKLIST.forEach(g=>g.items.forEach(it=>{ if(S.checklist[it.id].st==='unrated') S.checklist[it.id]={st:'safe',note:'',sev:'dev'}; }));
 
   /* --- competency, feedback and sign-off narrative --- */
   Object.assign(S,{
@@ -4234,10 +3909,6 @@ function validate(){
 
   /* ---- 1. the record itself ---- */
   if(!S.equipAt) A('setup_equip','Set-up not confirmed','Confirming the equipment and set-up check in Section 0 before the client arrives is good practice, but it does not hold up the report.','0','#equipRows');
-  if(!S.notesLocked) A('setup_lock','Field record not locked','A report is strongest when it is written from a closed contemporaneous record. Locking it in Section 0 is recommended, not required.','0','#noteStats');
-  if(notesIn('pre').length<NOTE_MIN.pre) A('setup_pre',`Only ${notesIn('pre').length} pre-drive field notes (${NOTE_MIN.pre} suggested)`,'A pre-drive screen that produced almost no notes will struggle to support a detailed report.','0','#noteStats');
-  if(notesIn('onroad').length<NOTE_MIN.onroad) A('setup_on',`Only ${notesIn('onroad').length} on-road field notes (${NOTE_MIN.onroad} suggested)`,'This is the gap that shows up in the report as thin, generic on-road description.','0','#noteStats');
-  CHECKLIST.forEach(g=>{ if(!S.notes.some(n=>n.phase==='onroad'&&n.group===g.g)) A('setup_grp_'+g.g.replace(/\W+/g,'_'),'No on-road note logged for '+g.g,'A note against every performance area — including the ones that were fine — gives the report something to be written from.','0','#noteStats'); });
 
   /* ---- 2. required fields ---- */
   REQ_FIELDS.forEach(([k,label,sec])=>{ if(!txt(S[k])) B(label,'Required field.',sec,`[data-bind=${k}]`); });
@@ -4296,14 +3967,13 @@ function validate(){
     const c=S.checklist[it.id];
     if(c.st==='unrated') B('Not yet rated — '+it.short,'Every performance item needs a rating you actually made.','5','#checklist');
     if(c.st==='issue' && !txt(c.note)) B('Issue needs a comment — '+it.short,'Describe the issue, the contributing factors, and what it will take to develop.','5','#checklist');
-    if(c.st==='issue' && !(c.refs||[]).length) B('Issue has no field note behind it — '+it.short,'Link the note you logged at the time. A finding with no contemporaneous record behind it is the exact problem this builder exists to stop.','5','#checklist');
     if(c.st==='na' && !txt(c.note)) B('Not-assessed item needs a reason — '+it.short,'Say why it was not assessed.','5','#checklist');
   }));
 
   /* ---- 7. drafting discipline ---- */
   ['summaryText','cogSummary','physSummary'].forEach(k=>{
     const lbl={summaryText:'Summary',cogSummary:'Cognitive summary',physSummary:'Physical summary'}[k];
-    if(txt(S[k]) && !verified(k)) B(lbl+' not confirmed against your notes','Tick the confirmation bar under the field. If you edit the text afterwards, it un-ticks and you confirm again.', k==='summaryText'?'6':'4', `[data-bind=${k}]`);
+    if(txt(S[k]) && !verified(k)) B(lbl+' not confirmed','Tick the confirmation bar under the field. If you edit the text afterwards, it un-ticks and you confirm again.', k==='summaryText'?'6':'4', `[data-bind=${k}]`);
   });
   if(isUntouchedDraft('summaryText')) B('Summary is still the untouched auto-draft','The auto-draft assembles your data into a skeleton. The clinical reasoning is yours to write into it.','6','[data-bind=summaryText]');
   ['reasonReferral','limitations','consentText','qualifications','declarationText'].forEach(k=>{
@@ -4365,7 +4035,7 @@ function validate(){
   if(!S.consentObtained) B('Confirm informed consent was obtained','Tick the box in Section 8.','8','[data-bindbool=consentObtained]');
   COMPETENCIES.filter(c=>c.hard).forEach(c=>{ if(compStatus(c)==='miss') B('Competency '+c.id+' not evidenced','“'+c.t+'” — this is a documentation standard the report itself has to satisfy.','9','#compRows'); });
   COMPETENCIES.forEach(c=>{ if(compStatus(c)==='man') A('cp_'+c.id,'Competency '+c.id+' awaiting confirmation','“'+c.t+'” — confirm in Section 9 that you did this.','9','#compRows'); });
-  if(!S.selfReview) B('Confirm you have read the report against your notes','The final check in Section 8.','8','#signoffPanel');
+  if(!S.selfReview) B('Confirm you have read the report end to end','The final check in Section 8.','8','#signoffPanel');
   DOCS.forEach(d=>{
     if(!docOn(d.id)) return;
     const miss=d.needs();
@@ -4384,9 +4054,7 @@ function updateBadge(){
   if(nb){ b.className='bad'; b.textContent=nb+' blocker'+(nb>1?'s':'')+(na?' · '+na+' to review':''); }
   else if(na){ b.className='warn'; b.textContent=na+' item'+(na>1?'s':'')+' to review'; }
   else { b.className='ok'; b.textContent='✓ ready to export'; }
-  const nbg=document.getElementById('noteBadge');
-  if(nbg) nbg.textContent=S.notes.length+' note'+(S.notes.length!==1?'s':'')+(S.notesLocked?' · locked':'');
-  const n0=document.getElementById('n0'); if(n0) n0.textContent=(S.equipAt?'set-up ✓':'set-up pending')+' · '+(S.notesLocked?'record locked':'record open');
+  const n0=document.getElementById('n0'); if(n0) n0.textContent=(S.equipAt?'set-up ✓':'set-up pending');
   const n3=document.getElementById('n3'); if(n3){ const done=PROFILE_DOMAINS.filter(d=>d.core&&profileDone(d.id)).length, tot=PROFILE_DOMAINS.filter(d=>d.core).length; n3.textContent=`profile ${done}/${tot}`; }
   const n4=document.getElementById('n4'); if(n4){
     const on=Object.keys(TEST_META).filter(k=>k!=='dsdaCat'&&S.tests[k].on).length;
@@ -4526,8 +4194,6 @@ window.addEventListener('DOMContentLoaded',()=>{
   const had=loadAutosave();
   if(!had){ ['reasonReferral','consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]()); }
   bindInputs(); syncForm(); initStages(); initAccordion(); render();
-  const ph=document.getElementById('ndPhase');
-  if(ph){ ph.addEventListener('change',refreshTagSelect); refreshTagSelect(); }
   document.addEventListener('click',e=>{
     if(document.body.classList.contains('more-open') &&
        !e.target.closest('#tbActions') && !e.target.closest('#tbMoreBtn'))

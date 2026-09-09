@@ -12,9 +12,9 @@ The entire app lives in `public/index.html` (HTML/CSS/vanilla JS, no build step,
 
 It was rebuilt around a set of supervisor feedback on a driver assessment course. The core principle:
 
-> **The report is written from the record. Not the other way round.**
+> **The report is written from what you observed. Not the other way round.**
 
-Most of what follows exists to make that structurally true rather than merely intended. The general design rule is that **the builder never sets a clinical judgement for you**. Nothing starts as normal, nothing is pre-ticked as safe, and every status is one the assessor sets. Where a status *has* been set, the builder will write the standard wording for it in one click so you are editing a sentence rather than typing one — but the judgement behind it is always yours, and a quick fill never touches a row you have already rated.
+The builder does not hold your assessment notes — keep those however you normally do. What it does is refuse to invent the parts only you can supply. The general design rule is that **the builder never sets a clinical judgement for you**. Nothing starts as normal, nothing is pre-ticked as safe, and every status is one the assessor sets. Where a status *has* been set, the builder will write the standard wording for it in one click so you are editing a sentence rather than typing one — but the judgement behind it is always yours, and a quick fill never touches a row you have already rated.
 
 ## The four stages
 
@@ -22,7 +22,7 @@ The form follows the four phases of the assessment itself rather than presenting
 
 | Stage | Sections | What it covers |
 | --- | --- | --- |
-| **1 · Initial Interview** | ⚙, 0–3 | Practice profile, room set-up and opening the contemporaneous record, client and referral details, reports reviewed, and the clinical interview and occupational profile |
+| **1 · Initial Interview** | ⚙, 0–3 | Practice profile, room set-up, client and referral details, reports reviewed, and the clinical interview and occupational profile |
 | **2 · Off-Road Assessment** | 4 | Hearing and communication, vision, physical, and the standardised cognitive battery — each with a how-to-conduct card |
 | **3 · On-Road Assessment** | 5 | Vehicle, conditions, route, MDI briefing, safety management and the performance checklist |
 | **4 · Feedback & Finalising** | 6–9 | Summary and clinical reasoning, recommendations, feedback given to the client, declarations, sign-off and competency coverage |
@@ -31,12 +31,12 @@ Within a stage, **one section is open at a time** — opening a section closes i
 
 ### The governance layer
 
-**Section 0 — Set-up & contemporaneous record**
+**Section 0 — Set-up**
 
 - **Equipment check.** A grouped pre-assessment checklist covering the client file, vision screen, physical screen, the full cognitive battery and the on-road set-up. Every item is marked Ready or N/A-with-a-reason, then timestamped. It is strongly recommended rather than enforced — an unconfirmed set-up is raised for review, not treated as a blocker.
-- **Field notes dock.** A capture panel available from any section (bottom-right button, or `⌘/Ctrl + ↵` to log). Each note is timestamped and tagged to a phase (pre-drive / on-road / debrief) and to a specific screen or on-road performance item.
-- **Locking.** The suggested coverage before locking is 6 pre-drive notes, 10 on-road notes, and at least one note against every one of the five on-road performance areas. Locking below that warns and asks you to confirm rather than refusing, and short coverage is raised for review rather than blocking export. After locking, notes cannot be edited or deleted — only timestamped addenda can be added, and anything added post-lock is marked as such in the report.
-- **Provenance.** Who recorded the on-road notes and when, plus a declared AI-use position (none / language editing after drafting from notes / dictation of your own spoken notes). This prints in the report as a **Basis of Record** section stating note counts, lock time and the AI position.
+- **Additional documents.** Tick the documents you want alongside the main report; they are described [below](#additional-documents).
+
+The builder does not hold your assessment notes. Record observations however you normally do — paper, a notes app, whatever travels with you into the car — and write the report from them.
 
 ### Clinical reasoning
 
@@ -52,7 +52,7 @@ The value of a driver assessment is not the list of findings but the relationshi
 ### Traceability
 
 - On-road checklist items start as **not yet rated**. Nothing is pre-ticked as safe. Once you *have* rated one safe, a click writes the standard description of that item so a clean drive reads as a positive finding rather than an empty cell — per item, or for every safe item at once. The report falls back to the same wording for any safe item you leave blank, and prints a short paragraph per performance area naming what was safe. Items rated as an issue or not assessed are never auto-worded.
-- Any item rated as an **issue** must be linked to at least one field note logged at the time. The linked notes appear as timestamped chips under the item, and export is blocked while a flagged issue has nothing behind it.
+- Any item rated as an **issue** must carry a comment describing what you saw, and export is blocked while a flagged issue has nothing written against it.
 - Items marked **not assessed** require a reason, which prints in the report rather than being silently dropped.
 
 ### How to conduct each assessment
@@ -117,9 +117,9 @@ Sixteen occupational profile domains (thirteen core), each with prompt questions
 
 Two tiers, both enforced before export:
 
-**Blockers** — must be fixed. Required client, referral and assessor fields, core profile domains, unrecorded physical screens, undescribed limitations, untested screens and muscle groups without reasons, incomplete administration records, unrated on-road items, unlinked issues, unconfirmed summaries, unresolved `{tokens}` and `[placeholders]`, `[TBC]` in the licence expiry, outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; a vision standard recorded as not met alongside a supportive outcome), missing recommendations, missing consent, an enabled additional document missing something essential, and the documentation competency standards.
+**Blockers** — must be fixed. Required client, referral and assessor fields, core profile domains, unrecorded physical screens, undescribed limitations, untested screens and muscle groups without reasons, incomplete administration records, unrated on-road items, flagged issues with no comment, unconfirmed summaries, unresolved `{tokens}` and `[placeholders]`, `[TBC]` in the licence expiry, outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; a vision standard recorded as not met alongside a supportive outcome), missing recommendations, missing consent, an enabled additional document missing something essential, and the documentation competency standards.
 
-**Advisories** — each must be individually ticked as considered. The whole of the set-up layer (unconfirmed set-up, an unlocked record, note coverage below the suggested minimum, an empty practice name), monocular visual acuity, contractions, unsupported phrasing ("seemed fine", "no issues", "I think", "obviously"), sentences over 45 words, missing terminal punctuation, thin sections by word count, short on-road duration, flagged issues that do not appear in the summary, and unedited template blocks.
+**Advisories** — each must be individually ticked as considered. The set-up layer (an unconfirmed equipment check, an empty practice name), monocular visual acuity, contractions, unsupported phrasing ("seemed fine", "no issues", "I think", "obviously"), sentences over 45 words, missing terminal punctuation, thin sections by word count, short on-road duration, flagged issues that do not appear in the summary, and unedited template blocks.
 
 The set-up gates sit in the second tier deliberately: they are good discipline and the panel keeps asking about them, but not being able to issue a finished report is the wrong price for having skipped one.
 
@@ -138,11 +138,11 @@ Only what belongs in each document goes into it — the NDIS participant number,
 
 ### Sign-off
 
-A single confirmation in Section 8: that you have read the report end to end against your field notes and every finding, interpretation and recommendation is traceable to something you recorded at the time. It is a hard blocker.
+A single confirmation in Section 8: that you have read the report end to end and every finding, interpretation and recommendation in it is supported by what you observed and recorded during the assessment. It is a hard blocker.
 
 ### Auto-draft discipline
 
-Auto-drafted text is a skeleton, not a report. The summary, cognitive summary and physical summary each carry a confirmation bar — you tick that the text reflects your notes. The tick stores a hash of the text, so **editing afterwards silently un-ticks it** and you confirm again. An untouched auto-draft summary is a hard blocker.
+Auto-drafted text is a skeleton, not a report. The summary, cognitive summary and physical summary each carry a confirmation bar — you tick that the text reflects what you observed. The tick stores a hash of the text, so **editing afterwards silently un-ticks it** and you confirm again. An untouched auto-draft summary is a hard blocker.
 
 ### Competency coverage
 
@@ -158,7 +158,6 @@ The same page adapts — there is no separate mobile build to keep in sync. On a
 - The draft report is **hidden by default** and the form takes the full width. Tap **Report** in the toolbar to read it full-screen, and **✕ Close report** to get back. The choice is remembered, so it also works as a focus mode on desktop.
 - While the report is hidden it is not re-rendered on every keystroke — it is marked stale and rebuilt when you open it, print or export, which keeps typing responsive.
 - Controls are sized for fingers: 46px inputs, 42px buttons, 22px checkboxes, full-width rating selects on the on-road checklist. Inputs use 16px text so iOS does not zoom on focus.
-- The field notes panel becomes a full-height sheet with a large capture box — this is the view you want in the car.
 - Secondary actions (load example, new, save/open draft, export, print) collapse into a **⋯** menu so the toolbar stays one row.
 - Safe-area insets are respected on notched devices, and the page can be added to the home screen to run without browser chrome.
 
@@ -196,7 +195,6 @@ The data that drives the assessment lives in plain arrays at the top of the scri
 | `interp*()` | Score thresholds and interpretation wording |
 | `REC_DEFS` | Recommendation library |
 | `COMPETENCIES` | Competency standards and how each is evidenced |
-| `NOTE_MIN` | Minimum field-note coverage before the record can be locked |
 | `BAD_PHRASES` / `CONTRACTIONS` | Writing-quality checks |
 | `REFS` | Reference list |
 
@@ -218,7 +216,7 @@ Open `public/index.html` directly in a browser, or serve it locally:
 npx serve public
 ```
 
-Click **Load example** for a fully worked de-identified sample — 34 field notes, complete profile, muscle grades, administration records and linked on-road findings — which exports cleanly and shows what the finished discipline looks like. The sample client is fictional.
+Click **Load example** for a fully worked de-identified sample — complete profile, muscle grades, administration records and rated on-road findings — which exports cleanly and shows what the finished discipline looks like. The sample client is fictional.
 
 ## Deploying to Vercel
 
