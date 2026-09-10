@@ -1846,6 +1846,31 @@ function fill(t){
   return t.replace(/\{(\w+)\}/g,(m,k)=> map[k]!==undefined? map[k] : m);
 }
 function esc(x){return String(x??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+/* Some panels rebuild their whole innerHTML on input so the live feedback beside
+   the field (word count, auto-interpretation, suggested hours) stays accurate as
+   you type. That destroys the element being typed into and focus falls back to
+   the body, so only the first keystroke lands. Remember what had focus and where
+   the caret was, rebuild, then put it back. Fields opt in with a data-fkey the
+   rebuild reproduces. */
+function keepFocus(rebuild){
+  const el=document.activeElement, key=el&&el.dataset? el.dataset.fkey : null;
+  if(!key){ rebuild(); return; }
+  let a=null,b=null;
+  try{ a=el.selectionStart; b=el.selectionEnd; }catch(_){}   /* number inputs have no selection */
+  rebuild();
+  const back=document.querySelector(`[data-fkey="${key}"]`);
+  if(!back) return;
+  back.focus({preventScroll:true});
+  if(a!=null){ try{ back.setSelectionRange(a,b); }catch(_){} return; }
+  /* A number input exposes no selection API, so the caret would land at 0 and
+     the next digit would go in front of the last one. Put it at the end, which
+     is where it sits while a figure is typed left to right. */
+  if(back.type==='number'){
+    back.type='text';
+    try{ back.setSelectionRange(back.value.length,back.value.length); }catch(_){}
+    back.type='number';
+  }
+}
 function fmtDate(d){ if(!d) return ''; const m=d.match(/^(\d{4})-(\d{2})-(\d{2})$/); return m? m[3]+'/'+m[2]+'/'+m[1] : d; }
 
 /* ---------- auto-text templates ---------- */
@@ -2417,7 +2442,7 @@ function buildPhys(){
       </div>
       ${r.m && st!=='nt' && st!=='na' ? `<div class="trow" style="margin-top:8px">${r.m.map(f=>
         `<div class="f" style="flex:0 0 auto;min-width:0"><label>${f.label}</label>
-         <input type="text" style="width:${f.w||'110px'}" value="${esc(p[f.k])}" oninput="S.phys['${r.id}'].${f.k}=this.value;buildPhys();update()"></div>`).join('')}</div>`:''}
+         <input type="text" data-fkey="phys:${r.id}:${f.k}" style="width:${f.w||'110px'}" value="${esc(p[f.k])}" oninput="S.phys['${r.id}'].${f.k}=this.value;keepFocus(buildPhys);update()"></div>`).join('')}</div>`:''}
       ${ip && st!=='nt' && st!=='na' ? `<div class="autonote"><b>${ip.pill==='fail'?'⚠ ':''}Auto-interpretation:</b> ${ip.txt}</div>`:''}
       ${st? `<textarea class="pnote" rows="1" placeholder="${esc(PHYS_PLACEHOLDER[st])}" oninput="S.phys['${r.id}'].note=this.value;update()">${esc(p.note)}</textarea>
         ${st==='wfl'&&!txt(p.note)? `<div style="margin-top:5px"><span class="resetlink" onclick="S.phys['${r.id}'].note=PHYS_ROWS.find(x=>x.id==='${r.id}').def;buildPhys();update()">insert the standard wording</span></div>`:''}`:''}
@@ -2562,7 +2587,7 @@ function buildRecs(){
     const st=S.recs[r.id]||(S.recs[r.id]={on:false,text:''});
     const suggested = r.when();
     const sug=suggestedHours();
-    const params = r.params? `<div class="params">Hours: <input type="number" style="width:64px" value="${esc(S.recParams.hours)}" oninput="S.recParams.hours=this.value;if(S.recs.lessons)S.recs.lessons.text=REC_DEFS.find(x=>x.id==='lessons').def();buildRecs();update()">
+    const params = r.params? `<div class="params">Hours: <input type="number" data-fkey="rechours" style="width:64px" value="${esc(S.recParams.hours)}" oninput="S.recParams.hours=this.value;if(S.recs.lessons)S.recs.lessons.text=REC_DEFS.find(x=>x.id==='lessons').def();keepFocus(buildRecs);update()">
       ${sug? `<span style="color:var(--faint)">suggested ${sug} from ${issueList().length} finding${issueList().length!==1?'s':''}${convergence().corroborated.length?' with a corroborated underlying difficulty':''}${String(S.recParams.hours)!==String(sug)? ` · <span class="resetlink" onclick="S.recParams.hours=${sug};if(S.recs.lessons)S.recs.lessons.text=REC_DEFS.find(x=>x.id==='lessons').def();buildRecs();update()">use ${sug}</span>`:''}</span>`:''}
       Funding: <select onchange="S.recParams.funder=this.value;if(S.recs.lessons)S.recs.lessons.text=REC_DEFS.find(x=>x.id==='lessons').def();buildRecs();update()">
         ${['NDIS plan (capacity building)','private funding','compensable funding scheme','other funding'].map(f=>`<option ${S.recParams.funder===f?'selected':''}>${f}</option>`).join('')}</select></div>`:'';
@@ -2646,7 +2671,7 @@ function buildProfile(){
       <details class="ref"><summary>▸ prompt questions</summary><div class="refcard"><ul>${d.prompts.map(q=>`<li>${esc(q)}</li>`).join('')}</ul></div></details>
       ${p.na
         ? `<input style="width:100%;margin-top:6px;border:1px solid #d6d4cf;border-radius:4px;padding:6px 8px;font-size:12.5px;font-family:'Barlow',sans-serif" placeholder="why this domain is not applicable for this client" value="${esc(p.naWhy)}" oninput="S.profile['${d.id}'].naWhy=this.value;update()">`
-        : `<textarea placeholder="What the client told you, in enough detail to be useful to whoever reads this report…" oninput="S.profile['${d.id}'].text=this.value;buildProfile();update()">${esc(p.text)}</textarea>
+        : `<textarea data-fkey="profile:${d.id}" placeholder="What the client told you, in enough detail to be useful to whoever reads this report…" oninput="S.profile['${d.id}'].text=this.value;keepFocus(buildProfile);update()">${esc(p.text)}</textarea>
            <div class="params"><span style="color:${wc(p.text)>=15?'#1e6b3a':'var(--faint)'}">${wc(p.text)} words${wc(p.text)>=15?' ✓':' · 15 minimum'}</span></div>`}
     </div>`;
   }).join('');
