@@ -817,7 +817,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   <div id="physRows"></div>
 
   <div class="subhead">Manual muscle testing (MRC grades)</div>
-  <div class="hint">The screens above establish what the client can do; this grid measures the power behind it. Nothing here is pre-filled as normal. Each muscle group starts as <b>not yet tested</b> and you record the grade you actually elicited — the report prints only what you tested, and says plainly what you did not. Every group carries a <b>how to test this one</b> card: position, what to stabilise, the words to say, where the resistance goes, and the error that most often produces a wrong grade.</div>
+  <div class="hint">The screens above establish what the client can do; this grid measures the power behind it. Nothing here starts as normal. Each muscle group begins as <b>not yet tested</b> and you record the grade you actually elicited — where a section graded normally throughout, the <b>grade remaining 5/5</b> buttons set the groups you have not touched yet, and never a group you have already recorded — the report prints only what you tested, and says plainly what you did not. Every group carries a <b>how to test this one</b> card: position, what to stabilise, the words to say, where the resistance goes, and the error that most often produces a wrong grade.</div>
   <details class="ref"><summary>▸ Muscle testing reference — MRC grading &amp; technique</summary>
     <div class="refcard">
       <h5>MRC / Oxford scale</h5>
@@ -2678,13 +2678,35 @@ function buildProfile(){
 }
 
 function gradeClass(g){ if(!g) return 'g-untested'; if(g==='5') return 'g-full'; if(g.indexOf('4')===0) return 'g-red'; return 'g-untested'; }
+/* Groups still sitting at the untouched default. "Not tested" with a reason
+   written against it is a decision the assessor made, so it is left alone —
+   only a group at the default with nothing said about it can be bulk filled. */
+function mmtBlank(group){
+  return MUSCLES.filter(m=>(!group||m.g===group) && S.muscles[m.id].tested==='no' && !txt(S.muscles[m.id].note));
+}
+/* One click for the groups that graded normally. The report's prose already
+   states that power was 5/5 throughout the groups tested, so no per-group
+   comment is written — the box stays free for anything the grade does not say. */
+function mmtFillNormal(group){
+  const rows=mmtBlank(group||null);
+  if(!rows.length) return;
+  rows.forEach(m=>{ const v=S.muscles[m.id]; v.tested='yes'; v.grade='5'; });
+  buildMuscles(); update();
+}
 function buildMuscles(){
   const el=document.getElementById('muscleRows'); if(!el) return;
   let lastG=null;
-  el.innerHTML = MUSCLES.map(m=>{
+  const totalBlank=mmtBlank().length;
+  el.innerHTML = (totalBlank? `<div class="bulkbar"><button class="btn" onclick="mmtFillNormal()">✓ Grade the ${totalBlank} remaining group${totalBlank!==1?'s':''} 5/5</button>
+    <span>Marks as tested at grade 5 only the groups you have not touched yet. A group you have already graded, or marked not tested with a reason, or marked N/A, is left alone. Comments stay empty — the report already states that power was 5/5 throughout the groups tested.</span></div>`:'')
+    + MUSCLES.map(m=>{
     const v=S.muscles[m.id];
     let head='';
-    if(m.g!==lastG){ head=`<div class="grouphead">${m.g}</div>`; lastG=m.g; }
+    if(m.g!==lastG){
+      const gb=mmtBlank(m.g).length;
+      head=`<div class="grouphead">${m.g}${gb? `<button class="wflbtn" onclick="mmtFillNormal('${m.g.replace(/'/g,"\\'")}')" title="Grades the ${gb} untouched group${gb!==1?'s':''} in this section 5/5. Groups you have already recorded are left alone.">✓ ${gb} remaining → 5/5</button>`:''}</div>`;
+      lastG=m.g;
+    }
     return head+`<div class="mgrid">
       <div class="mtop">
         <div class="mname">${m.n}<div style="font-size:11px;color:var(--faint);font-weight:400">${m.why}</div></div>
