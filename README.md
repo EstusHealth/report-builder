@@ -10,7 +10,7 @@ The entire app lives in `public/index.html` (HTML/CSS/vanilla JS, no build step,
 
 ## What this tool is for
 
-It was rebuilt around a set of supervisor feedback on a driver assessment course. The core principle:
+It is built to the depth of a real driver assessment report, measured against the Flinders Medical Centre driver assessment proformas and the record forms from the Australian OT driver assessment course. The core principle:
 
 > **The report is written from what you observed. Not the other way round.**
 
@@ -22,36 +22,33 @@ The form follows the four phases of the assessment itself rather than presenting
 
 | Stage | Sections | What it covers |
 | --- | --- | --- |
-| **1 · Initial Interview** | ⚙, 0–3 | Practice profile, room set-up, client and referral details, reports reviewed, and the clinical interview and occupational profile |
-| **2 · Off-Road Assessment** | 4 | Hearing and communication, vision, physical, and the standardised cognitive battery — each with a how-to-conduct card |
+| **1 · Initial Interview** | ⚙, 1–3 | Practice profile, client and referral details, reports reviewed, and the clinical interview and occupational profile |
+| **2 · Off-Road Assessment** | 4 | Hearing and communication, vision, physical, the standardised cognitive battery and the pre-drive outcome summary — each screen with a how-to-conduct card |
 | **3 · On-Road Assessment** | 5 | Vehicle, conditions, route, MDI briefing, safety management and the performance checklist |
-| **4 · Feedback & Finalising** | 6–9 | Summary and clinical reasoning, recommendations, feedback given to the client, declarations, sign-off and competency coverage |
+| **4 · Feedback & Finalising** | 6–9 | Summary and reasoning, recommendations, additional documents, feedback given to the client, declarations, sign-off and competency coverage |
 
-Within a stage, **one section is open at a time** — opening a section closes its siblings, so a stage is one form rather than a long scroll. Section numbers are unchanged, so the validation panel's `§` references still point where they always did — and clicking an outstanding item switches to the right stage, opens the section it lives in, and jumps to the field. The stage you were last on is remembered.
+Within a stage, **one section is open at a time** — opening a section closes its siblings, so a stage is one form rather than a long scroll. The validation panel's `§` references point at section numbers, and clicking an outstanding item switches to the right stage, opens the section it lives in, and jumps to the field. The stage you were last on is remembered.
 
-### The governance layer
+### The pre-drive outcome summary
 
-**Section 0 — Set-up**
+The value of a driver assessment is not the list of findings but the relationship between them. That relationship is recorded explicitly, in the three-column table the course record form uses, across five categories — visual, physical, cognitive, psychosocial and driving history:
 
-- **Equipment check.** A grouped pre-assessment checklist covering the client file, vision screen, physical screen, the full cognitive battery and the on-road set-up. Every item is marked Ready or N/A-with-a-reason, then timestamped. It is strongly recommended rather than enforced — an unconfirmed set-up is raised for review, not treated as a blocker.
-- **Additional documents.** Tick the documents you want alongside the main report; they are described [below](#additional-documents).
+| Issue | Possible impact on road | Considerations for the on-road assessment |
+| --- | --- | --- |
+
+It is filled in **before the drive**, so it does what it is for: it tells you what to look for and what to set up on the route. Afterwards it is the spine of the Section 6 summary, which is drafted from it — what the screen anticipated, what actually happened on road, and which of the two the reader should weigh. It prints at the end of the pre-drive section of the report.
 
 The builder does not hold your assessment notes. Record observations however you normally do — paper, a notes app, whatever travels with you into the car — and write the report from them.
 
-### Clinical reasoning
+### Scores are interpreted, not just stored
 
-The value of a driver assessment is not the list of findings but the relationship between them. The builder models that relationship rather than leaving it to prose.
-
-- **Convergence analysis.** Each cognitive domain is mapped to the on-road behaviours it typically shows up in — divided attention to scanning, mirror routines, blind-spot checks and gap selection; planning to route and manoeuvre set-up; insight to self-monitoring; lateralised inattention to detection on the affected side. The summary is then built from the *relationship* between the two halves: which off-road findings were corroborated on road, which were not evident (and what that implies), and which on-road behaviours had no off-road correlate and are therefore skill rather than capacity.
-- **Severity.** Flagged issues are rated developmental, significant or critical. Severity orders the summary and the instructor handover, drives the suggested instruction hours, and blocks a supportive outcome sitting under a critical finding.
-- **Suggested hours** are derived from the number and severity of findings and whether an underlying capacity difficulty was corroborated, not typed from habit. Departing from the suggestion is fine; a large gap raises an advisory asking the report to justify the figure.
 - **Score interpretation reports the pattern, not just pass/fail.** Trail Making B distinguishes accurate-but-slow from fast-but-inaccurate, since these mean different things and have different remedies. The Bells Test takes omissions by side and distinguishes lateralised neglect from a general search deficit. DriveSafe is banded rather than binary.
-- **Normative comparison.** Driving thresholds are cut-offs, not age norms. Each test carries a field for how the raw score compared with the manual's age-stratified data, which is reported alongside the threshold — distinguishing a result that is abnormal for this person from one that is normal for their age but still below the driving cut-off. The client's age at assessment is computed and shown.
-- **Cross-checks.** A DSDA category that is hard to reconcile with the entered scores raises an advisory, on the assumption it is a transcription error — the DSDA report itself remains authoritative.
+- **Physical measurements carry their thresholds.** Under 25 cm of wheel clearance raises the airbag problem and points at pedal extensions; under about 30° of cervical rotation raises wide-angle mirrors as a modification recommendation; a heel pivot slower than 15 taps in 9 seconds is reported against that standard; a Rapid Pace Walk over 9 seconds is reported as the risk marker it is and explicitly not as a licensing test; a sitting tolerance shorter than the on-road drive is cross-checked against the duration in Section 5 and flagged.
+- **What you did not do is reported.** Untested lines, untested muscle groups and unassessed on-road items print with their reasons, and the report states that nothing is concluded from their absence.
 
 ### Traceability
 
-- On-road checklist items start as **not yet rated**. Nothing is pre-ticked as safe. Once you *have* rated one safe, a click writes the standard description of that item so a clean drive reads as a positive finding rather than an empty cell — per item, or for every safe item at once. The report falls back to the same wording for any safe item you leave blank, and prints a short paragraph per performance area naming what was safe. Items rated as an issue or not assessed are never auto-worded.
+- On-road checklist items start as **not yet rated**. Nothing is pre-ticked as safe. Rate what you saw first; then one click marks the items still sitting unrated as safe and appropriate and inserts each one's standard description, so a clean drive reads as a positive finding rather than an empty cell. The report falls back to the same wording for any safe item you leave blank, and prints a short paragraph per performance area naming what was safe. Items rated as an issue or not assessed are never touched by it.
 - Any item rated as an **issue** must carry a comment describing what you saw, and export is blocked while a flagged issue has nothing written against it.
 - Items marked **not assessed** require a reason, which prints in the report rather than being silently dropped.
 
@@ -65,7 +62,7 @@ Stage 2 is built to be worked from at the bench, not just recorded into afterwar
 - **Visual fields by confrontation** — seating, testing each eye against your own field, the four quadrants, finger counting, the binocular pass, and double simultaneous stimulation for extinction. States plainly what confrontation cannot do, when to refer for formal perimetry, and what each pattern of field loss looks like on road.
 - **Ocular motility** — the H pattern for pursuit, two-target saccades, convergence and diplopia, with the reasoning for why saccadic accuracy predicts the mirror and blind-spot checks you will be rating in Stage 3.
 
-**Physical.** Sixteen screens in the order you would run them — set the seat first, because fit determines what every later measurement means, then upper limb, lower limb, trunk and mobility. Each carries a **how to screen this one** card with the procedure, what to record, and the error that most often makes the result meaningless. See [Physical screens](#physical-screens) below.
+**Physical.** Thirteen lines in the order the Flinders proforma reports them. Each carries a **how to screen this one** card with the procedure, what to record, and the error that most often makes the result meaningless. See [Physical screens](#physical-screens) below.
 
 Then each of the twelve muscle groups has a **how to test this one** card: client position, what to stabilise, the words to say, where the resistance goes and in which direction, the substitution to watch for, and a link to the technique reference. Each carries a schematic showing the stabilised segment, the moving segment at its test position, the direction of the movement asked for, and the point of resistance.
 
@@ -73,11 +70,11 @@ Then each of the twelve muscle groups has a **how to test this one** card: clien
 
 ### Test administration integrity
 
-Every standardised test carries an **administration record**: administered per manual, sample item completed, prompting/cueing given, environment free of distraction.
+The default battery is six tests — Trail Making B, OT Drive Home Maze, DriveSafe, DriveAware, the Intersection Diagram Test and the Bells Test. Eight more are there, unticked, for when the referral question calls for them: Trail Making A, Clock Drawing (Freund scoring, 4/7 cut-off), the Snellgrove Maze, the Road Law Slide Test, the Written Road Law Test, the MoCA, Addenbrooke's, and the 128-point paper DriveSafe. Each carries its own threshold from the course record form.
 
-Each test also carries two expandable cards. **How to conduct this test** covers what the test measures, what you need, roughly how long it takes, and the procedure step by step — including the process observations that are only capturable while the client is doing it. **What you may and may not say** sets out what you must do, what you may say, and what you must never say. Both are written for the tests that go wrong most easily (Trail Making Test B, Drive Home Maze, Bells, DriveSafe, DriveAware, Intersection Diagram), and both defer to the manual where they differ from it.
+Each test carries two expandable cards. **How to conduct this test** covers what the test measures, what you need, roughly how long it takes, and the procedure step by step — including the process observations that are only capturable while the client is doing it. **What you may and may not say** sets out what you must do, what you may say, and what you must never say. Both are written for the tests that go wrong most easily (Trail Making Test B, Drive Home Maze, Bells, DriveSafe, DriveAware, Intersection Diagram), and both defer to the manual where they differ from it.
 
-If answers, targets or route guidance were provided, or standard administration was departed from, the test is marked **not scoreable**. The score is then:
+One tick per test records that **standard administration was departed from**. The test is then marked **not scoreable**, and the score is:
 
 - excluded from the report's results table, which prints the reason instead of a number;
 - excluded from the DriveSafe DriveAware combined outcome category;
@@ -86,48 +83,55 @@ If answers, targets or route guidance were provided, or standard administration 
 
 ### Physical screens
 
-Sixteen screens covering what the driving task actually demands of the body, grouped and ordered the way you would run them:
+Thirteen lines, in the order and the wording the Flinders proforma reports them — a status you select, a comment where there is something to say, and a measurement where the line produces one:
 
-| Group | Screens |
+| Line | Measurement it carries |
 | --- | --- |
-| **Vehicle fit & access** | Seating position and fit to the vehicle; entry, exit and seatbelt |
-| **Upper limb** | Active range of movement; functional grasp, release and sustained grip; coordination and dexterity; sensation and proprioception |
-| **Lower limb** | Active range of movement; pedal transfer speed and accuracy; coordination and pedal modulation; sensation and proprioception |
-| **Trunk, neck & mobility** | Cervical and trunk rotation for observation checks; sitting balance, posture and seated tolerance; functional mobility and Rapid Pace Walk; pain and its effect on the driving task |
-| **Other factors** | Tone, tremor and involuntary movement; aids, orthoses, prostheses and existing modifications |
+| Range of movement | Cervical rotation, degrees each side |
+| Strength (Oxford scale) | — (the MRC grid below) |
+| Muscle tone | Modified Ashworth grade |
+| Coordination — upper limb | — |
+| **Coordination — lower limb** | **Heel pivot test** (taps and seconds), foot taps per 10 s, simulated accelerator/brake sequence |
+| Speed of movement | Accelerator-to-brake transfer, seconds |
+| Sensation & proprioception | — |
+| Sitting balance & posture | Sitting tolerated, minutes |
+| Mobility, transfers & Rapid Pace Walk | Rapid Pace Walk seconds, walking aid |
+| Fine manipulation | — |
+| Endurance | — |
+| Pain | VAS 0–10 |
+| Vehicle fit, aids & modifications | Sternum to wheel centre, cm |
 
-Every screen behaves like the rest of the builder rather than like a free-text box:
+Plus hand dominance. The status vocabulary is the proforma's: *no issues reported or observed* · *mild* · *moderate* · *significant difficulty* · *not tested* · *N/A*. Nothing defaults to normal, a difficulty must be described, and **not tested** and **N/A** need reasons, which print in the report. A blank is a blocker, because a reader cannot tell a clear screen from a skipped one — but where a run of lines was unremarkable, one button sets everything you have not recorded yet and inserts each one's standard wording for you to edit. It is scoped to blank lines and never overwrites a status you have set.
 
-- **A status you have to set** — within functional limits / limitation identified / not tested / N/A. Nothing defaults to normal. A limitation must be described, and **not tested needs a reason**, which prints in the report. A blank is a blocker, because a reader cannot tell a clear screen from a skipped one. Where a run of screens was unremarkable, a **mark remaining WFL** button on each group heading (and one for the whole section) sets every screen you have not yet rated and inserts its standard wording for you to edit. It is scoped to blank rows only and never overwrites a status you have set.
-- **Measurements where the screen produces one**, entered as figures: sternum-to-wheel clearance, accelerator-to-brake transfer time, cervical rotation in degrees each side, sitting tolerance in minutes, Rapid Pace Walk in seconds.
-- **The figures are interpreted, not just stored.** Under 25 cm of wheel clearance raises the airbag problem and points at pedal extensions; under about 30° of cervical rotation raises wide-angle mirrors as a modification recommendation; a Rapid Pace Walk over 9 seconds is reported as the risk marker it is and explicitly not as a licensing test; a sitting tolerance shorter than the on-road drive is cross-checked against the duration you entered in Section 5 and flagged.
-- **A how-to-screen card per row**: numbered procedure, what to record, and the error that most often makes that particular result meaningless — testing fit anywhere but the vehicle, prompting the seatbelt, accepting a head turn the trunk produced, timing a stroll, recording a pain score with no function attached.
+Each line carries a **how to screen this one** card: numbered procedure, what to record, and the error that most often makes that particular result meaningless — testing fit anywhere but the vehicle, prompting the seatbelt, accepting a head turn the trunk produced, timing a stroll, letting the whole leg lift instead of pivoting at the heel, recording a pain score with no function attached.
 
-The report prints a grouped table of what was screened with the measurements first, then states explicitly which screens were not performed and that nothing is concluded from their absence. Standard "within functional limits" wording is inserted on demand — per row or per group — rather than being the default.
+The report prints the thirteen lines with their measurements first, then states explicitly which were not tested and that nothing is concluded from their absence.
 
 ### Manual muscle testing
 
-On the MRC (Oxford) 0–5 scale across twelve groups relevant to vehicle control, each annotated with why it matters for driving and each with its own how-to card and diagram (above). Every group starts as **not tested**; a group left untested needs a documented reason, and the report states explicitly which groups were not tested and that no conclusion is drawn about them.
+On the MRC (Oxford) 0–5 scale across twelve groups relevant to vehicle control, each annotated with why it matters for driving and each with its own how-to card and diagram (above). This is what the **Strength** line points at. Every group starts as **not tested**, and the report states explicitly which groups were not tested and that no conclusion is drawn about them.
 
 Where a section graded normally throughout, a **remaining → 5/5** button on each section heading (and one for the whole grid) marks the groups you have not touched yet as tested at grade 5. It is scoped to untouched groups only — a group you have already graded, or marked not tested with a reason, or marked N/A, is never changed. Comments are left empty, since the report's summary already states that power was 5/5 throughout the groups tested. An in-app reference card covers the grading scale, break-test technique and the grade-4-vs-5 error.
 
 ### Clinical interview
 
-Sixteen occupational profile domains (thirteen core), each with prompt questions to ask. Core domains need at least 15 words or an explicit not-applicable with a reason. Covers roles, routine, work/study, community participation, transport reliance, goals, fatigue, medication timing, substance use, insight, supports for practice, learning style, incident history, sensory factors and communication needs.
+Eight occupational profile domains (six core), each with prompt questions to ask. Core domains need content, or an explicit not-applicable with a reason. Covers roles, work and study and social history; current transport and reliance on others; the purpose of driving and what the client expects from the assessment; insight into their own abilities and risk; fatigue, sleep, pain, medication timing and substance use; crashes, near-misses and infringements; and — where relevant — supports for supervised practice and learning style. Medical history, symptoms and driving history are recorded separately in Sections 1 and 3.
 
 ### Report-writing quality gate
 
 Two tiers, both enforced before export:
 
-**Blockers** — must be fixed. Required client, referral and assessor fields, core profile domains, unrecorded physical screens, undescribed limitations, untested screens and muscle groups without reasons, incomplete administration records, unrated on-road items, flagged issues with no comment, unconfirmed summaries, unresolved `{tokens}` and `[placeholders]`, `[TBC]` in the licence expiry, outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; a vision standard recorded as not met alongside a supportive outcome), missing recommendations, missing consent, an enabled additional document missing something essential, and the documentation competency standards.
+**Blockers** — must be fixed. Identity, licensing, referral and assessor fields, `[TBC]` in the licence expiry, core profile domains, unrecorded physical lines, undescribed difficulties, untested lines without reasons, binocular visual acuity, test scores, unrated on-road items, flagged issues with no comment, the unconfirmed summary, unresolved `{tokens}` and `[placeholders]`, outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; a vision standard recorded as not met alongside a supportive outcome), missing recommendations, missing consent, sign-off, an enabled additional document missing something essential, and the documentation competency standards.
 
-**Advisories** — each must be individually ticked as considered. The set-up layer (an unconfirmed equipment check, an empty practice name), monocular visual acuity, contractions, unsupported phrasing ("seemed fine", "no issues", "I think", "obviously"), sentences over 45 words, missing terminal punctuation, thin sections by word count, short on-road duration, flagged issues that do not appear in the summary, and unedited template blocks.
+**Advisories** — each must be individually ticked as considered. The competency-prompt fields (communication screen, MDI briefing, safety management, feedback given, licensing information, suitability decisions), an empty practice name, monocular visual acuity, contractions, unsupported phrasing ("seemed fine", "no issues", "I think", "obviously"), sentences over 45 words, missing terminal punctuation, thin sections by word count, short on-road duration, flagged issues that do not appear in the summary, and unedited template blocks.
 
-The set-up gates sit in the second tier deliberately: they are good discipline and the panel keeps asking about them, but not being able to issue a finished report is the wrong price for having skipped one.
+The competency prompts sit in the second tier deliberately: they are good discipline and the panel keeps asking about them, but not being able to issue a finished report is the wrong price for having skipped one. Standard wording still sitting verbatim as inserted is exempt from the phrasing checks — it is flagged as unedited, not as sloppy writing.
+
+Using each one-click fill where it applies, a complete assessment reaches **ready to export** in roughly the number of decisions the Flinders proforma itself takes.
 
 ### Additional documents
 
-Tick any of these in **Section 0** and they appear as tabs above the preview, each exporting to Word separately. All four are generated from the same assessment data as the main report, so they cannot drift from it or contradict each other — and each carries an optional free-text paragraph for anything specific to that reader.
+Tick any of these in **Section 6** and they appear as tabs above the preview, each exporting to Word separately. All four are generated from the same assessment data as the main report, so they cannot drift from it or contradict each other — and each carries an optional free-text paragraph for anything specific to that reader.
 
 | Document | Written for | Contains |
 | --- | --- | --- |
@@ -140,11 +144,11 @@ Only what belongs in each document goes into it — the NDIS participant number,
 
 ### Sign-off
 
-A single confirmation in Section 8: that you have read the report end to end and every finding, interpretation and recommendation in it is supported by what you observed and recorded during the assessment. It is a hard blocker.
+A single confirmation in Section 8: that you have read the report end to end and every finding, interpretation and recommendation in it is supported by what you observed and recorded during the assessment. It is a hard blocker. Section 8 also carries a declared position on AI or dictation use, which prints with the declaration when it is anything other than *None*.
 
 ### Auto-draft discipline
 
-Auto-drafted text is a skeleton, not a report. The summary, cognitive summary and physical summary each carry a confirmation bar — you tick that the text reflects what you observed. The tick stores a hash of the text, so **editing afterwards silently un-ticks it** and you confirm again. An untouched auto-draft summary is a hard blocker.
+Auto-drafted text is a skeleton, not a report. The Section 6 summary carries a confirmation bar — you tick that the text reflects what you observed. The tick stores a hash of the text, so **editing afterwards silently un-ticks it** and you confirm again. An untouched auto-draft summary is a hard blocker.
 
 ### Competency coverage
 
@@ -187,16 +191,17 @@ The data that drives the assessment lives in plain arrays at the top of the scri
 
 | Constant | What it controls |
 | --- | --- |
-| `EQUIP` | Pre-assessment equipment and set-up checklist |
 | `PROFILE_DOMAINS` | Occupational profile domains and their prompt questions |
 | `MUSCLES` / `MRC` | Muscle groups tested, their how-to-test text and diagram geometry, and the grading scale |
-| `PHYS_ROWS` / `PHYS_ST` | Physical screens — how-to-screen text, measurement fields, threshold interpretation and standard wording; and the status vocabulary |
-| `CHECKLIST` | On-road performance areas and items |
-| `TEST_META` / `ADMIN_SCRIPTS` | Standardised tests, and the procedure and administration rules shown for each |
+| `PHYS_ROWS` / `PHYS_ST` / `MAS` | Physical lines — how-to-screen text, measurement fields, threshold interpretation and standard wording; the status vocabulary; the Modified Ashworth scale |
+| `CHECKLIST` | On-road performance areas, items and their standard wording |
+| `PREDRIVE_CATS` | Categories in the pre-drive outcome summary |
+| `TEST_META` / `ADMIN_SCRIPTS` | Standardised tests (including which are on by default), and the procedure and administration rules shown for each |
 | `STAGES` | The four assessment stages and which sections belong to each |
 | `interp*()` | Score thresholds and interpretation wording |
 | `REC_DEFS` | Recommendation library |
 | `COMPETENCIES` | Competency standards and how each is evidenced |
+| `REQ_FIELDS` | Required fields — a fourth `'soft'` element makes one an advisory rather than a blocker |
 | `BAD_PHRASES` / `CONTRACTIONS` | Writing-quality checks |
 | `REFS` | Reference list |
 
@@ -218,7 +223,7 @@ Open `public/index.html` directly in a browser, or serve it locally:
 npx serve public
 ```
 
-Click **Load example** for a fully worked de-identified sample — complete profile, muscle grades, administration records and rated on-road findings — which exports cleanly and shows what the finished discipline looks like. The sample client is fictional.
+Click **Load example** for a fully worked de-identified sample — complete profile, physical lines with their measurements, muscle grades, test scores, a pre-drive outcome summary and rated on-road findings — which exports cleanly and shows what a finished report looks like. The sample client is fictional.
 
 ## Deploying to Vercel
 
