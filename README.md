@@ -144,7 +144,7 @@ Only what belongs in each document goes into it — the NDIS participant number,
 
 ### Sign-off
 
-A single confirmation in Section 8: that you have read the report end to end and every finding, interpretation and recommendation in it is supported by what you observed and recorded during the assessment. It is a hard blocker. Section 8 also carries a declared position on AI or dictation use, which prints with the declaration when it is anything other than *None*.
+A single confirmation in Section 8: that you have read the report end to end and every finding, interpretation and recommendation in it is supported by what you observed and recorded during the assessment. It is a hard blocker.
 
 ### Auto-draft discipline
 

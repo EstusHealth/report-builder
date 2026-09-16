@@ -941,14 +941,6 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   </div>
   <div class="row"><div class="f w100"><label>Reason if outside timeframe</label><input type="text" data-bind="turnaroundWhy" placeholder="only needed if late"></div></div>
 
-  <div class="row"><div class="f w100"><label>Use of AI or dictation tools in preparing this report</label>
-    <select data-bind="aiUse">
-      <option value="none">None — written directly from my own notes</option>
-      <option value="language">Language editing only, applied after drafting from my own notes</option>
-      <option value="transcribe">Dictation/transcription of my own spoken notes recorded at the time</option>
-    </select></div></div>
-  <div class="hint">AI may refine wording you have already written from your own notes. It cannot supply observations, behaviours or clinical reasoning that were not recorded at the time. Anything other than <b>None</b> prints with the declaration.</div>
-
   <div class="subhead">Sign-off</div>
   <div id="signoffPanel"></div>
 </div>
@@ -1714,7 +1706,7 @@ function freshState(){
       ace:{on:false, score:'', note:''},
     },
     admin:{},
-    genCog:'', cogSummary:'', psychosocial:'', aiUse:'none',
+    genCog:'', cogSummary:'', psychosocial:'',
     preDrive:{},
     vehicle:'Dual-control automatic vehicle (dual brakes)', duration:'', weather:'', route:'',
     checklist:{}, outcome:'learner-continue', summaryText:'',
@@ -2788,14 +2780,6 @@ function buildComp(){
     return `<div class="cprow"><span class="cid">${c.id}</span><span class="ctx">${esc(c.t)}</span><span class="cst ${s}"${click}>${lbl[s]}</span></div>`;
   }).join('')+`</div>`;
 }
-/* Declared position on AI use, printed with the declaration. */
-function aiStatement(){
-  return {
-    none:'',
-    language:'A generative artificial intelligence tool was used to refine the wording of text already drafted by the assessing occupational therapist from notes recorded at the time of the assessment. It was not used to generate observations, clinical findings or clinical reasoning.',
-    transcribe:"Transcription software was used to convert the assessing occupational therapist's own spoken notes, recorded at the time of the assessment, into written form. It was not used to generate observations, clinical findings or clinical reasoning.",
-  }[S.aiUse]||'';
-}
 function buildSignoff(){
   const el=document.getElementById('signoffPanel'); if(!el) return;
   el.innerHTML=`
@@ -3075,7 +3059,6 @@ function buildReport(){
   if(S.qualifications) h+=`<h3 style="${ST.h3}">Assessor Qualifications</h3>`+P(S.qualifications);
   if(S.limitations) h+=`<h3 style="${ST.h3}">Basis of Opinion and Limitations</h3>`+P(S.limitations);
   if(S.declarationText) h+=`<h3 style="${ST.h3}">Declaration</h3>`+P(S.declarationText);
-  if(aiStatement()) h+=P(aiStatement());
   if(S.distribution) h+=`<p style="${ST.p}"><b>This report has been prepared for:</b> ${esc(S.distribution)}. It is confidential and should not be released to other parties without appropriate consent.</p>`;
 
   /* signature */
@@ -3536,8 +3519,7 @@ function normalise(raw){
   const base=freshState();
   /* drafts saved before field notes were removed carry the old record and its
      client detail; drop it rather than keep re-saving data nothing reads */
-  ['notes','notesLocked','notesLockedAt','notesRecordedBy','equip','equipAt','equipWhy'].forEach(k=>delete s[k]);
-  if(!['none','language','transcribe'].includes(s.aiUse)) s.aiUse='none';
+  ['notes','notesLocked','notesLockedAt','notesRecordedBy','equip','equipAt','equipWhy','aiUse'].forEach(k=>delete s[k]);
   Object.keys(s.checklist||{}).forEach(k=>{ if(s.checklist[k]) delete s.checklist[k].refs; });
   ['verify','ackAdvisories','compManual','muscles','profile','admin','phys','needs','checklist','tests','docs','docMeta'].forEach(k=>{
     s[k]=Object.assign({}, base[k], raw&&raw[k]? raw[k]:{});
