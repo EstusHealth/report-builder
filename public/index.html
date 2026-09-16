@@ -849,14 +849,42 @@ body.preview-hidden #formPane{width:100%;border-right:none}
 <details class="sec" open>
 <summary>5 · On-Road Assessment <span class="n" id="n5"></span></summary>
 <div class="secbody">
+  <div class="hint">These fields compose the opening paragraph of the on-road section, in the form the proforma uses. Anything left blank is simply left out of the sentence.</div>
   <div class="row">
-    <div class="f w50"><label>Vehicle</label><select data-bind="vehicle"><option>Dual-control automatic vehicle (dual brakes)</option><option>Dual-control manual vehicle</option><option>Client's own vehicle</option><option>Client's own vehicle with modifications</option></select></div>
+    <div class="f w50"><label>Whose vehicle</label><select data-bind="vehicleOwner">
+      <option value="mdi">The Motor Driving Instructor's vehicle</option>
+      <option value="own">The client's own vehicle</option>
+      <option value="clinic">A practice vehicle</option></select></div>
+    <div class="f w25"><label>Transmission</label><select data-bind="transmission"><option>automatic</option><option>manual</option></select></div>
     <div class="f w25"><label>Duration (minutes)</label><input type="number" data-bind="duration"></div>
   </div>
-  <div class="row"><div class="f w100"><label>Weather conditions</label><input type="text" data-bind="weather" placeholder="e.g. Overcast with no rain; dry road surfaces."></div></div>
-  <div class="row"><div class="f w100"><label>Geographical area / route <span style="color:var(--faint);text-transform:none;letter-spacing:0">— planned in advance (competency 3.6)</span></label><textarea data-bind="route" rows="2"></textarea></div></div>
+  <div class="row">
+    <div class="f w25"><label>Dual controls</label><select data-bind="dualControls"><option>Yes</option><option>No</option></select></div>
+    <div class="f w25"><label>Power steering</label><select data-bind="powerSteering"><option>Yes</option><option>No</option></select></div>
+    <div class="f w50"><label>Traffic conditions</label><select data-bind="traffic">
+      <option>quiet</option><option>quiet to moderate</option><option>moderate</option><option>moderate to high density</option><option>high density</option></select></div>
+  </div>
+  <div class="row">
+    <div class="f w50"><label>Vehicle modifications fitted</label><input type="text" data-bind="vehicleMods" placeholder="leave blank if none were required"></div>
+    <div class="f w50"><label>Driving aids used</label><input type="text" data-bind="drivingAids" placeholder="leave blank if none"></div>
+  </div>
+  <div class="row"><div class="f w100"><label>Where the occupational therapist observed from</label><input type="text" data-bind="otSeat" placeholder="e.g. the rear passenger seat"></div></div>
+  <div class="row"><div class="f w100"><label>Weather conditions</label><input type="text" data-bind="weather" placeholder="e.g. overcast with no rain and dry road surfaces"></div></div>
+  <div class="row">
+    <div class="f w50"><label>Route commenced at</label><input type="text" data-bind="routeStart" placeholder="e.g. a quiet car park at the practice"></div>
+    <div class="f w50"><label>Route concluded via</label><input type="text" data-bind="routeEnd" placeholder="e.g. dual-lane roads and increased traffic density"></div>
+  </div>
+  <div class="row"><div class="f w100"><label>Route between those points <span style="color:var(--faint);text-transform:none;letter-spacing:0">— planned in advance (competency 3.6)</span></label><textarea data-bind="route" rows="2" placeholder="e.g. two-way and multi-lane roads, traffic lights and roundabouts across 25, 50 and 60 km/h zones"></textarea></div></div>
+  <div class="row">
+    <div class="f w25"><label>Familiarisation phase (min)</label><input type="number" data-bind="familiarisationMins" placeholder="0"></div>
+    <div class="f w75"><label>What the familiarisation phase covered</label><input type="text" data-bind="familiarisationNote" placeholder="Controls and vehicle differences covered, and anything attributable to an unfamiliar vehicle rather than to skill"></div>
+  </div>
   <div class="row"><div class="f w100"><label>Briefing given to the Motor Driving Instructor before the drive <span style="color:var(--faint);text-transform:none;letter-spacing:0">(competencies 3.2, 3.4)</span></label><textarea data-bind="mdiBrief" rows="2" placeholder="Relevant history shared, route and instruction plan agreed, roles clarified, what you asked the MDI to watch for and when to intervene…"></textarea></div></div>
   <div class="row"><div class="f w100"><label>Safety management during the drive <span style="color:var(--faint);text-transform:none;letter-spacing:0">(competency 3.8)</span></label><textarea data-bind="safetyMgmt" rows="2" placeholder="Any instructor intervention (verbal or dual controls), how it was managed, grading of route difficulty, decision points about continuing…"></textarea></div></div>
+
+  <div class="subhead">Instructor prompts &amp; interventions</div>
+  <div class="hint">Every prompt or intervention from the driving instructor, as it happened. A <b>verbal prompt</b> is a normal part of an assessed drive; everything below it is a fail error from the course record form, and none of them can sit under an outcome that supports driving.</div>
+  <div id="interventionRows"></div>
 
   <div class="subhead">Assessment results checklist</div>
   <div class="hint">Nothing is pre-rated. Every item starts as <b>not yet rated</b> and you rate what you observed — a blank checklist cannot become a report full of ticks. Anything you rate as an <b>issue</b> needs a comment describing what you saw.</div>
@@ -1381,44 +1409,49 @@ const PREDRIVE_CATS = [
   {id:'history',      label:'Driving history'},
 ];
 
+/* The on-road performance areas, their items and their order are the Flinders
+   proforma's. `short` names the skill for the summary and the instructor
+   handover; `def` is the standard wording the bulk fill inserts for an item
+   rated safe. Deviation from the proforma: `vp6` following distance is kept,
+   because the course record form tracks it as its own error code (FD) and
+   nothing else here captures it. */
 const CHECKLIST = [
- {g:'Physical Control', items:[
-  {id:'pc1', short:'vehicle set-up', text:'Ability to adjust seat, mirrors and other controls of the vehicle', def:'Adjusted the seat, mirrors and other vehicle controls appropriately before setting off.'},
-  {id:'pc2', short:'operating vehicle controls', text:'Able to operate all vehicle controls effectively including changing gears, removing and applying handbrake, applying indicators, and effective braking and accelerating', def:'Operated all vehicle controls effectively throughout, including gear selection, handbrake, indicators, braking and acceleration.'},
-  {id:'pc3', short:'physical shoulder checks', text:'Physically able to look over shoulder when reversing or changing lanes', def:'Was physically able to turn and look over the shoulder when reversing and changing lanes.'},
-  {id:'pc4', short:'foot pedal control', text:'Appropriate foot pedal control with accurate foot placement, braking and accelerating smoothly and efficiently', def:'Foot placement was accurate and pedal control smooth and efficient, with graded braking and acceleration.'},
-  {id:'pc5', short:'steering control', text:'Steering control conducted with both hands with smooth cornering and appropriate ability to maintain a straight line as required', def:'Maintained steering control with both hands, with smooth cornering and a consistently straight line where required.'},
-  {id:'pc6', short:'consistent indicator use', text:'Engaged indicator appropriately whilst driving', def:'Engaged the indicators appropriately and consistently throughout the drive.'},
-  {id:'pc7', short:'operating controls without diverting attention', text:'Operated vehicle controls without diverting attention from road and traffic conditions', def:'Operated the vehicle controls without diverting attention from the road and traffic conditions.'},
-  {id:'pc8', short:'reaction time to hazards', text:'Physically reacted in a timely manner to all road hazards or signal changes', def:'Reacted physically in a timely manner to road hazards and signal changes.'}]},
+ {g:'Observation', items:[
+  {id:'ob1', short:'continuous near-to-far scanning', text:'Continuous scanning to both left and right, short, middle and long distance', def:'Scanned continuously to both left and right across short, middle and long distances throughout the drive.'},
+  {id:'ob3', short:'consistent mirror monitoring', text:'Regular monitoring of left, right and internal mirrors', def:'Monitored the left, right and internal mirrors regularly and without prompting.'},
+  {id:'ob4', short:'attention to road while operating controls', text:'Operated vehicle controls without diverting attention from road and traffic conditions', def:'Operated the vehicle controls without diverting attention from the road and traffic conditions.'},
+  {id:'ob5', short:'blind-spot head checks', text:'Appropriate observation of blind spots when changing lanes, merging, or leaving kerb side parks', def:'Checked the blind spot with a head check when changing lanes, merging and leaving kerbside parks.'},
+  {id:'ob7', short:'observation when reversing', text:'Appropriate observation over shoulder when reversing', def:'Looked over the shoulder to observe appropriately before and during reversing.'},
+  {id:'ob6', short:'response to signs and signals', text:'Appropriate response to road signs and signals', def:'Observed and responded appropriately to all road signs and signals encountered.'}]},
+ {g:'Planning and Judgment', items:[
+  {id:'pj3', short:'gap selection', text:'Appropriate choice of safe gaps to enter or merge with traffic', def:'Selected safe gaps when entering and merging with traffic, without hesitation or undue delay.'},
+  {id:'pj4', short:'response to unexpected hazards', text:'Appropriate response to unexpected hazards and obstacles', def:'Responded appropriately and in good time to unexpected hazards and obstacles, including pedestrians.'},
+  {id:'pj2', short:'progress through intersections', text:'Efficient progress through intersections', def:'Made timely decisions and progressed efficiently through controlled and uncontrolled intersections.'},
+  {id:'pj5', short:'route and manoeuvre planning', text:'Planning of correct position to complete manoeuvres / routes', def:'Positioned the vehicle correctly and in good time to complete each manoeuvre and to follow the route.'},
+  {id:'pj6', short:'compliance with road rules', text:'Obeying advisory signs, markings and road rules', def:'Obeyed advisory signs, road markings and the road rules throughout.'},
+  {id:'pj7', short:'speed where vision was obscured', text:'Choosing safe speeds when vision obscured', def:'Reduced speed appropriately where vision was obscured, including at crests, bends and obstructed intersections.'},
+  {id:'pj8', short:'defensive driving', text:'Being prepared for evasive action by demonstrating defensive driving techniques', def:'Demonstrated defensive driving technique, maintaining an escape path and anticipating the actions of other road users.'},
+  {id:'pj9', short:'courtesy and composure', text:'Appropriate courtesy to other drivers, composure and positive approach to the drive', def:'Showed courtesy to other road users, remained composed throughout and approached the drive positively.'},
+  {id:'pj10', short:'use of controls without confusion', text:'Sound use of vehicle controls without confusion', def:'Selected and used the vehicle controls without hesitation or confusion.'}]},
  {g:'Vehicle Positioning', items:[
   {id:'vp1', short:'negotiating roundabouts and curves', text:'Ability to safely and efficiently negotiate roundabouts, curves and bends', def:'Negotiated roundabouts, curves and bends safely and efficiently.'},
-  {id:'vp2', short:'road position during turns', text:'Appropriate and legal road position during left and right turns', def:'Held an appropriate and legal road position through left and right turns.'},
-  {id:'vp3', short:'lane keeping', text:'Safe and appropriate position within lane markings on dual laned roads', def:'Maintained a safe and appropriate position within the lane markings on dual-laned roads.'},
-  {id:'vp4', short:'lane changing and merging position', text:'Safe and appropriate position when changing lanes and when merging with traffic', def:'Positioned the vehicle safely and appropriately when changing lanes and merging with traffic.'},
-  {id:'vp5', short:'clearance from parked cars', text:'Maintain sufficient distance from parked cars', def:'Maintained sufficient clearance from parked cars.'},
-  {id:'vp6', short:'stopping and following distance', text:'Effectively positioned the vehicle at traffic lights and Stop signs; appropriate stopping and following distance behind other cars', def:'Positioned the vehicle effectively at traffic lights and Stop signs, with appropriate stopping and following distance behind other vehicles.'},
-  {id:'vp7', short:'positioning for parking and manoeuvres', text:'Able to position the vehicle appropriately when parking and completing manoeuvres', def:'Positioned the vehicle appropriately when parking and completing manoeuvres.'}]},
+  {id:'vp5', short:'clearance from parked cars', text:'Maintain sufficient distance from parked cars', def:'Maintained sufficient clearance from parked cars throughout.'},
+  {id:'vp3', short:'position in lanes', text:'Safe and appropriate position in lanes', def:'Maintained a safe and appropriate position within the lane, including when changing lanes and merging.'},
+  {id:'vp2', short:'road position during turns', text:'Legal road position during left and right turns', def:'Took up a legal and appropriate road position for left and right turns.'},
+  {id:'vp7', short:'positioning when parking', text:'Able to position the vehicle appropriately when parking', def:'Positioned the vehicle appropriately when parking.'},
+  {id:'vp6', short:'following distance', text:'Appropriate following distance behind other vehicles, and effective positioning at traffic lights and Stop signs', def:'Maintained an appropriate following distance and stopped the vehicle effectively at traffic lights and Stop signs.'}]},
  {g:'Speed Control', items:[
-  {id:'sc1', short:'maintaining speed limits', text:'Able to maintain the correct speed limit throughout the assessment, including school and residential zones', def:'Maintained the correct speed limit throughout the assessment, including in school and residential zones.'},
-  {id:'sc2', short:'speed for traffic conditions', text:'Monitored the speed of the vehicle appropriately for the traffic conditions, including on corners and on approach to intersections', def:'Monitored the speed of the vehicle appropriately for the traffic conditions, including on corners and on approach to intersections.'},
-  {id:'sc3', short:'consistent safe speeds', text:'Consistent driving at reasonable but safe and legal speeds', def:'Drove consistently at reasonable, safe and legal speeds.'},
-  {id:'sc4', short:'speed on approach and moving off', text:'Safe and appropriate selection of speed approaching intersections and safe acceleration moving off from traffic lights', def:'Selected safe and appropriate speeds on approach to intersections, and accelerated safely when moving off from traffic lights.'},
-  {id:'sc5', short:'anticipating conditions', text:'Anticipation and response to conditions by adjusting to a safe and appropriate speed', def:'Anticipated the conditions and adjusted to a safe and appropriate speed in response.'}]},
- {g:'Observation', items:[
-  {id:'ob1', short:'continuous near-to-far scanning', text:'Continuous scanning to both left and right, short, middle and long distance', def:'Scanned continuously to both left and right, and across short, middle and long distances.'},
-  {id:'ob2', short:'forward observation', text:'Consistent and appropriate forward observation of traffic situations; observed all traffic signs, road markings and potential hazards', def:'Maintained consistent and appropriate forward observation of traffic situations, and observed the road signs, markings and potential hazards along the route.'},
-  {id:'ob3', short:'consistent mirror monitoring', text:'Regular monitoring of left, right and internal mirrors including appropriate use of rear view mirror', def:'Monitored the left, right and internal mirrors regularly, including appropriate use of the rear-view mirror.'},
-  {id:'ob4', short:'attention to road while operating controls', text:'Operated vehicle controls without diverting attention from road and traffic conditions', def:'Operated the vehicle controls without diverting attention from the road and traffic conditions.'},
-  {id:'ob5', short:'blind-spot head checks', text:'Appropriate observation of blind spots when changing lanes, merging, or leaving kerb side parks', def:'Performed blind-spot observations appropriately when changing lanes, merging and leaving kerbside parks.'},
-  {id:'ob6', short:'response to signs and signals', text:'Appropriate response to road signs and signals', def:'Responded appropriately to road signs and signals.'}]},
- {g:'Planning and Judgement', items:[
-  {id:'pj1', short:'following instructions', text:'Effectively able to follow verbal instructions of the driving instructor, confirming or clarifying instructions as needed', def:'Followed the verbal instructions of the driving instructor effectively, confirming or clarifying them as needed.'},
-  {id:'pj2', short:'decision-making at intersections', text:'Able to make timely and appropriate decisions and demonstrate efficient progress at controlled and uncontrolled intersections including traffic lights', def:'Made timely and appropriate decisions at controlled and uncontrolled intersections, including traffic lights, and progressed efficiently.'},
-  {id:'pj3', short:'gap selection', text:'Demonstrated appropriate gap selections when entering traffic or completing lane changes, including when turning left and right, at traffic lights and at Stop signs', def:'Selected appropriate gaps when entering traffic and completing lane changes, including when turning at traffic lights and Stop signs.'},
-  {id:'pj4', short:'response to unexpected hazards', text:'Appropriate response to unexpected hazards and obstacles including pedestrians', def:'Responded appropriately to unexpected hazards and obstacles, including pedestrians.'},
-  {id:'pj5', short:'route and manoeuvre planning', text:'Planning of correct position to complete manoeuvres / routes', def:'Planned the correct position from which to complete manoeuvres and follow the route.'},
-  {id:'pj6', short:'compliance with road rules', text:'Obeying advisory signs, markings and road rules', def:'Obeyed advisory signs, road markings and road rules throughout.'}]},
+  {id:'sc5', short:'anticipating conditions', text:'Anticipation and response to conditions by adjusting to a safe and appropriate speed', def:'Anticipated changing conditions and adjusted to a safe and appropriate speed in good time.'},
+  {id:'sc3', short:'consistent safe speeds', text:'Consistent driving at reasonable but safe and legal speeds', def:'Drove consistently at reasonable speeds within the legal limit, including in school and residential zones.'}]},
+ {g:'Physical Control', items:[
+  {id:'pc9', short:'transfer in and out of the vehicle', text:'Ability to safely and independently transfer in and out of the vehicle', def:'Transferred in and out of the vehicle safely and independently, and fastened the seatbelt without prompting.'},
+  {id:'pc1', short:'vehicle set-up', text:'Ability to adjust seat, mirrors and other controls of the vehicle', def:'Adjusted the seat, mirrors and other vehicle controls appropriately before setting off.'},
+  {id:'pc3', short:'physical shoulder checks', text:'Physically able to look over shoulder when reversing or changing lanes', def:'Physically able to look over the shoulder when reversing and changing lanes, through full range and without discomfort.'},
+  {id:'pc4', short:'foot pedal control', text:'Appropriate foot pedal control with accurate foot placement, braking and accelerating smoothly and efficiently', def:'Controlled the pedals accurately, with smooth and efficient braking and acceleration and accurate foot placement.'},
+  {id:'pc5', short:'steering control', text:'Steering control was conducted with both hands with smooth cornering and appropriate ability to maintain a straight line as required', def:'Maintained steering control with both hands, with smooth cornering and a consistently straight line where required.'},
+  {id:'pc6', short:'consistent indicator use', text:'Engaged indicator appropriately whilst driving', def:'Engaged the indicator appropriately and in good time throughout the drive.'},
+  {id:'pc10', short:'gear changes', text:'Appropriate gear changes with sound clutch application and upper limb control to engage the gear (if applicable)', def:'Changed gear appropriately, with sound clutch application and upper limb control to engage the gear.'},
+  {id:'pc8', short:'reaction to signal changes', text:'Physical reaction to signal changes was appropriate', def:'Reacted physically in a timely and appropriate manner to signal changes and road hazards.'}]},
 ];
 
 
@@ -1628,7 +1661,7 @@ const COMPETENCIES = [
  {id:'2.20', t:'Determines factors relevant to conducting the on-road assessment, including suitability on the day', ev:()=>!!txt(S.weather)&&!!txt(S.route)},
  {id:'3.1', t:'Confirms the licence/permit is current according to DLA legislation', ev:()=>S.licSighted==='Yes'&&!!txt(S.licExpiry)},
  {id:'3.2', t:'Briefs the driving instructor prior to the on-road assessment', ev:()=>!!txt(S.mdiBrief)},
- {id:'3.3', t:'Conducts the on-road assessment with a driving instructor in a dual-control or modified vehicle', ev:()=>!!txt(S.mdi)&&/dual|modif/i.test(S.vehicle)},
+ {id:'3.3', t:'Conducts the on-road assessment with a driving instructor in a dual-control or modified vehicle', ev:()=>!!txt(S.mdi)&&(S.dualControls==='Yes'||!!txt(S.vehicleMods))},
  {id:'3.4', t:'Works in collaboration with the driving instructor', ev:()=>!!txt(S.mdiBrief)},
  {id:'3.5', t:'Ensures the client is appropriately oriented and prepared at the commencement of the on-road assessment'},
  {id:'3.6', t:'Conducts the assessment with pre-determined instructions where possible', ev:()=>!!txt(S.route)},
@@ -1708,8 +1741,11 @@ function freshState(){
     admin:{},
     genCog:'', cogSummary:'', psychosocial:'',
     preDrive:{},
-    vehicle:'Dual-control automatic vehicle (dual brakes)', duration:'', weather:'', route:'',
-    checklist:{}, outcome:'learner-continue', summaryText:'',
+    duration:'', weather:'', route:'',
+    vehicleOwner:'mdi', transmission:'automatic', dualControls:'Yes', powerSteering:'Yes',
+    vehicleMods:'', drivingAids:'', traffic:'quiet to moderate', otSeat:'the rear passenger seat',
+    routeStart:'', routeEnd:'', familiarisationMins:'', familiarisationNote:'',
+    checklist:{}, clComments:{}, interventions:[], outcome:'learner-continue', summaryText:'',
     recs:{}, recParams:{hours:10, funder:'NDIS plan (capacity building)'},
     refsExtra:'',
     reportRef:'', reportVersion:'1.0 (Final)', consentObtained:false,
@@ -1729,7 +1765,7 @@ function freshState(){
   MUSCLES.forEach(m=> s.muscles[m.id]={tested:'no', grade:'', note:''});
   NEEDS_ROWS.forEach(r=> s.needs[r.id]={val:r.opts[0], note:''});
   PREDRIVE_CATS.forEach(c=> s.preDrive[c.id]=[]);
-  CHECKLIST.forEach(g=>g.items.forEach(it=> s.checklist[it.id]={st:'unrated', note:'', sev:'dev'}));
+  CHECKLIST.forEach(g=>{ g.items.forEach(it=> s.checklist[it.id]={st:'unrated', note:''}); s.clComments[g.g]=''; });
   PROFILE_DOMAINS.forEach(d=> s.profile[d.id]={text:'', na:false, naWhy:''});
   Object.keys(TEST_ADMIN_DEF).forEach(k=> s.admin[k]=Object.assign({},TEST_ADMIN_DEF[k]));
   return s;
@@ -2071,24 +2107,90 @@ function dsdaCombined(){
 /* Transcription sanity check — the DSDA report produces the category, so a
    category that is hard to reconcile with the entered scores usually means a
    typo. Advisory only; the software's own output is authoritative. */
+/* The opening paragraph of the on-road section, in the form the proforma uses:
+   how long, whose vehicle and how equipped, who was present and where the
+   assessor sat, the traffic conditions, the route from start to finish, the
+   weather, and any modifications. Composed rather than stored, so it cannot go
+   stale against the fields; anything left blank drops out of the sentence. */
+/* A short description of the assessment vehicle, derived from the fields that
+   compose the narrative rather than stored separately. */
+function vehicleDesc(){
+  const bits=[];
+  if(S.dualControls==='Yes') bits.push('dual-control');
+  bits.push(txt(S.transmission)||'automatic');
+  let t=bits.join(' ')+' vehicle';
+  if(S.vehicleOwner==='own') t=`{his} own ${t}`;
+  if(txt(S.vehicleMods)) t+=' with modifications fitted';
+  return t;
+}
+function driveNarrative(){
+  const mins=parseFloat(S.duration), fam=parseFloat(S.familiarisationMins);
+  const assessMins=(!isNaN(mins)&&!isNaN(fam)&&fam>0&&fam<mins)? mins-fam : null;
+  const owner={mdi:"the Motor Driving Instructor's", own:"{name}'s own", clinic:"a practice"}[S.vehicleOwner]||"the Motor Driving Instructor's";
+  const kit=[S.powerSteering==='Yes'?'power steering':'', S.dualControls==='Yes'?'dual brakes':''].filter(Boolean);
+
+  let p1=`A ${!isNaN(mins)? mins+'-minute ':''}on-road assessment was conducted in ${owner} ${txt(S.transmission)||'automatic'} vehicle`;
+  p1+= kit.length? ` with ${joinList(kit)}.` : '.';
+  const present=[`{full}, who was driving`];
+  if(txt(S.mdi)) present.push(`${txt(S.mdi)}, Motor Driving Instructor`);
+  /* each entry carries its own commas, so the list is joined with ", and" */
+  p1+=` Present for the assessment ${present.length>1?'were':'was'} ${present.length>1? present.slice(0,-1).join(', ')+', and '+present[present.length-1] : present[0]}.`;
+  if(txt(S.assessor)) p1+=` Observing from ${txt(S.otSeat)||'the rear passenger seat'} was ${txt(S.assessor)}, ${txt(S.assessorRole)||'Occupational Therapist'}, who was recording assessment details.`;
+
+  let p2='';
+  if(!isNaN(fam)&&fam>0){
+    p2+=`The first ${fam} minutes were a familiarisation phase${txt(S.routeStart)? ' in '+txt(S.routeStart):''}`;
+    p2+= txt(S.familiarisationNote)? `, during which ${txt(S.familiarisationNote)}. ` : '. ';
+    if(assessMins) p2+=`The assessment proper ran for the remaining ${assessMins} minutes. `;
+  }
+  p2+=`The assessment took place in ${txt(S.traffic)||'quiet'} traffic conditions`;
+  const leg=[];
+  if(txt(S.routeStart)&&isNaN(fam)) leg.push(`commencing in ${txt(S.routeStart)}`);
+  else if(txt(S.routeStart)&&!isNaN(fam)&&fam>0) leg.push(`commencing from ${txt(S.routeStart)}`);
+  else if(txt(S.routeStart)) leg.push(`commencing in ${txt(S.routeStart)}`);
+  if(txt(S.route)) leg.push(`progressing through ${txt(S.route)}`);
+  if(txt(S.routeEnd)) leg.push(`concluding via ${txt(S.routeEnd)}`);
+  p2+= leg.length? `, ${leg.join(', ')}.` : '.';
+  if(txt(S.weather)) p2+=` The weather conditions were ${txt(S.weather).replace(/\.$/,'')}.`;
+
+  p2+= txt(S.vehicleMods)
+    ? ` The following vehicle modifications were fitted for the assessment: ${txt(S.vehicleMods)}.`
+    : ' No modifications to the vehicle were required.';
+  if(txt(S.drivingAids)) p2+=` Driving aids used during the assessment: ${txt(S.drivingAids)}.`;
+
+  return [p1,p2].filter(Boolean).join('\n\n');
+}
 /* A short paragraph per performance area naming what was rated safe, so a
    clean area reads as a positive finding rather than a column of ticks. It
    describes only ratings the assessor set, and it names the flagged items
    without characterising them — the table and the summary do that. */
-function onroadAreaProse(){
-  let out='';
-  CHECKLIST.forEach(g=>{
-    const safe=g.items.filter(it=>S.checklist[it.id].st==='safe');
-    if(!safe.length) return;
-    const flagged=g.items.filter(it=>S.checklist[it.id].st==='issue');
-    const all=safe.length===g.items.length;
-    let t=all
-      ? `All aspects of ${g.g.toLowerCase()} assessed were safe and appropriate: ${joinList(safe.map(it=>it.short))}.`
-      : `Within ${g.g.toLowerCase()}, ${joinList(safe.map(it=>it.short))} ${safe.length===1?'was':'were'} safe and appropriate.`;
-    if(flagged.length){ const f=joinList(flagged.map(it=>it.short)); t+=` ${f.charAt(0).toUpperCase()+f.slice(1)} ${flagged.length===1?'is':'are'} addressed below.`; }
-    out+=`<p style="${ST.p}">${t}</p>`;
-  });
+/* One sentence naming what was rated safe in a performance area. Where the
+   assessor wrote against a safe item — or inserted the standard wording — that
+   sentence is used instead of the short name, so what they wrote appears once
+   and only here: the tick column carries the rest. */
+function areaSafeProse(g){
+  const safe=g.items.filter(it=>S.checklist[it.id].st==='safe');
+  if(!safe.length) return [];
+  const written=safe.filter(it=>txt(S.checklist[it.id].note));
+  const bare=safe.filter(it=>!txt(S.checklist[it.id].note));
+  const out=[];
+  if(bare.length) out.push(bare.length===g.items.length
+    ? `All aspects of ${g.g.toLowerCase()} assessed were safe and appropriate: ${joinList(bare.map(it=>it.short))}.`
+    : `${cap(joinList(bare.map(it=>it.short)))} ${bare.length===1?'was':'were'} safe and appropriate.`);
+  /* one paragraph each: the standard wordings are subjectless continuations and
+     read as a run-on if they are strung together */
+  written.forEach(it=> out.push(txt(S.checklist[it.id].note)));
   return out;
+}
+/* The proforma's "Further comments" for an area: what was written against each
+   flagged and not-assessed item, then anything recorded against the area as a
+   whole. */
+function areaComments(g){
+  const parts=g.items
+    .filter(it=>['issue','na'].includes(S.checklist[it.id].st) && txt(S.checklist[it.id].note))
+    .map(it=>txt(S.checklist[it.id].note));
+  if(txt(S.clComments[g.g])) parts.push(txt(S.clComments[g.g]));
+  return parts;
 }
 /* tests whose score fell outside the driving threshold */
 function failedTests(){
@@ -2162,6 +2264,40 @@ function preDriveIssues(){
     if(txt(r.issue)) out.push({cat:c.label, issue:txt(r.issue), impact:txt(r.impact), considerations:txt(r.considerations)});
   }));
   return out;
+}
+/* The course record form's Fail error column, plus the two interventions that
+   are not fail errors. A verbal prompt is a normal part of an assessed drive;
+   anything below it is a finding that cannot sit under a supportive outcome. */
+const INTERVENTIONS = {
+  verbal:        {label:'Verbal prompt from the instructor', fail:false, rep:'a verbal prompt from the driving instructor'},
+  duals:         {label:'Dual controls used', fail:true,  rep:'intervention using the dual controls'},
+  collision:     {label:'Collision', fail:true,  rep:'a collision'},
+  failStop:      {label:'Failed to stop', fail:true,  rep:'a failure to stop'},
+  failGiveWay:   {label:'Failed to give way', fail:true,  rep:'a failure to give way'},
+  excessiveSpeed:{label:'Excessive speed', fail:true,  rep:'excessive speed'},
+  tooSlow:       {label:'Too slow for the conditions', fail:true,  rep:'speed too slow for the conditions'},
+  disobeyed:     {label:'Disobeyed a direction', fail:true,  rep:'a direction from the instructor not followed'},
+  dangerousStop: {label:'Stopped in a dangerous position', fail:true,  rep:'the vehicle stopped in a dangerous position'},
+};
+function interventionList(){ return (S.interventions||[]).filter(i=>txt(i.what)); }
+function failErrors(){ return interventionList().filter(i=>(INTERVENTIONS[i.type]||{}).fail); }
+function addIntervention(){ (S.interventions=S.interventions||[]).push({type:'verbal',what:'',where:''}); buildInterventions(); update(); }
+function delIntervention(i){ S.interventions.splice(i,1); buildInterventions(); update(); }
+function buildInterventions(){
+  const el=document.getElementById('interventionRows'); if(!el) return;
+  const rows=S.interventions||[];
+  el.innerHTML = rows.map((r,i)=>`<div class="trow" style="align-items:flex-end;margin-bottom:6px">
+      <div class="f" style="flex:0 0 220px"><label>What happened</label>
+        <select onchange="S.interventions[${i}].type=this.value;buildInterventions();update()">
+          ${Object.keys(INTERVENTIONS).map(k=>`<option value="${k}" ${r.type===k?'selected':''}>${esc(INTERVENTIONS[k].label)}</option>`).join('')}</select></div>
+      <div class="f" style="flex:1 1 240px"><label>What you saw, and how it was managed</label>
+        <input type="text" data-fkey="iv:${i}:what" value="${esc(r.what)}" oninput="S.interventions[${i}].what=this.value;update()"></div>
+      <div class="f" style="flex:1 1 150px"><label>Where on the route</label>
+        <input type="text" data-fkey="iv:${i}:where" value="${esc(r.where)}" oninput="S.interventions[${i}].where=this.value;update()"></div>
+      <button class="btn" style="flex:0 0 auto" title="Remove this entry" onclick="delIntervention(${i})">×</button>
+    </div>`).join('')
+    + `<button class="addbtn" onclick="addIntervention()">＋ record an intervention</button>`
+    + (rows.length? '' : `<div class="hint" style="margin-top:6px">No intervention recorded. Leave it empty if the instructor did not prompt or intervene at any point — that is itself a finding, and the report says so.</div>`);
 }
 function addPreDrive(cat){ (S.preDrive[cat]=S.preDrive[cat]||[]).push({issue:'',impact:'',considerations:''}); buildPreDrive(); update(); }
 function delPreDrive(cat,i){ S.preDrive[cat].splice(i,1); buildPreDrive(); update(); }
@@ -2503,7 +2639,11 @@ function buildChecklist(){
              ${c.st==='issue'&&!txt(c.note)? `<div style="margin-top:4px"><span class="noteslink" onclick="scaffoldNote('${it.id}')">insert a structure for this note</span></div>`:''}
              ${c.st==='safe'&&!txt(c.note)? `<div style="margin-top:4px"><span class="resetlink" style="margin-left:0" onclick="S.checklist['${it.id}'].note=CHECKLIST.flatMap(g=>g.items).find(x=>x.id==='${it.id}').def;buildChecklist();update()">insert the standard wording</span></div>`:''}`}
       </div>`;
-    }).join('')).join('');
+    }).join('') + `<div class="row" style="margin:2px 0 14px"><div class="f w100">
+      <label>Further comments — ${esc(g.g.toLowerCase())}</label>
+      <textarea rows="2" placeholder="Anything that belongs to this area as a whole rather than to one item. Optional — what you wrote against each flagged item prints here too."
+        oninput="S.clComments['${g.g.replace(/'/g,"\\'")}']=this.value;update()">${esc(S.clComments[g.g]||'')}</textarea></div></div>`
+  ).join('');
 }
 
 function buildRecs(){
@@ -3022,26 +3162,36 @@ function buildReport(){
 
   /* on-road */
   h+=`<h2 style="${ST.h2}">On-Road Assessment</h2>`;
-  h+=`<table style="${ST.tbl}">`+
-    TR('Vehicle type used for assessment', S.vehicle)+
-    TR('Duration of assessment', S.duration? S.duration+' minutes':'')+
-    TR('Weather conditions', S.weather)+
-    TR('Geographical area', S.route)+
-    TR('MDI present for assessment', S.mdi)+`</table>`;
+  h+=P(driveNarrative());
   if(txt(S.mdiBrief)) h+=P('Prior to the on-road assessment the driving instructor was briefed on the relevant history, the planned route and the respective roles during the drive. '+fill(S.mdiBrief));
   h+=`<h3 style="${ST.h3}">Assessment Results</h3>`;
-  h+=onroadAreaProse();
-  h+=`<table style="${ST.tbl}"><tr><th style="${ST.th};width:14%">Performance area</th><th style="${ST.th};width:38%">Observations</th><th style="${ST.th};width:9%">Safe &amp; appropriate</th><th style="${ST.th}">Issues observed / comments</th></tr>`;
-  CHECKLIST.forEach(g=>g.items.forEach(it=>{
-    const c=S.checklist[it.id];
-    if(c.st==='na' && !c.note) return;
-    const safe = c.st==='safe';
-    h+=`<tr><td style="${ST.td};font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;color:${BRAND.c1}">${g.g}</td>
-      <td style="${ST.td}">${it.text}</td>
-      <td style="${c.st==='safe'? ST.ok : ST.td+';text-align:center'}">${safe?'✓': c.st==='na'?'n/a': c.st==='unrated'?'—':''}</td>
-      <td style="${ST.td}${c.st==='issue'?';color:#8c2f2f':''}">${c.st==='unrated'? '<i style="color:#8c2f2f">not rated</i>':''}${c.st==='issue'&&!c.note? '<b>✗</b>':''}${paraSplit(c.note || (c.st==='safe'? (it.def||'') : ''))}</td></tr>`;
-  }));
-  h+=`</table>`;
+  h+=P('During the on-road assessment a number of driving behaviours were observed in the areas of observation, planning and judgment, vehicle positioning, speed control and physical control. Results are outlined below.');
+  CHECKLIST.forEach(g=>{
+    h+=`<p style="${ST.p};font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:${BRAND.c1};margin:5mm 0 1mm">${esc(g.g)}</p>`;
+    h+=`<table style="${ST.tbl}"><tr><th style="${ST.th}">Performance area</th><th style="${ST.th};width:20%">Issues observed<div style="font-weight:400;text-transform:none;letter-spacing:0">(see further comments for details)</div></th></tr>`+
+      g.items.map(it=>{
+        const c=S.checklist[it.id];
+        const mark = c.st==='issue'? '✗' : c.st==='na'? 'not assessed' : c.st==='unrated'? '<i style="color:#8c2f2f">not rated</i>' : '';
+        return `<tr><td style="${ST.td}">${it.text}</td><td style="${ST.td};text-align:center${c.st==='issue'?';color:#8c2f2f;font-weight:700':''}">${mark}</td></tr>`;
+      }).join('')+`</table>`;
+    areaSafeProse(g).forEach(t=> h+=P(t));
+    const cmts=areaComments(g);
+    if(cmts.length) h+=`<p style="${ST.p}"><b>Further comments:</b> ${paraSplit(cmts.join('\n\n'))}</p>`;
+  });
+  const ivs=interventionList();
+  h+=`<h3 style="${ST.h3}">Instructor Prompts and Interventions</h3>`;
+  if(ivs.length){
+    h+=`<table style="${ST.tbl}"><tr><th style="${ST.th};width:26%">Type</th><th style="${ST.th}">What was observed</th><th style="${ST.th};width:24%">Where on the route</th></tr>`+
+      ivs.map(r=>{
+        const m=INTERVENTIONS[r.type]||{label:r.type, fail:false};
+        return `<tr><td style="${ST.lbl}${m.fail?';color:#8c2f2f':''}">${esc(m.label)}</td><td style="${ST.td}">${paraSplit(r.what)}</td><td style="${ST.td}">${paraSplit(r.where)}</td></tr>`;
+      }).join('')+`</table>`;
+    const fails=failErrors();
+    if(fails.length) h+=P(`${fails.length===1?'One intervention was':fails.length+' interventions were'} required beyond a verbal prompt, involving ${joinList(fails.map(f=>(INTERVENTIONS[f.type]||{}).rep).filter(Boolean))}. ${fails.length===1?'This is':'These are'} reflected in the outcome and recommendations below.`);
+    else h+=P('The instructor prompted verbally as recorded above. No intervention using the dual controls was required at any point.');
+  } else {
+    h+=P('No prompt or intervention was required from the driving instructor at any point during the assessment.');
+  }
   if(txt(S.safetyMgmt)) h+=`<p style="${ST.p}"><b>Safety management during the assessment:</b> ${paraSplit(S.safetyMgmt)}</p>`;
   if(txt(S.fbOnRoad)) h+=`<h3 style="${ST.h3}">Feedback Provided to the Client</h3>`+P(S.fbOnRoad);
   if(txt(S.legalInfo)) h+=P(S.legalInfo);
@@ -3143,10 +3293,12 @@ function gpLetter(){
     ? `Reduced power in ${red.map(m=>m.n.toLowerCase()+' (grade '+S.muscles[m.id].grade+')').join(', ')}. ${txt(S.physSummary)}`
     : (musclesTested()? `Manual muscle testing graded 5/5 across the ${musclesTested()} groups tested. Range of movement, coordination and sensation as documented in the report.` : 'See report.'));
   const iss=issueList();
-  h+=TR('On-road assessment', `${S.duration||'[?]'} minutes in a ${String(S.vehicle).toLowerCase()}. `+
+  const gpFails=failErrors();
+  h+=TR('On-road assessment', `${S.duration||'[?]'} minutes in a ${fill(vehicleDesc())}. `+
     (iss.length
       ? `${iss.length} area${iss.length>1?'s':''} requiring development: ${iss.map(i=>i.short).join(', ')}.`
-      : 'No areas of concern identified.'));
+      : 'No areas of concern identified.')+
+    (gpFails.length? ` Instructor intervention was required — ${joinList(gpFails.map(f=>(INTERVENTIONS[f.type]||{}).rep).filter(Boolean))}.` : ' No instructor intervention beyond verbal prompting was required.'));
   h+=`</table>`;
 
   const meds=S.meds.filter(m=>txt(m.name));
@@ -3207,7 +3359,7 @@ function ndisDoc(){
   const done=['Clinical interview and occupational profile','Vision screen (acuity and confrontation fields)','Hearing and communication screen',
     musclesTested()? 'Physical screen including manual muscle testing':'Physical screen'];
   Object.keys(TEST_META).forEach(id=>{ if(id!=='dsdaCat'&&S.tests[id].on) done.push(TEST_META[id].name+(testInvalid(id)?' (attempted, not scoreable)':'')); });
-  done.push(`On-road assessment, ${S.duration||'[?]'} minutes with a Motor Driving Instructor in a ${String(S.vehicle).toLowerCase()}`);
+  done.push(`On-road assessment, ${S.duration||'[?]'} minutes with a Motor Driving Instructor in a ${fill(vehicleDesc())}`);
   h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">`+done.map(x=>`<li style="margin-bottom:1.5mm">${esc(x)}</li>`).join('')+`</ul>`;
 
   h+=`<h2 style="${ST.h2}">5. Findings</h2>`+P(S.summaryText);
@@ -3256,7 +3408,7 @@ function mdiHandover(){
   h+=`<table style="${ST.tbl}">`+
     TR('Client', fullNm())+
     TR('Licence status', licenceConds())+
-    TR('Vehicle used at assessment', S.vehicle)+
+    TR('Vehicle used at assessment', cap(fill(vehicleDesc())))+
     TR('Recommended instruction', S.recs.lessons&&S.recs.lessons.on? `${S.recParams.hours} hours, funded through ${S.recParams.funder}` : 'See recommendations')+
     `</table>`;
 
@@ -3295,6 +3447,8 @@ function mdiHandover(){
   if(cogFail.length) aware.push(`Screening indicated reduced capacity in areas relevant to driving (${cogFail.join(', ')}). In practice this usually shows up as difficulty when several things happen at once — build complexity gradually rather than all at once.`);
   const fat=S.profile.fatigue; if(fat&&!fat.na&&txt(fat.text)) aware.push(`Fatigue and timing: ${fat.text}`);
   if(S.lenses==='Yes') aware.push('Corrective lenses must be worn for driving.');
+  const mdiIvs=interventionList();
+  if(mdiIvs.length) aware.push(`Interventions on the assessment drive: ${mdiIvs.map(r=>`${(INTERVENTIONS[r.type]||{}).label.toLowerCase()} — ${txt(r.what)}${txt(r.where)? ' ('+txt(r.where)+')':''}`).join('; ')}.`);
   if(txt(S.safetyMgmt)) aware.push(`At assessment: ${fill(S.safetyMgmt)}`);
   aware.push('If anything arises that makes you question safety, stop the lesson and let me know — I would rather reassess than have it continue.');
   h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">`+aware.map(a=>`<li style="margin-bottom:2mm">${paraSplit(a)}</li>`).join('')+`</ul>`;
@@ -3504,7 +3658,7 @@ function syncForm(){
   document.querySelectorAll('[data-bindchk]').forEach(el=>{ el.checked = (S[el.dataset.bindchk]||[]).includes(el.value); });
   document.querySelectorAll('[data-bindbool]').forEach(el=>{ el.checked = !!S[el.dataset.bindbool]; });
   buildMedRows(); buildReviewed(); buildNeeds(); buildPhys(); buildTests(); buildChecklist(); buildRecs();
-  buildProfile(); buildMuscles(); buildPreDrive(); buildComp(); buildSignoff(); buildDocsPanel(); buildDocTabs();
+  buildProfile(); buildMuscles(); buildPreDrive(); buildInterventions(); buildComp(); buildSignoff(); buildDocsPanel(); buildDocTabs();
   refreshPanels();
 }
 function refreshPanels(){
@@ -3519,9 +3673,9 @@ function normalise(raw){
   const base=freshState();
   /* drafts saved before field notes were removed carry the old record and its
      client detail; drop it rather than keep re-saving data nothing reads */
-  ['notes','notesLocked','notesLockedAt','notesRecordedBy','equip','equipAt','equipWhy','aiUse'].forEach(k=>delete s[k]);
+  ['notes','notesLocked','notesLockedAt','notesRecordedBy','equip','equipAt','equipWhy','aiUse','vehicle'].forEach(k=>delete s[k]);
   Object.keys(s.checklist||{}).forEach(k=>{ if(s.checklist[k]) delete s.checklist[k].refs; });
-  ['verify','ackAdvisories','compManual','muscles','profile','admin','phys','needs','checklist','tests','docs','docMeta'].forEach(k=>{
+  ['verify','ackAdvisories','compManual','muscles','profile','admin','phys','needs','checklist','clComments','tests','docs','docMeta'].forEach(k=>{
     s[k]=Object.assign({}, base[k], raw&&raw[k]? raw[k]:{});
   });
   MUSCLES.forEach(m=> s.muscles[m.id]=Object.assign({tested:'no',grade:'',note:''}, s.muscles[m.id]||{}));
@@ -3555,6 +3709,9 @@ function normalise(raw){
     if(carried[r.id]) s.phys[r.id].note=[txt(s.phys[r.id].note)].concat(carried[r.id]).filter(Boolean).join(' ');
   });
   PROFILE_DOMAINS.forEach(d=> s.profile[d.id]=Object.assign({text:'',na:false,naWhy:''}, s.profile[d.id]||{}));
+  if(!Array.isArray(s.interventions)) s.interventions=[];
+  s.interventions=s.interventions.map(r=>Object.assign({type:'verbal',what:'',where:''}, r||{}))
+    .map(r=>{ if(!INTERVENTIONS[r.type]) r.type='verbal'; return r; });
   s.preDrive=Object.assign({}, base.preDrive, raw&&raw.preDrive? raw.preDrive:{});
   PREDRIVE_CATS.forEach(c=>{ if(!Array.isArray(s.preDrive[c.id])) s.preDrive[c.id]=[];
     s.preDrive[c.id]=s.preDrive[c.id].map(r=>Object.assign({issue:'',impact:'',considerations:''}, r||{})); });
@@ -3564,9 +3721,30 @@ function normalise(raw){
     const departed = old.departed===true || old.perManual==='no' || old.cueing==='answers';
     s.admin[k]={departed, why:txt(old.why)};
   });
+  /* The on-road checklist was rebuilt to the Flinders proforma's list and
+     order. Carry each deleted item's note onto its nearest survivor so no
+     writing is lost, then drop the old key. `pj1` (following the instructor's
+     directions) has no item home — it lands in the area's further comments,
+     and a direction not followed is now an entry in the intervention log. */
+  const CL_LEGACY={pc7:'ob4', pc2:'pc10', ob2:'ob6', vp4:'vp3', sc1:'sc3', sc2:'sc5', sc4:'sc5'};
+  Object.keys(CL_LEGACY).forEach(oldId=>{
+    const old=s.checklist[oldId]; if(!old) return;
+    const to=s.checklist[CL_LEGACY[oldId]];
+    if(to && txt(old.note)) to.note=[txt(to.note), txt(old.note)].filter(Boolean).join(' ');
+    if(to && to.st==='unrated' && old.st && old.st!=='unrated') to.st=old.st;
+    delete s.checklist[oldId];
+  });
+  if(s.checklist.pj1){
+    if(txt(s.checklist.pj1.note))
+      s.clComments['Planning and Judgment']=[txt(s.clComments['Planning and Judgment']), txt(s.checklist.pj1.note)].filter(Boolean).join(' ');
+    delete s.checklist.pj1;
+  }
   CHECKLIST.forEach(g=>g.items.forEach(it=>{
-    s.checklist[it.id]=Object.assign({st:'unrated',note:'',sev:'dev'}, s.checklist[it.id]||{});
+    s.checklist[it.id]=Object.assign({st:'unrated',note:''}, s.checklist[it.id]||{});
+    delete s.checklist[it.id].sev;
   }));
+  /* keys from areas that no longer exist under that name */
+  Object.keys(s.clComments||{}).forEach(k=>{ if(!CHECKLIST.some(g=>g.g===k)) delete s.clComments[k]; });
   return s;
 }
 /* autosave */
@@ -3657,9 +3835,15 @@ function loadExample(){
     genCog:"{name} was alert, engaged and cooperative throughout the pre-driving screen. {He} required only minimal instruction, maintained concentration throughout (despite some general fatigue and localised pain after a recent injection), communicated clearly, asked relevant and at times complex questions, and demonstrated good insight into the implications of {his} functional status for driving.",
     cogSummary:"Cognitive and perceptual screening was broadly within functional limits for driving. {name} demonstrated intact visuoconstructional skills, planning and executive function, intact visual scanning and attention, accurate application of road rules, and realistic insight into {his} own abilities. {His} performance on the Trail Making Test Part B, however, exceeded the driving time threshold, indicating reduced speed of divided attention and mental flexibility under load. This is {his} main area of cognitive vulnerability and is consistent with the difficulty {he} reports managing several driving demands at once. {His} combined DriveSafe and DriveAware scores place {him} in the highest (likely to pass) category from a cognitive standpoint. This indicates cognitive readiness to progress to supervised on-road learning rather than readiness to drive unsupervised, and is best developed through graded, repeated practice.",
     location:'the practice assessment centre',
-    vehicle:'Dual-control automatic vehicle (dual brakes)', duration:'40',
-    weather:'Overcast with no rain; dry road surfaces.',
-    route:'Commenced in a quiet car park for vehicle familiarisation, progressing to two-way and multi-lane roads, traffic lights and roundabouts across 25, 50 and 60 km/h zones in low-to-moderate traffic.',
+    duration:'40',
+    vehicleOwner:'mdi', transmission:'automatic', dualControls:'Yes', powerSteering:'Yes',
+    vehicleMods:'', drivingAids:'', traffic:'quiet to moderate', otSeat:'the rear passenger seat',
+    weather:'overcast with no rain and dry road surfaces',
+    routeStart:'a quiet car park at the assessment centre',
+    route:'two-way and multi-lane roads, traffic lights and roundabouts across 25, 50 and 60 km/h zones',
+    routeEnd:'a dual-lane arterial section with increased traffic density before returning to the assessment centre',
+    familiarisationMins:'10',
+    familiarisationNote:"{name} set the seat and mirrors, located the indicator, wiper and light controls and drove two laps of the car park. The indicator stalk sits on the left in the assessment vehicle and on the right in {his} family car, and this difference was identified and discussed before the assessment proper began",
     outcome:'learner-continue',
     recParams:{hours:14, funder:'NDIS plan (capacity building)'},
   });
@@ -3722,21 +3906,29 @@ function loadExample(){
   Object.keys(S.admin).forEach(k=> S.admin[k]={departed:false, why:''});
 
   /* --- on-road ratings, each traceable to the record --- */
-  const CL=(id,st,note,sev)=>{ S.checklist[id]={st, note, sev:sev||'dev'}; };
+  const CL=(id,st,note)=>{ S.checklist[id]={st, note}; };
   CL('pc1','safe','Adjusted the seat, mirrors and steering column independently at the start of the assessment, without prompting.');
   CL('pc3','safe','Physically demonstrated the cervical range of motion to look over {his} shoulder, and manual muscle testing confirmed full cervical rotation and power. On road, however, {he} initiated the movement spontaneously on only two occasions across the assessment. The capacity is present; the habit is not yet established. This is common in novice drivers who have not yet automated the movement, and is likely compounded by the higher cognitive load {he} manages when several driving tasks occur at once. It will require specific instruction and repeated supervised practice.');
   CL('pc4','safe','Pedal control was smooth throughout, with no jerky braking and controlled acceleration from a standing start at traffic lights.');
   CL('pc6','issue',"Because the assessment vehicle's indicator stalk was on the left, contrasting with {his} familiar family vehicle, {he} triggered the wipers instead of the indicators on three occasions. {He} managed this calmly and self-corrected within a second each time. Separately, {he} required verbal prompting from the driving instructor to use indicators at approximately half of all turns, and omitted the left indicator when exiting four of the five roundabouts negotiated. Indicator errors of this kind are common in novice drivers, particularly in an unfamiliar vehicle, but the omission at roundabout exits is a consistent pattern rather than an unfamiliarity effect, and will require targeted instruction and repeated supervised practice.",'dev');
   CL('vp3','safe','Lane position was consistently central with no observed drift on the dual-lane section of the route.');
   CL('vp7','na','Reverse parking and three-point turns were not assessed. The 40-minute assessment was fully occupied by open-road driving and there was insufficient time remaining. {name} had identified these as {his} own practice priorities, and they are included in the recommended instruction.');
-  CL('sc1','safe','Speed control was consistent and appropriate for conditions throughout, including a 25 km/h school zone, where {he} slowed in good time and maintained the limit, and 50 and 60 km/h zones with no observed drift.');
+  CL('sc3','safe','Speed control was consistent and appropriate for conditions throughout, including a 25 km/h school zone, where {he} slowed in good time and maintained the limit, and 50 and 60 km/h zones with no observed drift.');
   CL('ob1','issue','{name} did not consistently maintain continuous scanning to near, middle and far distances. As traffic density increased on the 60 km/h section approaching a shopping strip, {his} scanning narrowed to the vehicle directly ahead, with no far scanning and no scanning to either side observed. This is common in novice drivers and is consistent with the reduced speed of divided attention identified on the Trail Making Test Part B. It will require targeted instruction and graded practice in progressively busier environments.','sig');
   CL('ob3','issue','Mirror checking was present but sparse and less frequent than required for a learner preparing for a practical test. {He} used the mirrors reliably when cornering and changing lanes, but there were extended stretches of the route with no mirror check observed. Building a consistent mirror routine demands sustained divided attention, which is {his} identified area of difficulty, and will require specific instruction and repeated practice.','sig');
   CL('ob5','issue','Physical blind-spot head checks were essentially absent. {name} relied on the mirrors alone when changing lanes and when leaving the kerb. When prompted once by the driving instructor, {he} performed the check correctly and in good time, indicating the skill is available but not yet integrated. For a learner preparing for a practical driving test, frequent and consistent head checks are required, and this is the highest-priority item for instruction arising from this assessment.','sig');
-  CL('pj1','safe','{name} followed all instructions from the driving instructor, and appropriately requested clarification on the two occasions an instruction was given late.');
   CL('pj3','issue','While {his} gap selection was consistently safe, {name} demonstrated marked over-caution at roundabouts. {He} waited for completely clear traffic on three occasions, missing viable gaps, and on one occasion a queue formed behind the assessment vehicle. This indicates difficulty judging dynamic gaps and managing the cognitive load of tracking several moving vehicles at once, and links directly to the reduced speed of divided attention identified on the pre-drive screen. It will require graded practice to build fluent and efficient decision-making without compromising the safety margin {he} currently maintains.','dev');
-  CL('pj5','safe','{name} covered the brake on approach to a parked delivery van with its driver-side door open, without being instructed to do so. This indicates developing hazard anticipation and defensive driving skill appropriate to {his} stage.');
-  CHECKLIST.forEach(g=>g.items.forEach(it=>{ if(S.checklist[it.id].st==='unrated') S.checklist[it.id]={st:'safe',note:'',sev:'dev'}; }));
+  CL('pj8','safe','{name} covered the brake on approach to a parked delivery van with its driver-side door open, without being instructed to do so. This indicates developing hazard anticipation and defensive driving skill appropriate to {his} stage.');
+  CL('pj9','safe','{name} remained composed throughout, showed courtesy to other road users when giving way, and approached the drive positively — including after being corrected on a missed head check.');
+  CL('pc10','na','The assessment vehicle was an automatic, so gear changes and clutch application were not applicable.');
+  CHECKLIST.forEach(g=>g.items.forEach(it=>{ if(S.checklist[it.id].st==='unrated') S.checklist[it.id]={st:'safe',note:''}; }));
+  S.clComments['Observation']='According to the government standards for safe driving, {name} did not check {his} blind spot with a shoulder check, and did not look into {his} mirrors regularly enough. This appears to be habit and inexperience rather than a consequence of {his} medical condition, and {he} was provided feedback to improve this area for safer driving.';
+  S.clComments['Planning and Judgment']='{name} followed all instructions from the driving instructor and appropriately requested clarification on the two occasions an instruction was given late.';
+
+  /* --- instructor prompts: one verbal, no intervention --- */
+  S.interventions=[
+    {type:'verbal', what:'The driving instructor prompted {name} to check the blind spot before a lane change. {He} performed the check correctly and in good time once prompted.', where:'60 km/h arterial section, approaching the shopping strip'},
+  ];
 
   /* --- competency, feedback and sign-off narrative --- */
   Object.assign(S,{
@@ -3944,6 +4136,11 @@ function validate(){
 
   if(S.tests.bells.on && !testInvalid('bells') && parseInt(S.tests.bells.omissions)>0 && (!txt(S.tests.bells.left)&&!txt(S.tests.bells.right)))
     A('bells_side','Bells Test omissions are not split by side','Six or more omissions on one side raises the question of visual neglect, which cannot be assessed from the total alone.','4','#card_bells');
+  const fe=failErrors();
+  if(fe.length && ['fit','fit-cond','learner-continue'].includes(S.outcome))
+    B('Instructor intervention sits under a supportive outcome',
+      `${joinList(fe.map(f=>(INTERVENTIONS[f.type]||{}).label.toLowerCase()))} ${fe.length===1?'was':'were'} recorded on road. That is difficult to reconcile with an outcome that supports continued driving — either the outcome or the intervention record needs to change.`,'6','[data-bind=outcome]');
+  (S.interventions||[]).forEach((r,i)=>{ if(!txt(r.what)) B('Intervention '+(i+1)+' needs describing','Say what you saw and how it was managed, or remove the entry.','5','#interventionRows'); });
   if(S.austroadsVision==='No' && ['fit','fit-cond','learner-continue'].includes(S.outcome)) B('Vision standard not met, but outcome supports driving','Austroads vision standard is recorded as not met. That has to be resolved before a supportive outcome.','6','[data-bind=outcome]');
   const sumLow=(S.summaryText||'').toLowerCase();
   issues.forEach(s=>{ const key=s.split(' ').filter(w=>w.length>4)[0]; if(key && !sumLow.includes(key.toLowerCase())) A('sum_'+key,'Flagged issue may not be reflected in the summary: '+s,'Every issue you raised on road should be visible in the summary and picked up by a recommendation.','6','[data-bind=summaryText]'); });

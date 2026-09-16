@@ -24,7 +24,7 @@ The form follows the four phases of the assessment itself rather than presenting
 | --- | --- | --- |
 | **1 · Initial Interview** | ⚙, 1–3 | Practice profile, client and referral details, reports reviewed, and the clinical interview and occupational profile |
 | **2 · Off-Road Assessment** | 4 | Hearing and communication, vision, physical, the standardised cognitive battery and the pre-drive outcome summary — each screen with a how-to-conduct card |
-| **3 · On-Road Assessment** | 5 | Vehicle, conditions, route, MDI briefing, safety management and the performance checklist |
+| **3 · On-Road Assessment** | 5 | The drive and the vehicle, the familiarisation phase, MDI briefing, the performance checklist and the intervention log |
 | **4 · Feedback & Finalising** | 6–9 | Summary and reasoning, recommendations, additional documents, feedback given to the client, declarations, sign-off and competency coverage |
 
 Within a stage, **one section is open at a time** — opening a section closes its siblings, so a stage is one form rather than a long scroll. The validation panel's `§` references point at section numbers, and clicking an outstanding item switches to the right stage, opens the section it lives in, and jumps to the field. The stage you were last on is remembered.
@@ -46,11 +46,38 @@ The builder does not hold your assessment notes. Record observations however you
 - **Physical measurements carry their thresholds.** Under 25 cm of wheel clearance raises the airbag problem and points at pedal extensions; under about 30° of cervical rotation raises wide-angle mirrors as a modification recommendation; a heel pivot slower than 15 taps in 9 seconds is reported against that standard; a Rapid Pace Walk over 9 seconds is reported as the risk marker it is and explicitly not as a licensing test; a sitting tolerance shorter than the on-road drive is cross-checked against the duration in Section 5 and flagged.
 - **What you did not do is reported.** Untested lines, untested muscle groups and unassessed on-road items print with their reasons, and the report states that nothing is concluded from their absence.
 
+### The on-road assessment
+
+The performance areas, their items and their order are the proforma's — Observation, Planning and
+Judgment, Vehicle Positioning, Speed Control, Physical Control — and the report prints them the way
+the proforma does: one block per area, the item list with an **Issues observed** column, then a
+single **Further comments** paragraph.
+
+- The drive itself is a **composed paragraph**, not a field table: how long, whose vehicle and how
+  it was equipped, who was present and where the assessor observed from, the traffic conditions,
+  the route from start to finish, the weather and any modifications. Anything left blank drops out
+  of the sentence.
+- A **familiarisation phase** can be marked off with its own duration and note, so errors that
+  belong to an unfamiliar vehicle are recorded as such rather than explained away in a finding
+  later.
+- The **intervention log** records every prompt and intervention from the driving instructor,
+  typed from the course record form's fail errors — collision, failed to stop, failed to give way,
+  excessive speed, too slow, disobeyed a direction, stopped in a dangerous position — plus a verbal
+  prompt and use of the dual controls. A verbal prompt is a normal part of an assessed drive;
+  anything below it is a blocker under an outcome that supports driving, and it is named in the GP
+  letter and the instructor handover.
+
 ### Traceability
 
-- On-road checklist items start as **not yet rated**. Nothing is pre-ticked as safe. Rate what you saw first; then one click marks the items still sitting unrated as safe and appropriate and inserts each one's standard description, so a clean drive reads as a positive finding rather than an empty cell. The report falls back to the same wording for any safe item you leave blank, and prints a short paragraph per performance area naming what was safe. Items rated as an issue or not assessed are never touched by it.
-- Any item rated as an **issue** must carry a comment describing what you saw, and export is blocked while a flagged issue has nothing written against it.
-- Items marked **not assessed** require a reason, which prints in the report rather than being silently dropped.
+- On-road checklist items start as **not yet rated**. Nothing is pre-ticked as safe. Rate what you
+  saw first; then one click marks the items still sitting unrated as safe and appropriate and
+  inserts each one's standard description, so a clean drive reads as a positive finding rather than
+  an empty tick box. Items rated as an issue or not assessed are never touched by it.
+- Any item rated as an **issue** must carry a comment describing what you saw, and export is blocked
+  while a flagged issue has nothing written against it. Those comments are what the area's *Further
+  comments* paragraph is built from, alongside an optional comment for the area as a whole.
+- Items marked **not assessed** require a reason, which prints in the report rather than being
+  silently dropped.
 
 ### How to conduct each assessment
 
@@ -121,7 +148,7 @@ Eight occupational profile domains (six core), each with prompt questions to ask
 
 Two tiers, both enforced before export:
 
-**Blockers** — must be fixed. Identity, licensing, referral and assessor fields, `[TBC]` in the licence expiry, core profile domains, unrecorded physical lines, undescribed difficulties, untested lines without reasons, binocular visual acuity, test scores, unrated on-road items, flagged issues with no comment, the unconfirmed summary, unresolved `{tokens}` and `[placeholders]`, outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; a vision standard recorded as not met alongside a supportive outcome), missing recommendations, missing consent, sign-off, an enabled additional document missing something essential, and the documentation competency standards.
+**Blockers** — must be fixed. Identity, licensing, referral and assessor fields, `[TBC]` in the licence expiry, core profile domains, unrecorded physical lines, undescribed difficulties, untested lines without reasons, binocular visual acuity, test scores, unrated on-road items, flagged issues with no comment, an undescribed intervention, the unconfirmed summary, unresolved `{tokens}` and `[placeholders]`, outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; an instructor intervention beyond a verbal prompt alongside a supportive outcome; a vision standard recorded as not met alongside a supportive outcome), missing recommendations, missing consent, sign-off, an enabled additional document missing something essential, and the documentation competency standards.
 
 **Advisories** — each must be individually ticked as considered. The competency-prompt fields (communication screen, MDI briefing, safety management, feedback given, licensing information, suitability decisions), an empty practice name, monocular visual acuity, contractions, unsupported phrasing ("seemed fine", "no issues", "I think", "obviously"), sentences over 45 words, missing terminal punctuation, thin sections by word count, short on-road duration, flagged issues that do not appear in the summary, and unedited template blocks.
 
@@ -137,7 +164,7 @@ Tick any of these in **Section 6** and they appear as tabs above the preview, ea
 | --- | --- | --- |
 | **Letter to GP / treating practitioner** | The treating doctor | One-page clinical summary: outcome, findings bearing on medical fitness to drive, medication, and an explicit list of what you are asking them to do |
 | **NDIS support recommendations** | Planner, support coordinator, plan manager | Participant goals the assessment relates to, current functional impact, what was assessed, and each recommended support with a reasonable-and-necessary rationale and expected outcome |
-| **Handover to driving instructor** | The MDI | Licence status, priority focus areas drawn from the flagged on-road issues, strengths to build on, how the client learns, safety notes, and what to report back and when |
+| **Handover to driving instructor** | The MDI | Licence status, priority focus areas drawn from the flagged on-road issues, strengths to build on, how the client learns, safety notes including any intervention on the assessment drive, and what to report back and when |
 | **Summary for client, family or support person** | The client and whoever supervises their practice | Plain-language account of what was done, the outcome, what went well, what needs practice, how to help, and next steps |
 
 Only what belongs in each document goes into it — the NDIS participant number, for instance, appears on the NDIS document and nowhere else. Enabling a document that is missing something essential (a GP name, an NDIS number) blocks export until it is supplied.
@@ -195,6 +222,7 @@ The data that drives the assessment lives in plain arrays at the top of the scri
 | `MUSCLES` / `MRC` | Muscle groups tested, their how-to-test text and diagram geometry, and the grading scale |
 | `PHYS_ROWS` / `PHYS_ST` / `MAS` | Physical lines — how-to-screen text, measurement fields, threshold interpretation and standard wording; the status vocabulary; the Modified Ashworth scale |
 | `CHECKLIST` | On-road performance areas, items and their standard wording |
+| `INTERVENTIONS` | The instructor-intervention taxonomy, and which entries count as fail errors |
 | `PREDRIVE_CATS` | Categories in the pre-drive outcome summary |
 | `TEST_META` / `ADMIN_SCRIPTS` | Standardised tests (including which are on by default), and the procedure and administration rules shown for each |
 | `STAGES` | The four assessment stages and which sections belong to each |
@@ -223,7 +251,7 @@ Open `public/index.html` directly in a browser, or serve it locally:
 npx serve public
 ```
 
-Click **Load example** for a fully worked de-identified sample — complete profile, physical lines with their measurements, muscle grades, test scores, a pre-drive outcome summary and rated on-road findings — which exports cleanly and shows what a finished report looks like. The sample client is fictional.
+Click **Load example** for a fully worked de-identified sample — complete profile, physical lines with their measurements, muscle grades, test scores, a pre-drive outcome summary, a familiarisation phase and rated on-road findings — which exports cleanly and shows what a finished report looks like. The sample client is fictional.
 
 ## Deploying to Vercel
 
