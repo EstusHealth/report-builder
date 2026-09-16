@@ -50,8 +50,10 @@ The builder does not hold your assessment notes. Record observations however you
 
 The performance areas, their items and their order are the proforma's — Observation, Planning and
 Judgment, Vehicle Positioning, Speed Control, Physical Control — and the report prints them the way
-the proforma does: one block per area, the item list with an **Issues observed** column, then a
-single **Further comments** paragraph.
+the proforma does: one block per area, the item list with an **Appropriate and safe** column and an
+**Issues observed** column, then a single **Further comments** paragraph. A safe item is confirmed
+with a tick rather than left as an empty cell, and nothing restates in prose what the ticks already
+say — what prints alongside them is only what you wrote.
 
 - The drive itself is a **composed paragraph**, not a field table: how long, whose vehicle and how
   it was equipped, who was present and where the assessor observed from, the traffic conditions,

@@ -2230,18 +2230,15 @@ function driveNarrative(){
    sentence is used instead of the short name, so what they wrote appears once
    and only here: the tick column carries the rest. */
 function areaSafeProse(g){
-  const safe=g.items.filter(it=>S.checklist[it.id].st==='safe');
-  if(!safe.length) return [];
-  const written=safe.filter(it=>txt(S.checklist[it.id].note));
-  const bare=safe.filter(it=>!txt(S.checklist[it.id].note));
-  const out=[];
-  if(bare.length) out.push(bare.length===g.items.length
-    ? `All aspects of ${g.g.toLowerCase()} assessed were safe and appropriate: ${joinList(bare.map(it=>it.short))}.`
-    : `${cap(joinList(bare.map(it=>it.short)))} ${bare.length===1?'was':'were'} safe and appropriate.`);
-  /* one paragraph each: the standard wordings are subjectless continuations and
-     read as a run-on if they are strung together */
-  written.forEach(it=> out.push(txt(S.checklist[it.id].note)));
-  return out;
+  /* Only what the assessor wrote. Naming the safe items in a sentence would
+     restate the Appropriate and safe column exactly, which is the double
+     narration this report is meant to be free of — the tick carries that, and
+     anything more than a tick is what they typed or inserted here.
+     One paragraph each: the standard wordings are subjectless continuations
+     and read as a run-on if they are strung together. */
+  return g.items
+    .filter(it=>S.checklist[it.id].st==='safe' && txt(S.checklist[it.id].note))
+    .map(it=>txt(S.checklist[it.id].note));
 }
 /* The proforma's "Further comments" for an area: what was written against each
    flagged and not-assessed item, then anything recorded against the area as a
@@ -3237,11 +3234,16 @@ function buildReport(){
   h+=P('During the on-road assessment a number of driving behaviours were observed in the areas of observation, planning and judgment, vehicle positioning, speed control and physical control. Results are outlined below.');
   CHECKLIST.forEach(g=>{
     h+=`<p style="${ST.p};font-family:'Barlow Semi Condensed',Calibri,sans-serif;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:${BRAND.c1};margin:5mm 0 1mm">${esc(g.g)}</p>`;
-    h+=`<table style="${ST.tbl}"><tr><th style="${ST.th}">Performance area</th><th style="${ST.th};width:20%">Issues observed<div style="font-weight:400;text-transform:none;letter-spacing:0">(see further comments for details)</div></th></tr>`+
+    /* The proforma's two checkbox columns. Not assessed and not yet rated both
+       leave the pair blank, as the proforma would — a not-assessed item carries
+       its reason in the further comments, and an unrated one cannot reach an
+       issued report because it is a hard export blocker. */
+    h+=`<table style="${ST.tbl}"><tr><th style="${ST.th}">Performance areas</th><th style="${ST.th};width:15%">Appropriate and safe</th><th style="${ST.th};width:19%">Issues observed<div style="font-weight:400;text-transform:none;letter-spacing:0">(see further comments for details)</div></th></tr>`+
       g.items.map(it=>{
         const c=S.checklist[it.id];
-        const mark = c.st==='issue'? '✗' : c.st==='na'? 'not assessed' : c.st==='unrated'? '<i style="color:#8c2f2f">not rated</i>' : '';
-        return `<tr><td style="${ST.td}">${it.text}</td><td style="${ST.td};text-align:center${c.st==='issue'?';color:#8c2f2f;font-weight:700':''}">${mark}</td></tr>`;
+        return `<tr><td style="${ST.td}">${it.text}</td>`+
+          `<td style="${ST.td};text-align:center;font-weight:700">${c.st==='safe'?'✓':''}</td>`+
+          `<td style="${ST.td};text-align:center;font-weight:700${c.st==='issue'?';color:#8c2f2f':''}">${c.st==='issue'?'✗':''}</td></tr>`;
       }).join('')+`</table>`;
     areaSafeProse(g).forEach(t=> h+=P(t));
     const cmts=areaComments(g);
