@@ -67,6 +67,27 @@ single **Further comments** paragraph.
   anything below it is a blocker under an outcome that supports driving, and it is named in the GP
   letter and the instructor handover.
 
+### Who else was there
+
+Two optional toggles in Section 1, either or both, for an assessment attended by a third person.
+Each takes a name, their role and qualification, and what they actually did.
+
+- A **student** — observed the assessment, administered parts of the off-road screen under your
+  supervision, or came along for the drive. Their presence needs the client's agreement, and the
+  tick confirming it is the one gate here: a report naming a student cannot be exported without it.
+- A **clinical supervisor** (OT Driving Assessor) — observed for competency sign-off, co-assessed,
+  reviewed the report, or a combination.
+
+Whoever is recorded is named in the administration paragraph, in the consent statement where a
+student was present, in your scope-of-practice statement where you were supervised, and in the
+on-road paragraph — but only where they were actually in the car, so a student who sat in on the
+screen alone is not placed on the drive. Those sentences are composed from the toggles rather than
+written into the editable wording, so ticking one after the text is drafted cannot leave the report
+contradicting itself.
+
+There is no supervised/final mode, no draft stamps and no countersignature — the toggles record who
+was there and nothing more.
+
 ### Traceability
 
 - On-road checklist items start as **not yet rated**. Nothing is pre-ticked as safe. Rate what you
@@ -148,7 +169,7 @@ Eight occupational profile domains (six core), each with prompt questions to ask
 
 Two tiers, both enforced before export:
 
-**Blockers** — must be fixed. Identity, licensing, referral and assessor fields, `[TBC]` in the licence expiry, core profile domains, unrecorded physical lines, undescribed difficulties, untested lines without reasons, binocular visual acuity, test scores, unrated on-road items, flagged issues with no comment, an undescribed intervention, the unconfirmed summary, unresolved `{tokens}` and `[placeholders]`, outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; an instructor intervention beyond a verbal prompt alongside a supportive outcome; a vision standard recorded as not met alongside a supportive outcome), missing recommendations, missing consent, sign-off, an enabled additional document missing something essential, and the documentation competency standards.
+**Blockers** — must be fixed. Identity, licensing, referral and assessor fields, a named student or supervisor with no name and a student present without the recorded consent, `[TBC]` in the licence expiry, core profile domains, unrecorded physical lines, undescribed difficulties, untested lines without reasons, binocular visual acuity, test scores, unrated on-road items, flagged issues with no comment, an undescribed intervention, the unconfirmed summary, unresolved `{tokens}` and `[placeholders]`, outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; an instructor intervention beyond a verbal prompt alongside a supportive outcome; a vision standard recorded as not met alongside a supportive outcome), missing recommendations, missing consent, sign-off, an enabled additional document missing something essential, and the documentation competency standards.
 
 **Advisories** — each must be individually ticked as considered. The competency-prompt fields (communication screen, MDI briefing, safety management, feedback given, licensing information, suitability decisions), an empty practice name, monocular visual acuity, contractions, unsupported phrasing ("seemed fine", "no issues", "I think", "obviously"), sentences over 45 words, missing terminal punctuation, thin sections by word count, short on-road duration, flagged issues that do not appear in the summary, and unedited template blocks.
 
@@ -221,6 +242,7 @@ The data that drives the assessment lives in plain arrays at the top of the scri
 | `PROFILE_DOMAINS` | Occupational profile domains and their prompt questions |
 | `MUSCLES` / `MRC` | Muscle groups tested, their how-to-test text and diagram geometry, and the grading scale |
 | `PHYS_ROWS` / `PHYS_ST` / `MAS` | Physical lines — how-to-screen text, measurement fields, threshold interpretation and standard wording; the status vocabulary; the Modified Ashworth scale |
+| `ATTENDEES` | The student and clinical-supervisor toggles, their involvement options and which of those put someone in the car |
 | `CHECKLIST` | On-road performance areas, items and their standard wording |
 | `INTERVENTIONS` | The instructor-intervention taxonomy, and which entries count as fail errors |
 | `PREDRIVE_CATS` | Categories in the pre-drive outcome summary |

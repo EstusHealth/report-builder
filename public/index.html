@@ -461,6 +461,10 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   </div>
   <div class="row"><div class="f w100"><label>Assessment location</label><input type="text" data-bind="location"></div></div>
 
+  <div class="subhead">Others present at the assessment</div>
+  <div class="hint">Optional. Tick either or both. Whoever you record here is named in the report — in the administration paragraph, in the consent statement where a student is present, in your scope-of-practice statement where you were supervised, and in the on-road paragraph where they were actually in the car.</div>
+  <div id="attendeeRows"></div>
+
   <div class="subhead">Suitability &amp; assessment history</div>
   <div class="row">
     <div class="f w50"><label>Suitable to undergo a driver assessment <span style="color:var(--faint);text-transform:none;letter-spacing:0">(1.1)</span></label>
@@ -1715,6 +1719,8 @@ function freshState(){
     assessor:BRAND.assessor||'', assessorRole:BRAND.assessorRole||'Occupational Therapist', ahpra:BRAND.ahpra||'',
     mdi:'', location:BRAND.location||'',
     reviewed:{referral:true, licence:true, background:true, gp:false, prevOT:false}, reviewedExtra:'', supportPerson:'',
+    student:    {on:false, name:'', qual:'', role:'observed', consent:false},
+    supervisor: {on:false, name:'', qual:'', role:'observed'},
     purpose:'learner', reasonReferral:'', symptoms:'', medHistory:'', medSideEffects:'', drivingHistory:'',
     needs:{}, hearing:'wnl', hearingNote:'',
     lenses:'Yes', lensesEndorsed:'Yes', acuityBy:'Optometrist',
@@ -2112,6 +2118,59 @@ function dsdaCombined(){
    assessor sat, the traffic conditions, the route from start to finish, the
    weather, and any modifications. Composed rather than stored, so it cannot go
    stale against the fields; anything left blank drops out of the sentence. */
+/* A student observes the assessor's assessment and needs the client's
+   agreement to be there; a clinical supervisor oversees the assessor and
+   belongs in the scope-of-practice statement. `inCar` decides whether they are
+   named in the on-road paragraph — someone who only sat in on the screen, or
+   only read the report, was not on the drive. */
+const ATTENDEES = {
+  student: {
+    label:'An occupational therapy student was present', defQual:'Occupational Therapy student',
+    roles:{
+      observed:{label:'Observed the assessment',                                       inCar:true,  rep:'was present throughout and observed the assessment'},
+      screen:  {label:'Administered parts of the off-road screen under my supervision', inCar:false, rep:'was present for the off-road screen and administered parts of it under supervision'},
+      onroad:  {label:'Present for the on-road assessment only',                        inCar:true,  rep:'was present for the on-road assessment'},
+    }},
+  supervisor: {
+    label:'A clinical supervisor (OT Driving Assessor) was present', defQual:'Occupational Therapy Driving Assessor',
+    roles:{
+      observed:{label:'Observed the assessment for competency sign-off', inCar:true,  rep:'observed the assessment'},
+      co:      {label:'Co-assessed',                                     inCar:true,  rep:'co-assessed'},
+      both:    {label:'Observed the assessment and reviewed this report', inCar:true, rep:'observed the assessment and reviewed this report'},
+      report:  {label:'Reviewed this report only',                       inCar:false, rep:'reviewed this report'},
+    }},
+};
+/* The two blocks resolved once, so every place that names them composes from
+   the same wording rather than re-deriving it. */
+function presentPeople(){
+  return Object.keys(ATTENDEES).map(k=>{
+    const v=S[k]||{}, def=ATTENDEES[k];
+    if(!v.on || !txt(v.name)) return null;
+    const r=def.roles[v.role]||def.roles[Object.keys(def.roles)[0]];
+    const qual=txt(v.qual)||def.defQual;
+    /* parenthetical, not "Name, qual" — a qualification of its own containing a
+       comma would otherwise run straight into the verb that follows */
+    return {key:k, name:txt(v.name), qual, role:r, inCar:r.inCar, full:`${txt(v.name)} (${qual})`};
+  }).filter(Boolean);
+}
+function personOf(k){ return presentPeople().find(x=>x.key===k)||null; }
+function buildAttendees(){
+  const el=document.getElementById('attendeeRows'); if(!el) return;
+  el.innerHTML = Object.keys(ATTENDEES).map(k=>{
+    const v=S[k]||{}, def=ATTENDEES[k];
+    return `<div style="margin-bottom:10px">
+      <label class="chk"><input type="checkbox" ${v.on?'checked':''} onchange="S['${k}'].on=this.checked;buildAttendees();update()"><b>${def.label}</b></label>
+      ${v.on? `<div class="row" style="margin-top:6px">
+        <div class="f w50"><label>Name</label><input type="text" data-fkey="att:${k}:name" value="${esc(v.name)}" oninput="S['${k}'].name=this.value;update()"></div>
+        <div class="f w50"><label>Role &amp; qualification</label><input type="text" data-fkey="att:${k}:qual" value="${esc(v.qual)}" placeholder="${esc(def.defQual)}" oninput="S['${k}'].qual=this.value;update()"></div></div>
+      <div class="row"><div class="f w100"><label>Their part in the assessment</label>
+        <select onchange="S['${k}'].role=this.value;buildAttendees();update()">
+          ${Object.keys(def.roles).map(r=>`<option value="${r}" ${v.role===r?'selected':''}>${esc(def.roles[r].label)}</option>`).join('')}</select></div></div>
+      ${k==='student'? `<label class="chk"><input type="checkbox" ${v.consent?'checked':''} onchange="S.student.consent=this.checked;update()">The client was advised the student would be present and <b>consented to their presence</b> (required before export)</label>`:''}`
+      :''}
+    </div>`;
+  }).join('');
+}
 /* A short description of the assessment vehicle, derived from the fields that
    compose the narrative rather than stored separately. */
 function vehicleDesc(){
@@ -2136,6 +2195,8 @@ function driveNarrative(){
   /* each entry carries its own commas, so the list is joined with ", and" */
   p1+=` Present for the assessment ${present.length>1?'were':'was'} ${present.length>1? present.slice(0,-1).join(', ')+', and '+present[present.length-1] : present[0]}.`;
   if(txt(S.assessor)) p1+=` Observing from ${txt(S.otSeat)||'the rear passenger seat'} was ${txt(S.assessor)}, ${txt(S.assessorRole)||'Occupational Therapist'}, who was recording assessment details.`;
+  const alsoInCar=presentPeople().filter(x=>x.inCar);
+  if(alsoInCar.length) p1+=` Also present for the drive ${alsoInCar.length>1?'were':'was'} ${alsoInCar.map(x=>x.full).join(' and ')}.`;
 
   let p2='';
   if(!isNaN(fam)&&fam>0){
@@ -3041,11 +3102,19 @@ function buildReport(){
 
   /* background */
   h+=`<h2 style="${ST.h2}">Background Information</h2>`;
+  const sup=personOf('supervisor'), stu=personOf('student');
   let admin=`This Occupational Therapy Driving Assessment was conducted at ${S.location||'[location]'}. The assessment was administered by ${S.assessor} (${S.assessorRole})`;
+  if(sup) admin+=`, under the clinical supervision of ${sup.name} (${sup.qual})`;
   if(S.mdi) admin+=`. On-road instruction was provided by ${S.mdi} (Motor Driving Instructor)`;
-  h+=P(admin+'.');
+  admin+='.';
+  if(stu) admin+=` ${stu.full} ${stu.role.rep}.`;
+  h+=P(admin);
   h+=`<h3 style="${ST.h3}">Reason for Referral</h3>`+P(S.reasonReferral);
-  if(S.consentText) h+=`<h3 style="${ST.h3}">Consent</h3>`+P(S.consentText);
+  const consentBits=[txt(S.consentText)];
+  /* derived from the toggle rather than written into the editable text, so
+     ticking the student on afterwards cannot leave this silently missing */
+  if(stu) consentBits.push(`{name} was advised that ${stu.full} would be present, and consented to their presence.`);
+  if(txt(consentBits.join(' '))) h+=`<h3 style="${ST.h3}">Consent</h3>`+P(consentBits.filter(Boolean).join(' '));
   if(S.symptoms) h+=`<h3 style="${ST.h3}">Current Symptoms and Functional Challenges</h3>`+P(S.symptoms);
   if(S.medHistory) h+=`<h3 style="${ST.h3}">Medical History</h3>`+P(S.medHistory);
   const meds=S.meds.filter(m=>m.name);
@@ -3206,7 +3275,9 @@ function buildReport(){
 
   /* basis of opinion, limitations, declaration */
   h+=`<h2 style="${ST.h2}">Basis of Opinion, Limitations and Declaration</h2>`;
-  if(S.qualifications) h+=`<h3 style="${ST.h3}">Assessor Qualifications</h3>`+P(S.qualifications);
+  const qualBits=[txt(S.qualifications)];
+  if(sup) qualBits.push(`This assessment was completed under the clinical supervision of ${sup.name} (${sup.qual}).`);
+  if(txt(qualBits.join(' '))) h+=`<h3 style="${ST.h3}">Assessor Qualifications</h3>`+P(qualBits.filter(Boolean).join(' '));
   if(S.limitations) h+=`<h3 style="${ST.h3}">Basis of Opinion and Limitations</h3>`+P(S.limitations);
   if(S.declarationText) h+=`<h3 style="${ST.h3}">Declaration</h3>`+P(S.declarationText);
   if(S.distribution) h+=`<p style="${ST.p}"><b>This report has been prepared for:</b> ${esc(S.distribution)}. It is confidential and should not be released to other parties without appropriate consent.</p>`;
@@ -3658,7 +3729,7 @@ function syncForm(){
   document.querySelectorAll('[data-bindchk]').forEach(el=>{ el.checked = (S[el.dataset.bindchk]||[]).includes(el.value); });
   document.querySelectorAll('[data-bindbool]').forEach(el=>{ el.checked = !!S[el.dataset.bindbool]; });
   buildMedRows(); buildReviewed(); buildNeeds(); buildPhys(); buildTests(); buildChecklist(); buildRecs();
-  buildProfile(); buildMuscles(); buildPreDrive(); buildInterventions(); buildComp(); buildSignoff(); buildDocsPanel(); buildDocTabs();
+  buildProfile(); buildMuscles(); buildPreDrive(); buildInterventions(); buildAttendees(); buildComp(); buildSignoff(); buildDocsPanel(); buildDocTabs();
   refreshPanels();
 }
 function refreshPanels(){
@@ -3709,6 +3780,10 @@ function normalise(raw){
     if(carried[r.id]) s.phys[r.id].note=[txt(s.phys[r.id].note)].concat(carried[r.id]).filter(Boolean).join(' ');
   });
   PROFILE_DOMAINS.forEach(d=> s.profile[d.id]=Object.assign({text:'',na:false,naWhy:''}, s.profile[d.id]||{}));
+  /* drafts saved before the attendee toggles existed load with both off */
+  s.student=Object.assign({on:false,name:'',qual:'',role:'observed',consent:false}, s.student||{});
+  s.supervisor=Object.assign({on:false,name:'',qual:'',role:'observed'}, s.supervisor||{});
+  Object.keys(ATTENDEES).forEach(k=>{ if(!ATTENDEES[k].roles[s[k].role]) s[k].role=Object.keys(ATTENDEES[k].roles)[0]; });
   if(!Array.isArray(s.interventions)) s.interventions=[];
   s.interventions=s.interventions.map(r=>Object.assign({type:'verbal',what:'',where:''}, r||{}))
     .map(r=>{ if(!INTERVENTIONS[r.type]) r.type='verbal'; return r; });
@@ -4052,6 +4127,12 @@ function validate(){
   if(/\[|TBC|TBA|unknown/i.test(S.licExpiry||'')) B('Licence expiry is still unconfirmed','“'+txt(S.licExpiry)+'” cannot go out in a report. Sight the licence or confirm with the licensing authority.','1','[data-bind=licExpiry]');
   if(!brandConfigured()) A('setup_brand','Practice name is empty','The letterhead falls back to a neutral heading. Set your practice name in the Practice Profile section to replace it.','⚙','#brandPanel');
   if(!S.meds.some(m=>txt(m.name))) B("Medications — add at least one row (or 'Nil reported')",'Required.','1','#medRows');
+  Object.keys(ATTENDEES).forEach(k=>{
+    if(!S[k]||!S[k].on) return;
+    if(!txt(S[k].name)) B(ATTENDEES[k].label.replace(/ was present$/,'')+' — name required','The report names whoever was present at the assessment. Add the name, or untick.','1','#attendeeRows');
+  });
+  if(S.student&&S.student.on&&!S.student.consent)
+    B('Confirm the client consented to the student being present','A student can only attend with the client\'s agreement, and the report states that it was obtained.','1','#attendeeRows');
   if(S.meds.some(m=>txt(m.name)) && !txt(S.medSideEffects)) B('Medication response / side effects','Required where medications are listed.','3','[data-bind=medSideEffects]');
   ['suitability','prevAssess','onroadSuitable','condConsidered'].forEach(k=>{
     const lbl={suitability:'Suitability to undergo assessment (1.1)',prevAssess:'Previous OT driver assessments (2.5)',onroadSuitable:'Suitability to proceed on-road (2.19)',condConsidered:'Licence conditions considered (3.13)'}[k];
