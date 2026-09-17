@@ -52,10 +52,10 @@ body{margin:0;font-family:'Barlow',sans-serif;background:var(--bg);color:var(--i
 .stagebtn .st{display:block} .stagebtn .ss{display:none}
 .stagebtn .sq{display:block;font-size:10.5px;letter-spacing:.02em;line-height:1.3;margin-top:2px;color:#8a8880;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.stagebtn .sq.blk{color:#e79191} .stagebtn .sq.ok{color:#8fd0a4}
+.stagebtn .sq.ok{color:#8fd0a4}
 .stagebtn.on{background:var(--bg);border-bottom-color:var(--plum)}
 .stagebtn.on .sn{color:var(--plum)} .stagebtn.on .st,.stagebtn.on .ss{color:var(--ink)} .stagebtn.on .sq{color:var(--muted)}
-.stagebtn.on .sq.blk{color:#8c2f2f} .stagebtn.on .sq.ok{color:#1e6b3a}
+.stagebtn.on .sq.ok{color:#1e6b3a}
 .stage{display:none} .stage.on{display:block}
 .stagelead{padding:14px 18px 0;font-size:12.5px;line-height:1.5;color:var(--muted)}
 .stagelead b{color:var(--ink)}
@@ -156,7 +156,7 @@ ul.rep li{margin-bottom:2mm}
 .gate b{color:#6b5416}
 .gate.locked{border-color:#c9dfc9;background:#f1f8f1;color:#2c5233}
 .gate.stop{border-color:#e5c4c4;background:#fbf1f1;color:#7c2d2d}
-/* advisory tone: worth doing, does not block export */
+/* advisory tone: worth doing, nothing is waiting on it */
 .gate.soft{border-color:#d8d5ce;background:#f7f6f3;color:#57534a}
 .gate.soft b{color:#3d3a33}
 .gate .gbtn{margin-top:8px}
@@ -238,18 +238,20 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 
 /* validation */
 #checkBadge{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:11.5px;padding:5px 10px;border-radius:12px;cursor:pointer;letter-spacing:.04em}
-#checkBadge.ok{background:#1e6b3a;color:#fff} #checkBadge.bad{background:#8c2f2f;color:#fff} #checkBadge.warn{background:#8a6d1f;color:#fff}
-.vgroup{font-family:'Oswald',sans-serif;font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin:12px 0 4px;padding-bottom:3px;border-bottom:1px solid var(--line)}
-.vgroup.blk{color:#8c2f2f} .vgroup.adv{color:#8a6d1f}
-.vitem.advisory{align-items:flex-start}
-.vitem .ack{accent-color:var(--teal);width:14px;height:14px;margin-top:2px;flex-shrink:0}
+#checkBadge.ok{background:#1e6b3a;color:#fff} #checkBadge.warn{background:#8a6d1f;color:#fff}
+.vnote{font-size:12px;color:var(--faint);line-height:1.5;padding:10px 8px 6px;border-bottom:1px solid var(--line);margin-bottom:4px}
 .vitem .vwhy{display:block;font-size:11.5px;color:var(--faint);line-height:1.4;margin-top:1px}
-#valModal{display:none;position:fixed;inset:0;background:rgba(23,20,16,.55);z-index:200;align-items:center;justify-content:center}
-#valModal.open{display:flex}
-#valBox{background:#fff;border-radius:8px;max-width:560px;width:92%;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px -20px rgba(0,0,0,.5)}
-#valBox header{background:var(--ink);color:#fff;padding:14px 18px;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.1em;text-transform:uppercase}
-#valBox .vbody{overflow-y:auto;padding:10px 18px}
-#valBox .vfoot{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+#valModal,#jsonModal{display:none;position:fixed;inset:0;background:rgba(23,20,16,.55);z-index:200;align-items:center;justify-content:center}
+#valModal.open,#jsonModal.open{display:flex}
+#valBox,#jsonBox{background:#fff;border-radius:8px;max-width:560px;width:92%;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px -20px rgba(0,0,0,.5)}
+#jsonBox{max-width:760px}
+#valBox header,#jsonBox header{background:var(--ink);color:#fff;padding:14px 18px;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.1em;text-transform:uppercase}
+#valBox .vbody,#jsonBox .jbody{overflow-y:auto;padding:10px 18px}
+#jsonBox .jbody{display:flex;flex-direction:column;min-height:0}
+#jsonOut{flex:1;min-height:44vh;width:100%;box-sizing:border-box;margin-top:8px;resize:none;border:1px solid var(--line);border-radius:5px;
+  padding:9px 11px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;line-height:1.5;color:var(--ink);background:#fbfaf8}
+#jsonSize{flex:1;font-family:'Barlow Semi Condensed',sans-serif;font-size:11.5px;letter-spacing:.04em;color:var(--faint);align-self:center}
+#valBox .vfoot,#jsonBox .vfoot{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
 .vitem{display:flex;gap:8px;align-items:center;padding:6px 8px;border-radius:4px;cursor:pointer;font-size:13px}
 .vitem:hover{background:var(--cream)}
 .vitem .sec{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10px;letter-spacing:.06em;color:#fff;background:var(--plum);border-radius:8px;padding:1px 7px;flex-shrink:0}
@@ -321,7 +323,6 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   .cprow{padding:10px 11px;font-size:13px}
   .cst{padding:4px 10px}
   .vitem{padding:12px 10px;font-size:14.5px}
-  .vitem .ack{width:22px;height:22px}
   .swatch input[type=color]{width:56px;height:42px}
   .doctab{font-size:13px;padding:11px 16px;min-height:42px}
   #docTabs{padding:9px 10px 0}
@@ -370,11 +371,12 @@ body.preview-hidden #formPane{width:100%;border-right:none}
     <button class="btn" onclick="tbGo(newReport)">New</button>
     <button class="btn" onclick="tbGo(saveJSON)">Save draft</button>
     <button class="btn" onclick="tbGo(()=>document.getElementById('openFile').click())">Open draft</button>
-    <button class="btn plum" onclick="tbGo(()=>guard(exportWord))">Export Word</button>
-    <button class="btn primary" onclick="tbGo(()=>guard(doPrint))">Print / PDF</button>
+    <button class="btn" onclick="tbGo(showAssessmentJSON)">Assessment JSON</button>
+    <button class="btn plum" onclick="tbGo(exportWord)">Export Word</button>
+    <button class="btn primary" onclick="tbGo(doPrint)">Print / PDF</button>
   </div>
   <input type="file" id="openFile" accept=".json" style="display:none" onchange="openJSON(event)">
-  <span id="checkBadge" class="bad" onclick="showValidation()">checking…</span>
+  <span id="checkBadge" class="warn" onclick="showValidation()">checking…</span>
   <button class="btn" id="tbPreview" onclick="togglePreview()">Report</button>
   <button class="btn" id="tbMoreBtn" onclick="toggleMore()" aria-label="More actions">⋯</button>
 </div>
@@ -923,7 +925,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
     </div>
   </div>
   <div class="row"><div class="f w100"><label>Summary paragraph(s) <span class="resetlink" onclick="resetField('summaryText')">reset to auto-draft</span></label><textarea data-bind="summaryText" rows="8"></textarea></div></div>
-  <div class="hint">The auto-draft is a <b>skeleton, not a report</b>. It assembles the outcome, the pre-drive outcome summary and the issues you flagged, in your standard structure — you then write the clinical reasoning into it. It is deliberately blocked from export while it is still untouched auto-text.</div>
+  <div class="hint">The auto-draft is a <b>skeleton, not a report</b>. It assembles the outcome, the pre-drive outcome summary and the issues you flagged, in your standard structure — you then write the clinical reasoning into it. While it is still untouched auto-text it is listed as outstanding, because the reasoning has not been written yet.</div>
   <div id="summaryVerify"></div>
 
   <div class="subhead">Recommendations</div>
@@ -959,7 +961,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
     <div class="f w50"><label>Report reference <span class="resetlink" onclick="resetField('reportRef')">auto-generate</span></label><input type="text" data-bind="reportRef" placeholder="e.g. EH-20260618-ROM"></div>
     <div class="f w50"><label>Report version</label><input type="text" data-bind="reportVersion" placeholder="e.g. 1.0 (Final)"></div>
   </div>
-  <label class="chk" style="margin:4px 0 8px"><input type="checkbox" data-bindbool="consentObtained"><b>Informed consent was obtained for the assessment and for release of this report</b> (required before export)</label>
+  <label class="chk" style="margin:4px 0 8px"><input type="checkbox" data-bindbool="consentObtained"><b>Informed consent was obtained for the assessment and for release of this report</b></label>
   <div class="row"><div class="f w100"><label>Consent statement <span class="resetlink" onclick="resetField('consentText')">reset</span></label><textarea data-bind="consentText" rows="3"></textarea></div></div>
   <div class="row"><div class="f w100"><label>Assessor qualifications &amp; scope <span class="resetlink" onclick="resetField('qualifications')">reset</span></label><textarea data-bind="qualifications" rows="3"></textarea></div></div>
   <div class="row"><div class="f w100"><label>Basis of opinion &amp; limitations <span class="resetlink" onclick="resetField('limitations')">reset</span></label><textarea data-bind="limitations" rows="5"></textarea></div></div>
@@ -1003,6 +1005,22 @@ body.preview-hidden #formPane{width:100%;border-right:none}
     <div class="vfoot"><button class="btn" onclick="document.getElementById('valModal').classList.remove('open')">Close</button></div>
   </div>
 </div>
+<div id="jsonModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div id="jsonBox">
+    <header>Assessment JSON</header>
+    <div class="jbody">
+      <div class="vnote">The whole assessment as one labelled object — statuses, ratings and test results written out in words rather than the codes the app stores, and every auto-interpretation and outstanding check included, so a language model can work from it without being given a schema. Paste it into a prompt.
+        <b>It carries the client's identifying details</b>, because the report does — de-identify it yourself if the model you are prompting should not hold them.</div>
+      <textarea id="jsonOut" readonly spellcheck="false" aria-label="Assessment JSON"></textarea>
+    </div>
+    <div class="vfoot">
+      <span id="jsonSize"></span>
+      <button class="btn" id="jsonCopyBtn" onclick="copyAssessmentJSON()">Copy to clipboard</button>
+      <button class="btn plum" onclick="downloadAssessmentJSON()">Download .json</button>
+      <button class="btn" onclick="document.getElementById('jsonModal').classList.remove('open')">Close</button>
+    </div>
+  </div>
+</div>
 <script>
 /* ================================================================
    OT DRIVING ASSESSMENT REPORT BUILDER
@@ -1031,7 +1049,7 @@ function saveBrand(){
 function brandName(){ return [BRAND.name1,BRAND.name2].filter(x=>String(x||'').trim()).join(' ').trim(); }
 function brandConfigured(){ return !!brandName(); }
 /* The letterhead must never print an empty wordmark, so an unset practice
-   name falls back to a neutral heading rather than blocking export. */
+   name falls back to a neutral heading. */
 const BRAND_FALLBACK='Occupational Therapy Driving Assessment';
 /* Text fields update live. The panel is not rebuilt on keystroke — that would
    steal focus — so only the preview, the gate and the badge are refreshed. */
@@ -1045,7 +1063,7 @@ function brandPreviewHTML(){
 function refreshBrandPreview(){
   const pv=document.getElementById('brandPrev'); if(pv) pv.innerHTML=brandPreviewHTML();
   const g=document.getElementById('brandGate');
-  if(g) g.innerHTML = brandConfigured()? '' : '<div class="gate stop"><b>Practice name is empty.</b> The report letterhead needs a name — export is blocked until one is set.</div>';
+  if(g) g.innerHTML = brandConfigured()? '' : '<div class="gate soft"><b>Practice name is empty.</b> The report letterhead will fall back to a neutral heading until one is set.</div>';
   const nb=document.getElementById('nB'); if(nb) nb.textContent = brandConfigured()? brandName() : 'not set up';
 }
 function applyBrand(){
@@ -1159,8 +1177,7 @@ const NEEDS_ROWS = [
    produces, a note, and a how-to card covering position, procedure, what to
    record and the error that most often makes the result meaningless. Nothing
    is pre-filled — `def` is offered on demand once a screen is marked within
-   functional limits, never as a default. `core:false` rows raise an advisory
-   rather than a blocker when left unrecorded. */
+   functional limits, never as a default. */
 /* Physical screening follows the Flinders proforma: one line per area, a
    status you select, and a comment only where there is something to say.
    Measurements hang off the lines that produce one, and are interpreted
@@ -1760,7 +1777,7 @@ function freshState(){
 
     /* ---- governance layer ---- */
     profile:{},
-    verify:{}, ackAdvisories:{},
+    verify:{},
     suitability:'', prevAssess:'', commScreen:'', mdiBrief:'', safetyMgmt:'', furtherInfo:'',
     fbOffRoad:'', fbOnRoad:'', legalInfo:'', condConsidered:'', onroadSuitable:'',
     turnaround:'ok', turnaroundWhy:'', recordsRetained:'Assessment notes, raw test forms and report retained securely in the client file',
@@ -2672,7 +2689,7 @@ function buildChecklist(){
   if(gate){
     const unrated=CHECKLIST.flatMap(g=>g.items).filter(it=>S.checklist[it.id].st==='unrated').length;
     gate.innerHTML = unrated
-      ? `<div class="gate stop"><b>${unrated} item${unrated!==1?'s':''} not yet rated</b>. Every item needs a rating before export.</div>
+      ? `<div class="gate stop"><b>${unrated} item${unrated!==1?'s':''} not yet rated</b>. An unrated item says nothing about the drive — it is not the same as a clean one.</div>
          <div class="bulkbar"><button class="btn" onclick="clFillRest()">✓ Mark the ${unrated} remaining item${unrated!==1?'s':''} safe &amp; appropriate</button>
          <span>Rate what you saw first — flagged issues and not-assessed items are never touched. This sets only the items still sitting unrated, and inserts each one's standard wording for you to edit.</span></div>`
       : `<div class="gate locked"><b>All ${CHECKLIST.flatMap(g=>g.items).length} items rated.</b></div>`;
@@ -3624,13 +3641,13 @@ function buildDocsPanel(){
         <label onclick="this.previousElementSibling.click()">${esc(d.label)}</label>
       </div>
       <div class="hint" style="margin:4px 0 0">${esc(d.hint)}</div>
-      ${on? (miss? `<div class="gate stop" style="margin-top:8px"><b>Needs ${esc(miss)}</b> before this document can be exported.</div>`:'')
+      ${on? (miss? `<div class="gate stop" style="margin-top:8px"><b>Needs ${esc(miss)}</b> — this document cannot be completed without it.</div>`:'')
         + (d.fields.length? `<div class="row" style="margin-top:8px">`+d.fields.map(([k,label,ph])=>
             `<div class="f"><label>${esc(label)}</label><input type="text" value="${esc(S.docMeta[k]||'')}" placeholder="${esc(ph)}" oninput="S.docMeta['${k}']=this.value;reportStale=true;update()"></div>`).join('')+`</div>`:'')
         + `<div class="row"><div class="f w100"><label>Extra paragraph for this document (optional)</label>
             <textarea rows="2" placeholder="Anything specific to add for this reader — inserted near the end." oninput="S.docMeta['${d.id}Note']=this.value;reportStale=true;update()">${esc(S.docMeta[d.id+'Note']||'')}</textarea></div></div>`
         + `<div class="row"><div class="f"><button class="btn" onclick="setActiveDoc('${d.id}');if(!previewOn())togglePreview()">Preview</button></div>
-            <div class="f"><button class="btn plum" onclick="guard(()=>exportDoc('${d.id}'))">Export Word</button></div></div>`
+            <div class="f"><button class="btn plum" onclick="exportDoc('${d.id}')">Export Word</button></div></div>`
       : ''}
     </div>`;
   }).join('');
@@ -3744,11 +3761,13 @@ function refreshPanels(){
 function normalise(raw){
   const s=Object.assign(freshState(), raw||{});
   const base=freshState();
-  /* drafts saved before field notes were removed carry the old record and its
-     client detail; drop it rather than keep re-saving data nothing reads */
-  ['notes','notesLocked','notesLockedAt','notesRecordedBy','equip','equipAt','equipWhy','aiUse','vehicle'].forEach(k=>delete s[k]);
+  /* keys from removed subsystems — the field-notes record and its client
+     detail, the fixed vehicle line, and the advisory acknowledgements the
+     export gate used to need. Drop them rather than keep re-saving data
+     nothing reads. */
+  ['notes','notesLocked','notesLockedAt','notesRecordedBy','equip','equipAt','equipWhy','aiUse','vehicle','ackAdvisories'].forEach(k=>delete s[k]);
   Object.keys(s.checklist||{}).forEach(k=>{ if(s.checklist[k]) delete s.checklist[k].refs; });
-  ['verify','ackAdvisories','compManual','muscles','profile','admin','phys','needs','checklist','clComments','tests','docs','docMeta'].forEach(k=>{
+  ['verify','compManual','muscles','profile','admin','phys','needs','checklist','clComments','tests','docs','docMeta'].forEach(k=>{
     s[k]=Object.assign({}, base[k], raw&&raw[k]? raw[k]:{});
   });
   MUSCLES.forEach(m=> s.muscles[m.id]=Object.assign({tested:'no',grade:'',note:''}, s.muscles[m.id]||{}));
@@ -3856,6 +3875,255 @@ function newReport(){
   S=freshState();
   ['reasonReferral','consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]());
   syncForm(); setStage(1); render(); autosave();
+}
+
+/* ================================================================
+   STRUCTURED EXPORT — the assessment as JSON, for LLM prompts
+   Separate from "Save draft", which writes the internal state so the
+   app can read it back. This writes the assessment for something else
+   to read: every stored code resolved to the words it stands for, every
+   {token} substituted, every auto-interpretation and every outstanding
+   check included. A model should be able to work from it with no schema
+   and no access to this file.
+   It contains the client's identifying details, because the report does.
+================================================================ */
+
+/* Strip markup, decode the entities the label tables carry (&amp;), and
+   collapse the whitespace that leaves behind. */
+function unent(x){ const d=document.createElement('textarea'); d.innerHTML=String(x??''); return d.value; }
+function jtxt(x){ return txt(unent(String(x??'').replace(/<[^>]+>/g,' ')).replace(/\s+/g,' ')); }
+/* Free text is stored with {tokens} unresolved; a prompt wants the words. */
+function jprose(x){ return jtxt(fill(String(x??''))); }
+/* Numeric fields are stored as strings; a prompt reads a number better. */
+function num(x){ const n=parseFloat(x); return txt(x)? (isNaN(n)? jtxt(x) : n) : ''; }
+
+/* Select values are stored as codes. Read the label off the select itself
+   rather than keeping a second copy of every option list down here, which
+   would drift from the markup the first time one changed. */
+function optLabel(key,val){
+  const el=document.querySelector(`[data-bind=${key}]`);
+  const v=String(val??'');
+  if(!el || el.tagName!=='SELECT') return jtxt(v);
+  const o=[...el.options].find(o=>o.value===v);
+  return o? jtxt(o.textContent) : jtxt(v);
+}
+
+/* Drop what was never filled in, so the prompt carries findings rather than
+   blanks. `false` and `0` are findings, so they stay. */
+function jprune(v){
+  if(Array.isArray(v)){ const a=v.map(jprune).filter(x=>x!==undefined); return a.length? a : undefined; }
+  if(v && typeof v==='object'){
+    const o={}; Object.keys(v).forEach(k=>{ const x=jprune(v[k]); if(x!==undefined) o[k]=x; });
+    return Object.keys(o).length? o : undefined;
+  }
+  if(typeof v==='string') return txt(v)||undefined;
+  return v===null||v===undefined? undefined : v;
+}
+
+const CL_RATING={unrated:'Not yet rated', safe:'Safe and appropriate', issue:'Issue observed', na:'Not assessed on road'};
+const COMP_STATUS={met:'Evidenced by the report', manok:'Confirmed by the assessor', man:'Awaiting confirmation',
+                   miss:'Not evidenced', nap:'Not applicable to this outcome'};
+
+function assessmentJSON(){
+  const physRow=id=>S.phys[id]||{};
+  const j={
+    document:{
+      type:'Occupational therapy driver assessment',
+      generatedBy:'OT Driving Assessment Report Builder',
+      generatedAt:new Date().toISOString(),
+      reportReference:jtxt(S.reportRef), reportVersion:jtxt(S.reportVersion),
+      note:'Values are written out in words. Anything not recorded during the assessment is absent from this file rather than empty.',
+    },
+    practice:{
+      name:brandName()||BRAND_FALLBACK, tagline:jtxt(BRAND.tagline),
+      assessor:jtxt(S.assessor), assessorRole:jtxt(S.assessorRole), ahpraNumber:jtxt(S.ahpra),
+      motorDrivingInstructor:jtxt(S.mdi), assessmentLocation:jtxt(S.location),
+    },
+    client:{
+      fullName:fullNm(), preferredName:jtxt(S.prefName||S.firstName), dateOfBirth:fmtDate(S.dob),
+      pronouns:jtxt(S.pronouns), address:jtxt(S.address), ndisParticipantNumber:jtxt(S.ndis),
+      supportPersonPresent:jtxt(S.supportPerson),
+    },
+    peoplePresent:presentPeople().map(x=>({name:x.name, qualification:x.qual, role:jtxt(x.role.label), inVehicleForTheDrive:x.inCar})),
+    licence:{
+      number:jtxt(S.licNo), sighted:jtxt(S.licSighted), expiry:jtxt(S.licExpiry),
+      type:jtxt(S.licType), conditions:(S.licCond||[]).map(jtxt), otherConditions:jtxt(S.licCondOther),
+    },
+    referral:{
+      referrer:jtxt(S.refName), role:jtxt(S.refRole), organisation:jtxt(S.refOrg), contact:jtxt(S.refContact),
+      purposeOfAssessment:optLabel('purpose',S.purpose), reasonForReferral:jprose(S.reasonReferral),
+      recordsReviewed:REVIEWED_OPTS.filter(o=>S.reviewed[o.id]).map(o=>jtxt(o.label))
+        .concat(jtxt(S.reviewedExtra)? [jtxt(S.reviewedExtra)] : []),
+    },
+    assessment:{
+      dateOfAssessment:fmtDate(S.dateAssess), dateOfReport:fmtDate(S.dateReport),
+      suitabilityToUndergoAssessment:jprose(S.suitability),
+      previousOTDriverAssessments:jprose(S.prevAssess),
+      furtherInformationSought:jprose(S.furtherInfo),
+    },
+    presentation:{
+      diagnoses:jprose(S.diagnoses), currentSymptoms:jprose(S.symptoms), medicalHistory:jprose(S.medHistory),
+      medications:(S.meds||[]).filter(m=>txt(m.name)).map(m=>({name:jtxt(m.name), dose:jtxt(m.dose), purpose:jtxt(m.purpose)})),
+      medicationResponseAndSideEffects:jprose(S.medSideEffects),
+    },
+    occupationalProfile:PROFILE_DOMAINS.map(d=>{
+      const p=S.profile[d.id]||{};
+      return {domain:jtxt(d.label), core:!!d.core,
+        status:p.na? 'Not applicable' : (txt(p.text)? 'Recorded' : 'Not recorded'),
+        detail:jprose(p.na? p.naWhy : p.text)};
+    }),
+    drivingHistory:jprose(S.drivingHistory),
+    drivingNeeds:NEEDS_ROWS.map(r=>{
+      const v=S.needs[r.id]||{};
+      return {need:jtxt(r.label), response:jtxt(v.val), note:jprose(v.note)};
+    }),
+    sensoryScreen:{
+      hearing:{finding:optLabel('hearing',S.hearing), note:jprose(S.hearingNote)},
+      communicationScreen:jprose(S.commScreen),
+      vision:{
+        acuityTestedBy:jtxt(S.acuityBy), wearsCorrectiveLenses:jtxt(S.lenses), lensConditionOnLicence:jtxt(S.lensesEndorsed),
+        acuityUncorrected:{right:jtxt(S.vaUR), left:jtxt(S.vaUL), binocular:jtxt(S.vaUB)},
+        acuityCorrected:{right:jtxt(S.vaCR), left:jtxt(S.vaCL), binocular:jtxt(S.vaCB)},
+        visualFields:optLabel('vFields',S.vFields), eyeMovements:optLabel('vMovements',S.vMovements),
+        notes:jprose(S.visionNotes),
+        meetsAustroadsVisionStandard:jtxt(S.austroadsVision), eyeSpecialistReviewRecommended:jtxt(S.eyeReview),
+      },
+    },
+    physicalScreen:{
+      handDominance:jtxt(physRow('hand').note),
+      summary:jprose(S.physSummary),
+      screens:PHYS_ROWS.filter(r=>!r.simple).map(r=>{
+        const p=physRow(r.id);
+        let interp=null; try{ interp=r.interp? r.interp(p):null; }catch(e){}
+        return {
+          area:jtxt(r.label), relevanceToDriving:jtxt(r.why),
+          status:(PHYS_ST[p.st||'']||PHYS_ST['']).label,
+          measurements:(r.m||[]).map(f=>({measure:jtxt(f.label), value:jtxt(p[f.k])})).filter(x=>x.value),
+          note:jprose(p.note),
+          interpretation:interp? jprose(interp.txt) : '',
+        };
+      }),
+      manualMuscleTesting:{
+        scale:'MRC (Oxford) 0–5, where 5 is full range against full resistance',
+        groups:MUSCLES.map(m=>{
+          const v=S.muscles[m.id]||{};
+          return {group:jtxt(m.n), region:jtxt(m.g), relevanceToDriving:jtxt(m.why),
+            tested:v.tested==='yes', grade:jtxt(v.grade), note:jprose(v.note)};
+        }),
+      },
+    },
+    cognitiveAndPerceptualScreen:{
+      generalObservations:jprose(S.genCog),
+      tests:Object.keys(TEST_META).filter(id=>id!=='dsdaCat' && S.tests[id] && S.tests[id].on).map(id=>{
+        const m=TEST_META[id], t=S.tests[id];
+        const o={test:jtxt(m.name), measures:jtxt(m.purpose), administeredToStandardInstructions:!testInvalid(id)};
+        if(testInvalid(id)){
+          o.departureFromStandardAdministration=jprose(S.admin[id].why)
+            || 'Recorded as departing from the standard instructions; no detail entered.';
+          o.scoreReportable=false;
+          return o;
+        }
+        o.scores=m.fields.map(f=>({measure:jtxt(f.label), value:jtxt(t[f.k])})).filter(x=>x.value);
+        let r=null; try{ r=m.interp? m.interp():null; }catch(e){}
+        if(r && r.pill!=='na'){
+          o.result = r.pill==='pass'? 'Within the driving threshold' : 'Outside the driving threshold';
+          o.interpretation = jprose((r.scoreTxt? r.scoreTxt+' ':'')+r.txt);
+        }
+        o.note=jprose(t.note);
+        return o;
+      }),
+      driveSafeDriveAwareCombinedOutcome:jprose(dsdaCombined()),
+      summary:jprose(S.cogSummary),
+    },
+    psychosocialSkills:jprose(S.psychosocial),
+    preDriveOutcomeSummary:PREDRIVE_CATS.flatMap(c=>(S.preDrive[c.id]||[])
+      .filter(r=>txt(r.issue)||txt(r.impact)||txt(r.considerations))
+      .map(r=>({area:jtxt(c.label), issue:jprose(r.issue), impactOnDriving:jprose(r.impact), considerationsForTheDrive:jprose(r.considerations)}))),
+    offRoadFeedback:{
+      feedbackGivenToClient:jprose(S.fbOffRoad),
+      suitabilityToProceedOnRoad:jprose(S.onroadSuitable),
+      briefingGivenToInstructor:jprose(S.mdiBrief),
+    },
+    onRoadAssessment:{
+      vehicle:{
+        description:jprose(vehicleDesc()), owner:optLabel('vehicleOwner',S.vehicleOwner),
+        transmission:jtxt(S.transmission), dualControls:jtxt(S.dualControls), powerSteering:jtxt(S.powerSteering),
+        modifications:jprose(S.vehicleMods), drivingAids:jprose(S.drivingAids),
+        assessorSeatedIn:jtxt(S.otSeat),
+      },
+      durationMinutes:num(S.duration),
+      familiarisation:{minutes:num(S.familiarisationMins), whatItCovered:jprose(S.familiarisationNote)},
+      route:{start:jtxt(S.routeStart), through:jtxt(S.route), end:jtxt(S.routeEnd)},
+      trafficConditions:jtxt(S.traffic), weather:jtxt(S.weather),
+      safetyManagement:jprose(S.safetyMgmt),
+      instructorInterventions:interventionList().map(i=>({
+        type:jtxt((INTERVENTIONS[i.type]||{}).label), countsAsAFailedItem:!!(INTERVENTIONS[i.type]||{}).fail,
+        whatHappened:jprose(i.what), whereOnTheRoute:jprose(i.where)})),
+      performance:CHECKLIST.map(g=>({
+        area:jtxt(g.g),
+        items:g.items.map(it=>{
+          const c=S.checklist[it.id]||{};
+          return {item:jtxt(it.short), criterion:jtxt(it.text),
+            rating:CL_RATING[c.st]||jtxt(c.st), note:jprose(c.note)};
+        }),
+        areaComment:jprose((S.clComments||{})[g.g]),
+      })),
+    },
+    outcome:{
+      code:jtxt(S.outcome), finding:optLabel('outcome',S.outcome), plainLanguage:jtxt(OUTCOME_PLAIN[S.outcome]),
+      summary:jprose(S.summaryText),
+      summaryConfirmedByAssessor:verified('summaryText'),
+      recommendations:REC_DEFS.filter(r=>S.recs[r.id]&&S.recs[r.id].on&&txt(S.recs[r.id].text))
+        .map(r=>({recommendation:jtxt(r.label), detail:jprose(S.recs[r.id].text)})),
+      licenceConditionsConsidered:jprose(S.condConsidered),
+      feedbackGivenAfterTheDrive:jprose(S.fbOnRoad),
+      legalAndLicensingInformationGiven:jprose(S.legalInfo),
+    },
+    additionalDocuments:DOCS.filter(d=>docOn(d.id))
+      .map(d=>({document:jtxt(d.label), extraParagraph:jprose(docNote(d.id))})),
+    governance:{
+      informedConsentObtained:!!S.consentObtained,
+      consentStatement:jprose(S.consentText),
+      assessorQualifications:jprose(S.qualifications),
+      basisOfOpinionAndLimitations:jprose(S.limitations),
+      declaration:jprose(S.declarationText),
+      distribution:jtxt(S.distribution),
+      reportIssuedWithinAgreedTimeframe:S.turnaround==='ok',
+      reasonIfOutsideTimeframe:jprose(S.turnaroundWhy),
+      recordsRetained:jtxt(S.recordsRetained),
+      readEndToEndByAssessor:!!S.selfReview,
+      additionalReferences:jprose(S.refsExtra),
+      competencyStandards:{
+        source:REFS.competency,
+        standards:COMPETENCIES.map(c=>({id:c.id, standard:jtxt(c.t), status:COMP_STATUS[compStatus(c)]||''})),
+      },
+    },
+    outstandingChecks:validate().map(m=>({section:jtxt(m.sec), item:jprose(m.label), why:jprose(m.why)})),
+  };
+  return jprune(j)||{};
+}
+
+function assessmentJSONText(){ return JSON.stringify(assessmentJSON(),null,2); }
+
+function showAssessmentJSON(){
+  const s=assessmentJSONText();
+  document.getElementById('jsonOut').value=s;
+  document.getElementById('jsonSize').textContent =
+    s.length.toLocaleString()+' characters — roughly '+Math.round(s.length/4).toLocaleString()+' tokens';
+  document.getElementById('jsonCopyBtn').textContent='Copy to clipboard';
+  document.getElementById('jsonModal').classList.add('open');
+}
+function copyAssessmentJSON(){
+  const t=document.getElementById('jsonOut'), b=document.getElementById('jsonCopyBtn');
+  const done=()=>{ b.textContent='✓ Copied'; setTimeout(()=>{ b.textContent='Copy to clipboard'; },1800); };
+  const fallback=()=>{ t.focus(); t.select(); try{ document.execCommand('copy'); done(); }catch(e){ b.textContent='Select all and copy'; } };
+  if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t.value).then(done, fallback);
+  else fallback();
+}
+function downloadAssessmentJSON(){
+  const blob=new Blob([assessmentJSONText()],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=(S.surname||'client')+'-driving-assessment.json'; a.click();
 }
 
 /* Word export */
@@ -4050,11 +4318,14 @@ function loadExample(){
   });
   S.verify.summaryText={ok:true,h:hashOf(S.summaryText)};
   syncForm(); render(); autosave();
-  setTimeout(()=>{ const {advisories}=validate(); advisories.forEach(a=>S.ackAdvisories[a.id]=true); update(); },0);
 }
 
 /* ================================================================
-   VALIDATION — every required item must be complete before export
+   CHECKS
+   One flat list of things worth looking at before the report goes out,
+   in the order the assessment takes them. Nothing here stops an export —
+   the assessor decides what is outstanding and what is deliberate. Each
+   item carries the section it lives in and a selector to jump to.
 ================================================================ */
 const REQ_FIELDS = [
  ['firstName','First name','1'],['surname','Surname','1'],['dob','Date of birth','1'],['address','Address','1'],
@@ -4113,146 +4384,145 @@ const BAD_PHRASES = [
 const CONTRACTIONS = /\b(didn't|doesn't|wasn't|weren't|isn't|aren't|can't|couldn't|wouldn't|shouldn't|hasn't|haven't|won't|he's|she's|they're|it's|I've|I'm)\b/i;
 
 function validate(){
-  const blockers=[], advisories=[];
-  const B=(label,why,sec,sel)=>blockers.push({label,why,sec,sel});
-  const A=(id,label,why,sec,sel)=>advisories.push({id,label,why,sec,sel});
+  const items=[];
+  const C=(label,why,sec,sel)=>items.push({label,why,sec,sel});
 
   /* ---- 1. required fields ---- */
   REQ_FIELDS.forEach(([k,label,sec,soft])=>{
     if(txt(S[k])) return;
-    if(soft) A('req_'+k, label+' is empty','Good practice, and a competency standard expects it — but it does not block the report.',sec,`[data-bind=${k}]`);
-    else B(label,'Required field.',sec,`[data-bind=${k}]`);
+    if(soft) C(label+' is empty','Good practice, and a competency standard expects it.',sec,`[data-bind=${k}]`);
+    else C(label,'Required field.',sec,`[data-bind=${k}]`);
   });
   [['vaUR','uncorrected right'],['vaUL','uncorrected left'],['vaCR','corrected right'],['vaCL','corrected left']].forEach(([k,lbl])=>{
-    if(!txt(S[k])) A('va_'+k,'Visual acuity — '+lbl+' not recorded','The binocular figures carry the Austroads comparison, so this does not hold up the report. Record it where you took it — a monocular difference is the thing that points at one eye.','4',`[data-bind=${k}]`);
+    if(!txt(S[k])) C('Visual acuity — '+lbl+' not recorded','The binocular figures carry the Austroads comparison. Record it where you took it — a monocular difference is the thing that points at one eye.','4',`[data-bind=${k}]`);
   });
-  if(/\[|TBC|TBA|unknown/i.test(S.licExpiry||'')) B('Licence expiry is still unconfirmed','“'+txt(S.licExpiry)+'” cannot go out in a report. Sight the licence or confirm with the licensing authority.','1','[data-bind=licExpiry]');
-  if(!brandConfigured()) A('setup_brand','Practice name is empty','The letterhead falls back to a neutral heading. Set your practice name in the Practice Profile section to replace it.','⚙','#brandPanel');
-  if(!S.meds.some(m=>txt(m.name))) B("Medications — add at least one row (or 'Nil reported')",'Required.','1','#medRows');
+  if(/\[|TBC|TBA|unknown/i.test(S.licExpiry||'')) C('Licence expiry is still unconfirmed','“'+txt(S.licExpiry)+'” cannot go out in a report. Sight the licence or confirm with the licensing authority.','1','[data-bind=licExpiry]');
+  if(!brandConfigured()) C('Practice name is empty','The letterhead falls back to a neutral heading. Set your practice name in the Practice Profile section to replace it.','⚙','#brandPanel');
+  if(!S.meds.some(m=>txt(m.name))) C("Medications — add at least one row (or 'Nil reported')",'Required.','1','#medRows');
   Object.keys(ATTENDEES).forEach(k=>{
     if(!S[k]||!S[k].on) return;
-    if(!txt(S[k].name)) B(ATTENDEES[k].label.replace(/ was present$/,'')+' — name required','The report names whoever was present at the assessment. Add the name, or untick.','1','#attendeeRows');
+    if(!txt(S[k].name)) C(ATTENDEES[k].label.replace(/ was present$/,'')+' — name required','The report names whoever was present at the assessment. Add the name, or untick.','1','#attendeeRows');
   });
   if(S.student&&S.student.on&&!S.student.consent)
-    B('Confirm the client consented to the student being present','A student can only attend with the client\'s agreement, and the report states that it was obtained.','1','#attendeeRows');
-  if(S.meds.some(m=>txt(m.name)) && !txt(S.medSideEffects)) B('Medication response / side effects','Required where medications are listed.','3','[data-bind=medSideEffects]');
+    C('Confirm the client consented to the student being present','A student can only attend with the client\'s agreement, and the report states that it was obtained.','1','#attendeeRows');
+  if(S.meds.some(m=>txt(m.name)) && !txt(S.medSideEffects)) C('Medication response / side effects','Required where medications are listed.','3','[data-bind=medSideEffects]');
   ['suitability','prevAssess','onroadSuitable','condConsidered'].forEach(k=>{
     const lbl={suitability:'Suitability to undergo assessment (1.1)',prevAssess:'Previous OT driver assessments (2.5)',onroadSuitable:'Suitability to proceed on-road (2.19)',condConsidered:'Licence conditions considered (3.13)'}[k];
-    if(!txt(S[k])) A('comp_'+k, lbl+' not recorded','A competency standard expects this to be recorded.', k==='suitability'||k==='prevAssess'?'1':(k==='condConsidered'?'6':'4'), `[data-bind=${k}]`);
+    if(!txt(S[k])) C(lbl+' not recorded','A competency standard expects this to be recorded.', k==='suitability'||k==='prevAssess'?'1':(k==='condConsidered'?'6':'4'), `[data-bind=${k}]`);
   });
 
   /* ---- 3. occupational profile depth ---- */
   PROFILE_DOMAINS.filter(d=>d.core).forEach(d=>{
-    if(!profileDone(d.id)) B('Occupational profile — '+d.label,'Core interview domain: record what the client told you, or mark it not applicable with a reason.','3','#profileRows');
+    if(!profileDone(d.id)) C('Occupational profile — '+d.label,'Core interview domain: record what the client told you, or mark it not applicable with a reason.','3','#profileRows');
   });
 
   /* ---- 4. physical & muscle testing ---- */
   PHYS_ROWS.forEach(r=>{
     const p=S.phys[r.id];
-    if(r.simple){ if(!txt(p.note)) B('Not recorded — '+r.label,'Required.','4','#physRows'); return; }
+    if(r.simple){ if(!txt(p.note)) C('Not recorded — '+r.label,'Required.','4','#physRows'); return; }
     if(!p.st){
-      B('Not recorded — '+r.label,'Give it a status. "Not tested" with a reason is a valid answer — a blank is not, because the report cannot say whether it was clear or skipped.','4','#physRows');
+      C('Not recorded — '+r.label,'Give it a status. "Not tested" with a reason is a valid answer — a blank is not, because the report cannot say whether it was clear or skipped.','4','#physRows');
       return;
     }
-    if(PHYS_ISSUE.includes(p.st) && !txt(p.note)) B('Difficulty needs describing — '+r.label,'Say what the difficulty is, how far it goes, and what it means for the driving task.','4','#physRows');
-    if(p.st==='nt' && !txt(p.note)) B('Untested area needs a reason — '+r.label,'Leaving it out is a clinical decision; record it as one. It prints in the report.','4','#physRows');
-    if(p.st==='na' && !txt(p.note)) B('N/A needs a reason — '+r.label,'Say why it does not apply to this client.','4','#physRows');
+    if(PHYS_ISSUE.includes(p.st) && !txt(p.note)) C('Difficulty needs describing — '+r.label,'Say what the difficulty is, how far it goes, and what it means for the driving task.','4','#physRows');
+    if(p.st==='nt' && !txt(p.note)) C('Untested area needs a reason — '+r.label,'Leaving it out is a clinical decision; record it as one. It prints in the report.','4','#physRows');
+    if(p.st==='na' && !txt(p.note)) C('N/A needs a reason — '+r.label,'Say why it does not apply to this client.','4','#physRows');
     (r.m||[]).forEach(f=>{ if(f.num && txt(p[f.k]) && isNaN(parseFloat(p[f.k])))
-      A('physnum_'+r.id+f.k, r.label+' — "'+txt(p[f.k])+'" is not a number','The measurement is reported and interpreted numerically. Enter the figure alone, and put any qualification in the note.','4','#physRows'); });
+      C(r.label+' — "'+txt(p[f.k])+'" is not a number','The measurement is reported and interpreted numerically. Enter the figure alone, and put any qualification in the note.','4','#physRows'); });
   });
   MUSCLES.forEach(m=>{
     const v=S.muscles[m.id];
-    if(v.tested==='yes' && !v.grade) B('Muscle grade missing — '+m.n,'Testing was recorded but no MRC grade entered.','4','#muscleRows');
+    if(v.tested==='yes' && !v.grade) C('Muscle grade missing — '+m.n,'Testing was recorded but no MRC grade entered.','4','#muscleRows');
   });
   if(musclesTested()===0 && S.phys.strength && S.phys.strength.st==='wfl')
-    A('mmt_none','Strength recorded as no issues, but no muscle group is graded','The strength line says there were no issues; the grid below is where the grades that support that statement go. Grade the groups you tested, or say in the strength line what you based it on.','4','#muscleRows');
+    C('Strength recorded as no issues, but no muscle group is graded','The strength line says there were no issues; the grid below is where the grades that support that statement go. Grade the groups you tested, or say in the strength line what you based it on.','4','#muscleRows');
 
   /* ---- 5. test administration ---- */
   Object.keys(TEST_META).forEach(id=>{
     const t=S.tests[id]; if(!t.on || id==='dsdaCat') return;
     const m=TEST_META[id];
-    if(testInvalid(id) && !txt(S.admin[id].why)) B(m.name+' — record what happened','The test is marked as departing from standard administration, so the report has to say what happened and what you are doing about it.','4','#card_'+id);
+    if(testInvalid(id) && !txt(S.admin[id].why)) C(m.name+' — record what happened','The test is marked as departing from standard administration, so the report has to say what happened and what you are doing about it.','4','#card_'+id);
     if(testInvalid(id)) return;
     const need=m.fields[0];
-    if(need && !txt(t[need.k])) B(m.name+' — score required (or untick the test)','Required.','4','#card_'+id);
+    if(need && !txt(t[need.k])) C(m.name+' — score required (or untick the test)','Required.','4','#card_'+id);
   });
 
   /* ---- 6. on-road ratings and traceability ---- */
   CHECKLIST.forEach(g=>g.items.forEach(it=>{
     const c=S.checklist[it.id];
-    if(c.st==='unrated') B('Not yet rated — '+it.short,'Every performance item needs a rating you actually made.','5','#checklist');
-    if(c.st==='issue' && !txt(c.note)) B('Issue needs a comment — '+it.short,'Describe the issue, the contributing factors, and what it will take to develop.','5','#checklist');
-    if(c.st==='na' && !txt(c.note)) B('Not-assessed item needs a reason — '+it.short,'Say why it was not assessed.','5','#checklist');
+    if(c.st==='unrated') C('Not yet rated — '+it.short,'Every performance item needs a rating you actually made.','5','#checklist');
+    if(c.st==='issue' && !txt(c.note)) C('Issue needs a comment — '+it.short,'Describe the issue, the contributing factors, and what it will take to develop.','5','#checklist');
+    if(c.st==='na' && !txt(c.note)) C('Not-assessed item needs a reason — '+it.short,'Say why it was not assessed.','5','#checklist');
   }));
 
   /* ---- 7. drafting discipline ---- */
-  if(txt(S.summaryText) && !verified('summaryText')) B('Summary not confirmed','Tick the confirmation bar under the field. If you edit the text afterwards, it un-ticks and you confirm again.','6','[data-bind=summaryText]');
-  if(isUntouchedDraft('summaryText')) B('Summary is still the untouched auto-draft','The auto-draft assembles your data into a skeleton. The clinical reasoning is yours to write into it.','6','[data-bind=summaryText]');
+  if(txt(S.summaryText) && !verified('summaryText')) C('Summary not confirmed','Tick the confirmation bar under the field. If you edit the text afterwards, it un-ticks and you confirm again.','6','[data-bind=summaryText]');
+  if(isUntouchedDraft('summaryText')) C('Summary is still the untouched auto-draft','The auto-draft assembles your data into a skeleton. The clinical reasoning is yours to write into it.','6','[data-bind=summaryText]');
+  /* Name and place each block from REQ_FIELDS rather than from the key, so the
+     item reads as a field and jumps to the section that actually holds it. */
   ['reasonReferral','limitations','consentText','qualifications','declarationText'].forEach(k=>{
-    if(isUntouchedDraft(k)) A('draft_'+k,'Standard wording unedited — '+k,'This block is still the stock template. Fine if it is accurate for this client; check that it is.','8',`[data-bind=${k}]`);
+    if(!isUntouchedDraft(k)) return;
+    const f=REQ_FIELDS.find(r=>r[0]===k)||[k,k,'8'];
+    C('Standard wording unedited — '+f[1],'This block is still the stock template. Fine if it is accurate for this client; check that it is.',f[2],`[data-bind=${k}]`);
   });
 
   /* ---- 8. writing quality ---- */
   allProse().forEach(f=>{
     const t=f.text;
     const left=(fill(t).match(/\{[A-Za-z_]+\}/g)||[]);
-    if(left.length) B('Unrecognised token in '+f.label,'“'+left[0]+'” did not substitute — check it against the token list, or it will print literally in the report.',f.sec,f.sel);
-    if(/\[(TBC|TBA|xxx|X{2,}|insert|list [a-z]+|[a-z ]+)\]/i.test(t)) B('Placeholder left in '+f.label,'Square-bracket placeholder still in the text.',f.sec,f.sel);
-    if(/\b(TODO|FIXME|\?\?\?)\b/i.test(t)) B('Working marker left in '+f.label,'Remove before issue.',f.sec,f.sel);
-    if(CONTRACTIONS.test(t)) A('contr_'+f.k,'Contractions in '+f.label,'Contractions read as informal in a medicolegal document — “did not” rather than “didn’t”.',f.sec,f.sel);
-    BAD_PHRASES.forEach(([re,why],i)=>{ if(re.test(t)) A('bad'+i+'_'+f.k,'Unsupported phrasing in '+f.label,why,f.sec,f.sel); });
+    if(left.length) C('Unrecognised token in '+f.label,'“'+left[0]+'” did not substitute — check it against the token list, or it will print literally in the report.',f.sec,f.sel);
+    if(/\[(TBC|TBA|xxx|X{2,}|insert|list [a-z]+|[a-z ]+)\]/i.test(t)) C('Placeholder left in '+f.label,'Square-bracket placeholder still in the text.',f.sec,f.sel);
+    if(/\b(TODO|FIXME|\?\?\?)\b/i.test(t)) C('Working marker left in '+f.label,'Remove before issue.',f.sec,f.sel);
+    if(CONTRACTIONS.test(t)) C('Contractions in '+f.label,'Contractions read as informal in a medicolegal document — “did not” rather than “didn’t”.',f.sec,f.sel);
+    BAD_PHRASES.forEach(([re,why])=>{ if(re.test(t)) C('Unsupported phrasing in '+f.label,why,f.sec,f.sel); });
     const long=t.split(/(?<=[.!?])\s+/).filter(s=>s.split(/\s+/).length>45);
-    if(long.length) A('long_'+f.k,`${long.length} very long sentence${long.length>1?'s':''} in ${f.label}`,'Sentences over about 45 words lose the reader — and the reader here may be a licensing authority.',f.sec,f.sel);
-    if(/ {2,}/.test(t)) A('sp_'+f.k,'Double spacing in '+f.label,'Tidy before issue.',f.sec,f.sel);
-    if(!/[.!?]\s*$/.test(txt(t))) A('punc_'+f.k,'No terminal punctuation in '+f.label,'The field ends mid-sentence.',f.sec,f.sel);
+    if(long.length) C(`${long.length} very long sentence${long.length>1?'s':''} in ${f.label}`,'Sentences over about 45 words lose the reader — and the reader here may be a licensing authority.',f.sec,f.sel);
+    if(/ {2,}/.test(t)) C('Double spacing in '+f.label,'Tidy before issue.',f.sec,f.sel);
+    if(!/[.!?]\s*$/.test(txt(t))) C('No terminal punctuation in '+f.label,'The field ends mid-sentence.',f.sec,f.sel);
   });
 
   /* ---- 9. depth ---- */
-  if(wc(S.summaryText)<150) A('len_sum',`Summary is ${wc(S.summaryText)} words`,'A summary under about 150 words rarely carries the reasoning from findings to recommendations.','6','[data-bind=summaryText]');
-  if(wc(S.drivingHistory)<60) A('len_dh',`Driving history is ${wc(S.drivingHistory)} words`,'Licence history, hours, vehicle, prior instruction, incidents and goals — that is more than a couple of sentences.','3','[data-bind=drivingHistory]');
-  if(wc(S.genCog)<40) A('len_gc',`General cognitive observations are ${wc(S.genCog)} words`,'This is where your own observation carries the section rather than the test scores.','4','[data-bind=genCog]');
-  if(parseFloat(S.duration)<40) A('dur',`On-road assessment was ${S.duration} minutes`,'Competency 3.7 requires adequate duration for a comprehensive assessment. Record why if it was shortened.','5','[data-bind=duration]');
+  if(wc(S.summaryText)<150) C(`Summary is ${wc(S.summaryText)} words`,'A summary under about 150 words rarely carries the reasoning from findings to recommendations.','6','[data-bind=summaryText]');
+  if(wc(S.drivingHistory)<60) C(`Driving history is ${wc(S.drivingHistory)} words`,'Licence history, hours, vehicle, prior instruction, incidents and goals — that is more than a couple of sentences.','3','[data-bind=drivingHistory]');
+  if(wc(S.genCog)<40) C(`General cognitive observations are ${wc(S.genCog)} words`,'This is where your own observation carries the section rather than the test scores.','4','[data-bind=genCog]');
+  if(parseFloat(S.duration)<40) C(`On-road assessment was ${S.duration} minutes`,'Competency 3.7 requires adequate duration for a comprehensive assessment. Record why if it was shortened.','5','[data-bind=duration]');
 
   /* ---- 10. internal consistency ---- */
   const issues=flaggedShorts();
-  if(issues.length && ['fit'].includes(S.outcome)) B('Outcome contradicts the findings','The outcome is “fit to drive, no restrictions” while '+issues.length+' on-road issue'+(issues.length>1?'s are':' is')+' flagged. Resolve one or the other.','6','[data-bind=outcome]');
+  if(issues.length && ['fit'].includes(S.outcome)) C('Outcome contradicts the findings','The outcome is “fit to drive, no restrictions” while '+issues.length+' on-road issue'+(issues.length>1?'s are':' is')+' flagged. Resolve one or the other.','6','[data-bind=outcome]');
 
   if(S.tests.bells.on && !testInvalid('bells') && parseInt(S.tests.bells.omissions)>0 && (!txt(S.tests.bells.left)&&!txt(S.tests.bells.right)))
-    A('bells_side','Bells Test omissions are not split by side','Six or more omissions on one side raises the question of visual neglect, which cannot be assessed from the total alone.','4','#card_bells');
+    C('Bells Test omissions are not split by side','Six or more omissions on one side raises the question of visual neglect, which cannot be assessed from the total alone.','4','#card_bells');
   const fe=failErrors();
   if(fe.length && ['fit','fit-cond','learner-continue'].includes(S.outcome))
-    B('Instructor intervention sits under a supportive outcome',
+    C('Instructor intervention sits under a supportive outcome',
       `${joinList(fe.map(f=>(INTERVENTIONS[f.type]||{}).label.toLowerCase()))} ${fe.length===1?'was':'were'} recorded on road. That is difficult to reconcile with an outcome that supports continued driving — either the outcome or the intervention record needs to change.`,'6','[data-bind=outcome]');
-  (S.interventions||[]).forEach((r,i)=>{ if(!txt(r.what)) B('Intervention '+(i+1)+' needs describing','Say what you saw and how it was managed, or remove the entry.','5','#interventionRows'); });
-  if(S.austroadsVision==='No' && ['fit','fit-cond','learner-continue'].includes(S.outcome)) B('Vision standard not met, but outcome supports driving','Austroads vision standard is recorded as not met. That has to be resolved before a supportive outcome.','6','[data-bind=outcome]');
+  (S.interventions||[]).forEach((r,i)=>{ if(!txt(r.what)) C('Intervention '+(i+1)+' needs describing','Say what you saw and how it was managed, or remove the entry.','5','#interventionRows'); });
+  if(S.austroadsVision==='No' && ['fit','fit-cond','learner-continue'].includes(S.outcome)) C('Vision standard not met, but outcome supports driving','Austroads vision standard is recorded as not met. That has to be resolved before a supportive outcome.','6','[data-bind=outcome]');
   const sumLow=(S.summaryText||'').toLowerCase();
-  issues.forEach(s=>{ const key=s.split(' ').filter(w=>w.length>4)[0]; if(key && !sumLow.includes(key.toLowerCase())) A('sum_'+key,'Flagged issue may not be reflected in the summary: '+s,'Every issue you raised on road should be visible in the summary and picked up by a recommendation.','6','[data-bind=summaryText]'); });
-  if(!REC_DEFS.some(r=>S.recs[r.id]&&S.recs[r.id].on&&txt(S.recs[r.id].text))) B('At least one recommendation must be included','Required.','6','#recCards');
-  if(issues.length && !(S.recs.lessons&&S.recs.lessons.on) && ['learner-continue','lessons-reassess'].includes(S.outcome)) A('rec_less','Issues flagged but no driving instruction recommended','Check that each flagged issue is answered by a recommendation.','6','#recCards');
+  issues.forEach(s=>{ const key=s.split(' ').filter(w=>w.length>4)[0]; if(key && !sumLow.includes(key.toLowerCase())) C('Flagged issue may not be reflected in the summary: '+s,'Every issue you raised on road should be visible in the summary and picked up by a recommendation.','6','[data-bind=summaryText]'); });
+  if(!REC_DEFS.some(r=>S.recs[r.id]&&S.recs[r.id].on&&txt(S.recs[r.id].text))) C('At least one recommendation must be included','Required.','6','#recCards');
+  if(issues.length && !(S.recs.lessons&&S.recs.lessons.on) && ['learner-continue','lessons-reassess'].includes(S.outcome)) C('Issues flagged but no driving instruction recommended','Check that each flagged issue is answered by a recommendation.','6','#recCards');
 
   /* ---- 11. consent, competency, sign-off ---- */
-  if(!S.consentObtained) B('Confirm informed consent was obtained','Tick the box in Section 8.','8','[data-bindbool=consentObtained]');
-  COMPETENCIES.filter(c=>c.hard).forEach(c=>{ if(compStatus(c)==='miss') B('Competency '+c.id+' not evidenced','“'+c.t+'” — this is a documentation standard the report itself has to satisfy.','9','#compRows'); });
-  COMPETENCIES.forEach(c=>{ if(compStatus(c)==='man') A('cp_'+c.id,'Competency '+c.id+' awaiting confirmation','“'+c.t+'” — confirm in Section 9 that you did this.','9','#compRows'); });
-  if(!S.selfReview) B('Confirm you have read the report end to end','The final check in Section 8.','8','#signoffPanel');
+  if(!S.consentObtained) C('Confirm informed consent was obtained','Tick the box in Section 8.','8','[data-bindbool=consentObtained]');
+  COMPETENCIES.filter(c=>c.hard).forEach(c=>{ if(compStatus(c)==='miss') C('Competency '+c.id+' not evidenced','“'+c.t+'” — this is a documentation standard the report itself has to satisfy.','9','#compRows'); });
+  COMPETENCIES.forEach(c=>{ if(compStatus(c)==='man') C('Competency '+c.id+' awaiting confirmation','“'+c.t+'” — confirm in Section 9 that you did this.','9','#compRows'); });
+  if(!S.selfReview) C('Confirm you have read the report end to end','The final check in Section 8.','8','#signoffPanel');
   DOCS.forEach(d=>{
     if(!docOn(d.id)) return;
     const miss=d.needs();
-    if(miss) B(d.label+' needs '+miss,'This document is enabled but cannot be completed without it. Fill it in, or untick the document.','6','#docsPanel');
-    if(!txt(d.build().replace(/<[^>]+>/g,''))) B(d.label+' is empty','Something went wrong generating this document.','6','#docsPanel');
+    if(miss) C(d.label+' needs '+miss,'This document is enabled but cannot be completed without it. Fill it in, or untick the document.','6','#docsPanel');
+    if(!txt(d.build().replace(/<[^>]+>/g,''))) C(d.label+' is empty','Something went wrong generating this document.','6','#docsPanel');
   });
 
-  return {blockers, advisories};
+  return items;
 }
-function unackedAdvisories(){ return validate().advisories.filter(a=>!S.ackAdvisories[a.id]); }
-function missingItems(){ return validate().blockers; }
-
 function updateBadge(){
   const b=document.getElementById('checkBadge'); if(!b) return;
-  const v=validate(); const nb=v.blockers.length, na=v.advisories.filter(a=>!S.ackAdvisories[a.id]).length;
-  if(nb){ b.className='bad'; b.textContent=nb+' blocker'+(nb>1?'s':'')+(na?' · '+na+' to review':''); }
-  else if(na){ b.className='warn'; b.textContent=na+' item'+(na>1?'s':'')+' to review'; }
-  else { b.className='ok'; b.textContent='✓ ready to export'; }
+  const v=validate();
+  if(v.length){ b.className='warn'; b.textContent=v.length+' item'+(v.length>1?'s':'')+' to review'; }
+  else { b.className='ok'; b.textContent='✓ nothing outstanding'; }
   const n3=document.getElementById('n3'); if(n3){ const done=PROFILE_DOMAINS.filter(d=>d.core&&profileDone(d.id)).length, tot=PROFILE_DOMAINS.filter(d=>d.core).length; n3.textContent=`profile ${done}/${tot}`; }
   const n4=document.getElementById('n4'); if(n4){
     const on=Object.keys(TEST_META).filter(k=>k!=='dsdaCat'&&S.tests[k].on).length;
@@ -4266,21 +4536,15 @@ function updateBadge(){
   syncStageNav(v);
 }
 function showValidation(){
-  const {blockers, advisories}=validate();
-  const nb=blockers.length, na=advisories.filter(a=>!S.ackAdvisories[a.id]).length;
-  document.getElementById('valHead').textContent = nb? nb+' blocker'+(nb>1?'s':'')+' — these prevent export'
-    : na? na+' item'+(na>1?'s':'')+' to review before export' : 'Ready to export';
-  window._valList=blockers.concat(advisories);
-  let html='';
-  if(nb) html+=`<div class="vgroup blk">Blockers · must be fixed</div>`+blockers.map((m,i)=>
-    `<div class="vitem" onclick="jumpTo(${i})"><span class="sec">§${m.sec}</span><span>${esc(m.label)}<span class="vwhy">${esc(m.why||'')}</span></span></div>`).join('');
-  if(advisories.length) html+=`<div class="vgroup adv">Review · tick each once you have considered it</div>`+advisories.map((m,i)=>{
-    const ack=!!S.ackAdvisories[m.id];
-    return `<div class="vitem advisory"><input type="checkbox" class="ack" ${ack?'checked':''} onchange="S.ackAdvisories['${m.id}']=this.checked;showValidation();update()">
-      <span onclick="jumpTo(${nb+i})" style="cursor:pointer;flex:1"><span class="sec">§${m.sec}</span> ${esc(m.label)}<span class="vwhy">${esc(m.why||'')}</span></span></div>`;
-  }).join('');
-  if(!nb && !na) html=`<div style="padding:14px;font-size:13.5px;color:#1e6b3a"><b>✓ Everything checks out.</b> Blockers cleared and every advisory reviewed.</div>`+html;
-  document.getElementById('valList').innerHTML=html;
+  const items=validate();
+  document.getElementById('valHead').textContent = items.length
+    ? items.length+' item'+(items.length>1?'s':'')+' to review' : 'Nothing outstanding';
+  window._valList=items;
+  document.getElementById('valList').innerHTML = items.length
+    ? `<div class="vnote">Everything the report builder can see that is worth a second look. None of it holds up an export — work through what applies and leave what does not.</div>`
+      + items.map((m,i)=>
+        `<div class="vitem" onclick="jumpTo(${i})"><span class="sec">§${m.sec}</span><span>${esc(m.label)}<span class="vwhy">${esc(m.why||'')}</span></span></div>`).join('')
+    : `<div style="padding:14px;font-size:13.5px;color:#1e6b3a"><b>✓ Everything checks out.</b> Nothing outstanding against any of the checks.</div>`;
   document.getElementById('valModal').classList.add('open');
 }
 /* ================================================================
@@ -4312,7 +4576,7 @@ function buildStageNav(){
     f.innerHTML = (prev? `<button class="btn" onclick="setStage(${prev.n})">← ${esc(prev.label)}</button>`:'')
       + (next? `<button class="btn primary sfnext" onclick="setStage(${next.n})">${esc(next.label)} →</button>`
              : `<button class="btn sfnext" onclick="showValidation()">Review outstanding items</button>
-                <button class="btn plum" onclick="guard(exportWord)">Export Word</button>`);
+                <button class="btn plum" onclick="exportWord()">Export Word</button>`);
   });
 }
 /* `v` is the validation result the caller has already computed — this runs
@@ -4323,10 +4587,9 @@ function syncStageNav(v){
     const b=document.getElementById('stagebtn'+s.n); if(!b) return;
     b.classList.toggle('on', s.n===curStage);
     const q=document.getElementById('stageq'+s.n); if(!q) return;
-    const nb=v.blockers.filter(m=>stageOfSec(m.sec)===s.n).length;
-    const na=v.advisories.filter(m=>!S.ackAdvisories[m.id] && stageOfSec(m.sec)===s.n).length;
-    q.className = 'sq'+(nb?' blk':na?'':' ok');
-    q.textContent = nb? nb+' blocker'+(nb>1?'s':'') : na? na+' to review' : '✓ '+s.sub;
+    const n=v.filter(m=>stageOfSec(m.sec)===s.n).length;
+    q.className = 'sq'+(n?'':' ok');
+    q.textContent = n? n+' to review' : '✓ '+s.sub;
   });
 }
 function setStage(n){
@@ -4379,12 +4642,6 @@ function jumpTo(i){
   el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'),2500);
   if(el.focus) try{el.focus({preventScroll:true})}catch(e){}
 }
-function guard(fn){
-  const {blockers}=validate();
-  if(blockers.length || unackedAdvisories().length){ showValidation(); return; }
-  fn();
-}
-
 /* init */
 window.addEventListener('DOMContentLoaded',()=>{
   initPreview();

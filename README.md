@@ -27,7 +27,7 @@ The form follows the four phases of the assessment itself rather than presenting
 | **3 · On-Road Assessment** | 5 | The drive and the vehicle, the familiarisation phase, MDI briefing, the performance checklist and the intervention log |
 | **4 · Feedback & Finalising** | 6–9 | Summary and reasoning, recommendations, additional documents, feedback given to the client, declarations, sign-off and competency coverage |
 
-Within a stage, **one section is open at a time** — opening a section closes its siblings, so a stage is one form rather than a long scroll. The validation panel's `§` references point at section numbers, and clicking an outstanding item switches to the right stage, opens the section it lives in, and jumps to the field. The stage you were last on is remembered.
+Within a stage, **one section is open at a time** — opening a section closes its siblings, so a stage is one form rather than a long scroll. The review panel's `§` references point at section numbers, and clicking an outstanding item switches to the right stage, opens the section it lives in, and jumps to the field. The stage you were last on is remembered.
 
 ### The pre-drive outcome summary
 
@@ -96,8 +96,8 @@ was there and nothing more.
   saw first; then one click marks the items still sitting unrated as safe and appropriate and
   inserts each one's standard description, so a clean drive reads as a positive finding rather than
   an empty tick box. Items rated as an issue or not assessed are never touched by it.
-- Any item rated as an **issue** must carry a comment describing what you saw, and export is blocked
-  while a flagged issue has nothing written against it. Those comments are what the area's *Further
+- Any item rated as an **issue** needs a comment describing what you saw; a flagged issue with
+  nothing written against it is raised in the checks. Those comments are what the area's *Further
   comments* paragraph is built from, alongside an optional comment for the area as a whole.
 - Items marked **not assessed** require a reason, which prints in the report rather than being
   silently dropped.
@@ -108,7 +108,7 @@ Stage 2 is built to be worked from at the bench, not just recorded into afterwar
 
 **Vision.** A **record an unremarkable vision screen** button sets fields, ocular motility and the Austroads standard to their normal findings and inserts the standard wording, leaving the acuity figures to you. Then a lead card on what the three vision screens each measure — and what none of them measure (contrast sensitivity, glare recovery, useful field of view), so the limits of the screen are explicit. Then one card per test, each with a diagram:
 
-- **Visual acuity** — chart set-up and the measured test distance, the R / L / binocular order, reading down to the smallest line with no more than one error, and what 6/12 means. The binocular figures are required, since they carry the Austroads comparison; the monocular ones are raised for review rather than blocking, so a screen you took binocularly does not hold up the report. No acuity figure is ever filled in for you — it has to be read off the chart. Carries the Austroads private-vehicle threshold and the common errors (pacing the distance, testing in reading glasses, recording "within normal limits" with no figure).
+- **Visual acuity** — chart set-up and the measured test distance, the R / L / binocular order, reading down to the smallest line with no more than one error, and what 6/12 means. Both are raised for review; the binocular figures carry the Austroads comparison, so those are the ones the report leans on. No acuity figure is ever filled in for you — it has to be read off the chart. Carries the Austroads private-vehicle threshold and the common errors (pacing the distance, testing in reading glasses, recording "within normal limits" with no figure).
 - **Visual fields by confrontation** — seating, testing each eye against your own field, the four quadrants, finger counting, the binocular pass, and double simultaneous stimulation for extinction. States plainly what confrontation cannot do, when to refer for formal perimetry, and what each pattern of field loss looks like on road.
 - **Ocular motility** — the H pattern for pursuit, two-target saccades, convergence and diplopia, with the reasoning for why saccadic accuracy predicts the mirror and blind-spot checks you will be rating in Stage 3.
 
@@ -129,7 +129,7 @@ One tick per test records that **standard administration was departed from**. Th
 - excluded from the report's results table, which prints the reason instead of a number;
 - excluded from the DriveSafe DriveAware combined outcome category;
 - excluded from the auto-drafted summary, which states plainly that the result was not relied upon;
-- blocked from export until you record what happened and what you are doing about it.
+- raised in the checks until you record what happened and what you are doing about it.
 
 ### Physical screens
 
@@ -151,7 +151,7 @@ Thirteen lines, in the order and the wording the Flinders proforma reports them 
 | Pain | VAS 0–10 |
 | Vehicle fit, aids & modifications | Sternum to wheel centre, cm |
 
-Plus hand dominance. The status vocabulary is the proforma's: *no issues reported or observed* · *mild* · *moderate* · *significant difficulty* · *not tested* · *N/A*. Nothing defaults to normal, a difficulty must be described, and **not tested** and **N/A** need reasons, which print in the report. A blank is a blocker, because a reader cannot tell a clear screen from a skipped one — but where a run of lines was unremarkable, one button sets everything you have not recorded yet and inserts each one's standard wording for you to edit. It is scoped to blank lines and never overwrites a status you have set.
+Plus hand dominance. The status vocabulary is the proforma's: *no issues reported or observed* · *mild* · *moderate* · *significant difficulty* · *not tested* · *N/A*. Nothing defaults to normal, a difficulty must be described, and **not tested** and **N/A** need reasons, which print in the report. A blank is raised in the checks, because a reader cannot tell a clear screen from a skipped one — but where a run of lines was unremarkable, one button sets everything you have not recorded yet and inserts each one's standard wording for you to edit. It is scoped to blank lines and never overwrites a status you have set.
 
 Each line carries a **how to screen this one** card: numbered procedure, what to record, and the error that most often makes that particular result meaningless — testing fit anywhere but the vehicle, prompting the seatbelt, accepting a head turn the trunk produced, timing a stroll, letting the whole leg lift instead of pivoting at the heel, recording a pain score with no function attached.
 
@@ -167,17 +167,17 @@ Where a section graded normally throughout, a **remaining → 5/5** button on ea
 
 Eight occupational profile domains (six core), each with prompt questions to ask. Core domains need content, or an explicit not-applicable with a reason. Covers roles, work and study and social history; current transport and reliance on others; the purpose of driving and what the client expects from the assessment; insight into their own abilities and risk; fatigue, sleep, pain, medication timing and substance use; crashes, near-misses and infringements; and — where relevant — supports for supervised practice and learning style. Medical history, symptoms and driving history are recorded separately in Sections 1 and 3.
 
-### Report-writing quality gate
+### Report-writing checks
 
-Two tiers, both enforced before export:
+The builder runs a standing set of checks over the report and lists everything it can see that is worth a second look. **None of them stop an export.** Export, print and the additional documents are always available; the badge in the toolbar tells you what is outstanding, and what to do about it is the assessor's call.
 
-**Blockers** — must be fixed. Identity, licensing, referral and assessor fields, a named student or supervisor with no name and a student present without the recorded consent, `[TBC]` in the licence expiry, core profile domains, unrecorded physical lines, undescribed difficulties, untested lines without reasons, binocular visual acuity, test scores, unrated on-road items, flagged issues with no comment, an undescribed intervention, the unconfirmed summary, unresolved `{tokens}` and `[placeholders]`, outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; an instructor intervention beyond a verbal prompt alongside a supportive outcome; a vision standard recorded as not met alongside a supportive outcome), missing recommendations, missing consent, sign-off, an enabled additional document missing something essential, and the documentation competency standards.
+Click the badge for the list. Each entry says what it found and why it matters, carries the `§` section it lives in, and jumps to the field when clicked. Each stage tab carries its own count, so you can see what a phase still owes you before you leave it.
 
-**Advisories** — each must be individually ticked as considered. The competency-prompt fields (communication screen, MDI briefing, safety management, feedback given, licensing information, suitability decisions), an empty practice name, monocular visual acuity, contractions, unsupported phrasing ("seemed fine", "no issues", "I think", "obviously"), sentences over 45 words, missing terminal punctuation, thin sections by word count, short on-road duration, flagged issues that do not appear in the summary, and unedited template blocks.
+What gets checked: identity, licensing, referral and assessor fields; a student or supervisor recorded as present with no name, and a student present without the recorded consent; `[TBC]` left in the licence expiry; core profile domains; unrecorded physical lines, undescribed difficulties and untested lines without reasons; visual acuity; test scores and departures from standard administration; unrated on-road items, flagged issues with no comment and an undescribed intervention; an unconfirmed or untouched auto-draft summary; unresolved `{tokens}` and `[placeholders]`; outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; an instructor intervention beyond a verbal prompt alongside a supportive outcome; a vision standard recorded as not met alongside a supportive outcome); missing recommendations, consent or sign-off; an enabled additional document missing something essential; the competency standards; the competency-prompt fields (communication screen, MDI briefing, safety management, feedback given, licensing information, suitability decisions); contractions and unsupported phrasing ("seemed fine", "no issues", "I think", "obviously"); sentences over 45 words; missing terminal punctuation; thin sections by word count; short on-road duration; and flagged issues that do not appear in the summary.
 
-The competency prompts sit in the second tier deliberately: they are good discipline and the panel keeps asking about them, but not being able to issue a finished report is the wrong price for having skipped one. Standard wording still sitting verbatim as inserted is exempt from the phrasing checks — it is flagged as unedited, not as sloppy writing.
+Standard wording still sitting verbatim as inserted is exempt from the phrasing checks — it is flagged as unedited, not as sloppy writing.
 
-Using each one-click fill where it applies, a complete assessment reaches **ready to export** in roughly the number of decisions the Flinders proforma itself takes.
+A report that raises nothing is unusual, and a report that raises a handful is not a problem: the worked example flags nine, all of them things a real assessor would look at and most of them wave through. The list is there to be read, not cleared.
 
 ### Additional documents
 
@@ -190,21 +190,56 @@ Tick any of these in **Section 6** and they appear as tabs above the preview, ea
 | **Handover to driving instructor** | The MDI | Licence status, priority focus areas drawn from the flagged on-road issues, strengths to build on, how the client learns, safety notes including any intervention on the assessment drive, and what to report back and when |
 | **Summary for client, family or support person** | The client and whoever supervises their practice | Plain-language account of what was done, the outcome, what went well, what needs practice, how to help, and next steps |
 
-Only what belongs in each document goes into it — the NDIS participant number, for instance, appears on the NDIS document and nowhere else. Enabling a document that is missing something essential (a GP name, an NDIS number) blocks export until it is supplied.
+Only what belongs in each document goes into it — the NDIS participant number, for instance, appears on the NDIS document and nowhere else. Enabling a document that is missing something essential (a GP name, an NDIS number) is raised in the checks until it is supplied.
 
 ### Sign-off
 
-A single confirmation in Section 8: that you have read the report end to end and every finding, interpretation and recommendation in it is supported by what you observed and recorded during the assessment. It is a hard blocker.
+A single confirmation in Section 8: that you have read the report end to end and every finding, interpretation and recommendation in it is supported by what you observed and recorded during the assessment. It is one of the checks.
 
 ### Auto-draft discipline
 
-Auto-drafted text is a skeleton, not a report. The Section 6 summary carries a confirmation bar — you tick that the text reflects what you observed. The tick stores a hash of the text, so **editing afterwards silently un-ticks it** and you confirm again. An untouched auto-draft summary is a hard blocker.
+Auto-drafted text is a skeleton, not a report. The Section 6 summary carries a confirmation bar — you tick that the text reflects what you observed. The tick stores a hash of the text, so **editing afterwards silently un-ticks it** and you confirm again. An untouched auto-draft summary is raised in the checks until you have written into it.
 
 ### Competency coverage
 
-All 50 standards from the *Australian Competency Standards for Occupational Therapy Driver Assessors* (Fields, Unsworth & Harreveld, 2018), mapped to the report. Most are evidenced automatically from what you entered; the rest are confirmed manually; ones that do not apply to the outcome are marked N/A. The four documentation standards (4.1, 4.2, 4.4, 4.5) are hard blockers.
+All 50 standards from the *Australian Competency Standards for Occupational Therapy Driver Assessors* (Fields, Unsworth & Harreveld, 2018), mapped to the report. Most are evidenced automatically from what you entered; the rest are confirmed manually; ones that do not apply to the outcome are marked N/A. The four documentation standards (4.1, 4.2, 4.4, 4.5) are called out separately in the checks when they are not evidenced.
 
 Fields exist for the competencies that previously had nowhere to be recorded: suitability screening, prior assessments, communication screen, MDI briefing, safety management during the drive, off-road and on-road feedback to the client, licensing/insurance information given, licence conditions considered, and report turnaround.
+
+## Exporting the assessment as JSON
+
+**Assessment JSON** in the toolbar opens the whole assessment as one labelled JSON object, ready to paste into a prompt. Copy it to the clipboard or download it as a file; the panel shows its size and a rough token count.
+
+This is not the same thing as **Save draft**. A draft is the app's internal state, written so the app can read it back — full of codes like `"st": "mod"` and `"st": "unrated"` that mean nothing outside this file. The JSON export is written for something else to read:
+
+- every stored code resolved to the words it stands for — `"rating": "Issue observed"`, `"status": "Moderate difficulty"`, `"response": "Low to medium density, building with experience"`;
+- every `{token}` substituted, so the prose reads as the report reads;
+- every auto-interpretation included alongside the raw score, so a model gets the threshold reasoning and not just a number;
+- the criterion text for each on-road item and the relevance-to-driving line for each physical screen and muscle group, so nothing needs a glossary;
+- the shape of the assessment preserved — on-road performance grouped by area with its area comment, interventions with whether each counts as a failed item, who was present and in which seat;
+- the competency standards with their status, and the current outstanding checks;
+- anything never recorded left out entirely, rather than present and empty.
+
+```json
+{
+  "area": "Observation",
+  "items": [
+    {
+      "item": "continuous near-to-far scanning",
+      "criterion": "Continuous scanning to both left and right, short, middle and long distance",
+      "rating": "Issue observed",
+      "note": "As traffic density increased on the 60 km/h section approaching a shopping strip …"
+    }
+  ],
+  "areaComment": "According to the government standards for safe driving, Mr Citizen did not check …"
+}
+```
+
+Top-level keys follow the assessment: `document`, `practice`, `client`, `peoplePresent`, `licence`, `referral`, `assessment`, `presentation`, `occupationalProfile`, `drivingHistory`, `drivingNeeds`, `sensoryScreen`, `physicalScreen`, `cognitiveAndPerceptualScreen`, `psychosocialSkills`, `preDriveOutcomeSummary`, `offRoadFeedback`, `onRoadAssessment`, `outcome`, `additionalDocuments`, `governance`, `outstandingChecks`. A complete assessment runs to roughly 17,000 tokens, which fits comfortably in any current model's context.
+
+> ⚠️ **It contains the client's identifying details** — name, date of birth, address, licence number, NDIS number — because the report does. Pasting it into a hosted model sends those details to that provider. De-identify it first if that is not appropriate for the client, and check it against your practice's privacy obligations before it leaves the machine.
+
+The shape is defined in one place, `assessmentJSON()`, if you want to change what goes in it.
 
 ## On a tablet
 
@@ -214,7 +249,7 @@ The same page adapts — there is no separate mobile build to keep in sync. On a
 - The draft report is **hidden by default** and the form takes the full width. Tap **Report** in the toolbar to read it full-screen, and **✕ Close report** to get back. The choice is remembered, so it also works as a focus mode on desktop.
 - While the report is hidden it is not re-rendered on every keystroke — it is marked stale and rebuilt when you open it, print or export, which keeps typing responsive.
 - Controls are sized for fingers: 46px inputs, 42px buttons, 22px checkboxes, full-width rating selects on the on-road checklist. Inputs use 16px text so iOS does not zoom on focus.
-- Secondary actions (load example, new, save/open draft, export, print) collapse into a **⋯** menu so the toolbar stays one row.
+- Secondary actions (load example, new, save/open draft, assessment JSON, export, print) collapse into a **⋯** menu so the toolbar stays one row.
 - Safe-area insets are respected on notched devices, and the page can be added to the home screen to run without browser chrome.
 
 ## Making it your own
@@ -253,8 +288,10 @@ The data that drives the assessment lives in plain arrays at the top of the scri
 | `interp*()` | Score thresholds and interpretation wording |
 | `REC_DEFS` | Recommendation library |
 | `COMPETENCIES` | Competency standards and how each is evidenced |
-| `REQ_FIELDS` | Required fields — a fourth `'soft'` element makes one an advisory rather than a blocker |
+| `REQ_FIELDS` | Fields checked for content — a fourth `'soft'` element words the check as good practice rather than a requirement |
 | `BAD_PHRASES` / `CONTRACTIONS` | Writing-quality checks |
+| `validate()` | Every check the review panel runs, in one flat list |
+| `assessmentJSON()` | Shape of the exported assessment JSON |
 | `REFS` | Reference list |
 
 If you adapt the thresholds for another jurisdiction, please check them against that jurisdiction's fitness-to-drive standard rather than trusting the defaults here.
