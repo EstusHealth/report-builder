@@ -170,6 +170,41 @@ ul.rep li{margin-bottom:2mm}
 .vbar input{accent-color:var(--teal);width:14px;height:14px;cursor:pointer;flex-shrink:0}
 .vbar label{cursor:pointer}
 
+/* an optional block folded out of the main flow (the muscle grid) */
+details.disc{border:1px solid var(--line);border-radius:5px;background:#fff;margin:6px 0 10px}
+details.disc>summary{cursor:pointer;padding:9px 12px;font-family:'Barlow Semi Condensed',sans-serif;
+  font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--teal)}
+details.disc[open]>summary{border-bottom:1px solid var(--line)}
+details.disc .discbody{padding:10px 12px}
+
+/* the physical table: one line per area, the proforma's shape */
+.prow{display:flex;gap:10px;align-items:flex-start;border-bottom:1px solid var(--line);padding:6px 0}
+.prow:last-of-type{border-bottom:none}
+.prow>label{flex:0 0 190px;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:12.5px;
+  letter-spacing:.02em;color:var(--navy);padding-top:8px}
+.prow.sub>label{padding-left:18px;font-weight:400;font-style:italic;color:var(--muted)}
+.prow.head>label{color:var(--plum)}
+.prow .pbody{flex:1;min-width:0}
+.prow textarea{width:100%;box-sizing:border-box;border:1px solid #d6d4cf;border-radius:4px;padding:6px 8px;
+  font-family:'Barlow',sans-serif;font-size:12.5px;line-height:1.45;min-height:34px;resize:vertical;overflow:hidden}
+.prow .pmeta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:3px}
+.prow .fillup{font-size:10.5px;color:var(--plum);cursor:pointer;text-decoration:underline;font-weight:600}
+.prow.filled .fillup{display:none}
+.prow .isstog{font-size:10.5px;color:var(--faint);cursor:pointer;border:1px solid var(--line);
+  border-radius:9px;padding:1px 8px;user-select:none}
+.prow .isstog.on{background:#fbf1f1;border-color:#e5c4c4;color:#8c2f2f;font-weight:600}
+.prow .pnote-x{font-size:10.5px;color:var(--faint)}
+.prow details.meas{margin-top:5px}
+.prow details.meas>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;
+  font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);list-style:none}
+.prow details.meas>summary::-webkit-details-marker{display:none}
+.prow details.ref>summary{list-style:none;font-size:10.5px;color:var(--muted)}
+.prow details.ref>summary::-webkit-details-marker{display:none}
+.prow .measbody{border-left:2px solid var(--line);padding:6px 0 2px 10px;margin-top:5px}
+.pcomments{margin-top:8px;border-top:1px solid var(--line);padding-top:4px}
+.pcomments .prow>label{flex:0 0 200px;font-weight:400;color:var(--muted);font-style:italic}
+.physrefs{font-size:10.5px;color:var(--faint);line-height:1.5;margin-top:10px;padding-top:8px;border-top:1px solid var(--line)}
+
 /* muscle grid */
 .mgrid{border:1px solid var(--line);border-radius:5px;background:#fff;padding:8px 10px;margin-bottom:7px}
 .mgrid .mtop{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -199,12 +234,6 @@ details.ref>summary{cursor:pointer;font-family:'Barlow Semi Condensed',sans-seri
 .dgm text.k{fill:var(--navy);font-weight:600}
 .dgm text.r{fill:#8c2f2f;font-weight:600}
 
-/* admin fidelity */
-.adminbox{border:1px solid #e4d6df;background:#fdf9fc;border-radius:4px;padding:8px 10px;margin-top:8px}
-.adminbox .ahead{font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--plum);margin-bottom:5px}
-.adminbox .arow{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
-.adminbox select,.adminbox input{border:1px solid #d6d4cf;border-radius:4px;padding:4px 6px;font-size:12px;font-family:'Barlow',sans-serif}
-.invalidflag{background:#8c2f2f;color:#fff;font-family:'Barlow Semi Condensed',sans-serif;font-weight:600;font-size:10px;letter-spacing:.08em;padding:2px 8px;border-radius:9px;text-transform:uppercase}
 
 /* equipment */
 .cpwrap{border:1px solid var(--line);border-radius:5px;background:#fff;overflow:hidden;margin-bottom:10px}
@@ -307,8 +336,7 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   .f label{font-size:11.5px}
   .f input[type=text],.f input[type=date],.f input[type=number],.f select,.f textarea,
   .clrow textarea,.clrow select,.reccard textarea,.reccard .params input,.reccard .params select,
-  .medrow input,.mgrid select,.mgrid input.mnote,.mgrid textarea.pnote,
-  .adminbox select,.adminbox input{
+  .medrow input,.mgrid select,.mgrid input.mnote,.mgrid textarea.pnote{
     font-size:16px;padding:11px 12px;min-height:46px}          /* 16px stops iOS zoom-on-focus */
   .f textarea,.clrow textarea,.reccard textarea{min-height:84px;line-height:1.5}
   .chk{padding:9px 0;font-size:15px;min-height:44px}
@@ -318,6 +346,10 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   .clrow,.testcard,.reccard,.mgrid{padding:12px 13px;margin-bottom:11px}
   .clrow .cltop{flex-direction:column;align-items:stretch;gap:9px}
   .clrow .cltxt{font-size:14px}
+  .prow{display:block;padding:9px 0}
+  .prow>label{display:block;padding:0 0 4px;font-size:13px}
+  .prow.sub>label{padding-left:14px}
+  .prow textarea{font-size:16px;min-height:44px}
   .mgrid .mtop{gap:10px}
   .mgrid .mname{font-size:14px;flex:1 0 100%}
   .cprow{padding:10px 11px;font-size:13px}
@@ -784,11 +816,13 @@ body.preview-hidden #formPane{width:100%;border-right:none}
   </div>
 
   <div class="subhead">Physical abilities &amp; restrictions</div>
-  <div class="hint">One line per area, in the order the Flinders proforma reports them. Nothing starts as normal — set a status for each, and <b>Not tested</b> with a reason is a valid answer where a blank is not. Where a run of areas was unremarkable, the button at the top sets everything you have not recorded yet and inserts each one's standard wording for you to edit; it never touches a line you have already recorded. Where a line produces a number — cervical rotation, the heel pivot count, accelerator-to-brake time, Rapid Pace Walk, sitting tolerance, pain, wheel clearance — enter it and the builder interprets it against the driving thresholds. Each carries a <b>how to screen this one</b> card with the procedure, what to record, and the error that most often makes the result meaningless.</div>
+  <div class="hint">One line per area, in the order and the wording the Flinders proforma reports them — a sentence each, nothing else required. The button at the top writes each line's standard wording into the areas you have not written yet, for you to edit; it never touches a line you have already written. Mark <b>difficulty</b> on any line whose sentence describes one, so the summary and the report can pick it out. Where a line produces a measurement — cervical rotation, the heel pivot count, accelerator-to-brake time, the Rapid Pace Walk, sitting tolerance, pain — it is under <b>measurements</b> on that line, interpreted against the driving thresholds. Each line keeps its <b>how to screen this one</b> card.</div>
   <div id="physRows"></div>
 
-  <div class="subhead">Manual muscle testing (MRC grades)</div>
-  <div class="hint">The screens above establish what the client can do; this grid measures the power behind it. Nothing here starts as normal. Each muscle group begins as <b>not yet tested</b> and you record the grade you actually elicited — where a section graded normally throughout, the <b>grade remaining 5/5</b> buttons set the groups you have not touched yet, and never a group you have already recorded — the report prints only what you tested, and says plainly what you did not. Every group carries a <b>how to test this one</b> card: position, what to stabilise, the words to say, where the resistance goes, and the error that most often produces a wrong grade.</div>
+  <details class="disc">
+  <summary>Grade individual muscle groups (MRC / Oxford) — optional</summary>
+  <div class="discbody">
+  <div class="hint">The <b>Strength</b> line above is the proforma's single sentence, and for most assessments it is the whole record. Open this where a group-by-group grade is needed. Nothing here starts as normal: each group begins as <b>not yet tested</b> and you record the grade you actually elicited — where a section graded normally throughout, the <b>grade remaining 5/5</b> buttons set only the groups you have not touched. The report prints what you tested and says plainly what you did not. Every group carries a <b>how to test this one</b> card: position, what to stabilise, the words to say, where the resistance goes, and the error that most often produces a wrong grade.</div>
   <details class="ref"><summary>▸ Muscle testing reference — MRC grading &amp; technique</summary>
     <div class="refcard">
       <h5>MRC / Oxford scale</h5>
@@ -818,11 +852,13 @@ body.preview-hidden #formPane{width:100%;border-right:none}
     </div>
   </details>
   <div id="muscleRows"></div>
+  </div>
+  </details>
 
   <div class="row"><div class="f w100"><label>Summary of physical skills for driving <span class="resetlink" onclick="resetField('physSummary')">draft from what I recorded</span></label><textarea data-bind="physSummary" rows="2"></textarea></div></div>
 
   <div class="subhead">Cognition / perception — standardised tests</div>
-  <div class="hint">Enter raw scores; interpretation against driving thresholds is written automatically. The first six are ticked by default; the rest are there when the referral question calls for them. Untick anything you did not administer. Where standard administration was departed from, tick that on the test and the score is reported as not scoreable rather than as a result.</div>
+  <div class="hint">Enter raw scores; interpretation against driving thresholds is written automatically. The first six are ticked by default; the rest are there when the referral question calls for them. Untick anything you did not administer. Each test carries a <b>how to conduct this test</b> card, and the named comment rows the proforma asks you to fill in.</div>
   <div id="testCards"></div>
   <div class="row"><div class="f w100"><label>General cognitive skills (observations)</label><textarea data-bind="genCog" rows="3" placeholder="Alertness, engagement, instruction needs, concentration, communication, insight…"></textarea></div></div>
   <div class="row"><div class="f w100"><label>Summary of cognitive skills for driving</label><textarea data-bind="cogSummary" rows="4"></textarea></div></div>
@@ -1173,31 +1209,22 @@ const NEEDS_ROWS = [
 ];
 
 /* ---------- physical screens ----------
-   Each screen is a card: a status, the measurements that screen actually
-   produces, a note, and a how-to card covering position, procedure, what to
-   record and the error that most often makes the result meaningless. Nothing
-   is pre-filled — `def` is offered on demand once a screen is marked within
-   functional limits, never as a default. */
-/* Physical screening follows the Flinders proforma: one line per area, a
-   status you select, and a comment only where there is something to say.
-   Measurements hang off the lines that produce one, and are interpreted
-   against the driving thresholds rather than just stored. */
-const PHYS_ST = {
-  '':   {label:'? Not yet recorded',                     cls:'na',    rep:''},
-  wfl:  {label:'No issues reported or observed',         cls:'safe',  rep:''},
-  mild: {label:'Mild difficulty',                        cls:'issue', rep:'Mild difficulty identified.'},
-  mod:  {label:'Moderate difficulty',                    cls:'issue', rep:'Moderate difficulty identified.'},
-  sig:  {label:'Significant difficulty',                 cls:'issue', rep:'Significant difficulty identified.'},
-  nt:   {label:'Not tested',                             cls:'na',    rep:''},
-  na:   {label:'N/A for this client',                    cls:'na',    rep:''},
-};
-const PHYS_ISSUE = ['mild','mod','sig'];
+   The Flinders proforma's table: one line per area, and a sentence in each.
+   Nothing is pre-filled — `def` is that line's standard wording, offered on
+   demand rather than written in. The measurements a line produces, and their
+   interpretation against the driving thresholds, sit behind that line's
+   measurements disclosure, and its how-to card behind another. */
 const MAS = ['0','1','1+','2','3','4'];
 
 const PHYS_ROWS = [
- {id:'hand', label:'Hand dominance', simple:true, ph:'e.g. Right'},
+ /* The Flinders proforma's physical table: one line per area, one sentence each.
+    `def` is that line's standard wording, and it has to stay — the writing-quality
+    scan skips a sentence still matching it. Measurements and their interpretation
+    survive behind each line's measurements disclosure; the how-to cards are as they
+    were. An area is recorded when it has a sentence; `issue` marks it as a difficulty. */
+ {id:'hand', label:'Hand dominance', kind:'select', opts:['Right','Left','Ambidextrous'], def:'Right'},
 
- {id:'rom', label:'Range of movement',
+ {id:'rom', label:'Active range of movement',
   why:'Steering through range, reaching the controls, pedal travel, and the head turn a blind-spot check needs',
   m:[{k:'v1', num:true, label:'Cervical rotation — left (°)', w:'104px', rep:'Cervical rotation {}° to the left'},
      {k:'v2', num:true, label:'right (°)', w:'104px', rep:'and {}° to the right.'}],
@@ -1218,9 +1245,9 @@ const PHYS_ROWS = [
   record:'Normal or decreased per region; degrees for anything limited; the cause of the limit; whether it was symmetrical; and whether a real over-shoulder check was achieved with the belt on.',
   watch:'Trunk substitution. A client who leans and rotates can produce an apparently normal steering arc, or an apparently normal head turn, from a joint that will not do it — hold the shoulders and watch the trunk, not the hand.',
   url:'https://www.merckmanuals.com/professional/geriatrics/the-older-driver/functional-assessment-of-the-older-driver',
-  def:'No issues reported; full active range of movement was observed in the upper limbs, lower limbs, neck and trunk, sufficient for steering through range, full pedal travel and over-shoulder observation checks.'},
+  def:'No issues reported, full range of movement observed.'},
 
- {id:'strength', label:'Strength (Oxford scale)',
+ {id:'strength', label:'Strength (Oxford Scale)', mmt:true,
   why:'Steering force, sustained braking force, and holding a control against resistance',
   how:[
     'Graded on the MRC (Oxford) 0–5 scale in the grid below, which covers the twelve groups the driving task depends on. Use this line for the overall picture and the grid for the detail.',
@@ -1230,9 +1257,9 @@ const PHYS_ROWS = [
   ],
   record:'The overall picture here, and the group-by-group grades in the grid below. Say which groups were not tested and why.',
   watch:'Grade 4 recorded as 5. If you can break the hold at all, it is a 4 — record 4−/4/4+ rather than defaulting to 5.',
-  def:'No issues reported; all upper limb and lower limb strength was rated 5 on the Oxford Scale, with no limitations observed.'},
+  def:'No issues reported, all upper limb and lower limb strength was rated as 5 according to the Oxford Scale, no limitations observed.'},
 
- {id:'tone', label:'Muscle tone (Modified Ashworth)',
+ {id:'tone', label:'Tone (Modified Ashworth Scale)',
   why:'Spasticity, rigidity and tremor all degrade fine control of the wheel and pedals',
   m:[{k:'v1', opts:MAS, label:'Modified Ashworth grade', w:'120px', rep:'Muscle tone graded {} on the Modified Ashworth Scale.'}],
   interp:p=>{ const v=String(p.v1||''); if(!v) return null;
@@ -1247,24 +1274,12 @@ const PHYS_ROWS = [
   ],
   record:'Grade, limb and movement; type and distribution of any tremor; relationship to medication timing; and the specific vehicle control it interferes with.',
   watch:'Testing tone slowly only, and testing tremor at rest only.',
-  def:'No issues reported; muscle tone in the upper and lower limbs was normal, with no tremor, clonus or involuntary movement observed at rest, on posture or on action.'},
+  def:'No issues reported, all muscle tone in the upper and lower limbs was rated as 0 according to the Modified Ashworth Scale, which is normal.'},
 
- {id:'coordUL', label:'Coordination — upper limb',
-  why:'Smooth steering corrections, and operating controls without looking at them',
-  how:[
-    'Finger-to-nose, eyes open then <b>closed</b>, both sides. Look for dysmetria — over- or under-shooting — and for an intention tremor that grows as the finger nears the target.',
-    'Finger-to-finger between your moving finger and their nose, which adds a tracking demand closer to the real task.',
-    'Rapid alternating pronation and supination on the thigh, as fast as they can, both sides. Dysdiadochokinesia here shows up on road as jerky, over-corrected steering.',
-    'Wrist tapping and thumb-to-finger opposition, counted and compared side to side.',
-    'Then a dexterity task with a real object — fastening the belt, turning a key, working an indicator stalk. Time it if it looks slow.',
-    'Do at least one item with the eyes closed. Steering corrections are made without looking at the hands.',
-  ],
-  record:'Which test, which side, what you saw (dysmetria, tremor, slowing, overshoot), and whether it worsened with speed or with the eyes closed.',
-  watch:'Testing with eyes open only. Vision compensates for a proprioceptive problem; driving does not give it the chance.',
-  def:'No issues reported or observed; upper limb coordination was accurate and symmetrical on finger-to-nose, finger-to-finger, rapid pronation and supination, wrist tapping and thumb opposition.'},
-
- {id:'coordLL', label:'Coordination — lower limb (incl. heel pivot test)',
-  why:'Moving between the pedals accurately and repeatedly, and braking in graded steps rather than on-off',
+ /* The proforma has one coordination line; this carries both limbs, and keeps the
+    lower-limb measurements because the heel pivot is the one with a threshold. */
+ {id:'coordination', label:'Coordination',
+  why:'Smooth steering corrections, moving between the pedals accurately, and braking in graded steps rather than on-off',
   m:[{k:'v1', num:true, label:'Heel pivot — taps', w:'92px', rep:'Heel pivot test: {} taps'},
      {k:'v2', num:true, label:'in (sec)', w:'92px', rep:'in {} seconds.'},
      {k:'v3', label:'Foot taps / 10 sec (L / R)', w:'140px', rep:'Foot tapping {} in ten seconds (left / right).'},
@@ -1277,6 +1292,12 @@ const PHYS_ROWS = [
       ? {pill:'pass', txt:`${n} taps in ${t} seconds, at or inside the expected standard of 15 taps side to side in under 9 seconds. Record the <b>quality</b> as well as the count — the heel should stay planted and the foot should land squarely on each target, because that is the movement an emergency stop actually uses.`}
       : {pill:'fail', txt:`${n} taps in ${t} seconds is outside the expected standard of 15 taps in under 9 seconds. A slow or inaccurate heel pivot means the foot is travelling between the pedals rather than pivoting, which is slower and less reliable under pressure. Say what it means for this driver, and check it against the accelerator-to-brake time on the speed of movement line.`}; },
   how:[
+    'Finger-to-nose, eyes open then <b>closed</b>, both sides. Look for dysmetria — over- or under-shooting — and for an intention tremor that grows as the finger nears the target.',
+    'Finger-to-finger between your moving finger and their nose, which adds a tracking demand closer to the real task.',
+    'Rapid alternating pronation and supination on the thigh, as fast as they can, both sides. Dysdiadochokinesia here shows up on road as jerky, over-corrected steering.',
+    'Wrist tapping and thumb-to-finger opposition, counted and compared side to side.',
+    'Then a dexterity task with a real object — fastening the belt, turning a key, working an indicator stalk. Time it if it looks slow.',
+    'Do at least one item with the eyes closed. Steering corrections are made without looking at the hands.',
     'Set two targets at the pedal spacing of the assessment vehicle — best done <b>in the vehicle with the engine off</b>, otherwise mark the floor.',
     '<b>Heel pivot test.</b> Heel planted on the floor between the targets, foot over the accelerator position. Ask for 15 taps side to side, pivoting on the heel, as fast as they can do it accurately. Time it: <b>15 taps in under 9 seconds</b> is the expected standard. Count the taps and the seconds separately and enter both.',
     '<b>Simulated accelerator and brake test.</b> Call the sequence <i>accelerator, brake, accelerator, accelerator, brake, accelerator, brake, brake</i> and watch them follow it. This adds a listening and set-shifting demand to the motor task, which is what an instruction from the passenger seat does.',
@@ -1285,9 +1306,9 @@ const PHYS_ROWS = [
     '<b>Graded pressure.</b> Ask them to press your hand with the ball of the foot at light, then medium, then hard, and back down again. That is progressive braking, and it is precisely what an on-off foot cannot do.',
     'Watch whether the foot needs to be looked at. A driver who glances down to find the brake is taking their eyes off the road to stop.',
   ],
-  record:'Heel pivot count and time; the accelerator/brake sequence result; taps per ten seconds each side; whether graded pressure was controllable; and whether visual guidance was needed.',
-  watch:'Letting the whole leg lift instead of pivoting at the heel, and assuming normal strength means normal control — a strong leg with poor modulation produces harsh braking.',
-  def:'No issues reported or observed; lower limb coordination was accurate on foot tapping, foot rotation, the heel pivot test and the simulated accelerator and brake sequence, with graded, controlled pedal pressure.'},
+  record:'Which test, which side, and what you saw — dysmetria, tremor, slowing, overshoot, and whether it worsened with speed or the eyes closed. For the lower limb: heel pivot count and time, the accelerator/brake sequence, taps per ten seconds each side, whether graded pressure was controllable, and whether visual guidance was needed.',
+  watch:'Testing the upper limb with the eyes open only — vision compensates for a proprioceptive problem and driving does not give it the chance. For the lower limb, letting the whole leg lift instead of pivoting at the heel.',
+  def:'No issues reported or observed.'},
 
  {id:'speed', label:'Speed of movement',
   why:'The physical half of emergency braking',
@@ -1305,9 +1326,12 @@ const PHYS_ROWS = [
   ],
   record:'Method used, pedal spacing, number of trials, typical time, accuracy of placement, and whether the heel stayed down.',
   watch:'A predictable rhythm, and reporting a clinic figure as though it were an instrumented reaction time.',
-  def:'No issues reported or detected on testing; movement between the accelerator and brake was prompt and accurate, with the heel maintained on the floor and consistent placement on the pedal.'},
+  def:'No issues reported or observed.'},
 
- {id:'sensation', label:'Sensation & proprioception',
+ /* The proforma splits sensation into four modalities. The head row carries the
+    how-to card and a cell of its own, which is also where a pre-split draft's
+    combined sentence lands on migration. */
+ {id:'sensation', label:'Sensation', kind:'head', optional:true,
   why:'Feeling the wheel and the pedals, and knowing where the hands and feet are without looking',
   how:[
     'Ask first whether they have noticed any loss or alteration of sensation anywhere. Then occlude the eyes for everything that follows.',
@@ -1318,10 +1342,13 @@ const PHYS_ROWS = [
     'Ask about altered sensation as well as absent — burning, pins and needles, hypersensitivity, or a foot that "feels like it is not there". That is how a driver describes a foot that slips off a pedal.',
   ],
   record:'Modality, distribution and side; whether protective sensation was present; whether movement positions were accurate, delayed or absent; and the functional consequence you observed — not just "reduced".',
-  watch:'Testing over clothing, glancing at the limb you are about to touch, and recording "sensation intact" from a light touch to the shin when the sole of the foot is the surface that does the driving.',
-  def:'No issues reported or detected on testing; light touch, pressure, proprioception and kinaesthesia were intact in the upper and lower limbs, including plantar sensation, with accurate position matching with the eyes closed.'},
+  watch:'Testing over clothing, glancing at the limb you are about to touch, and recording "sensation intact" from a light touch to the shin when the sole of the foot is the surface that does the driving.'},
+ {id:'sensUL', label:'upper limb', sub:true, def:'No issues reported or detected on testing.'},
+ {id:'sensLL', label:'lower limb', sub:true, def:'No issues reported or detected on testing.'},
+ {id:'sensProp', label:'proprioception', sub:true, def:'No issues reported or detected on testing.'},
+ {id:'sensKin', label:'kinaesthesia', sub:true, def:'No issues reported or detected on testing.'},
 
- {id:'sitting', label:'Sitting balance & posture',
+ {id:'sitting', label:'Sitting balance / posture',
   why:'Holding a stable driving posture for the length of a real trip',
   m:[{k:'v1', num:true, label:'Sitting tolerated (min)', w:'112px', rep:'Sustained sitting tolerated for approximately {} minutes.'}],
   interp:p=>{ const v=parseFloat(p.v1); if(isNaN(v)) return null;
@@ -1337,9 +1364,9 @@ const PHYS_ROWS = [
   ],
   record:'Static and dynamic sitting balance, whether a hand was needed for support, minutes tolerated before a position change, and end-of-session posture compared with the start.',
   watch:'Testing at minute two and generalising to minute fifty.',
-  def:'No issues reported or observed with {his} sitting balance or posture; a stable, symmetrical seated posture was maintained with both hands free, with dynamic sitting balance sufficient for reaching the vehicle controls.'},
+  def:'No issues reported or observed with {his} sitting balance or posture.'},
 
- {id:'mobility', label:'Mobility, transfers & Rapid Pace Walk',
+ {id:'mobility', label:'Mobility',
   why:'Getting into the driving position, and a well-evidenced physical risk marker',
   m:[{k:'v1', num:true, label:'Rapid Pace Walk (sec)', w:'112px', rep:'Rapid Pace Walk completed in {} seconds.'},
      {k:'v2', label:'Walking aid', w:'150px', rep:'Walking aid used: {}.'}],
@@ -1357,7 +1384,7 @@ const PHYS_ROWS = [
   record:'Independence of transfer and what was used for support; whether the belt was fastened without prompting; time in seconds; aid used; quality of the turn; and any unsteadiness.',
   watch:'Prompting the seatbelt — if you remind them, you have lost the observation. And timing a stroll: if they are ambling, repeat the instruction.',
   url:'https://www.nhtsa.gov/files/process-and-outcomes-evaluation-screening-programs-assessment-driving-related-skills-adres',
-  def:'No issues reported; {name} entered and exited the vehicle independently and safely, fastened and released the seatbelt without difficulty or prompting, and did not demonstrate any difficulties with mobility, completing the Rapid Pace Walk within the expected range.'},
+  def:'No issues reported, {name} did not demonstrate any difficulties with mobility.'},
 
  {id:'fine', label:'Fine manipulation',
   why:'Holding the wheel for a whole drive, and working the key, belt, handbrake, selector and stalks',
@@ -1371,19 +1398,7 @@ const PHYS_ROWS = [
   record:'Sustained grip time before degradation, quality of release, any specific control that was difficult, and side difference.',
   watch:'Testing a three-second squeeze and calling it grip. The drive is forty-five minutes.',
   url:'https://www.physio-pedia.com/Grip_Strength',
-  def:'No issues reported or observed; grasp, release, sustained grip and fine manipulation were sufficient for steering and for operating the ignition, seatbelt, handbrake, gear selector and stalk controls without difficulty.'},
-
- {id:'endurance', label:'Endurance',
-  why:'A drive is a sustained task, and most screens are snapshots',
-  how:[
-    'You have the client for well over an hour. Treat the whole session as the endurance test and record what changed across it — posture, speed of movement, attention, willingness to repeat a task.',
-    'Ask directly how long they can sustain activity before needing to stop, and whether that varies across the day or with medication timing. Cross-check it against the fatigue entry in the occupational profile.',
-    'Re-test one or two motor items late in the session and compare with the first attempt. Fatigable weakness will not show on a single trial.',
-    'Ask what the longest drive they want to make is, and whether they have done anything of that length recently.',
-  ],
-  record:'What changed across the session, the reported limit, its pattern across the day, and how it compares with the journeys they want to make.',
-  watch:'Recording endurance from a single early trial, and conflating it with the seated tolerance figure above — one is fatigue, the other is position.',
-  def:'No issues reported or observed; {name} sustained the physical demands of the assessment without fatigue affecting performance.'},
+  def:'No issues reported or observed.'},
 
  {id:'pain', label:'Pain',
   why:'Pain limits range, breaks concentration, and changes across the length of a drive',
@@ -1400,25 +1415,7 @@ const PHYS_ROWS = [
   ],
   record:'Current and typical rating, location, provoking factors, the pattern across the day, its interaction with medication timing, and the specific driving movements it limits.',
   watch:'Recording a number with no function attached. "6/10" tells the reader nothing; "6/10 right shoulder, reducing the over-shoulder check to a glance after twenty minutes of driving" is a finding.',
-  def:'No pain or discomfort was reported at rest or on testing, and none was observed to limit the movements required for the driving task.'},
-
- {id:'fitAids', label:'Vehicle fit, aids & modifications',
-  why:'Reach to the pedals and wheel, clearance from the airbag, and what they already use',
-  m:[{k:'v1', num:true, label:'Sternum to wheel centre (cm)', w:'150px', rep:'Sternum to steering wheel centre {} cm.'}],
-  interp:p=>{ const v=parseFloat(p.v1); if(isNaN(v)) return null;
-    return v<25 ? {pill:'fail', txt:`At ${v} cm the driver sits inside the usual 25 cm (10 inch) clearance recommended between the breastbone and the centre of the steering wheel. Where the seat cannot be moved back without losing the pedals, pedal extensions are the answer rather than sitting closer — record that as a modification recommendation in Section 6.`}
-                : {pill:'pass', txt:`${v} cm clearance from the steering wheel centre, at or above the usual 25 cm (10 inch) recommendation.`}; },
-  how:[
-    'Do this <b>in the assessment vehicle</b>, seated as they will drive. Fit is a property of this person in that car; it cannot be inferred from a clinic chair.',
-    'Set the seat so the ball of the foot reaches the brake with the heel on the floor and the knee still slightly bent at <b>full</b> brake travel. A knee that locks straight at full braking is a finding.',
-    'Measure from the breastbone to the centre of the steering wheel — at least 25 cm (10 inches), to keep the driver clear of the airbag deployment zone. Check the sightline too: roughly three inches of clear vision over the top of the wheel.',
-    'Check they can reach and operate the handbrake, gear selector, indicator and wiper stalks and the ignition <b>without leaving the driving position</b>. Head restraint level with the top of the head.',
-    'Record everything already in use — walking aid, AFO, splint, prosthesis, cushion, transfer aid, existing vehicle modification — and <b>test the driving task with it in place</b>. An AFO changes ankle range and pedal feel; a cushion changes airbag clearance and sightline, so re-measure after adding one.',
-    'Where a modification is already fitted, check it works, that they can use it, and that it <b>matches what is recorded on the licence</b>. A modification in the car but not on the licence is a problem to raise now.',
-  ],
-  record:'Seat position and the sternum-to-wheel measurement; what had to change to achieve the standard set-up; each aid or modification in use, its condition, and whether it is already a licence condition.',
-  watch:'Assessing fit anywhere other than the vehicle they will drive, and assessing without the aid because it is quicker — you are assessing the driver plus their equipment, because that is what will be on the road.',
-  def:'A safe driving position was achieved and maintained, with adequate clearance from the steering wheel, full reach to the pedals and primary controls and a clear sightline over the wheel. No aids, orthoses, prostheses or vehicle modifications are currently used, and none were required during the assessment.'},
+  def:'No pain or discomfort reported.'},
 ];
 
 /* categories for the pre-drive outcome summary, per the course record form */
@@ -1672,7 +1669,7 @@ const COMPETENCIES = [
  {id:'2.10', t:'Screens visual function; meets AFTD visual requirements (acuity and confrontation fields)', ev:()=>!!txt(S.vaUB)&&!!txt(S.vaCB)&&S.vFields!=='nt'},
  {id:'2.11', t:'Screens communication skills as required for the driving task', ev:()=>!!txt(S.commScreen)},
  {id:'2.12', t:'Screens hearing as required for the driving task', ev:()=>!!S.hearing},
- {id:'2.13', t:'Screens sensory-motor function as required for the driving task', ev:()=>musclesTested()>0 && PHYS_ROWS.every(physDone)},
+ {id:'2.13', t:'Screens sensory-motor function as required for the driving task', ev:()=>physRequired().every(physDone)},
  {id:'2.14', t:'Screens cognitive-behavioural and perceptual function as required for the driving task', ev:()=>validTests()>=3 && wc(S.genCog)>=40},
  {id:'2.15', t:'Screens road law knowledge as required for the driving task', ev:()=>S.tests.intersection.on&&!!txt(S.tests.intersection.score)},
  {id:'2.16', t:'Considers the impact of the off-road assessment results on the driving task', ev:()=>wc(S.cogSummary)>=50},
@@ -1722,6 +1719,8 @@ const REFS = {
   ace:"Hsieh S, Schubert S, Hoon C, Mioshi E & Hodges JR, 2013, 'Validation of the Addenbrooke's Cognitive Examination III in frontotemporal dementia and Alzheimer's disease', Dementia and Geriatric Cognitive Disorders, vol. 36, no. 3–4, pp. 242–250",
   roadlaw:"Dean P, Dolling M & Berndt A, 2002, Written Road Law Test, Driver Assessment and Rehabilitation Service, University of South Australia, Adelaide",
   rlst:"Road Law Slide Test, reproduced and adapted 2004 with permission from Cumberland Health and Research Centre, Faculty of Health Sciences, The University of Sydney",
+  oxford:"Turner A, Foster M & Johnson SE, 1992, Occupational Therapy and Physical Dysfunction: Principles, Skills and Practice, 3rd edn, p. 193, Churchill Livingstone, UK",
+  ashworth:"Kohlmeyer K, 1998, 'Evaluation of Sensory and Neuromuscular Performance Components', in Neistadt ME & Crepeau EB (eds), Willard and Spackman's Occupational Therapy, 9th edn, ch. 16, sec. 1, p. 236, Lippincott-Raven, Philadelphia",
   otdora:"Unsworth C, 2011, OT-DORA: Occupational Therapy Driver Off-Road Assessment Battery, American Occupational Therapy Association, Bethesda, USA",
 };
 
@@ -1744,24 +1743,27 @@ function freshState(){
     vaUR:'',vaUL:'',vaUB:'',vaCR:'',vaCL:'',vaCB:'',
     vFields:'full', vMovements:'wnl', visionNotes:'', austroadsVision:'Yes', eyeReview:'No',
     phys:{}, physSummary:'', muscles:{},
+    /* The default battery is the Flinders proforma's: the 128-point DriveSafe and
+       the 26-point DriveAware. The iPad versions of both are there, unticked, for
+       practices that administer the DSDA on the tablet. */
     tests:{
-      trailsB:{on:true, secs:'', errors:'', note:''},
-      maze:{on:true, secs:'', errors:'', note:''},
-      driveSafe:{on:true, score:'', detail:'', note:''},
-      driveAware:{on:true, score:'', note:''},
-      dsdaCat:{on:true, cat:'likely', note:''},
-      intersection:{on:true, score:'', note:''},
-      bells:{on:true, omissions:'', left:'', right:'', time:'', note:''},
-      rlst:{on:false, score:'', note:''},
-      roadLaw:{on:false, score:'', note:''},
-      trailsA:{on:false, secs:'', errors:'', note:''},
-      clock:{on:false, score:'', note:''},
-      snellgrove:{on:false, secs:'', errors:'', note:''},
-      driveSafePaper:{on:false, score:'', note:''},
-      moca:{on:false, score:'', note:''},
-      ace:{on:false, score:'', note:''},
+      trailsB:{on:true, secs:'', errors:'', normPct:'', note:'', c:{}},
+      maze:{on:true, secs:'', errors:'', note:'', c:{}},
+      driveSafePaper:{on:true, score:'', note:'', c:{}},
+      driveAware26:{on:true, score:'', note:'', c:{}},
+      dsdaCat:{on:true, cat:'likely', note:'', c:{}},
+      intersection:{on:true, score:'', note:'', c:{}},
+      bells:{on:true, omissions:'', left:'', right:'', time:'', note:'', c:{}},
+      driveSafe:{on:false, score:'', detail:'', note:'', c:{}},
+      driveAware:{on:false, score:'', note:'', c:{}},
+      rlst:{on:false, score:'', note:'', c:{}},
+      roadLaw:{on:false, score:'', note:'', c:{}},
+      trailsA:{on:false, secs:'', errors:'', note:'', c:{}},
+      clock:{on:false, score:'', note:'', c:{}},
+      snellgrove:{on:false, secs:'', errors:'', note:'', c:{}},
+      moca:{on:false, score:'', note:'', c:{}},
+      ace:{on:false, score:'', note:'', c:{}},
     },
-    admin:{},
     genCog:'', cogSummary:'', psychosocial:'',
     preDrive:{},
     duration:'', weather:'', route:'',
@@ -1784,20 +1786,14 @@ function freshState(){
     compManual:{}, selfReview:false,
     docs:{gp:false,ndis:false,mdi:false,family:false}, docMeta:{}, activeDoc:'report',
   };
-  PHYS_ROWS.forEach(r=> s.phys[r.id]={st:'', v1:'', v2:'', v3:'', v4:'', note:''});
+  PHYS_ROWS.forEach(r=> s.phys[r.id]={note:'', issue:false, v1:'', v2:'', v3:'', v4:''});
   MUSCLES.forEach(m=> s.muscles[m.id]={tested:'no', grade:'', note:''});
   NEEDS_ROWS.forEach(r=> s.needs[r.id]={val:r.opts[0], note:''});
   PREDRIVE_CATS.forEach(c=> s.preDrive[c.id]=[]);
   CHECKLIST.forEach(g=>{ g.items.forEach(it=> s.checklist[it.id]={st:'unrated', note:''}); s.clComments[g.g]=''; });
   PROFILE_DOMAINS.forEach(d=> s.profile[d.id]={text:'', na:false, naWhy:''});
-  Object.keys(TEST_ADMIN_DEF).forEach(k=> s.admin[k]=Object.assign({},TEST_ADMIN_DEF[k]));
   return s;
 }
-/* One question per test, not five: was standard administration departed from,
-   and if so what happened. That still drives the not-scoreable path. */
-const TEST_ADMIN_DEF = {};
-['trailsB','maze','driveSafe','driveAware','intersection','bells','rlst','roadLaw','trailsA','clock','snellgrove','driveSafePaper','moca','ace']
-  .forEach(k=> TEST_ADMIN_DEF[k]={departed:false, why:''});
 
 /* small helpers used across validation & competency mapping */
 function txt(x){ return String(x??'').trim(); }
@@ -1805,8 +1801,13 @@ function wc(x){ const t=txt(x); return t? t.split(/\s+/).length : 0; }
 function profileDone(id){ const p=S.profile[id]; return !!p && (p.na? !!txt(p.naWhy) : !!txt(p.text)); }
 function musclesTested(){ return MUSCLES.filter(m=>S.muscles[m.id].tested==='yes'&&S.muscles[m.id].grade).length; }
 function allRated(){ return CHECKLIST.every(g=>g.items.every(it=>S.checklist[it.id].st!=='unrated')); }
-function testInvalid(id){ const a=S.admin[id]; return !!(a && a.departed); }
-function validTests(){ return Object.keys(TEST_META).filter(id=>id!=='dsdaCat'&&S.tests[id].on&&!testInvalid(id)).length; }
+/* Tests that actually produced a score. Counting ticked tests instead would let a
+   blank form satisfy the documentation competencies. */
+function validTests(){ return Object.keys(TEST_META).filter(id=>{
+  if(id==='dsdaCat'||!S.tests[id].on) return false;
+  const f=(TEST_META[id].fields||[])[0];
+  return !!(f && txt(S.tests[id][f.k]));
+}).length; }
 
 let S = freshState();
 
@@ -1884,10 +1885,10 @@ const AUTOTEXT = {
     const tested=MUSCLES.filter(m=>S.muscles[m.id].tested==='yes'&&S.muscles[m.id].grade);
     const untested=MUSCLES.filter(m=>S.muscles[m.id].tested==='no');
     const reduced=tested.filter(m=>S.muscles[m.id].grade!=='5');
-    const screens=PHYS_ROWS.filter(r=>!r.simple);
-    const done=screens.filter(r=>['wfl'].concat(PHYS_ISSUE).includes(S.phys[r.id].st));
-    const lim=screens.filter(r=>PHYS_ISSUE.includes(S.phys[r.id].st));
-    const notDone=screens.filter(r=>S.phys[r.id].st==='nt');
+    const screens=physRequired();
+    const done=screens.filter(physDone);
+    const lim=screens.filter(physIssue);
+    const notDone=screens.filter(r=>!physDone(r));
     if(!tested.length && !done.length) return `No physical screening has been recorded, so no summary of physical skills can be drafted. Record what you screened first.`;
     let t='';
     if(done.length) t+=`${done.length} of ${screens.length} physical areas relevant to the driving task ${done.length===1?'was':'were'} screened. `;
@@ -1907,7 +1908,7 @@ const AUTOTEXT = {
         : `Power was graded 5/5 throughout the groups tested, with full range against full resistance. `;
     }
     if(untested.length) t+=`${untested.length} muscle group${untested.length!==1?'s were':' was'} not formally tested and no conclusion is drawn about ${untested.length!==1?'them':'it'}. `;
-    if(notDone.length) t+=`The following were not tested and nothing is concluded from their absence: ${joinList(notDone.map(r=>r.label.toLowerCase()))}. `;
+    if(notDone.length) t+=`Not yet recorded: ${joinList(notDone.map(r=>r.label.toLowerCase()))}. `;
     if(!reduced.length && !lim.length && done.length)
       t+=`On the basis of what was screened, {name}'s physical abilities are within functional limits for driving a light automatic vehicle and no vehicle modifications are indicated.`;
     return t.trim();
@@ -2109,18 +2110,53 @@ function interpDriveSafePaper(){
         lower:`{name} scored ${v}/128. Research on this measure indicates that a score of 76 or under is associated with unsafe driving performance and that the client is unlikely to pass an on-road test. It should be read alongside the DriveAware result and the on-road findings rather than taken alone.`}[band])};
 }
 
+/* The 26-point paper DriveAware runs in the OPPOSITE direction to the iPad 17-point
+   version: the score counts the mismatch between self-appraisal and measured
+   performance, so a HIGHER score is POORER insight. Bands per the Flinders proforma —
+   above 17 lower range, 15–17 mid range, below 15 upper range. The prose says which
+   way round it is in words, so no reader has to infer it from the number. */
+function interpDriveAware26(){
+  const v=parseInt(S.tests.driveAware26.score);
+  if(isNaN(v)) return {pill:'na', txt:'Enter score out of 26.'};
+  const band = v>17? 'lower' : (v>=15? 'mid' : 'upper');
+  const txt={
+    upper:`A score in the upper range indicates that {name}'s appraisal of {his} own driving-related abilities matches {his} measured performance. Realistic self-appraisal matters because it predicts whether a driver will recognise and act on {his} own limits without supervision.`,
+    mid:`A score in the mid range means insight could not be determined from this test alone; it is read alongside the DriveSafe score, the combined DSDA category and the on-road assessment.`,
+    lower:`A score in the lower range indicates that {name}'s appraisal of {his} own driving-related abilities does not match {his} measured performance. Reduced insight is significant for on-road safety because it affects whether {he} will recognise a situation as beyond {his} capability and act accordingly, and it affects how much weight can be placed on {his} own account of {his} driving.`,
+  }[band];
+  return {pill: band==='upper'?'pass':(band==='lower'?'fail':'na'), domain:'insight',
+    scoreTxt:`${v}/26 (${band} range — on this scale a higher score indicates poorer insight)`, txt};
+}
+
+/* The order the report prints tests in. Anything in TEST_META but not named here
+   still prints, after the named tail — a new test cannot go missing from the report. */
+const TEST_ORDER_HEAD=['moca','ace','trailsA','trailsB','clock','maze','snellgrove','driveSafe','driveSafePaper','driveAware','driveAware26'];
+const TEST_ORDER_TAIL=['intersection','roadLaw','rlst','bells'];
+function testOrderTail(){
+  const named=TEST_ORDER_HEAD.concat(TEST_ORDER_TAIL);
+  return TEST_ORDER_TAIL.concat(Object.keys(TEST_META).filter(id=>id!=='dsdaCat'&&!named.includes(id)));
+}
+
 const DSDA_CATS = {
   likely:'Likely to pass an on-road assessment',
   further:'Requires further on-road assessment to determine impact on driving',
   unlikely:'Unlikely to be safe to drive',
 };
+/* Either version of each half may be the one in use, so the combined sentence
+   resolves whichever is enabled and quotes its own denominator. */
+function dsdaVariant(){
+  const ds = S.tests.driveSafePaper.on? {id:'driveSafePaper', max:128}
+           : S.tests.driveSafe.on?      {id:'driveSafe', max:84} : null;
+  const da = S.tests.driveAware26.on?   {id:'driveAware26', max:26}
+           : S.tests.driveAware.on?     {id:'driveAware', max:17} : null;
+  return {ds, da};
+}
 function dsdaCombined(){
-  const ds=S.tests.driveSafe, da=S.tests.driveAware;
-  if(!(ds.on&&da.on&&S.tests.dsdaCat.on)) return '';
-  if(testInvalid('driveSafe')||testInvalid('driveAware'))
-    return `A combined DriveSafe DriveAware outcome category has not been reported, because the administration of ${[testInvalid('driveSafe')?'DriveSafe':'',testInvalid('driveAware')?'DriveAware':''].filter(Boolean).join(' and ')} departed from the standard protocol. The combined category depends on both scores being validly obtained.`;
+  const {ds:dsv, da:dav}=dsdaVariant();
+  if(!(dsv&&dav&&S.tests.dsdaCat.on)) return '';
+  const ds=S.tests[dsv.id], da=S.tests[dav.id];
   const cat=S.tests.dsdaCat.cat;
-  let base = `{name}'s combined DriveSafe (${ds.score||'—'}/84) and DriveAware (${da.score||'—'}/17) results place {him} in the "${DSDA_CATS[cat]}" category`;
+  let base = `{name}'s combined DriveSafe (${ds.score||'—'}/${dsv.max}) and DriveAware (${da.score||'—'}/${dav.max}) results place {him} in the "${DSDA_CATS[cat]}" category`;
   if(cat==='likely') base += `. This indicates that the cognitive and perceptual abilities the DSDA measures are adequate for driving. It is a statement about those abilities, not a prediction that {he} will drive safely — that is what the on-road assessment tests.`;
   else if(cat==='further') base += `. Cognitive readiness for driving could not be determined from off-road testing alone, which is why the on-road assessment carries the weight in this report.`;
   else base += `, indicating cognitive and perceptual barriers of a degree that is difficult to overcome through practice alone.`;
@@ -2272,7 +2308,7 @@ function failedTests(){
   const out=[];
   Object.keys(TEST_META).forEach(id=>{
     const t=S.tests[id];
-    if(id==='dsdaCat'||!t||!t.on||testInvalid(id)) return;
+    if(id==='dsdaCat'||!t||!t.on) return;
     const m=TEST_META[id]; if(!m.interp) return;
     const r=m.interp();
     if(r.pill==='fail') out.push({test:m.name, testId:id});
@@ -2405,12 +2441,10 @@ function autoSummary(){
   /* ---- paragraph 1: what the pre-drive screen found ---- */
   const pd=preDriveIssues();
   const cogFlags=failedTests().map(f=>`${f.test} fell outside the driving threshold`);
-  const voided=Object.keys(TEST_META).filter(id=>id!=='dsdaCat'&&S.tests[id].on&&testInvalid(id)).map(id=>TEST_META[id].name);
   const visOK = S.austroadsVision==='Yes';
   let p1 = purposeTxt + ` On the pre-drive screen {his} vision ${S.lenses==='Yes'?'(with correction) ':''}${visOK?'met the Austroads vision standard':'did not clearly meet the Austroads vision standard'}, and {his} physical abilities and cognition were ${pd.length?'broadly ':''}within functional limits for driving.`;
   if(pd.length) p1 += ` The screen did, however, identify the following: ${semiList(pd.map(r=>r.issue))}.${cogFlags.length? ' On the standardised tests, '+joinList(cogFlags)+'.':''}`;
   else if(cogFlags.length) p1 += ` On the standardised tests, ${joinList(cogFlags)}.`;
-  if(voided.length) p1 += ` The ${voided.join(' and ')} ${voided.length>1?'were':'was'} attempted but not validly administered, and ${voided.length>1?'those results have':'that result has'} not been relied upon; the conclusions below rest on the remaining screen findings and the on-road assessment.`;
 
   /* ---- paragraph 2: what happened on road ---- */
   const all=issueList();
@@ -2488,16 +2522,15 @@ function buildNeeds(){
   }).join('');
 }
 
-const PHYS_PLACEHOLDER = {
-  wfl:'Optional — anything worth saying beyond the standard wording',
-  mild:'What the difficulty is and what it means for the driving task — required',
-  mod:'What the difficulty is and what it means for the driving task — required',
-  sig:'What the difficulty is and what it means for the driving task — required',
-  nt:'Why this was not tested — required, and it prints in the report',
-  na:'Why this does not apply to this client — required',
-};
-function physDone(r){ const p=S.phys[r.id]; return !!(p && (r.simple? txt(p.note) : p.st)); }
-function physIssue(r){ const p=S.phys[r.id]; return !!(p && PHYS_ISSUE.includes(p.st)); }
+/* An area is recorded when it has a sentence — that is the whole model, and it is
+   the proforma's. `issue` is the one bit of structure kept on top of the prose, so
+   the summary can still name which areas were a difficulty and the report can mark
+   them; it never gates anything. */
+const PHYS_PLACEHOLDER = 'What you found — or use the standard wording';
+function physFields(){ return PHYS_ROWS.filter(r=>r.kind!=='select'); }
+function physRequired(){ return physFields().filter(r=>!r.optional); }
+function physDone(r){ const p=S.phys[r.id]; return !!(p && txt(p.note)); }
+function physIssue(r){ const p=S.phys[r.id]; return !!(p && p.issue && txt(p.note)); }
 /* The vision equivalent of physFillWFL. Deliberately narrower: acuity is a
    measurement, so no Snellen figure is ever written here. Where the client
    wears no correction the corrected boxes are marked N/A, which is a fact
@@ -2522,54 +2555,85 @@ function scaffoldNote(id){
   buildChecklist(); update();
   const el=document.querySelector('#checklist textarea'); if(el) el.focus();
 }
-/* Lines still awaiting a status. Everything the bulk fill touches is scoped to
-   these — a line the assessor has already judged is never overwritten. */
-function physBlank(){ return PHYS_ROWS.filter(r=>!r.simple && !S.phys[r.id].st); }
-/* One click for the areas that were unremarkable. It sets the status the
-   assessor would have set and drops in that line's standard wording, which
-   they can then edit. It cannot change a line they have already recorded. */
+/* Areas with nothing written yet. Everything the bulk fill touches is scoped to
+   these — a line the assessor has already written is never overwritten. */
+function physBlank(){ return physRequired().filter(r=>!txt(S.phys[r.id].note)); }
+/* One click for the areas that were unremarkable: drops in each line's standard
+   wording for the assessor to edit. It cannot change a line already written. */
 function physFillWFL(){
   const rows=physBlank();
   if(!rows.length) return;
-  rows.forEach(r=>{ const p=S.phys[r.id]; p.st='wfl'; if(!txt(p.note)) p.note=r.def||''; });
+  rows.forEach(r=>{ S.phys[r.id].note=r.def||''; });
   buildPhys(); update();
 }
+function physFillOne(id){
+  const r=PHYS_ROWS.find(x=>x.id===id); if(!r) return;
+  S.phys[id].note=r.def||''; buildPhys(); update();
+}
+function physToggleIssue(id){ S.phys[id].issue=!S.phys[id].issue; buildPhys(); update(); }
+/* Typing must not rebuild #physRows: a rebuild would collapse an open how-to card
+   and drop the caret. Only the row's own class and the blank counter change. */
+/* the sentence is the record, so it is never clipped — the box grows to it */
+function physGrow(el){
+  el.style.height='auto';
+  /* an element in a hidden stage reports no scrollHeight; leave it to be grown
+     when its stage is shown rather than pinning it to nothing */
+  if(el.scrollHeight) el.style.height=(el.scrollHeight+2)+'px';
+}
+function physGrowAll(){ document.querySelectorAll('#physRows textarea, #testCards .prow textarea').forEach(physGrow); }
+function physNote(id,el){
+  physGrow(el);
+  S.phys[id].note=el.value;
+  const row=document.getElementById('prow_'+id);
+  if(row) row.classList.toggle('filled', !!txt(el.value));
+  const c=document.getElementById('physFillCount');
+  if(c){ const n=physBlank().length; c.textContent=n; c.parentElement.style.display=n?'':'none'; }
+  update();
+}
 function buildPhys(){
-  let html='';
-  const totalBlank=physBlank().length;
-  PHYS_ROWS.forEach(r=>{
+  const n=physBlank().length;
+  const bar=`<div class="bulkbar" style="${n?'':'display:none'}"><button class="btn" onclick="physFillWFL()">✓ Fill the remaining <span id="physFillCount">${n}</span> line${n===1?'':'s'} with the standard wording</button>
+    <span>Writes each line's standard sentence into the areas you have not written yet, for you to edit. It never touches a line you have already written.</span></div>`;
+  const rows=PHYS_ROWS.map(r=>{
     const p=S.phys[r.id];
-    if(r.simple){
-      html+=`<div class="row" style="margin-bottom:7px"><div class="f w100"><label>${esc(r.label)}</label>
-        <input type="text" placeholder="${esc(r.ph||'')}" value="${esc(p.note)}" oninput="S.phys['${r.id}'].note=this.value;update()"></div></div>`;
-      return;
+    if(r.kind==='select'){
+      return `<div class="prow"><label>${esc(r.label)}</label><div class="pbody">
+        <select style="max-width:200px" onchange="S.phys['${r.id}'].note=this.value;update()">
+          <option value=""${p.note?'':' selected'}>—</option>
+          ${(r.opts||[]).map(o=>`<option ${p.note===o?'selected':''}>${esc(o)}</option>`).join('')}
+        </select></div></div>`;
     }
-    const st=p.st||'', ip=r.interp? r.interp(p):null, live=(st!=='nt'&&st!=='na');
+    const filled=!!txt(p.note);
+    const ip=r.interp? r.interp(p):null;
     const meas=(r.m||[]).map(f=> f.opts
       ? `<div class="f" style="flex:0 0 auto;min-width:0"><label>${f.label}</label>
-         <select data-fkey="phys:${r.id}:${f.k}" style="width:${f.w||'110px'}" onchange="S.phys['${r.id}'].${f.k}=this.value;buildPhys();update()">
+         <select style="width:${f.w||'110px'}" onchange="S.phys['${r.id}'].${f.k}=this.value;buildPhys();update()">
            <option value=""${p[f.k]?'':' selected'}>—</option>
-           ${f.opts.map(o=>`<option value="${o}" ${String(p[f.k])===o?'selected':''}>${o}</option>`).join('')}</select></div>`
+           ${f.opts.map(o=>`<option ${String(p[f.k])===o?'selected':''}>${o}</option>`).join('')}</select></div>`
       : `<div class="f" style="flex:0 0 auto;min-width:0"><label>${f.label}</label>
          <input type="text" data-fkey="phys:${r.id}:${f.k}" style="width:${f.w||'110px'}" value="${esc(p[f.k])}" oninput="S.phys['${r.id}'].${f.k}=this.value;keepFocus(buildPhys);update()"></div>`).join('');
-    html+=`<div class="mgrid" style="${st===''?'border-left:3px solid #8c2f2f':PHYS_ISSUE.includes(st)?'border-left:3px solid var(--plum)':''}">
-      <div class="mtop">
-        <div class="mname">${esc(r.label)}<div style="font-size:11px;color:var(--faint);font-weight:400">${r.why}</div></div>
-        <select class="st-${PHYS_ST[st].cls}" onchange="S.phys['${r.id}'].st=this.value;buildPhys();update()">
-          ${Object.keys(PHYS_ST).map(k=>`<option value="${k}" ${st===k?'selected':''}>${PHYS_ST[k].label}</option>`).join('')}
-        </select>
-      </div>
-      ${r.m && live ? `<div class="trow" style="margin-top:8px">${meas}</div>`:''}
-      ${ip && live ? `<div class="autonote"><b>${ip.pill==='fail'?'⚠ ':''}Auto-interpretation:</b> ${ip.txt}</div>`:''}
-      ${st? `<textarea class="pnote" rows="1" placeholder="${esc(PHYS_PLACEHOLDER[st])}" oninput="S.phys['${r.id}'].note=this.value;update()">${esc(p.note)}</textarea>
-        ${st==='wfl'&&!txt(p.note)? `<div style="margin-top:5px"><span class="resetlink" onclick="S.phys['${r.id}'].note=PHYS_ROWS.find(x=>x.id==='${r.id}').def;buildPhys();update()">insert the standard wording</span></div>`:''}`:''}
-      ${physHowTo(r)}
-    </div>`;
-  });
-  document.getElementById('physRows').innerHTML =
-    (totalBlank? `<div class="bulkbar"><button class="btn" onclick="physFillWFL()">✓ Mark the ${totalBlank} remaining ${totalBlank!==1?'areas':'area'} as no issues reported or observed</button>
-      <span>Sets only what you have not recorded yet, and inserts each one's standard wording for you to edit. Anything already marked as a difficulty, not tested or N/A is left untouched.</span></div>`:'')
-    + html;
+    return `<div class="prow${r.sub?' sub':''}${r.kind==='head'?' head':''}${filled?' filled':''}" id="prow_${r.id}">
+      <label>${esc(r.label)}</label>
+      <div class="pbody">
+        <textarea rows="1" placeholder="${esc(PHYS_PLACEHOLDER)}" oninput="physNote('${r.id}',this)">${esc(p.note)}</textarea>
+        <div class="pmeta">
+          ${r.def? `<span class="fillup" onclick="physFillOne('${r.id}')">standard wording</span>`:''}
+          <span class="isstog${p.issue?' on':''}" onclick="physToggleIssue('${r.id}')" title="Mark this area as a difficulty">${p.issue?'⚠ difficulty':'difficulty?'}</span>
+          ${r.mmt? `<span class="pnote-x">group-by-group grades go in the optional grid below</span>`:''}
+        </div>
+        ${r.m? `<details class="meas"><summary>▸ measurements</summary><div class="measbody">
+          <div class="trow">${meas}</div>
+          ${ip? `<div class="autonote"><b>${ip.pill==='fail'?'⚠ ':''}Auto-interpretation:</b> ${ip.txt}</div>`:''}
+        </div></details>`:''}
+        ${physHowTo(r)}
+      </div></div>`;
+  }).join('');
+  document.getElementById('physRows').innerHTML = bar + rows + physRefs();
+  physGrowAll();
+}
+/* The proforma prints the scale sources under its physical table. */
+function physRefs(){
+  return `<div class="physrefs">${esc(REFS.oxford)}<br>${esc(REFS.ashworth)}</div>`;
 }
 function physHowTo(r){
   if(!r.how) return '';
@@ -2580,76 +2644,136 @@ function physHowTo(r){
     ${r.url? `<div class="src"><a href="${r.url}" target="_blank" rel="noopener">Reference</a></div>`:''}
   </div></details>`;
 }
-/* what this screen contributes to the report — measurements first, then words */
+/* what this line contributes to the report — the sentence, then any measurements
+   that were taken, in the wording each one prints with */
 function physText(r){
   const p=S.phys[r.id]; if(!p) return '';
   const meas=(r.m||[]).map(f=> txt(p[f.k])? f.rep.replace('{}', txt(p[f.k])) : '').filter(Boolean).join(' ');
-  const body=txt(p.note) || (p.st==='wfl'? r.def : '');
-  return [meas, body].filter(Boolean).join(' ');
+  return [txt(p.note), meas].filter(Boolean).join(' ');
 }
 
 const TEST_META = {
+  driveSafePaper:{name:'DriveSafe (128-point paper version)', purpose:'Measures awareness of driving environments', interp:interpDriveSafePaper,
+    fields:[{k:'score',label:'Score / 128',type:'number',w:'110px'}],
+    comments:[{k:'missed',label:'Missed objects',def:'Responses on this test revealed sound recall for complex visual and verbal information. No objects were missed.'},
+      {k:'detail',label:'Detail of answer',def:'The detail of the answer regarding the position and direction for the objects noted was accurate.'},
+      {k:'speed',label:'Speed of response',def:'Responses were answered appropriately.'},
+      {k:'instr',label:'Following instructions',def:'{name} required no prompting following the initial instructions.'},
+      {k:'logical',label:'Logical, systematic responses',def:'Answers were provided in a logical and systematic manner.'},
+      {k:'lr',label:'Left/right discrimination',def:'There was no evident issue with left/right discrimination when providing verbal responses.'}]},
+  intersection:{name:'Intersection Diagram Test', purpose:'Measures knowledge of road rules', interp:interpIntersection,
+    fields:[{k:'score',label:'Score / 8',type:'number',w:'100px'}],
+    comments:[{k:'rules',label:'Ability to apply road rules',def:'There was no issue with the application of road rules.'},
+      {k:'time',label:'Time to complete',def:'The test was completed in under 10 minutes.'},
+      {k:'plan',label:'Ability to plan',def:"There was no issue with {name}'s ability to plan and problem solve."},
+      {k:'visuospatial',label:'Visual-spatial skills',def:'There appeared to be no evident issues with the visuospatial skills.'},
+      {k:'attention',label:'Visual attention',def:'There appeared to be no evident issues with the visual attention.'}]},
+  driveAware26:{name:'DriveAware (26-point paper version)', purpose:'Measures insight into functional concerns and potential impact on road', interp:interpDriveAware26,
+    fields:[{k:'score',label:'Score / 26',type:'number',w:'100px'}], comments:[{k:'insight',label:'Insight',def:'Results of the DriveAware indicate that {name} appears to have good insight into {his} functional concerns and the potential implications on road.'}]},
   trailsB:{name:'Trail Making Test — Part B', purpose:'Measures cognitive flexibility and multi-tasking', interp:interpTrailsB,
-    fields:[{k:'secs',label:'Time (seconds)',type:'number',w:'110px'},{k:'errors',label:'Errors',type:'number',w:'80px'}]},
+    fields:[{k:'secs',label:'Time (seconds)',type:'number',w:'110px'},{k:'errors',label:'Errors',type:'number',w:'80px'},
+      {k:'normPct',label:'Age-related normative %',type:'text',w:'150px'}],
+    comments:[{k:'comment',label:'Comment — threshold is 180 seconds with no more than one error',def:''}]},
   maze:{name:'OT Drive Home Maze', purpose:'Screens attention, visuoconstructional skills, planning and foresight', interp:interpMaze,
-    fields:[{k:'secs',label:'Time (seconds)',type:'number',w:'110px'},{k:'errors',label:'Errors',type:'number',w:'80px'}]},
-  driveSafe:{name:'DriveSafe (iPad version)', purpose:'Measures awareness of driving environments', interp:interpDriveSafe,
-    fields:[{k:'score',label:'Score / 84',type:'number',w:'100px'},{k:'detail',label:'Detail (e.g. 0 objects missed; 1 direction detail missed)',type:'text',w:'260px'}]},
-  driveAware:{name:'DriveAware', purpose:'Measures insight into functional concerns and potential impact on road', interp:interpDriveAware,
-    fields:[{k:'score',label:'Score / 17',type:'number',w:'100px'}]},
+    fields:[{k:'secs',label:'Time (seconds)',type:'number',w:'110px'},{k:'errors',label:'Errors',type:'number',w:'80px'}],
+    comments:[{k:'comment',label:'Comment — over 100 seconds raises concern; under 25 seconds is expected for sound problem solving',def:''}]},
+  bells:{name:'Bells Test', purpose:'Tests for visual inattention', interp:interpBells,
+    fields:[{k:'omissions',label:'Total omissions',type:'number',w:'110px'},{k:'left',label:'…of which left',type:'number',w:'110px'},{k:'right',label:'…of which right',type:'number',w:'110px'},{k:'time',label:'Time (optional)',type:'text',w:'120px'}],
+    comments:[{k:'comment',label:'Comment — 3+ omissions indicate an attentional deficit; 6+ to one side raises visual neglect',def:''}]},
   dsdaCat:{name:'DriveSafe DriveAware — combined outcome', purpose:'DSDA outcome category (from the DSDA report)', interp:null,
     fields:[]},
-  intersection:{name:'Intersection Diagram Test', purpose:'Measures knowledge of road rules', interp:interpIntersection,
-    fields:[{k:'score',label:'Score / 8',type:'number',w:'100px'}]},
   rlst:{name:'Road Law Slide Test', purpose:'Tests road law knowledge and interpretation of a traffic scene', interp:interpRLST,
-    fields:[{k:'score',label:'Score / 48',type:'number',w:'100px'}]},
+    fields:[{k:'score',label:'Score / 48',type:'number',w:'100px'}],
+    comments:[{k:'detail',label:'Attention to detail',def:'There was no issue with attention to detail.'},
+      {k:'hazard',label:'Hazard perception',def:'There was no issue with hazard perception.'},
+      {k:'rules',label:'Application of road rules',def:'There was no issue with the application of road rules.'},
+      {k:'procedures',label:'Knowledge of driving procedures',def:'There was no issue with knowledge of driving procedures.'}]},
   roadLaw:{name:'Written Road Law Test', purpose:'Tests road law knowledge and problem solving', interp:interpWrittenRoadLaw,
     fields:[{k:'score',label:'Score / 23',type:'number',w:'100px'}]},
-  trailsA:{name:'Trail Making Test — Part A', purpose:'Baseline for Part B — visual search and motor speed', interp:interpTrailsA,
-    fields:[{k:'secs',label:'Time (seconds)',type:'number',w:'110px'},{k:'errors',label:'Errors',type:'number',w:'80px'}]},
   clock:{name:'Clock Drawing Test', purpose:'Screens visuoconstructional skill, planning and abstract reasoning', interp:interpClock,
-    fields:[{k:'score',label:'Score / 7 (Freund)',type:'number',w:'130px'}]},
+    fields:[{k:'score',label:'Score / 7 (Freund)',type:'number',w:'130px'}],
+    comments:[{k:'comment',label:'Comment',def:''}]},
   snellgrove:{name:'Snellgrove Maze Test', purpose:'Screens planning, foresight and visual search', interp:interpSnellgrove,
     fields:[{k:'secs',label:'Time (seconds)',type:'number',w:'110px'},{k:'errors',label:'Errors',type:'number',w:'80px'}]},
-  driveSafePaper:{name:'DriveSafe (128-point version)', purpose:'Measures awareness of driving environments', interp:interpDriveSafePaper,
-    fields:[{k:'score',label:'Score / 128',type:'number',w:'110px'}]},
+  trailsA:{name:'Trail Making Test — Part A', purpose:'Baseline for Part B — visual search and motor speed', interp:interpTrailsA,
+    fields:[{k:'secs',label:'Time (seconds)',type:'number',w:'110px'},{k:'errors',label:'Errors',type:'number',w:'80px'}]},
+  driveSafe:{name:'DriveSafe (iPad, 84-point)', purpose:'Measures awareness of driving environments', interp:interpDriveSafe,
+    fields:[{k:'score',label:'Score / 84',type:'number',w:'100px'},{k:'detail',label:'Detail (e.g. 0 objects missed; 1 direction detail missed)',type:'text',w:'260px'}],
+    comments:[{k:'missed',label:'Missed objects',def:'Responses on this test revealed sound recall for complex visual and verbal information. No objects were missed.'},
+      {k:'detail',label:'Detail of answer',def:'The detail of the answer regarding the position and direction for the objects noted was accurate.'},
+      {k:'speed',label:'Speed of response',def:'Responses were answered appropriately.'},
+      {k:'instr',label:'Following instructions',def:'{name} required no prompting following the initial instructions.'},
+      {k:'logical',label:'Logical, systematic responses',def:'Answers were provided in a logical and systematic manner.'},
+      {k:'lr',label:'Left/right discrimination',def:'There was no evident issue with left/right discrimination when providing verbal responses.'}]},
+  driveAware:{name:'DriveAware (iPad, 17-point)', purpose:'Measures insight into functional concerns and potential impact on road', interp:interpDriveAware,
+    fields:[{k:'score',label:'Score / 17',type:'number',w:'100px'}], comments:[{k:'insight',label:'Insight',def:'Results of the DriveAware indicate that {name} appears to have good insight into {his} functional concerns and the potential implications on road.'}]},
   moca:{name:'Montreal Cognitive Assessment (MoCA)', purpose:'General cognitive screen', interp:interpMoCA,
     fields:[{k:'score',label:'Score / 30',type:'number',w:'100px'}]},
   ace:{name:"Addenbrooke's Cognitive Examination", purpose:'General cognitive screen', interp:interpACE,
     fields:[{k:'score',label:'Score / 100',type:'number',w:'100px'}]},
-  bells:{name:'Bells Test', purpose:'Tests for visual inattention', interp:interpBells,
-    fields:[{k:'omissions',label:'Total omissions',type:'number',w:'110px'},{k:'left',label:'…of which left',type:'number',w:'110px'},{k:'right',label:'…of which right',type:'number',w:'110px'},{k:'time',label:'Time (optional)',type:'text',w:'120px'}]},
 };
 function buildTests(){
-  document.getElementById('testCards').innerHTML = Object.keys(TEST_META).map(id=>{
+  const _tc=document.getElementById('testCards');
+  _tc.innerHTML = Object.keys(TEST_META).map(id=>{
     const m=TEST_META[id], t=S.tests[id];
     const r = m.interp? m.interp() : null;
     const pill = id==='dsdaCat' ? `<span class="pill ${S.tests.dsdaCat.cat==='likely'?'pass':S.tests.dsdaCat.cat==='unlikely'?'fail':'na'}">${DSDA_CATS[S.tests.dsdaCat.cat]}</span>`
       : (r? `<span class="pill ${r.pill}">${r.pill==='pass'?'Within threshold':r.pill==='fail'?'Outside threshold':'awaiting score'}</span>`:'');
     let fields = m.fields.map(f=>`<div class="f" style="flex:0 0 auto;min-width:0"><label>${f.label}</label><input type="${f.type}" style="width:${f.w}" value="${esc(t[f.k])}" oninput="S.tests.${id}.${f.k}=this.value;buildTestPill('${id}');update()"></div>`).join('');
     if(id==='dsdaCat') fields = `<div class="f" style="flex:1"><label>Outcome category (from DSDA report)</label><select onchange="S.tests.dsdaCat.cat=this.value;buildTests();update()">${Object.keys(DSDA_CATS).map(c=>`<option value="${c}" ${t.cat===c?'selected':''}>${DSDA_CATS[c]}</option>`).join('')}</select></div>`;
-    const bad=testInvalid(id);
-    return `<div class="testcard ${t.on?'':'off'}" id="card_${id}" style="${bad?'border-left-color:#8c2f2f':''}">
-      <h4><label class="chk" style="padding:0"><input type="checkbox" ${t.on?'checked':''} onchange="S.tests.${id}.on=this.checked;buildTests();update()"></label>${m.name} <span id="pill_${id}">${bad?'<span class="invalidflag">not scoreable</span>':pill}</span></h4>
+    return `<div class="testcard ${t.on?'':'off'}" id="card_${id}">
+      <h4><label class="chk" style="padding:0"><input type="checkbox" ${t.on?'checked':''} onchange="S.tests.${id}.on=this.checked;buildTests();update()"></label>${m.name} <span id="pill_${id}">${pill}</span></h4>
       <div style="font-size:11.5px;color:var(--faint);margin:2px 0 0 23px">${m.purpose}</div>
       ${t.on? `<div class="trow">${fields}<div class="f" style="flex:1;min-width:160px"><label>Clinical comment (optional — appended to interpretation)</label><input type="text" value="${esc(t.note)}" oninput="S.tests.${id}.note=this.value;update()"></div></div>
-      ${id==='dsdaCat'? '' : buildAdminBox(id)}
+      ${testComments(id)}
+      ${id==='dsdaCat'? '' : testHowTo(id)}
       <div class="autonote" id="auto_${id}">${autoNoteHTML(id)}</div>`:''}
     </div>`;
   }).join('');
+  physGrowAll();
+}
+/* The proforma names what to comment on for each test, and prints a standard
+   sentence for each. Free text is equally valid — the label is the prompt. */
+function testComments(id){
+  const m=TEST_META[id]; if(!(m.comments||[]).length) return '';
+  const c=S.tests[id].c||(S.tests[id].c={});
+  const blank=m.comments.filter(x=>x.def && !txt(c[x.k])).length;
+  return `<div class="pcomments">
+    ${m.comments.map(x=>`<div class="prow${txt(c[x.k])?' filled':''}" id="trow_${id}_${x.k}">
+      <label>${esc(x.label)}</label>
+      <div class="pbody">
+        <textarea rows="1" oninput="testNote('${id}','${x.k}',this)">${esc(c[x.k]||'')}</textarea>
+        ${x.def? `<div class="pmeta"><span class="fillup" onclick="testFillOne('${id}','${x.k}')">standard wording</span></div>`:''}
+      </div></div>`).join('')}
+    ${blank? `<div style="margin-top:5px"><span class="fillup" onclick="testFillComments('${id}')">fill the remaining ${blank} comment row${blank===1?'':'s'} with the standard wording</span></div>`:''}
+  </div>`;
+}
+function testNote(id,k,el){
+  physGrow(el);
+  (S.tests[id].c||(S.tests[id].c={}))[k]=el.value;
+  const row=document.getElementById('trow_'+id+'_'+k);
+  if(row) row.classList.toggle('filled', !!txt(el.value));
+  update();
+}
+function testFillOne(id,k){
+  const x=(TEST_META[id].comments||[]).find(y=>y.k===k); if(!x) return;
+  (S.tests[id].c||(S.tests[id].c={}))[k]=x.def||''; buildTests(); update();
+}
+function testFillComments(id){
+  const c=S.tests[id].c||(S.tests[id].c={});
+  (TEST_META[id].comments||[]).forEach(x=>{ if(x.def && !txt(c[x.k])) c[x.k]=x.def; });
+  buildTests(); update();
+}
+/* filled comment rows, in the proforma's order */
+function testCommentList(id){
+  const c=(S.tests[id]||{}).c||{};
+  return (TEST_META[id].comments||[]).filter(x=>txt(c[x.k])).map(x=>({label:x.label, text:c[x.k]}));
 }
 function autoNoteHTML(id){
-  if(id==='dsdaCat') return '<b>Auto-text:</b> '+esc(fill(dsdaCombined())||'Enable DriveSafe + DriveAware (both validly administered) to compose the combined outcome.');
+  if(id==='dsdaCat') return '<b>Auto-text:</b> '+esc(fill(dsdaCombined())||'Enable DriveSafe + DriveAware to compose the combined outcome.');
   const m=TEST_META[id]; if(!m.interp) return '';
-  if(testInvalid(id)) return '<b style="color:#8c2f2f">Score withheld.</b> '+esc(fill(invalidText(id)));
   const r=m.interp();
   return '<b>Auto-interpretation:</b> '+esc((r.scoreTxt? r.scoreTxt+' ':'')+fill(r.txt));
-}
-function invalidText(id){
-  const a=S.admin[id]||{}, m=TEST_META[id];
-  const reason = 'the test was not administered in accordance with the standard instructions';
-  return `The ${m.name} was attempted but ${reason}. The result is therefore not a valid measure of ${m.purpose.toLowerCase().replace(/^(measures|screens|tests for|measures) /,'')} and no score is reported. `+
-    (txt(a.why)? txt(a.why) : 'This result has not been relied upon in forming the opinions in this report.');
 }
 function buildTestPill(id){
   const el=document.getElementById('auto_'+id); if(el) el.innerHTML=autoNoteHTML(id);
@@ -2841,10 +2965,10 @@ function mmtHowTo(m){
   </div></details>`;
 }
 
-/* Two cards per test: how to conduct it, and what you may and may not say
-   while you do. `how` is a prompt for the bench, not a substitute for the
-   manual — where the two differ, the manual wins and you record that. */
-const ADMIN_SCRIPTS = {
+/* One card per test: what it measures, what you need, and the procedure. A prompt
+   for the bench, not a substitute for the manual — where the two differ, the
+   manual wins. Teaching only: the app does not record how a test was administered. */
+const TEST_HOWTO = {
   trailsB:{
     kit:'Part A and Part B sample and test sheets · pen · stopwatch · a clear desk with nothing else on it',
     mins:'5–10 minutes including Part A',
@@ -2857,23 +2981,6 @@ const ADMIN_SCRIPTS = {
       'Watch the process as well as the clock: does the pen hover and search, do they lose the alternation and recover, do they catch their own errors or need telling, do they trace the page with a finger. Write it down now — it will not be recoverable later, and it is what distinguishes slow-but-accurate from fast-and-wrong.',
       'Record time in seconds and the number of errors separately. Both go in the fields below, and the interpretation distinguishes between them.',
     ],
-    title:'Trail Making Test — Part B administration',
-    must:[
-      'Give the sample (practice) sheet first and let the client complete it. Correct errors on the sample freely — that is what it is for.',
-      'Instructions once: "Draw a line from 1 to A, A to 2, 2 to B, and so on, alternating numbers and letters, as fast as you can without lifting the pen."',
-      'Start the stopwatch as the pen touches the page. The clock does not stop.',
-    ],
-    may:[
-      'If the client makes an error, say "You made a mistake" and return them to the last correct circle. The timer keeps running — the error cost is the time it takes them to recover.',
-      'If they lift the pen, remind them to keep it on the page.',
-      'If they stop and ask whether they are right, you may say "Keep going."',
-    ],
-    never:[
-      'Never name, point to, or indicate the next correct target. Not with a finger, not with your eyes, not with "you\'re nearly there".',
-      'Never tell them which sequence comes next when they hesitate.',
-      'Never let them restart to get a better time.',
-    ],
-    fail:'If any answer or cue was given, the timed score no longer measures divided attention — it measures your prompting. It must be reported as invalid, not as a slow score.',
   },
   maze:{
     kit:'Maze form and scoring sheet · pen · stopwatch',
@@ -2886,21 +2993,6 @@ const ADMIN_SCRIPTS = {
       'Score errors as the manual defines them — typically line crossings and dead-end entries. Count them as they happen; reconstructing from the sheet afterwards is unreliable.',
       'Watch for planning behaviour: do they scan the whole maze before starting, or set off and correct? Do they pause at junctions? That observation is often more useful in the report than the time, so write it down while you can still see it.',
     ],
-    title:'OT Drive Home Maze administration',
-    must:[
-      'Present the maze with the standard instruction: find the way from the start to the home, without crossing any lines and without entering dead ends.',
-      'Confirm the client understands before starting; give the practice maze if the version includes one.',
-      'Time from pen-down to completion. Record errors: line crossings and dead-end entries.',
-    ],
-    may:[
-      'Repeat the standard instruction verbatim if asked.',
-      'Remind the client not to lift the pen.',
-    ],
-    never:[
-      'Never indicate the route, the correct turn, or that a chosen path is wrong.',
-      'Never trace part of the path as a demonstration on the live test sheet.',
-    ],
-    fail:'Guidance on route choice invalidates the planning and foresight measure entirely — that is the construct being tested.',
   },
   driveSafe:{
     kit:'iPad charged and updated, licence current · quiet room · the manual',
@@ -2912,7 +3004,7 @@ const ADMIN_SCRIPTS = {
       'Run the scored sequence without interruption. Take the phone out of the room; a pause mid-sequence is a departure from standard administration.',
       'Record the score together with what was missed — objects, direction, or detail — because that is what the report needs. Missing moving objects means something different on road from missing static ones.',
     ],
-    title:'DriveSafe administration', must:['Screen positioned per manual, client seated at the specified distance.','Practice items completed and understood before the scored run.','Run without interruption; do not pause the scored sequence.'], may:['Repeat the standard instruction before the scored items begin.'], never:['Never name objects, directions or locations during the scored items.','Never replay a scored clip.'], fail:'Cueing during scored items inflates the awareness score.'},
+  },
   driveAware:{
     kit:'iPad · the manual · somewhere to write the client\'s own words verbatim',
     mins:'administered with DriveSafe',
@@ -2923,7 +3015,7 @@ const ADMIN_SCRIPTS = {
       'Keep your face and voice neutral. A nod at the "right" answer is a prompt.',
       'Note the gap between their self-rating and their DriveSafe performance — that gap is the finding, and it is what the combined DSDA category is built from.',
     ],
-    title:'DriveAware administration', must:['Ask the questions as written, in order.','Record the client\'s own words where the manual calls for it.'], may:['Repeat a question verbatim.'], never:['Never rephrase a question to lead toward the "insightful" answer.','Never react in a way that signals whether an answer was right.'], fail:'Leading the client produces a measure of your prompts, not their insight.'},
+  },
   intersection:{
     kit:'Intersection diagrams in the standard order · recording sheet',
     mins:'5–10 minutes',
@@ -2935,7 +3027,7 @@ const ADMIN_SCRIPTS = {
       'Record which rules were missed, not just the total. Roundabouts, unmarked T-intersections and give-way-to-the-right are different gaps with different remedies.',
       'Save the teaching until the whole test is finished — then do it, because it is useful and it is the point of finding out.',
     ],
-    title:'Intersection Diagram Test administration', must:['Present each diagram in the standard order.','Allow the client to answer without time pressure unless the version is timed.'], may:['Confirm the client can see the diagram clearly.'], never:['Never confirm or deny correctness during the test.','Never explain the road rule until the whole test is finished.'], fail:'Teaching during the test converts a road-law measure into a road-law lesson.'},
+  },
   bells:{
     kit:'Bells sheet and scoring template · pen · stopwatch',
     mins:'5 minutes',
@@ -2948,31 +3040,16 @@ const ADMIN_SCRIPTS = {
       'Score against the template and <b>split the omissions by side of the page</b>, then enter left and right separately below. A total alone cannot distinguish neglect from a general search deficit, and those two findings mean very different things on road.',
       'Cross-read this against the confrontation fields you did earlier: a field cut and visual inattention can look similar here and are managed differently.',
     ],
-    title:'Bells Test administration', must:['Present the sheet at midline, in the standard orientation.','Standard instruction: circle every bell, as quickly as you can.','Time the search and record omissions by side.'], may:['Repeat the standard instruction.','Confirm when the client says they have finished.'], never:['Never point out a missed bell.','Never reposition the sheet mid-test.','Never say "keep looking, there are more" — that is the deficit you are measuring.'], fail:'Prompting the client to keep searching masks inattention and neglect.'},
+  },
 };
-function buildAdminBox(id){
-  const a=S.admin[id]; if(!a) return '';
-  const sc=ADMIN_SCRIPTS[id];
-  const bad=testInvalid(id);
-  return `<div class="adminbox">
-    ${sc&&sc.how? `<details class="ref"><summary>▸ How to conduct this test</summary><div class="refcard">
-      <p style="margin:0 0 6px"><b>What it measures.</b> ${sc.measures}</p>
-      <h5>You will need</h5><p style="margin:0 0 4px">${sc.kit} — about ${sc.mins}.</p>
-      <h5>Procedure</h5><ul>${sc.how.map((x,i)=>`<li><span class="stepnum">${i+1}.</span> ${x}</li>`).join('')}</ul>
-      <p class="src">A prompt for the bench, not a substitute for the manual. Where the two differ, follow the manual.</p></div></details>`:''}
-    ${sc? `<details class="ref"><summary>▸ ${esc(sc.title)} — what you may and may not say</summary><div class="refcard">
-      <h5>Must do</h5><ul>${sc.must.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
-      <h5><span class="say">You may say</span></h5><ul>${sc.may.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
-      <h5><span class="dont">Never</span></h5><ul>${sc.never.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
-      <p style="margin:6px 0 0"><b>If this is breached:</b> ${esc(sc.fail)}</p></div></details>`:''}
-    <label class="chk" style="margin-top:6px"><input type="checkbox" ${bad?'checked':''} onchange="S.admin['${id}'].departed=this.checked;buildTests();update()">Standard administration was departed from ${bad?'<span class="invalidflag">score invalid</span>':''}</label>
-    ${bad? `<div class="gate stop" style="margin:6px 0 0">
-      <b>This score cannot be reported as a result.</b> ${esc(sc? sc.fail : 'Standard administration was not maintained.')}
-      The report will state that the test was attempted but is not scoreable, with the reason — and the score is excluded from the summary, the combined outcome and the recommendations.
-      <div style="margin-top:6px"><input style="width:100%;border:1px solid #d6d4cf;border-radius:4px;padding:6px 8px;font-size:12.5px;font-family:'Barlow',sans-serif" placeholder="What happened, and what you will do about it (re-test with a different form, defer to on-road findings, refer on)…" value="${esc(a.why)}" oninput="S.admin['${id}'].why=this.value;update()"></div></div>`:''}
-  </div>`;
+function testHowTo(id){
+  const sc=TEST_HOWTO[id]; if(!sc||!sc.how) return '';
+  return `<details class="ref"><summary>▸ How to conduct this test</summary><div class="refcard">
+    <p style="margin:0 0 6px"><b>What it measures.</b> ${sc.measures}</p>
+    <h5>You will need</h5><p style="margin:0 0 4px">${sc.kit} — about ${sc.mins}.</p>
+    <h5>Procedure</h5><ul>${sc.how.map((x,i)=>`<li><span class="stepnum">${i+1}.</span> ${x}</li>`).join('')}</ul>
+    <p class="src">A prompt for the bench, not a substitute for the manual. Where the two differ, follow the manual.</p></div></details>`;
 }
-
 /* ================================================================
    COMPETENCY COVERAGE
 ================================================================ */
@@ -3175,22 +3252,28 @@ function buildReport(){
 
   /* physical */
   h+=`<h3 style="${ST.h3}">Physical Abilities &amp; Restrictions</h3>`;
-  const pScreens=PHYS_ROWS.filter(r=>!r.simple);
-  const pRec=pScreens.filter(r=>['wfl'].concat(PHYS_ISSUE).includes(S.phys[r.id].st));
-  const pNt=pScreens.filter(r=>S.phys[r.id].st==='nt');
-  const pNa=pScreens.filter(r=>S.phys[r.id].st==='na');
+  /* a group heading prints when any of its lines did, even if the heading's own
+     cell is empty — otherwise the indented modalities have nothing to sit under */
+  const pDone=physFields().filter(physDone);
+  const pRec=physFields().filter((r,i,all)=>{
+    if(physDone(r)) return true;
+    if(r.kind!=='head') return false;
+    for(let k=all.indexOf(r)+1;k<all.length && all[k].sub;k++) if(physDone(all[k])) return true;
+    return false;
+  });
   if(txt(S.phys.hand.note)) h+=`<table style="${ST.tbl}">${TR('Hand dominance', S.phys.hand.note)}</table>`;
   if(pRec.length){
-    h+=P("{name}'s physical skills were assessed including range of movement, strength, tone, coordination, speed of movement, sensation, sitting balance, mobility, fine manipulation, endurance and pain.");
+    /* the lead sentence names the areas from the row list, so it cannot go stale */
+    const areas=physRequired().filter(r=>!r.sub).map(r=>r.label.toLowerCase().replace(/\s*\(.*?\)/,''));
+    h+=P(`{name}'s physical skills were assessed including ${joinList(areas)}.`);
     h+=`<table style="${ST.tbl}"><tr><th style="${ST.th};width:34%">Reported / observed physical abilities and restrictions</th><th style="${ST.th}">What was found</th></tr>`;
     pRec.forEach(r=>{
-      const iss=PHYS_ISSUE.includes(S.phys[r.id].st);
-      h+=`<tr><td style="${ST.lbl}">${esc(r.label)}</td><td style="${ST.td}${iss?';color:#8c2f2f':''}">${paraSplit(physText(r))}</td></tr>`;
+      const iss=physIssue(r);
+      h+=`<tr><td style="${ST.lbl}${r.sub?';padding-left:8mm;font-weight:400;font-style:italic':''}">${esc(r.label)}</td><td style="${ST.td}${iss?';color:#8c2f2f':''}">${paraSplit(physText(r))}</td></tr>`;
     });
     h+=`</table>`;
+    h+=`<p style="${ST.p};font-size:8pt;color:#8a8880">${esc(REFS.oxford)}<br>${esc(REFS.ashworth)}</p>`;
   }
-  if(pNt.length) h+=P(`The following were not tested: ${pNt.map(r=>r.label.toLowerCase()+(txt(S.phys[r.id].note)? ' ('+txt(S.phys[r.id].note)+')':'')).join('; ')}. No conclusion about ${pNt.length>1?'these areas is':'this area is'} drawn in this report.`);
-  if(pNa.length) h+=P(`Not applicable for this client: ${pNa.map(r=>r.label.toLowerCase()).join('; ')}.`);
 
   /* manual muscle testing */
   const mTested=MUSCLES.filter(m=>S.muscles[m.id].tested==='yes'&&S.muscles[m.id].grade);
@@ -3220,16 +3303,14 @@ function buildReport(){
   const testRow=(id)=>{
     const t=S.tests[id]; if(!t.on) return '';
     const m=TEST_META[id];
-    if(testInvalid(id)) return `<tr><td style="${ST.td}"><b>${m.name}</b></td><td style="${ST.td}">${m.purpose}</td>
-      <td style="${ST.td};text-align:center;color:#8c2f2f;font-weight:700">Not scoreable</td>
-      <td style="${ST.td};color:#8c2f2f">${paraSplit(invalidText(id))}</td></tr>`;
     const r=m.interp();
-    return `<tr><td style="${ST.td}"><b>${m.name}</b></td><td style="${ST.td}">${m.purpose}</td><td style="${ST.td}">${esc(r.scoreTxt||'')}</td><td style="${ST.td}">${paraSplit(r.txt+(t.note? ' '+t.note:''))}</td></tr>`;
+    const cm=testCommentList(id).map(x=>`<br><b>${esc(x.label)}.</b> ${paraSplit(x.text)}`).join('');
+    return `<tr><td style="${ST.td}"><b>${m.name}</b></td><td style="${ST.td}">${m.purpose}</td><td style="${ST.td}">${esc(r.scoreTxt||'')}</td><td style="${ST.td}">${paraSplit(r.txt+(t.note? ' '+t.note:''))}${cm}</td></tr>`;
   };
-  h+= ['moca','ace','trailsA','trailsB','clock','maze','snellgrove','driveSafe','driveSafePaper','driveAware'].map(testRow).join('');
+  h+= TEST_ORDER_HEAD.map(testRow).join('');
   const comb=dsdaCombined();
   if(comb) h+=`<tr><td colspan="4" style="${ST.td};background:#f4f8f9">${paraSplit(comb)}</td></tr>`;
-  h+= ['intersection','roadLaw','rlst','bells'].map(testRow).join('');
+  h+= testOrderTail().map(testRow).join('');
   if(S.genCog) h+=`<tr><td style="${ST.td}"><b>General Cognitive Skills</b></td><td colspan="3" style="${ST.td}">${paraSplit(S.genCog)}</td></tr>`;
   if(txt(S.psychosocial)) h+=`<tr><td style="${ST.td}"><b>Psychosocial Skills</b></td><td colspan="3" style="${ST.td}">${paraSplit(S.psychosocial)}</td></tr>`;
   h+=`</table>`;
@@ -3308,7 +3389,8 @@ function buildReport(){
 
   /* references */
   const refs=[REFS.austroads, REFS.competency];
-  if(S.tests.driveSafe.on||S.tests.driveAware.on){refs.push(REFS.dsda1,REFS.dsda2);}
+  if(physFields().some(physDone)) refs.push(REFS.oxford, REFS.ashworth);
+  if(['driveSafe','driveSafePaper','driveAware','driveAware26'].some(k=>S.tests[k].on)){refs.push(REFS.dsda1,REFS.dsda2);}
   if(S.tests.trailsB.on||S.tests.trailsA.on) refs.push(REFS.trails);
   if(S.tests.maze.on||S.tests.intersection.on||S.tests.bells.on) refs.push(REFS.otdora);
   if(S.tests.clock.on) refs.push(REFS.clock);
@@ -3373,7 +3455,6 @@ function gpLetter(){
   const cogBits=[];
   Object.keys(TEST_META).forEach(id=>{
     if(id==='dsdaCat'||!S.tests[id].on) return;
-    if(testInvalid(id)){ cogBits.push(`${TEST_META[id].name}: not scoreable`); return; }
     const r=TEST_META[id].interp();
     cogBits.push(`${TEST_META[id].name}: ${txt(r.scoreTxt).replace(/\.$/,'')||'—'}${r.pill==='fail'?' (outside driving threshold)':''}`);
   });
@@ -3381,7 +3462,9 @@ function gpLetter(){
   const red=MUSCLES.filter(m=>S.muscles[m.id].tested==='yes'&&S.muscles[m.id].grade&&S.muscles[m.id].grade!=='5');
   h+=TR('Physical', red.length
     ? `Reduced power in ${red.map(m=>m.n.toLowerCase()+' (grade '+S.muscles[m.id].grade+')').join(', ')}. ${txt(S.physSummary)}`
-    : (musclesTested()? `Manual muscle testing graded 5/5 across the ${musclesTested()} groups tested. Range of movement, coordination and sensation as documented in the report.` : 'See report.'));
+    : (musclesTested()? `Manual muscle testing graded 5/5 across the ${musclesTested()} groups tested. Range of movement, coordination and sensation as documented in the report.`
+      /* the muscle grid is optional, so the common case falls back to the summary */
+      : (txt(S.physSummary) || (physRequired().every(physDone)? 'Physical screening was within functional limits for the driving task; see the report for each area.' : 'See report.'))));
   const iss=issueList();
   const gpFails=failErrors();
   h+=TR('On-road assessment', `${S.duration||'[?]'} minutes in a ${fill(vehicleDesc())}. `+
@@ -3448,7 +3531,7 @@ function ndisDoc(){
   h+=`<h2 style="${ST.h2}">4. Assessment completed</h2>`;
   const done=['Clinical interview and occupational profile','Vision screen (acuity and confrontation fields)','Hearing and communication screen',
     musclesTested()? 'Physical screen including manual muscle testing':'Physical screen'];
-  Object.keys(TEST_META).forEach(id=>{ if(id!=='dsdaCat'&&S.tests[id].on) done.push(TEST_META[id].name+(testInvalid(id)?' (attempted, not scoreable)':'')); });
+  Object.keys(TEST_META).forEach(id=>{ if(id!=='dsdaCat'&&S.tests[id].on) done.push(TEST_META[id].name); });
   done.push(`On-road assessment, ${S.duration||'[?]'} minutes with a Motor Driving Instructor in a ${fill(vehicleDesc())}`);
   h+=`<ul style="margin:1mm 0 4mm;padding-left:6mm">`+done.map(x=>`<li style="margin-bottom:1.5mm">${esc(x)}</li>`).join('')+`</ul>`;
 
@@ -3531,7 +3614,7 @@ function mdiHandover(){
   const aware=[];
   const cogFail=[];
   Object.keys(TEST_META).forEach(id=>{
-    if(id==='dsdaCat'||!S.tests[id].on||testInvalid(id)) return;
+    if(id==='dsdaCat'||!S.tests[id].on) return;
     const r=TEST_META[id].interp(); if(r.pill==='fail') cogFail.push(TEST_META[id].name);
   });
   if(cogFail.length) aware.push(`Screening indicated reduced capacity in areas relevant to driving (${cogFail.join(', ')}). In practice this usually shows up as difficulty when several things happen at once — build complexity gradually rather than all at once.`);
@@ -3765,9 +3848,9 @@ function normalise(raw){
      detail, the fixed vehicle line, and the advisory acknowledgements the
      export gate used to need. Drop them rather than keep re-saving data
      nothing reads. */
-  ['notes','notesLocked','notesLockedAt','notesRecordedBy','equip','equipAt','equipWhy','aiUse','vehicle','ackAdvisories'].forEach(k=>delete s[k]);
+  ['notes','notesLocked','notesLockedAt','notesRecordedBy','equip','equipAt','equipWhy','aiUse','vehicle','ackAdvisories','admin'].forEach(k=>delete s[k]);
   Object.keys(s.checklist||{}).forEach(k=>{ if(s.checklist[k]) delete s.checklist[k].refs; });
-  ['verify','compManual','muscles','profile','admin','phys','needs','checklist','clComments','tests','docs','docMeta'].forEach(k=>{
+  ['verify','compManual','muscles','profile','phys','needs','checklist','clComments','tests','docs','docMeta'].forEach(k=>{
     s[k]=Object.assign({}, base[k], raw&&raw[k]? raw[k]:{});
   });
   MUSCLES.forEach(m=> s.muscles[m.id]=Object.assign({tested:'no',grade:'',note:''}, s.muscles[m.id]||{}));
@@ -3775,31 +3858,97 @@ function normalise(raw){
      Flinders lines carried sixteen ids. Carry their words and measurements
      across rather than dropping the assessor's work — but leave the status
      for them to set, since several old screens now share one line. */
-  const PHYS_LEGACY={fit:'fitAids', access:'fitAids', aids:'fitAids', ulRom:'rom', llRom:'rom', tnRom:'rom',
-    ulGrip:'fine', ulCoord:'coordUL', llCoord:'coordLL', llTransfer:'speed', ulSens:'sensation', llSens:'sensation', walk:'mobility'};
-  const carried={};
-  Object.keys(PHYS_LEGACY).forEach(oldId=>{
-    const old=s.phys[oldId]; if(!old) return;
-    const to=PHYS_LEGACY[oldId];
-    const note=typeof old==='string'? old : txt(old.note);
-    if(note) (carried[to]=carried[to]||[]).push(note);
-    if(typeof old==='object'){
-      const t=s.phys[to]=s.phys[to]||{};
-      ['v1','v2'].forEach(k=>{ if(txt(old[k]) && !txt(t[k])) t[k]=old[k]; });
+  /* Physical screening was rebuilt to the proforma's table: one sentence per area,
+     no status, and the measurements folded behind a disclosure. Three generations of
+     draft exist — the sixteen-id era, the fourteen-id status-and-measurement era, and
+     this one. Nothing the assessor wrote or measured is discarded: a measurement is
+     folded back into the sentence in the wording it used to print with, a status that
+     carried meaning survives as a prefix, and an area that no longer has a row has its
+     text appended to the physical summary rather than dropped. */
+  const PHYS_TO = {
+    /* sixteen-id era */
+    fit:'@sum:Vehicle fit, aids and modifications', access:'@sum:Vehicle fit, aids and modifications',
+    aids:'@sum:Vehicle fit, aids and modifications', ulRom:'rom', llRom:'rom', tnRom:'rom',
+    ulGrip:'fine', ulCoord:'coordination', llCoord:'coordination', llTransfer:'speed',
+    ulSens:'sensation', llSens:'sensation', walk:'mobility',
+    /* fourteen-id era */
+    coordUL:'coordination', coordLL:'coordination',
+    endurance:'@sum:Endurance', fitAids:'@sum:Vehicle fit, aids and modifications',
+  };
+  /* the `rep` templates the deleted measurement slots used to print with */
+  const PHYS_M_TO = {
+    rom:[['v1','Cervical rotation {}° to the left.'],['v2','Cervical rotation {}° to the right.']],
+    tone:[['v1','Muscle tone graded {} on the Modified Ashworth Scale.']],
+    coordLL:[['v1','Heel pivot test: {} taps.'],['v2','Heel pivot completed in {} seconds.'],
+             ['v3','Foot tapping {} in ten seconds (left / right).'],
+             ['v4','Simulated accelerator and brake sequence: {}.']],
+    speed:[['v1','Accelerator-to-brake transfer averaged {} seconds over repeated trials.']],
+    sitting:[['v1','Sustained sitting tolerated for approximately {} minutes.']],
+    mobility:[['v1','Rapid Pace Walk completed in {} seconds.'],['v2','Walking aid used: {}.']],
+    pain:[['v1','Pain rated {}/10 on a visual analogue scale.']],
+    fitAids:[['v1','Sternum to steering wheel centre {} cm.']],
+  };
+  const PHYS_ST_TO = {wfl:'', mild:'Mild difficulty identified.', mod:'Moderate difficulty identified.',
+    sig:'Significant difficulty identified.', lim:'Moderate difficulty identified.',
+    nt:'Not tested.', na:'Not applicable for this client.'};
+  const PHYS_WAS_ISSUE = ['mild','mod','sig','lim'];
+
+  const carried={}, toSummary=[];
+  Object.keys(s.phys||{}).forEach(oldId=>{
+    const old=s.phys[oldId];
+    if(old==null) return;
+    const obj = typeof old==='string' ? {note:old} : old;
+    const to=PHYS_TO[oldId];
+    const target0 = to && to.indexOf('@sum:')!==0 ? to : (to? null : oldId);
+    const keeps = k => { const r=PHYS_ROWS.find(x=>x.id===target0);
+      return !!(r && (r.m||[]).some(f=>f.k===k)); };
+    /* Compose what this row said into one sentence. A figure is written into the
+       words only where the surviving row has no slot left to hold it — otherwise it
+       stays in its slot, still interpreted, and the report would print it twice. */
+    const bits=[PHYS_ST_TO[obj.st]||'',
+      ...((PHYS_M_TO[oldId]||[]).map(([k,tpl])=> txt(obj[k]) && !keeps(k)? tpl.replace('{}', txt(obj[k])) : '')),
+      txt(obj.note)].filter(Boolean);
+    const text=bits.join(' ').trim();
+    if(to && to.indexOf('@sum:')===0){
+      if(text) toSummary.push(to.slice(5)+': '+text);
+      delete s.phys[oldId]; return;
     }
-    delete s.phys[oldId];
+    const target = to || oldId;
+    if(!PHYS_ROWS.some(r=>r.id===target)){ if(text) toSummary.push(text); delete s.phys[oldId]; return; }
+    if(text) (carried[target]=carried[target]||[]).push(text);
+    if(PHYS_WAS_ISSUE.includes(obj.st)) carried['@issue:'+target]=true;
+    /* keep the figures where the surviving row still has a slot for them */
+    if(typeof old==='object'){
+      const t=s.phys[target]=s.phys[target]||{};
+      ['v1','v2','v3','v4'].forEach(k=>{ if(txt(old[k]) && !txt(t[k])) t[k]=old[k]; });
+    }
+    if(target!==oldId) delete s.phys[oldId];
   });
-  /* physical screens were a bare string before they carried a status and
-     measurements; keep the words and let the assessor supply the status,
-     rather than inferring a clinical finding from old free text */
   PHYS_ROWS.forEach(r=>{
     const old=s.phys[r.id];
-    s.phys[r.id] = typeof old==='string' ? {st:'', v1:'', v2:'', v3:'', v4:'', note:old}
-                                         : Object.assign({st:'', v1:'', v2:'', v3:'', v4:'', note:''}, old||{});
-    /* the status vocabulary changed from wfl/lim to the Flinders grades */
-    if(s.phys[r.id].st==='lim') s.phys[r.id].st='mod';
-    if(carried[r.id]) s.phys[r.id].note=[txt(s.phys[r.id].note)].concat(carried[r.id]).filter(Boolean).join(' ');
+    const base = typeof old==='object' && old ? old : {};
+    s.phys[r.id] = {note:'', issue:!!carried['@issue:'+r.id],
+      v1:txt(base.v1), v2:txt(base.v2), v3:txt(base.v3), v4:txt(base.v4)};
+    if(carried[r.id]) s.phys[r.id].note=carried[r.id].join(' ');
   });
+  /* drop anything that is no longer a row, so no `st` or stray id survives */
+  Object.keys(s.phys).forEach(k=>{ if(!PHYS_ROWS.some(r=>r.id===k)) delete s.phys[k]; });
+  if(toSummary.length) s.physSummary=[txt(s.physSummary)].concat(toSummary).filter(Boolean).join(' ');
+  /* `tests` is only shallow-merged above, so per-test keys need seeding explicitly.
+     `norm` is a stale key from an earlier battery — strip it, or it would silently
+     populate the new Trails B normative-percentile field. */
+  Object.keys(TEST_META).forEach(id=>{
+    s.tests[id]=Object.assign({}, base.tests[id], s.tests[id]||{});
+    s.tests[id].c=Object.assign({}, s.tests[id].c||{});
+    delete s.tests[id].norm;
+  });
+  /* A draft written before the proforma battery existed keeps the tests it was
+     recorded with. Without this the new defaults would switch on a second DriveSafe
+     and DriveAware and the report would print both versions of each. */
+  if(raw && raw.tests && !('driveAware26' in raw.tests)){
+    s.tests.driveAware26.on=false;
+    s.tests.driveSafePaper.on=!!(raw.tests.driveSafePaper||{}).on;
+  }
   PROFILE_DOMAINS.forEach(d=> s.profile[d.id]=Object.assign({text:'',na:false,naWhy:''}, s.profile[d.id]||{}));
   /* drafts saved before the attendee toggles existed load with both off */
   s.student=Object.assign({on:false,name:'',qual:'',role:'observed',consent:false}, s.student||{});
@@ -3811,12 +3960,6 @@ function normalise(raw){
   s.preDrive=Object.assign({}, base.preDrive, raw&&raw.preDrive? raw.preDrive:{});
   PREDRIVE_CATS.forEach(c=>{ if(!Array.isArray(s.preDrive[c.id])) s.preDrive[c.id]=[];
     s.preDrive[c.id]=s.preDrive[c.id].map(r=>Object.assign({issue:'',impact:'',considerations:''}, r||{})); });
-  Object.keys(TEST_ADMIN_DEF).forEach(k=>{
-    const old=s.admin[k]||{};
-    /* the five-question administration record collapsed to one question */
-    const departed = old.departed===true || old.perManual==='no' || old.cueing==='answers';
-    s.admin[k]={departed, why:txt(old.why)};
-  });
   /* The on-road checklist was rebuilt to the Flinders proforma's list and
      order. Carry each deleted item's note onto its nearest survivor so no
      writing is lost, then drop the old key. `pj1` (following the instructor's
@@ -3992,14 +4135,14 @@ function assessmentJSON(){
     physicalScreen:{
       handDominance:jtxt(physRow('hand').note),
       summary:jprose(S.physSummary),
-      screens:PHYS_ROWS.filter(r=>!r.simple).map(r=>{
+      screens:physFields().map(r=>{
         const p=physRow(r.id);
         let interp=null; try{ interp=r.interp? r.interp(p):null; }catch(e){}
         return {
           area:jtxt(r.label), relevanceToDriving:jtxt(r.why),
-          status:(PHYS_ST[p.st||'']||PHYS_ST['']).label,
+          difficultyFlagged:!!p.issue,
           measurements:(r.m||[]).map(f=>({measure:jtxt(f.label), value:jtxt(p[f.k])})).filter(x=>x.value),
-          note:jprose(p.note),
+          finding:jprose(p.note),
           interpretation:interp? jprose(interp.txt) : '',
         };
       }),
@@ -4016,13 +4159,7 @@ function assessmentJSON(){
       generalObservations:jprose(S.genCog),
       tests:Object.keys(TEST_META).filter(id=>id!=='dsdaCat' && S.tests[id] && S.tests[id].on).map(id=>{
         const m=TEST_META[id], t=S.tests[id];
-        const o={test:jtxt(m.name), measures:jtxt(m.purpose), administeredToStandardInstructions:!testInvalid(id)};
-        if(testInvalid(id)){
-          o.departureFromStandardAdministration=jprose(S.admin[id].why)
-            || 'Recorded as departing from the standard instructions; no detail entered.';
-          o.scoreReportable=false;
-          return o;
-        }
+        const o={test:jtxt(m.name), measures:jtxt(m.purpose)};
         o.scores=m.fields.map(f=>({measure:jtxt(f.label), value:jtxt(t[f.k])})).filter(x=>x.value);
         let r=null; try{ r=m.interp? m.interp():null; }catch(e){}
         if(r && r.pill!=='na'){
@@ -4030,6 +4167,7 @@ function assessmentJSON(){
           o.interpretation = jprose((r.scoreTxt? r.scoreTxt+' ':'')+r.txt);
         }
         o.note=jprose(t.note);
+        o.qualitativeComments=testCommentList(id).map(x=>({aspect:jtxt(x.label), comment:jprose(x.text)}));
         return o;
       }),
       driveSafeDriveAwareCombinedOutcome:jprose(dsdaCombined()),
@@ -4198,13 +4336,29 @@ function loadExample(){
   S.needs.country={val:'On occasions',note:''};
   S.needs.traffic={val:'Low to medium density, building with experience',note:''};
   Object.assign(S.tests,{
-    trailsB:{on:true,secs:'227',errors:'0',norm:'b1',note:'This is likely to affect {his} management of high-density traffic and complex intersections, where attention must be shifted quickly between multiple vehicles, signs and signals. It is consistent with the cognitive-load difficulties {he} reports and is a key focus for supervised practice.'},
-    maze:{on:true,secs:'23',errors:'0',norm:'wnl',note:''},
-    driveSafe:{on:true,score:'83',detail:'0 objects missed; 1 location/direction detail missed',norm:'wnl',note:''},
-    driveAware:{on:true,score:'14',norm:'wnl',note:''},
+    trailsB:{on:true,secs:'227',errors:'0',normPct:'below the 10th percentile for age',note:'This is likely to affect {his} management of high-density traffic and complex intersections, where attention must be shifted quickly between multiple vehicles, signs and signals. It is consistent with the cognitive-load difficulties {he} reports and is a key focus for supervised practice.',
+      c:{comment:'Completed accurately but slowly. {He} did not lose the alternation at any point and caught {his} own near-errors, so the cost is speed rather than the set-shifting itself.'}},
+    maze:{on:true,secs:'23',errors:'0',note:'',c:{comment:'Completed in well under half the allowed time without error, planning the route before committing the pen.'}},
+    driveSafePaper:{on:true,score:'118',note:'',
+      c:{missed:'Responses on this test revealed sound recall for complex visual and verbal information. No objects were missed.',
+         detail:'The detail of the answer regarding the position and direction for the objects noted was accurate, with one location detail omitted on the most complex image.',
+         speed:'Responses were answered appropriately.',
+         instr:'{name} required no prompting following the initial instructions.',
+         logical:'Answers were provided in a logical and systematic manner, consistently working left to right across each scene.',
+         lr:'There was no evident issue with left/right discrimination when providing verbal responses.'}},
+    driveAware26:{on:true,score:'12',note:'',
+      c:{insight:'Results of the DriveAware indicate that {name} appears to have good insight into {his} functional concerns and the potential implications on road. {His} account of {his} own difficulty managing several demands at once matched both the test findings and {his} on-road performance.'}},
     dsdaCat:{on:true,cat:'likely',note:'This reflects cognitive and perceptual readiness only. As a learner driver {he} still requires substantial supervised on-road practice and specialised instruction to develop the physical and procedural skills needed to drive independently and to pass a practical driving test.'},
-    intersection:{on:true,score:'8',norm:'wnl',note:''},
-    bells:{on:true,omissions:'0',left:'0',right:'0',time:'2 min 10 sec',norm:'wnl',note:''},
+    intersection:{on:true,score:'8',note:'',
+      c:{rules:'There was no issue with the application of road rules.',
+         time:'The test was completed in under 10 minutes.',
+         plan:"There was no issue with {name}'s ability to plan and problem solve.",
+         visuospatial:'There appeared to be no evident issues with the visuospatial skills.',
+         attention:'There appeared to be no evident issues with the visual attention.'}},
+    bells:{on:true,omissions:'0',left:'0',right:'0',time:'2 min 10 sec',note:'',
+      c:{comment:'No omissions to either side, with a systematic column-by-column search. No indication of visual inattention or neglect.'}},
+    driveSafe:{on:false,score:'',detail:'',note:'',c:{}},
+    driveAware:{on:false,score:'',note:'',c:{}},
   });
   /* --- set-up complete before the client arrived --- */
 
@@ -4215,25 +4369,27 @@ function loadExample(){
   S.muscles.m11.note='Full range and power both directions — the limitation on road was habit, not capacity.';
 
   /* --- physical screening --- */
-  PHYS_ROWS.forEach(r=>{ if(!r.simple) S.phys[r.id]={st:'wfl', v1:'', v2:'', v3:'', v4:'', note:''}; });
   S.phys.hand.note='Right';
   S.phys.rom.v1='72'; S.phys.rom.v2='70';
-  S.phys.rom.note='Full active range throughout the upper limbs, lower limbs and trunk. Cervical rotation measured with the shoulders held square, then repeated in the vehicle with the seatbelt fastened, where a full over-shoulder check was still achieved. No pain, hesitation or dizziness on repeated rotation.';
+  S.phys.rom.note='Full active range throughout the upper limbs, lower limbs and trunk. Cervical rotation was measured with the shoulders held square, then repeated in the vehicle with the seatbelt fastened, where a full over-shoulder check was still achieved. No pain, hesitation or dizziness on repeated rotation.';
   S.phys.tone.v1='0';
-  S.phys.coordLL.v1='15'; S.phys.coordLL.v2='7.4'; S.phys.coordLL.v3='26 / 25';
-  S.phys.coordLL.v4='completed accurately at first attempt';
-  S.phys.coordLL.note='Accurate heel-to-shin bilaterally with eyes closed, no slowing across the tapping trial, and graded pedal pressure controllable through light, medium and hard without looking down.';
+  S.phys.coordination.v1='15'; S.phys.coordination.v2='7.4'; S.phys.coordination.v3='26 / 25';
+  S.phys.coordination.v4='completed accurately at first attempt';
+  S.phys.coordination.note='Accurate finger-to-nose and heel-to-shin bilaterally with the eyes closed, and no slowing across the tapping trial. The heel pivot was inside the expected standard, with graded pedal pressure controllable through light, medium and hard without looking down.';
   S.phys.speed.v1='0.7';
   S.phys.speed.note='Six trials at irregular intervals in the assessment vehicle, engine off. The heel stayed on the floor throughout, the foot cleared the accelerator cleanly and landed centrally on the brake each time.';
   S.phys.sitting.v1='90';
-  S.phys.sitting.note='Stable symmetrical posture with both hands free; reached the glovebox and over the shoulder without loss of balance. Posture at the end of the session was unchanged from the start.';
+  S.phys.sitting.note='Stable symmetrical posture with both hands free, comfortably beyond the length of the assessment drive. Reached the glovebox and over the shoulder without loss of balance, and posture at the end of the session was unchanged from the start.';
   S.phys.mobility.v1='6.2';
   S.phys.mobility.note='Entered and exited unaided using the door frame for balance, and fastened and released the seatbelt without prompting. Walked unaided with a controlled turn at the mark, no hesitancy and no reach for support, consistent with his unobserved walking from the waiting room.';
   S.phys.fine.note='Held the wheel at nine-and-three for the full minute without the grip degrading or the hand repositioning, and released and re-gripped quickly. Operated the key, indicator stalk and handbrake button without difficulty.';
   S.phys.pain.v1='0';
-  S.phys.fitAids.v1='31';
-  S.phys.fitAids.note='Seat set with the ball of the foot on the brake, heel on the floor and the knee still flexed at full brake travel. Clear sightline over the wheel; reached the handbrake, selector and stalks without leaving the driving position. No aids, orthoses or vehicle modifications currently used.';
-  PHYS_ROWS.forEach(r=>{ if(!r.simple && !txt(S.phys[r.id].note)) S.phys[r.id].note=r.def; });
+  S.phys.pain.note='No pain or discomfort reported at rest or on testing, and none observed to limit the movements the driving task requires.';
+  /* every remaining line takes its standard wording, as it would in practice */
+  S.phys.sensation.note='Screened with the eyes occluded throughout, comparing side to side and proximal to distal.';
+  physRequired().forEach(r=>{ if(!txt(S.phys[r.id].note)) S.phys[r.id].note=r.def; });
+  /* the two areas the proforma has no row for live in the summary */
+  S.physSummary='Vehicle fit: seat set with the ball of the foot on the brake, heel on the floor and the knee still flexed at full brake travel, with 31 cm clearance from the sternum to the steering wheel centre and a clear sightline over the wheel. He reached the handbrake, selector and stalks without leaving the driving position, and no aids, orthoses or vehicle modifications are currently used. Endurance: he sustained the physical demands of the assessment without fatigue affecting performance.';
 
   /* --- occupational profile --- */
   Object.assign(S.profile,{
@@ -4247,8 +4403,6 @@ function loadExample(){
     learning:{text:'Previous lessons through a community driving program went well; a subsequent private instructor was experienced as frustrating, with the client reporting he was criticised for hesitating. Reports he learns best when a skill is demonstrated first and then broken into steps, and that he takes correction better when it is given after a manoeuvre rather than during it. English is his first language and no interpreter is required; he prefers written summaries of verbal information, which was accommodated by providing feedback in writing as well as verbally.',na:false,naWhy:''},
   });
 
-  /* --- test administration records --- */
-  Object.keys(S.admin).forEach(k=> S.admin[k]={departed:false, why:''});
 
   /* --- on-road ratings, each traceable to the record --- */
   const CL=(id,st,note)=>{ S.checklist[id]={st, note}; };
@@ -4311,7 +4465,8 @@ function loadExample(){
   S.reportRef=AUTOTEXT.reportRef();
   ['consentText','qualifications','limitations','declarationText'].forEach(k=>S[k]=AUTOTEXT[k]());
   S.reasonReferral=AUTOTEXT.reasonReferral();
-  S.physSummary=AUTOTEXT.physSummary();
+  /* the auto-draft, then the two areas the proforma table has no row for */
+  S.physSummary=[AUTOTEXT.physSummary(), S.physSummary].filter(Boolean).join(' ');
   S.summaryText=autoSummary();
   ['continueLearner','lessons','lenses','optom','medReview','reviewChange'].forEach(id=>{
     S.recs[id]={on:true,text:REC_DEFS.find(r=>r.id===id).def()};
@@ -4365,8 +4520,11 @@ function allProse(){
   const out=[];
   NARR_FIELDS.forEach(([k,l,s])=>{ if(txt(S[k])) out.push({k,label:l,sec:s,text:S[k],sel:`[data-bind=${k}]`}); });
   PROFILE_DOMAINS.forEach(d=>{ const p=S.profile[d.id]; if(p&&!p.na&&txt(p.text)) out.push({k:'profile_'+d.id,label:'Profile — '+d.label,sec:'3',text:p.text,sel:'#profileRows'}); });
-  PHYS_ROWS.forEach(r=>{ const p=S.phys[r.id]; if(p&&!r.simple&&txt(p.note)&&txt(p.note)!==txt(r.def)) out.push({k:'phys_'+r.id,label:'Physical line — '+r.label,sec:'4',text:p.note,sel:'#physRows'}); });
+  physFields().forEach(r=>{ const p=S.phys[r.id]; if(p&&txt(p.note)&&txt(p.note)!==txt(r.def)) out.push({k:'phys_'+r.id,label:'Physical line — '+r.label,sec:'4',text:p.note,sel:'#physRows'}); });
   CHECKLIST.forEach(g=>g.items.forEach(it=>{ const c=S.checklist[it.id]; if(txt(c.note)&&txt(c.note)!==txt(it.def)) out.push({k:'cl_'+it.id,label:'On-road — '+it.short,sec:'5',text:c.note,sel:'#checklist'}); }));
+  Object.keys(TEST_META).forEach(id=>{ if(!S.tests[id].on) return;
+    (TEST_META[id].comments||[]).forEach(x=>{ const v=txt((S.tests[id].c||{})[x.k]);
+      if(v && v!==txt(x.def)) out.push({k:'tc_'+id+'_'+x.k,label:TEST_META[id].name+' — '+x.label,sec:'4',text:v,sel:'#card_'+id}); }); });
   REC_DEFS.forEach(r=>{ const st=S.recs[r.id]; if(st&&st.on&&txt(st.text)) out.push({k:'rec_'+r.id,label:'Recommendation — '+r.label,sec:'6',text:st.text,sel:'#recCards'}); });
   return out;
 }
@@ -4417,32 +4575,24 @@ function validate(){
   });
 
   /* ---- 4. physical & muscle testing ---- */
-  PHYS_ROWS.forEach(r=>{
+  if(!txt(S.phys.hand.note)) C('Not recorded — hand dominance','Required.','4','#physRows');
+  physRequired().forEach(r=>{
+    if(!physDone(r)) C('Not recorded — '+r.label,'Every line in the physical table needs a sentence. "Not tested" with a reason is a valid answer — a blank is not, because the report cannot say whether it was clear or skipped. The button at the top of the table fills the standard wording.','4','#physRows');
+  });
+  physFields().forEach(r=>{
     const p=S.phys[r.id];
-    if(r.simple){ if(!txt(p.note)) C('Not recorded — '+r.label,'Required.','4','#physRows'); return; }
-    if(!p.st){
-      C('Not recorded — '+r.label,'Give it a status. "Not tested" with a reason is a valid answer — a blank is not, because the report cannot say whether it was clear or skipped.','4','#physRows');
-      return;
-    }
-    if(PHYS_ISSUE.includes(p.st) && !txt(p.note)) C('Difficulty needs describing — '+r.label,'Say what the difficulty is, how far it goes, and what it means for the driving task.','4','#physRows');
-    if(p.st==='nt' && !txt(p.note)) C('Untested area needs a reason — '+r.label,'Leaving it out is a clinical decision; record it as one. It prints in the report.','4','#physRows');
-    if(p.st==='na' && !txt(p.note)) C('N/A needs a reason — '+r.label,'Say why it does not apply to this client.','4','#physRows');
     (r.m||[]).forEach(f=>{ if(f.num && txt(p[f.k]) && isNaN(parseFloat(p[f.k])))
-      C(r.label+' — "'+txt(p[f.k])+'" is not a number','The measurement is reported and interpreted numerically. Enter the figure alone, and put any qualification in the note.','4','#physRows'); });
+      C(r.label+' — "'+txt(p[f.k])+'" is not a number','The measurement is reported and interpreted numerically. Enter the figure alone, and put any qualification in the sentence.','4','#physRows'); });
   });
   MUSCLES.forEach(m=>{
     const v=S.muscles[m.id];
     if(v.tested==='yes' && !v.grade) C('Muscle grade missing — '+m.n,'Testing was recorded but no MRC grade entered.','4','#muscleRows');
   });
-  if(musclesTested()===0 && S.phys.strength && S.phys.strength.st==='wfl')
-    C('Strength recorded as no issues, but no muscle group is graded','The strength line says there were no issues; the grid below is where the grades that support that statement go. Grade the groups you tested, or say in the strength line what you based it on.','4','#muscleRows');
 
   /* ---- 5. test administration ---- */
   Object.keys(TEST_META).forEach(id=>{
     const t=S.tests[id]; if(!t.on || id==='dsdaCat') return;
     const m=TEST_META[id];
-    if(testInvalid(id) && !txt(S.admin[id].why)) C(m.name+' — record what happened','The test is marked as departing from standard administration, so the report has to say what happened and what you are doing about it.','4','#card_'+id);
-    if(testInvalid(id)) return;
     const need=m.fields[0];
     if(need && !txt(t[need.k])) C(m.name+' — score required (or untick the test)','Required.','4','#card_'+id);
   });
@@ -4491,7 +4641,7 @@ function validate(){
   const issues=flaggedShorts();
   if(issues.length && ['fit'].includes(S.outcome)) C('Outcome contradicts the findings','The outcome is “fit to drive, no restrictions” while '+issues.length+' on-road issue'+(issues.length>1?'s are':' is')+' flagged. Resolve one or the other.','6','[data-bind=outcome]');
 
-  if(S.tests.bells.on && !testInvalid('bells') && parseInt(S.tests.bells.omissions)>0 && (!txt(S.tests.bells.left)&&!txt(S.tests.bells.right)))
+  if(S.tests.bells.on && parseInt(S.tests.bells.omissions)>0 && (!txt(S.tests.bells.left)&&!txt(S.tests.bells.right)))
     C('Bells Test omissions are not split by side','Six or more omissions on one side raises the question of visual neglect, which cannot be assessed from the total alone.','4','#card_bells');
   const fe=failErrors();
   if(fe.length && ['fit','fit-cond','learner-continue'].includes(S.outcome))
@@ -4526,7 +4676,9 @@ function updateBadge(){
   const n3=document.getElementById('n3'); if(n3){ const done=PROFILE_DOMAINS.filter(d=>d.core&&profileDone(d.id)).length, tot=PROFILE_DOMAINS.filter(d=>d.core).length; n3.textContent=`profile ${done}/${tot}`; }
   const n4=document.getElementById('n4'); if(n4){
     const on=Object.keys(TEST_META).filter(k=>k!=='dsdaCat'&&S.tests[k].on).length;
-    n4.textContent=`${musclesTested()}/${MUSCLES.length} muscle groups · ${on} test${on!==1?'s':''}`;
+    const req=physRequired(), done=req.filter(physDone).length;
+    n4.textContent=`${done}/${req.length} physical lines · ${on} test${on!==1?'s':''}`
+      + (musclesTested()? ` · ${musclesTested()} muscle groups`:'');
   }
   const n5=document.getElementById('n5'); if(n5){
     const all=CHECKLIST.flatMap(g=>g.items);
@@ -4595,6 +4747,7 @@ function syncStageNav(v){
 function setStage(n){
   curStage=n;
   document.querySelectorAll('.stage').forEach(el=>el.classList.toggle('on', +el.dataset.stage===n));
+  physGrowAll();
   try{ localStorage.setItem(STAGE_KEY,String(n)); }catch(e){}
   syncStageNav();
   const fp=document.getElementById('formPane'); if(fp) fp.scrollTop=0;

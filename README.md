@@ -23,7 +23,7 @@ The form follows the four phases of the assessment itself rather than presenting
 | Stage | Sections | What it covers |
 | --- | --- | --- |
 | **1 · Initial Interview** | ⚙, 1–3 | Practice profile, client and referral details, reports reviewed, and the clinical interview and occupational profile |
-| **2 · Off-Road Assessment** | 4 | Hearing and communication, vision, physical, the standardised cognitive battery and the pre-drive outcome summary — each screen with a how-to-conduct card |
+| **2 · Off-Road Assessment** | 4 | Hearing and communication, vision, the physical table, the standardised cognitive battery and the pre-drive outcome summary — each screen with a how-to-conduct card |
 | **3 · On-Road Assessment** | 5 | The drive and the vehicle, the familiarisation phase, MDI briefing, the performance checklist and the intervention log |
 | **4 · Feedback & Finalising** | 6–9 | Summary and reasoning, recommendations, additional documents, feedback given to the client, declarations, sign-off and competency coverage |
 
@@ -43,8 +43,9 @@ The builder does not hold your assessment notes. Record observations however you
 ### Scores are interpreted, not just stored
 
 - **Score interpretation reports the pattern, not just pass/fail.** Trail Making B distinguishes accurate-but-slow from fast-but-inaccurate, since these mean different things and have different remedies. The Bells Test takes omissions by side and distinguishes lateralised neglect from a general search deficit. DriveSafe is banded rather than binary.
-- **Physical measurements carry their thresholds.** Under 25 cm of wheel clearance raises the airbag problem and points at pedal extensions; under about 30° of cervical rotation raises wide-angle mirrors as a modification recommendation; a heel pivot slower than 15 taps in 9 seconds is reported against that standard; a Rapid Pace Walk over 9 seconds is reported as the risk marker it is and explicitly not as a licensing test; a sitting tolerance shorter than the on-road drive is cross-checked against the duration in Section 5 and flagged.
-- **What you did not do is reported.** Untested lines, untested muscle groups and unassessed on-road items print with their reasons, and the report states that nothing is concluded from their absence.
+- **Physical measurements carry their thresholds.** Under about 30° of cervical rotation raises wide-angle mirrors as a modification recommendation; a heel pivot slower than 15 taps in 9 seconds is reported against that standard; a Rapid Pace Walk over 9 seconds is reported as the risk marker it is and explicitly not as a licensing test; a sitting tolerance shorter than the on-road drive is cross-checked against the duration in Section 5 and flagged. The measurements sit behind each line's **measurements** disclosure, so the table stays a table.
+- **Two scoring scales, the proforma's by default.** DriveSafe ships as the 128-point paper version (≤76 lower, 77–95 middle, above 95 upper) and DriveAware as the 26-point paper version, where a **higher score means poorer insight** (above 17 lower range, 15–17 mid, below 15 upper). The iPad versions — DriveSafe out of 84, DriveAware out of 17 scored the other way — are there unticked for practices that administer the DSDA on the tablet. The combined DSDA paragraph quotes whichever pair is enabled, with its own denominators.
+- **What you did not do is reported.** Untested muscle groups and unassessed on-road items print with their reasons, and the report states that nothing is concluded from their absence.
 
 ### The on-road assessment
 
@@ -66,8 +67,8 @@ say — what prints alongside them is only what you wrote.
   typed from the course record form's fail errors — collision, failed to stop, failed to give way,
   excessive speed, too slow, disobeyed a direction, stopped in a dangerous position — plus a verbal
   prompt and use of the dual controls. A verbal prompt is a normal part of an assessed drive;
-  anything below it is a blocker under an outcome that supports driving, and it is named in the GP
-  letter and the instructor handover.
+  anything beyond it is raised in the checks under an outcome that supports driving, and it is
+  named in the GP letter and the instructor handover.
 
 ### Who else was there
 
@@ -112,54 +113,55 @@ Stage 2 is built to be worked from at the bench, not just recorded into afterwar
 - **Visual fields by confrontation** — seating, testing each eye against your own field, the four quadrants, finger counting, the binocular pass, and double simultaneous stimulation for extinction. States plainly what confrontation cannot do, when to refer for formal perimetry, and what each pattern of field loss looks like on road.
 - **Ocular motility** — the H pattern for pursuit, two-target saccades, convergence and diplopia, with the reasoning for why saccadic accuracy predicts the mirror and blind-spot checks you will be rating in Stage 3.
 
-**Physical.** Thirteen lines in the order the Flinders proforma reports them. Each carries a **how to screen this one** card with the procedure, what to record, and the error that most often makes the result meaningless. See [Physical screens](#physical-screens) below.
+**Physical.** Fourteen lines in the order the Flinders proforma reports them. Each carries a **how to screen this one** card with the procedure, what to record, and the error that most often makes the result meaningless. See [Physical screens](#physical-screens) below.
 
-Then each of the twelve muscle groups has a **how to test this one** card: client position, what to stabilise, the words to say, where the resistance goes and in which direction, the substitution to watch for, and a link to the technique reference. Each carries a schematic showing the stabilised segment, the moving segment at its test position, the direction of the movement asked for, and the point of resistance.
+Then each of the twelve muscle groups has a **how to test this one** card: client position, what to stabilise, the words to say, where the resistance goes and in which direction, the substitution to watch for, and a link to the technique reference. Each carries a schematic showing the stabilised segment, the moving segment at its test position, the direction of the movement asked for, and the point of resistance. These live inside the optional grid — see [Manual muscle testing](#manual-muscle-testing).
+
+**Standardised tests.** Each of the six main tests carries a **how to conduct this test** card: what it measures, what you need, roughly how long it takes, and the procedure step by step — including the process observations that are only capturable while the client is doing it.
 
 **Hearing and communication** has its own card, since it comes first and everything after it depends on instructions landing.
 
-### Test administration integrity
+### Standardised tests
 
-The default battery is six tests — Trail Making B, OT Drive Home Maze, DriveSafe, DriveAware, the Intersection Diagram Test and the Bells Test. Eight more are there, unticked, for when the referral question calls for them: Trail Making A, Clock Drawing (Freund scoring, 4/7 cut-off), the Snellgrove Maze, the Road Law Slide Test, the Written Road Law Test, the MoCA, Addenbrooke's, and the 128-point paper DriveSafe. Each carries its own threshold from the course record form.
+The default battery is the proforma's six — the 128-point DriveSafe, the Intersection Diagram Test, the 26-point DriveAware, Trail Making B, the OT Drive Home Maze and the Bells Test. Nine more are there, unticked, for when the referral question calls for them: the Road Law Slide Test, the Written Road Law Test, Clock Drawing (Freund scoring, 4/7 cut-off), the Snellgrove Maze, Trail Making A, the iPad DriveSafe and DriveAware, the MoCA and Addenbrooke's. Each carries its own threshold.
 
-Each test carries two expandable cards. **How to conduct this test** covers what the test measures, what you need, roughly how long it takes, and the procedure step by step — including the process observations that are only capturable while the client is doing it. **What you may and may not say** sets out what you must do, what you may say, and what you must never say. Both are written for the tests that go wrong most easily (Trail Making Test B, Drive Home Maze, Bells, DriveSafe, DriveAware, Intersection Diagram), and both defer to the manual where they differ from it.
+Each test takes a score, and then the **named comment rows the proforma asks for** — DriveSafe has six (missed objects, detail of answer, speed of response, following instructions, logical and systematic responses, left/right discrimination), the Intersection Diagram Test five, the Road Law Slide Test four, and the rest one each with the threshold restated in the label. Every row carries its standard sentence, and one click fills the rows you have not written. Free text is equally valid — the label is the prompt, not a constraint. The filled sentences print under that test's interpretation in the report and appear in the JSON export as `qualitativeComments`.
 
-One tick per test records that **standard administration was departed from**. The test is then marked **not scoreable**, and the score is:
-
-- excluded from the report's results table, which prints the reason instead of a number;
-- excluded from the DriveSafe DriveAware combined outcome category;
-- excluded from the auto-drafted summary, which states plainly that the result was not relied upon;
-- raised in the checks until you record what happened and what you are doing about it.
+The score itself is still interpreted against its threshold automatically, so the comment rows describe *how* the client worked while the interpretation reports *what* the score means.
 
 ### Physical screens
 
-Thirteen lines, in the order and the wording the Flinders proforma reports them — a status you select, a comment where there is something to say, and a measurement where the line produces one:
+The Flinders proforma's table, row for row: one line per area, and **one sentence in each**. No status to set, no cell that means something different from the cell above it. Every line carries its standard wording — *"No issues reported, full range of movement observed."* — and the button at the top of the table writes it into every line you have not written yet, for you to edit. It never touches a line you have already written.
 
-| Line | Measurement it carries |
+| Line | What it holds |
 | --- | --- |
-| Range of movement | Cervical rotation, degrees each side |
-| Strength (Oxford scale) | — (the MRC grid below) |
-| Muscle tone | Modified Ashworth grade |
-| Coordination — upper limb | — |
-| **Coordination — lower limb** | **Heel pivot test** (taps and seconds), foot taps per 10 s, simulated accelerator/brake sequence |
-| Speed of movement | Accelerator-to-brake transfer, seconds |
-| Sensation & proprioception | — |
-| Sitting balance & posture | Sitting tolerated, minutes |
-| Mobility, transfers & Rapid Pace Walk | Rapid Pace Walk seconds, walking aid |
-| Fine manipulation | — |
-| Endurance | — |
-| Pain | VAS 0–10 |
-| Vehicle fit, aids & modifications | Sternum to wheel centre, cm |
+| Hand dominance | Right / Left / Ambidextrous |
+| Active range of movement | Sentence · cervical rotation, degrees each side |
+| Strength (Oxford Scale) | Sentence · points at the optional muscle grid |
+| Tone (Modified Ashworth Scale) | Sentence · Modified Ashworth grade |
+| Coordination | Sentence · **heel pivot test** (taps and seconds), foot taps per 10 s, simulated accelerator/brake sequence |
+| Speed of movement | Sentence · accelerator-to-brake transfer, seconds |
+| **Sensation** → upper limb · lower limb · proprioception · kinaesthesia | A sentence each, under one heading |
+| Sitting balance / posture | Sentence · sitting tolerated, minutes |
+| Mobility | Sentence · Rapid Pace Walk seconds, walking aid |
+| Fine manipulation | Sentence |
+| Pain | Sentence · VAS 0–10 |
 
-Plus hand dominance. The status vocabulary is the proforma's: *no issues reported or observed* · *mild* · *moderate* · *significant difficulty* · *not tested* · *N/A*. Nothing defaults to normal, a difficulty must be described, and **not tested** and **N/A** need reasons, which print in the report. A blank is raised in the checks, because a reader cannot tell a clear screen from a skipped one — but where a run of lines was unremarkable, one button sets everything you have not recorded yet and inserts each one's standard wording for you to edit. It is scoped to blank lines and never overwrites a status you have set.
+Where a line produces a measurement it sits behind that line's **measurements** disclosure, closed by default, with its threshold interpretation underneath. The figure prints after the sentence in the report; it is not lost, it is just not in the way.
 
-Each line carries a **how to screen this one** card: numbered procedure, what to record, and the error that most often makes that particular result meaningless — testing fit anywhere but the vehicle, prompting the seatbelt, accepting a head turn the trunk produced, timing a stroll, letting the whole leg lift instead of pivoting at the heel, recording a pain score with no function attached.
+One piece of structure survives on top of the prose: a **difficulty** toggle per line. Flip it where the sentence describes a problem, and the physical summary can name the impaired areas, the report marks the cell, and the JSON export carries a machine-readable flag. It gates nothing.
 
-The report prints the thirteen lines with their measurements first, then states explicitly which were not tested and that nothing is concluded from their absence.
+Each line keeps its **how to screen this one** card: numbered procedure, what to record, and the error that most often makes that particular result meaningless — accepting a head turn the trunk produced, timing a stroll, letting the whole leg lift instead of pivoting at the heel, recording a pain score with no function attached.
+
+A line with no sentence is raised in the checks, because a reader cannot tell a clear screen from a skipped one. The report prints the lines that have one, under a lead sentence generated from the row list, with the Oxford and Modified Ashworth sources as footnotes exactly as the proforma has them.
+
+> Endurance and vehicle fit have no row, because the proforma has no row for them. Anything worth reporting about either goes in the summary of physical skills below the table — and a draft saved before this change has its endurance and vehicle-fit text moved there automatically.
 
 ### Manual muscle testing
 
-On the MRC (Oxford) 0–5 scale across twelve groups relevant to vehicle control, each annotated with why it matters for driving and each with its own how-to card and diagram (above). This is what the **Strength** line points at. Every group starts as **not tested**, and the report states explicitly which groups were not tested and that no conclusion is drawn about them.
+**Optional, and folded away by default.** The Strength line above is the proforma's single sentence, and for most assessments that is the whole record. Open **grade individual muscle groups** where a group-by-group grade is needed.
+
+Inside: the MRC (Oxford) 0–5 scale across twelve groups relevant to vehicle control, each annotated with why it matters for driving and each with its own how-to card and diagram (above). Every group starts as **not tested**, and the report states explicitly which groups were not tested and that no conclusion is drawn about them.
 
 Where a section graded normally throughout, a **remaining → 5/5** button on each section heading (and one for the whole grid) marks the groups you have not touched yet as tested at grade 5. It is scoped to untouched groups only — a group you have already graded, or marked not tested with a reason, or marked N/A, is never changed. Comments are left empty, since the report's summary already states that power was 5/5 throughout the groups tested. An in-app reference card covers the grading scale, break-test technique and the grade-4-vs-5 error.
 
@@ -173,7 +175,7 @@ The builder runs a standing set of checks over the report and lists everything i
 
 Click the badge for the list. Each entry says what it found and why it matters, carries the `§` section it lives in, and jumps to the field when clicked. Each stage tab carries its own count, so you can see what a phase still owes you before you leave it.
 
-What gets checked: identity, licensing, referral and assessor fields; a student or supervisor recorded as present with no name, and a student present without the recorded consent; `[TBC]` left in the licence expiry; core profile domains; unrecorded physical lines, undescribed difficulties and untested lines without reasons; visual acuity; test scores and departures from standard administration; unrated on-road items, flagged issues with no comment and an undescribed intervention; an unconfirmed or untouched auto-draft summary; unresolved `{tokens}` and `[placeholders]`; outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; an instructor intervention beyond a verbal prompt alongside a supportive outcome; a vision standard recorded as not met alongside a supportive outcome); missing recommendations, consent or sign-off; an enabled additional document missing something essential; the competency standards; the competency-prompt fields (communication screen, MDI briefing, safety management, feedback given, licensing information, suitability decisions); contractions and unsupported phrasing ("seemed fine", "no issues", "I think", "obviously"); sentences over 45 words; missing terminal punctuation; thin sections by word count; short on-road duration; and flagged issues that do not appear in the summary.
+What gets checked: identity, licensing, referral and assessor fields; a student or supervisor recorded as present with no name, and a student present without the recorded consent; `[TBC]` left in the licence expiry; core profile domains; physical lines with no sentence recorded, and measurements that are not numbers; visual acuity; test scores; unrated on-road items, flagged issues with no comment and an undescribed intervention; an unconfirmed or untouched auto-draft summary; unresolved `{tokens}` and `[placeholders]`; outcome/finding contradictions (e.g. "fit to drive, no restrictions" alongside flagged issues; an instructor intervention beyond a verbal prompt alongside a supportive outcome; a vision standard recorded as not met alongside a supportive outcome); missing recommendations, consent or sign-off; an enabled additional document missing something essential; the competency standards; the competency-prompt fields (communication screen, MDI briefing, safety management, feedback given, licensing information, suitability decisions); contractions and unsupported phrasing ("seemed fine", "no issues", "I think", "obviously"); sentences over 45 words; missing terminal punctuation; thin sections by word count; short on-road duration; and flagged issues that do not appear in the summary.
 
 Standard wording still sitting verbatim as inserted is exempt from the phrasing checks — it is flagged as unedited, not as sloppy writing.
 
@@ -278,12 +280,13 @@ The data that drives the assessment lives in plain arrays at the top of the scri
 | --- | --- |
 | `PROFILE_DOMAINS` | Occupational profile domains and their prompt questions |
 | `MUSCLES` / `MRC` | Muscle groups tested, their how-to-test text and diagram geometry, and the grading scale |
-| `PHYS_ROWS` / `PHYS_ST` / `MAS` | Physical lines — how-to-screen text, measurement fields, threshold interpretation and standard wording; the status vocabulary; the Modified Ashworth scale |
+| `PHYS_ROWS` / `MAS` | The physical table — the row list and its standard wording, how-to-screen text, measurement fields and threshold interpretation; the Modified Ashworth scale |
 | `ATTENDEES` | The student and clinical-supervisor toggles, their involvement options and which of those put someone in the car |
 | `CHECKLIST` | On-road performance areas, items and their standard wording |
 | `INTERVENTIONS` | The instructor-intervention taxonomy, and which entries count as fail errors |
 | `PREDRIVE_CATS` | Categories in the pre-drive outcome summary |
-| `TEST_META` / `ADMIN_SCRIPTS` | Standardised tests (including which are on by default), and the procedure and administration rules shown for each |
+| `TEST_META` / `TEST_HOWTO` | Standardised tests — which are on by default, their score fields, their `comments` rows and standard sentences, and the procedure card shown for each |
+| `TEST_ORDER_HEAD` / `TEST_ORDER_TAIL` | The order tests print in; anything not named still prints, after the tail |
 | `STAGES` | The four assessment stages and which sections belong to each |
 | `interp*()` | Score thresholds and interpretation wording |
 | `REC_DEFS` | Recommendation library |
